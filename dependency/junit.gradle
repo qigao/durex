@@ -1,0 +1,5 @@
+dependencies {
+    testImplementation enforcedPlatform(libs.junit5.bom.get())
+    testImplementation 'org.junit.jupiter:junit-jupiter-api'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
+}

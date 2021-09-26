@@ -1,0 +1,503 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="2644e0ff-6390-4c46-86d1-6c488d5f49cb" name="Changes" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ExternalProjectsData">
+    <projectState path="$PROJECT_DIR$">
+      <ProjectState />
+    </projectState>
+    <projectState path="$PROJECT_DIR$/quarkus/starter/src/main/demo">
+      <ProjectState />
+    </projectState>
+  </component>
+  <component name="ExternalProjectsManager">
+    <system id="GRADLE">
+      <state>
+        <task path="$PROJECT_DIR$">
+          <activation />
+        </task>
+        <task path="$PROJECT_DIR$/library-module">
+          <activation />
+        </task>
+        <task path="$PROJECT_DIR$/server-module">
+          <activation />
+        </task>
+        <task path="$PROJECT_DIR$/client-app">
+          <activation />
+        </task>
+        <task path="$PROJECT_DIR$/shared/utils">
+          <activation />
+        </task>
+        <task path="$PROJECT_DIR$/shared">
+          <activation />
+        </task>
+        <task path="$PROJECT_DIR$/shared/data-model">
+          <activation />
+        </task>
+        <task path="$PROJECT_DIR$/core">
+          <activation />
+        </task>
+        <task path="$PROJECT_DIR$/shared/library-module">
+          <activation />
+        </task>
+        <task path="$PROJECT_DIR$/core/example">
+          <activation />
+        </task>
+        <task path="$PROJECT_DIR$/core/client-app">
+          <activation />
+        </task>
+        <task path="$PROJECT_DIR$/core/spring-boot-integration-tests-wiremock">
+          <activation />
+        </task>
+        <task path="$PROJECT_DIR$/core/spring-boot-rest-assured">
+          <activation />
+        </task>
+        <task path="$PROJECT_DIR$/springboot/example">
+          <activation />
+        </task>
+        <task path="$PROJECT_DIR$/springboot">
+          <activation />
+        </task>
+        <task path="$PROJECT_DIR$/springboot/rest-assured">
+          <activation />
+        </task>
+        <task path="$PROJECT_DIR$/quarkus">
+          <activation />
+        </task>
+        <task path="$PROJECT_DIR$/quarkus/starter">
+          <activation />
+        </task>
+        <task path="$PROJECT_DIR$/springboot/integration-tests">
+          <activation />
+        </task>
+        <task path="$PROJECT_DIR$/shared/pojo">
+          <activation />
+        </task>
+        <projects_view>
+          <tree_state>
+            <expand>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="multi-module-project" type="f1a62948:ProjectNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="multi-module-project" type="f1a62948:ProjectNode" />
+                <item name="shared" type="2d1252cf:ModuleNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="multi-module-project" type="f1a62948:ProjectNode" />
+                <item name="springboot" type="2d1252cf:ModuleNode" />
+              </path>
+            </expand>
+            <select />
+          </tree_state>
+        </projects_view>
+      </state>
+    </system>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="JUnit5 Test Class" />
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitSEFilterConfiguration">
+    <file-type-list>
+      <filtered-out-file-type name="LOCAL_BRANCH" />
+      <filtered-out-file-type name="REMOTE_BRANCH" />
+      <filtered-out-file-type name="TAG" />
+      <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
+    </file-type-list>
+  </component>
+  <component name="JpbToolWindowState">
+    <option name="myId2FirstActivated">
+      <map>
+        <entry key="JPA Inspector" value="true" />
+        <entry key="JPA Palette" value="true" />
+        <entry key="JPA Structure" value="true" />
+      </map>
+    </option>
+    <option name="myId2Visible">
+      <map>
+        <entry key="JPA Inspector" value="false" />
+        <entry key="JPA Palette" value="false" />
+        <entry key="JPA Structure" value="false" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectId" id="1xGnaeEnLJ8yr3ZAybiNY2nZHBv" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="1" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="SONARLINT_PRECOMMIT_ANALYSIS" value="false" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="com.intellij.ide.scratch.ScratchImplUtil$2/New Scratch File" value="PLAIN_TEXT&#10;Groovy" />
+    <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary" value="JUnit5" />
+    <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5" value="" />
+    <property name="create.test.in.the.same.root" value="true" />
+    <property name="jdk.selected.JAVA_MODULE" value="11" />
+    <property name="last_directory_selection" value="$PROJECT_DIR$/shared/utils/src/test/java/com/github/durex/json" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/shared" />
+    <property name="nodejs_package_manager_path" value="npm" />
+    <property name="project.structure.last.edited" value="Modules" />
+    <property name="project.structure.proportion" value="0.15" />
+    <property name="project.structure.side.proportion" value="0.5850575" />
+    <property name="settings.editor.selected.configurable" value="configurable.group.tools.jpab" />
+    <property name="show.run.dashboard.notification" value="false" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/shared" />
+      <recent name="$PROJECT_DIR$/shared/utils/src/test/resources/__files.json" />
+      <recent name="$PROJECT_DIR$/quarkus" />
+      <recent name="$PROJECT_DIR$/core/spring-boot-rest-assured" />
+      <recent name="$PROJECT_DIR$/core/spring-boot-integration-tests-wiremock" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/shared/utils/src/test/resources/__files/json" />
+      <recent name="$PROJECT_DIR$/dependency" />
+      <recent name="$PROJECT_DIR$/common" />
+      <recent name="$PROJECT_DIR$/quarkus/starter/src" />
+      <recent name="$PROJECT_DIR$/springboot/dependencies" />
+    </key>
+    <key name="CreateTestDialog.Recents.Supers">
+      <recent name="" />
+    </key>
+    <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="com.github.durex.pojo" />
+      <recent name="com.github.durex.json" />
+      <recent name="com.github.durex" />
+    </key>
+    <key name="CreateTestDialog.RecentsKey">
+      <recent name="com.github.durex.json" />
+      <recent name="com.github.durex.demo" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="de.rieckpil.blog" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Gradle.SerDeTest">
+    <configuration name="SerDeTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="--tests &quot;com.github.durex.json.SerDeTest&quot;" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value=":shared:utils:test" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <method v="2" />
+    </configuration>
+    <configuration name="SerDeTest.testFileWriter" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="--tests &quot;com.github.durex.json.SerDeTest.testFileWriter&quot;" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value=":shared:utils:test" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <method v="2" />
+    </configuration>
+    <configuration name="SerDeTest.testFileWriterWithPretty" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="--tests &quot;com.github.durex.json.SerDeTest.testFileWriterWithPretty&quot;" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value=":shared:utils:test" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <method v="2" />
+    </configuration>
+    <configuration name="gradle-multi-module-project:shared:utils [test]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/shared/utils" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="test" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <method v="2" />
+    </configuration>
+    <configuration name="gradle-multi-module-project:springboot:rest-assured [test]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/springboot/rest-assured" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="test" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <method v="2" />
+    </configuration>
+    <configuration name="multi-module-project.quarkus.starter.main" type="QuarkusRunConfigurationType" factoryName="Quarkus">
+      <module name="multi-module-project.quarkus.starter.main" />
+      <QsGradleRunConfiguration>
+        <ExternalSystemSettings>
+          <option name="executionName" />
+          <option name="externalProjectPath" value="$PROJECT_DIR$/quarkus/starter" />
+          <option name="externalSystemIdString" value="GRADLE" />
+          <option name="scriptParameters" />
+          <option name="taskDescriptions">
+            <list />
+          </option>
+          <option name="taskNames">
+            <list />
+          </option>
+          <option name="vmOptions" />
+        </ExternalSystemSettings>
+        <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+        <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+        <DebugAllEnabled>false</DebugAllEnabled>
+      </QsGradleRunConfiguration>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Application (1)" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+      <module name="multi-module-project.core.spring-boot-IT.main" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.github.durex.todo.Application" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Application (2)" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+      <module name="multi-module-project.springboot.rest-assured.main" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.github.durex.book.BookApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Application (3)" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+      <module name="multi-module-project.springboot.spring-boot-IT.main" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.github.durex.todo.Application" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Application (4)" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+      <module name="multi-module-project.springboot.rest-assured.main" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.github.durex.book.BookApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Application (5)" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+      <module name="multi-module-project.springboot.integration-tests.main" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.github.durex.todo.Application" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Application (6)" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+      <module name="multi-module-project.springboot.rest-assured.main" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.github.durex.book.BookApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Application" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+      <module name="multi-module-project.springboot.rest-assured.main" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.github.durex.book.BookApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="ServerApplication (1)" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+      <module name="multi-module-project.springboot.example.main" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="pl.jlabs.server.ServerApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="ServerApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+      <module name="multi-module-project.core.example.main" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="pl.jlabs.server.ServerApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="StartApplication (1)" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+      <module name="multi-module-project.core.client-app.main" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.github.durex.StartApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="StartApplication (2)" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+      <module name="multi-module-project.springboot.client-app.main" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.github.durex.StartApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="StartApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+      <module name="core-app.client-app.main" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.github.durex.StartApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Gradle.SerDeTest" />
+        <item itemvalue="Gradle.SerDeTest.testFileWriter" />
+        <item itemvalue="Gradle.SerDeTest.testFileWriterWithPretty" />
+        <item itemvalue="Gradle.gradle-multi-module-project:shared:utils [test]" />
+        <item itemvalue="Gradle.gradle-multi-module-project:springboot:rest-assured [test]" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="2644e0ff-6390-4c46-86d1-6c488d5f49cb" name="Changes" comment="" />
+      <created>1629990387492</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1629990387492</updated>
+      <workItem from="1631893764185" duration="10595000" />
+      <workItem from="1631931731738" duration="32311000" />
+      <workItem from="1632014934734" duration="2880000" />
+      <workItem from="1632114526507" duration="10299000" />
+      <workItem from="1632153152510" duration="6734000" />
+      <workItem from="1632182587163" duration="13803000" />
+      <workItem from="1632218171208" duration="15924000" />
+      <workItem from="1632276300540" duration="758000" />
+      <workItem from="1632410929806" duration="2257000" />
+      <workItem from="1632414020197" duration="342000" />
+      <workItem from="1632457473092" duration="3701000" />
+      <workItem from="1632495572633" duration="3111000" />
+      <workItem from="1632531136271" duration="7320000" />
+      <workItem from="1632538876848" duration="13250000" />
+      <workItem from="1632571174954" duration="9245000" />
+      <workItem from="1632622329646" duration="2751000" />
+      <workItem from="1632626640028" duration="9660000" />
+    </task>
+    <task id="LOCAL-00001" summary="init file structure">
+      <created>1632413010862</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1632413010862</updated>
+    </task>
+    <task id="LOCAL-00002" summary="test: SerDe unit test&#10;- [x] add pojo project&#10;- [x] WireMock demo&#10;- [x] add more method to SerDe">
+      <created>1632622892868</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1632622892868</updated>
+    </task>
+    <task id="LOCAL-00003" summary="chore: update gradle&#10;- [x] drop rest-assured.gradle, use as dependency&#10;- [x] update spotless target file tree&#10;- [x] add more method to SerDe">
+      <created>1632626586950</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1632626586950</updated>
+    </task>
+    <task id="LOCAL-00004" summary="chore: mv pojo to mock">
+      <created>1632650409270</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1632650409270</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="UnknownFeatures">
+    <option featureType="com.intellij.fileTypeFactory" implementationName="*.env" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
+    <option name="CHECK_NEW_TODO" value="false" />
+    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
+    <MESSAGE value="init file structure" />
+    <MESSAGE value="test: SerDe unit test&#10;- [x] add pojo project&#10;- [x] WireMock demo&#10;- [x] add more method to SerDe" />
+    <MESSAGE value="chore: update gradle&#10;- [x] drop rest-assured.gradle, use as dependency&#10;- [x] update spotless target file tree&#10;- [x] add more method to SerDe" />
+    <MESSAGE value="chore: mv pojo to mock" />
+    <option name="LAST_COMMIT_MESSAGE" value="chore: mv pojo to mock" />
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
+  </component>
+</project>

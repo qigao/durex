@@ -1,0 +1,83 @@
+apply plugin: 'com.diffplug.spotless'
+
+spotless {
+    ratchetFrom 'origin/master'
+    java {
+        target fileTree('.') {
+            include '**/src/*/java/**/*.java'
+            exclude '**/.gradle/**'
+            exclude '**/generated/**'
+            exclude '**/build/**'
+        }
+        removeUnusedImports()
+        importOrder()
+        googleJavaFormat()
+        indentWithSpaces(2)
+        endWithNewline()
+    }
+    groovy {
+        target '**/*.groovy'
+        target fileTree('.') {
+            include '**/*.gradle'
+            exclude '**/build/**', '**/build-*/**'
+        }
+        greclipse()
+        indentWithSpaces()
+    }
+    groovyGradle {
+        target '**/*.gradle'
+        target fileTree('.') {
+            include '**/*.gradle'
+            exclude '**/build/**', '**/build-*/**'
+        }
+        greclipse()
+        indentWithSpaces()
+    }
+    json {
+        target fileTree('.') {
+            include '**/*.json'
+            include '**/*.xsd'
+            exclude '**/build/**', '**/build-*/**'
+        }
+        eclipseWtp('json')
+    }
+    format 'xml', {
+        target fileTree('.') {
+            include '**/*.xml'
+            include '**/*.xsd'
+            exclude '**/build/**', '**/build-*/**'
+        }
+        eclipseWtp('xml')
+        trimTrailingWhitespace()
+        indentWithSpaces(2)
+        endWithNewline()
+    }
+    format 'html', {
+        target fileTree('src') {
+            include '**/*.html'
+            include '**/*.js'
+            include '**/*.css'
+            exclude '**/build/**', '**/build-*/**'
+        }
+        eclipseWtp('html')
+    }
+    format 'misc', {
+        target fileTree(projectDir) {
+            include '**/.gitignore'
+            include '**/.properties'
+            include '**/*.adoc'
+            include '**/*.md'
+            include '**/*.sh'
+            exclude '**/build/**', '**/build-*/**'
+        }
+        indentWithSpaces(2)
+        trimTrailingWhitespace()
+        endWithNewline()
+    }
+    task format {
+        doLast {
+            println 'format!'
+        }
+    }
+    tasks.format.dependsOn 'spotlessApply'
+}

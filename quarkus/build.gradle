@@ -1,0 +1,15 @@
+plugins {
+    alias libs.plugins.quarkus
+}
+
+group = 'com.github.durex.quarkus'
+version = '0.0.1'
+
+subprojects {
+    apply plugin: 'io.freefair.lombok'
+    apply plugin: 'io.quarkus'
+    apply from: "$rootDir/gradle/jacoco.gradle"
+    apply from: "$rootDir/gradle/spotless.gradle"
+    apply from: "$rootDir/dependency/common.gradle"
+    apply from: "$rootDir/quarkus/dependencies.gradle"
+}
