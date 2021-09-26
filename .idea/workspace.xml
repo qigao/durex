@@ -4,258 +4,204 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2644e0ff-6390-4c46-86d1-6c488d5f49cb" name="Changes" comment="">
+    <list default="true" id="ce16b42b-2afe-4f38-886d-149d86eb013d" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/a/5/a5cc2925ca8258af241be7e5b0381edf30266302" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.2/dependencies-accessors/2163c433cbb682cd9ab3b05d7502e345db3ea7a9/classes/org/gradle/accessors/dm/LibrariesForLibs$BundleAccessors.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.2/dependencies-accessors/2163c433cbb682cd9ab3b05d7502e345db3ea7a9/classes/org/gradle/accessors/dm/LibrariesForLibs$CommonsLibraryAccessors.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.2/dependencies-accessors/2163c433cbb682cd9ab3b05d7502e345db3ea7a9/classes/org/gradle/accessors/dm/LibrariesForLibs$GroovyLibraryAccessors.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.2/dependencies-accessors/2163c433cbb682cd9ab3b05d7502e345db3ea7a9/classes/org/gradle/accessors/dm/LibrariesForLibs$PluginAccessors.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.2/dependencies-accessors/2163c433cbb682cd9ab3b05d7502e345db3ea7a9/classes/org/gradle/accessors/dm/LibrariesForLibs$QuarkusLibraryAccessors.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.2/dependencies-accessors/2163c433cbb682cd9ab3b05d7502e345db3ea7a9/classes/org/gradle/accessors/dm/LibrariesForLibs$VersionAccessors.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.2/dependencies-accessors/2163c433cbb682cd9ab3b05d7502e345db3ea7a9/classes/org/gradle/accessors/dm/LibrariesForLibs$WiremockLibraryAccessors.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.2/dependencies-accessors/2163c433cbb682cd9ab3b05d7502e345db3ea7a9/classes/org/gradle/accessors/dm/LibrariesForLibs.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.2/dependencies-accessors/2163c433cbb682cd9ab3b05d7502e345db3ea7a9/sources/org/gradle/accessors/dm/LibrariesForLibs.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.2/dependencies-accessors/24e3d57dd4a7eaf8b93fd65493b89b867588d520/classes/org/gradle/accessors/dm/LibrariesForLibs$BundleAccessors.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.2/dependencies-accessors/24e3d57dd4a7eaf8b93fd65493b89b867588d520/classes/org/gradle/accessors/dm/LibrariesForLibs$CommonsLibraryAccessors.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.2/dependencies-accessors/24e3d57dd4a7eaf8b93fd65493b89b867588d520/classes/org/gradle/accessors/dm/LibrariesForLibs$GroovyLibraryAccessors.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.2/dependencies-accessors/24e3d57dd4a7eaf8b93fd65493b89b867588d520/classes/org/gradle/accessors/dm/LibrariesForLibs$JacksonLibraryAccessors.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.2/dependencies-accessors/24e3d57dd4a7eaf8b93fd65493b89b867588d520/classes/org/gradle/accessors/dm/LibrariesForLibs$PluginAccessors.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.2/dependencies-accessors/24e3d57dd4a7eaf8b93fd65493b89b867588d520/classes/org/gradle/accessors/dm/LibrariesForLibs$QuarkusLibraryAccessors.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.2/dependencies-accessors/24e3d57dd4a7eaf8b93fd65493b89b867588d520/classes/org/gradle/accessors/dm/LibrariesForLibs$SpringPluginAccessors.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.2/dependencies-accessors/24e3d57dd4a7eaf8b93fd65493b89b867588d520/classes/org/gradle/accessors/dm/LibrariesForLibs$VersionAccessors.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.2/dependencies-accessors/24e3d57dd4a7eaf8b93fd65493b89b867588d520/classes/org/gradle/accessors/dm/LibrariesForLibs$WiremockLibraryAccessors.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.2/dependencies-accessors/24e3d57dd4a7eaf8b93fd65493b89b867588d520/classes/org/gradle/accessors/dm/LibrariesForLibs.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.2/dependencies-accessors/24e3d57dd4a7eaf8b93fd65493b89b867588d520/sources/org/gradle/accessors/dm/LibrariesForLibs.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.2/dependencies-accessors/5091a7e52dc216fac5a70a4c4c13e5d450f139a6/classes/org/gradle/accessors/dm/LibrariesForLibs$BundleAccessors.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.2/dependencies-accessors/5091a7e52dc216fac5a70a4c4c13e5d450f139a6/classes/org/gradle/accessors/dm/LibrariesForLibs$CommonsLibraryAccessors.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.2/dependencies-accessors/5091a7e52dc216fac5a70a4c4c13e5d450f139a6/classes/org/gradle/accessors/dm/LibrariesForLibs$GroovyLibraryAccessors.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.2/dependencies-accessors/5091a7e52dc216fac5a70a4c4c13e5d450f139a6/classes/org/gradle/accessors/dm/LibrariesForLibs$JacksonLibraryAccessors.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.2/dependencies-accessors/5091a7e52dc216fac5a70a4c4c13e5d450f139a6/classes/org/gradle/accessors/dm/LibrariesForLibs$Junit5LibraryAccessors.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.2/dependencies-accessors/5091a7e52dc216fac5a70a4c4c13e5d450f139a6/classes/org/gradle/accessors/dm/LibrariesForLibs$PluginAccessors.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.2/dependencies-accessors/5091a7e52dc216fac5a70a4c4c13e5d450f139a6/classes/org/gradle/accessors/dm/LibrariesForLibs$QuarkusLibraryAccessors.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.2/dependencies-accessors/5091a7e52dc216fac5a70a4c4c13e5d450f139a6/classes/org/gradle/accessors/dm/LibrariesForLibs$SpringPluginAccessors.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.2/dependencies-accessors/5091a7e52dc216fac5a70a4c4c13e5d450f139a6/classes/org/gradle/accessors/dm/LibrariesForLibs$VersionAccessors.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.2/dependencies-accessors/5091a7e52dc216fac5a70a4c4c13e5d450f139a6/classes/org/gradle/accessors/dm/LibrariesForLibs$WiremockLibraryAccessors.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.2/dependencies-accessors/5091a7e52dc216fac5a70a4c4c13e5d450f139a6/classes/org/gradle/accessors/dm/LibrariesForLibs.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.2/dependencies-accessors/5091a7e52dc216fac5a70a4c4c13e5d450f139a6/sources/org/gradle/accessors/dm/LibrariesForLibs.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.2/dependencies-accessors/663d0d4484a4135b930da6952dcddb44856b1eb3/classes/org/gradle/accessors/dm/LibrariesForLibs$BundleAccessors.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.2/dependencies-accessors/663d0d4484a4135b930da6952dcddb44856b1eb3/classes/org/gradle/accessors/dm/LibrariesForLibs$CommonsLibraryAccessors.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.2/dependencies-accessors/663d0d4484a4135b930da6952dcddb44856b1eb3/classes/org/gradle/accessors/dm/LibrariesForLibs$GroovyLibraryAccessors.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.2/dependencies-accessors/663d0d4484a4135b930da6952dcddb44856b1eb3/classes/org/gradle/accessors/dm/LibrariesForLibs$JacksonLibraryAccessors.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.2/dependencies-accessors/663d0d4484a4135b930da6952dcddb44856b1eb3/classes/org/gradle/accessors/dm/LibrariesForLibs$PluginAccessors.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.2/dependencies-accessors/663d0d4484a4135b930da6952dcddb44856b1eb3/classes/org/gradle/accessors/dm/LibrariesForLibs$QuarkusLibraryAccessors.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.2/dependencies-accessors/663d0d4484a4135b930da6952dcddb44856b1eb3/classes/org/gradle/accessors/dm/LibrariesForLibs$SpringPluginAccessors.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.2/dependencies-accessors/663d0d4484a4135b930da6952dcddb44856b1eb3/classes/org/gradle/accessors/dm/LibrariesForLibs$VersionAccessors.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.2/dependencies-accessors/663d0d4484a4135b930da6952dcddb44856b1eb3/classes/org/gradle/accessors/dm/LibrariesForLibs$WiremockLibraryAccessors.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.2/dependencies-accessors/663d0d4484a4135b930da6952dcddb44856b1eb3/classes/org/gradle/accessors/dm/LibrariesForLibs.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.2/dependencies-accessors/663d0d4484a4135b930da6952dcddb44856b1eb3/sources/org/gradle/accessors/dm/LibrariesForLibs.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.2/dependencies-accessors/6b147cbea09bdfd2400e9da07dd5fe5d488a703c/classes/org/gradle/accessors/dm/LibrariesForLibs$BundleAccessors.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.2/dependencies-accessors/6b147cbea09bdfd2400e9da07dd5fe5d488a703c/classes/org/gradle/accessors/dm/LibrariesForLibs$CommonsLibraryAccessors.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.2/dependencies-accessors/6b147cbea09bdfd2400e9da07dd5fe5d488a703c/classes/org/gradle/accessors/dm/LibrariesForLibs$GroovyLibraryAccessors.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.2/dependencies-accessors/6b147cbea09bdfd2400e9da07dd5fe5d488a703c/classes/org/gradle/accessors/dm/LibrariesForLibs$PluginAccessors.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.2/dependencies-accessors/6b147cbea09bdfd2400e9da07dd5fe5d488a703c/classes/org/gradle/accessors/dm/LibrariesForLibs$VersionAccessors.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.2/dependencies-accessors/6b147cbea09bdfd2400e9da07dd5fe5d488a703c/classes/org/gradle/accessors/dm/LibrariesForLibs$WiremockLibraryAccessors.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.2/dependencies-accessors/6b147cbea09bdfd2400e9da07dd5fe5d488a703c/classes/org/gradle/accessors/dm/LibrariesForLibs$WiremockVersionAccessors.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.2/dependencies-accessors/6b147cbea09bdfd2400e9da07dd5fe5d488a703c/classes/org/gradle/accessors/dm/LibrariesForLibs.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.2/dependencies-accessors/6b147cbea09bdfd2400e9da07dd5fe5d488a703c/sources/org/gradle/accessors/dm/LibrariesForLibs.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.2/dependencies-accessors/6b7d1521fb32b14bbd64a4d756b62b5f3749019f/classes/org/gradle/accessors/dm/LibrariesForLibs$BundleAccessors.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.2/dependencies-accessors/6b7d1521fb32b14bbd64a4d756b62b5f3749019f/classes/org/gradle/accessors/dm/LibrariesForLibs$CommonsLibraryAccessors.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.2/dependencies-accessors/6b7d1521fb32b14bbd64a4d756b62b5f3749019f/classes/org/gradle/accessors/dm/LibrariesForLibs$GroovyLibraryAccessors.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.2/dependencies-accessors/6b7d1521fb32b14bbd64a4d756b62b5f3749019f/classes/org/gradle/accessors/dm/LibrariesForLibs$PluginAccessors.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.2/dependencies-accessors/6b7d1521fb32b14bbd64a4d756b62b5f3749019f/classes/org/gradle/accessors/dm/LibrariesForLibs$QuarkusLibraryAccessors.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.2/dependencies-accessors/6b7d1521fb32b14bbd64a4d756b62b5f3749019f/classes/org/gradle/accessors/dm/LibrariesForLibs$VersionAccessors.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.2/dependencies-accessors/6b7d1521fb32b14bbd64a4d756b62b5f3749019f/classes/org/gradle/accessors/dm/LibrariesForLibs$WiremockLibraryAccessors.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.2/dependencies-accessors/6b7d1521fb32b14bbd64a4d756b62b5f3749019f/classes/org/gradle/accessors/dm/LibrariesForLibs.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.2/dependencies-accessors/6b7d1521fb32b14bbd64a4d756b62b5f3749019f/sources/org/gradle/accessors/dm/LibrariesForLibs.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.2/dependencies-accessors/7a4a196b2ed29c88909c3b37b86b492c843fbcd4/classes/org/gradle/accessors/dm/LibrariesForLibs$BundleAccessors.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.2/dependencies-accessors/7a4a196b2ed29c88909c3b37b86b492c843fbcd4/classes/org/gradle/accessors/dm/LibrariesForLibs$CommonsLibraryAccessors.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.2/dependencies-accessors/7a4a196b2ed29c88909c3b37b86b492c843fbcd4/classes/org/gradle/accessors/dm/LibrariesForLibs$GroovyLibraryAccessors.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.2/dependencies-accessors/7a4a196b2ed29c88909c3b37b86b492c843fbcd4/classes/org/gradle/accessors/dm/LibrariesForLibs$PluginAccessors.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.2/dependencies-accessors/7a4a196b2ed29c88909c3b37b86b492c843fbcd4/classes/org/gradle/accessors/dm/LibrariesForLibs$QuarkusLibraryAccessors.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.2/dependencies-accessors/7a4a196b2ed29c88909c3b37b86b492c843fbcd4/classes/org/gradle/accessors/dm/LibrariesForLibs$VersionAccessors.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.2/dependencies-accessors/7a4a196b2ed29c88909c3b37b86b492c843fbcd4/classes/org/gradle/accessors/dm/LibrariesForLibs$WiremockLibraryAccessors.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.2/dependencies-accessors/7a4a196b2ed29c88909c3b37b86b492c843fbcd4/classes/org/gradle/accessors/dm/LibrariesForLibs$WiremockVersionAccessors.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.2/dependencies-accessors/7a4a196b2ed29c88909c3b37b86b492c843fbcd4/classes/org/gradle/accessors/dm/LibrariesForLibs.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.2/dependencies-accessors/7a4a196b2ed29c88909c3b37b86b492c843fbcd4/sources/org/gradle/accessors/dm/LibrariesForLibs.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.2/dependencies-accessors/a95aad47b08c17c922205ed79f70a5c19f1d431c/classes/org/gradle/accessors/dm/LibrariesForLibs$BundleAccessors.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.2/dependencies-accessors/a95aad47b08c17c922205ed79f70a5c19f1d431c/classes/org/gradle/accessors/dm/LibrariesForLibs$CommonsLibraryAccessors.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.2/dependencies-accessors/a95aad47b08c17c922205ed79f70a5c19f1d431c/classes/org/gradle/accessors/dm/LibrariesForLibs$GroovyLibraryAccessors.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.2/dependencies-accessors/a95aad47b08c17c922205ed79f70a5c19f1d431c/classes/org/gradle/accessors/dm/LibrariesForLibs$PluginAccessors.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.2/dependencies-accessors/a95aad47b08c17c922205ed79f70a5c19f1d431c/classes/org/gradle/accessors/dm/LibrariesForLibs$VersionAccessors.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.2/dependencies-accessors/a95aad47b08c17c922205ed79f70a5c19f1d431c/classes/org/gradle/accessors/dm/LibrariesForLibs$WiremockLibraryAccessors.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.2/dependencies-accessors/a95aad47b08c17c922205ed79f70a5c19f1d431c/classes/org/gradle/accessors/dm/LibrariesForLibs$WiremockVersionAccessors.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.2/dependencies-accessors/a95aad47b08c17c922205ed79f70a5c19f1d431c/classes/org/gradle/accessors/dm/LibrariesForLibs.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.2/dependencies-accessors/a95aad47b08c17c922205ed79f70a5c19f1d431c/sources/org/gradle/accessors/dm/LibrariesForLibs.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.2/dependencies-accessors/b4ebfd41b13c564cc97bf2408d624466edee131e/classes/org/gradle/accessors/dm/LibrariesForLibs$BundleAccessors.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.2/dependencies-accessors/b4ebfd41b13c564cc97bf2408d624466edee131e/classes/org/gradle/accessors/dm/LibrariesForLibs$CommonsLibraryAccessors.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.2/dependencies-accessors/b4ebfd41b13c564cc97bf2408d624466edee131e/classes/org/gradle/accessors/dm/LibrariesForLibs$GroovyLibraryAccessors.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.2/dependencies-accessors/b4ebfd41b13c564cc97bf2408d624466edee131e/classes/org/gradle/accessors/dm/LibrariesForLibs$PluginAccessors.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.2/dependencies-accessors/b4ebfd41b13c564cc97bf2408d624466edee131e/classes/org/gradle/accessors/dm/LibrariesForLibs$QuarkusLibraryAccessors.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.2/dependencies-accessors/b4ebfd41b13c564cc97bf2408d624466edee131e/classes/org/gradle/accessors/dm/LibrariesForLibs$VersionAccessors.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.2/dependencies-accessors/b4ebfd41b13c564cc97bf2408d624466edee131e/classes/org/gradle/accessors/dm/LibrariesForLibs$WiremockLibraryAccessors.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.2/dependencies-accessors/b4ebfd41b13c564cc97bf2408d624466edee131e/classes/org/gradle/accessors/dm/LibrariesForLibs$WiremockVersionAccessors.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.2/dependencies-accessors/b4ebfd41b13c564cc97bf2408d624466edee131e/classes/org/gradle/accessors/dm/LibrariesForLibs.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.2/dependencies-accessors/b4ebfd41b13c564cc97bf2408d624466edee131e/sources/org/gradle/accessors/dm/LibrariesForLibs.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.2/dependencies-accessors/bb799e694da8fa9116fe16035d8ca317e9a52621/classes/org/gradle/accessors/dm/LibrariesForLibs$BundleAccessors.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.2/dependencies-accessors/bb799e694da8fa9116fe16035d8ca317e9a52621/classes/org/gradle/accessors/dm/LibrariesForLibs$CommonsLibraryAccessors.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.2/dependencies-accessors/bb799e694da8fa9116fe16035d8ca317e9a52621/classes/org/gradle/accessors/dm/LibrariesForLibs$GroovyLibraryAccessors.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.2/dependencies-accessors/bb799e694da8fa9116fe16035d8ca317e9a52621/classes/org/gradle/accessors/dm/LibrariesForLibs$PluginAccessors.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.2/dependencies-accessors/bb799e694da8fa9116fe16035d8ca317e9a52621/classes/org/gradle/accessors/dm/LibrariesForLibs$QuarkusLibraryAccessors.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.2/dependencies-accessors/bb799e694da8fa9116fe16035d8ca317e9a52621/classes/org/gradle/accessors/dm/LibrariesForLibs$SpringPluginAccessors.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.2/dependencies-accessors/bb799e694da8fa9116fe16035d8ca317e9a52621/classes/org/gradle/accessors/dm/LibrariesForLibs$VersionAccessors.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.2/dependencies-accessors/bb799e694da8fa9116fe16035d8ca317e9a52621/classes/org/gradle/accessors/dm/LibrariesForLibs$WiremockLibraryAccessors.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.2/dependencies-accessors/bb799e694da8fa9116fe16035d8ca317e9a52621/classes/org/gradle/accessors/dm/LibrariesForLibs.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.2/dependencies-accessors/bb799e694da8fa9116fe16035d8ca317e9a52621/sources/org/gradle/accessors/dm/LibrariesForLibs.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.2/dependencies-accessors/dependencies-accessors.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.2/dependencies-accessors/dependencies-accessors.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.2/dependencies-accessors/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.2/dependencies-accessors/executionHistory.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.2/executionHistory/executionHistory.bin" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.2/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.2/executionHistory/executionHistory.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.2/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.2/fileHashes/fileHashes.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.2/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.2/fileHashes/fileHashes.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.2/fileHashes/resourceHashesCache.bin" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/cache.properties" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/cache.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/checksums/checksums.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/checksums/checksums.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/checksums/md5-checksums.bin" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/checksums/sha1-checksums.bin" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/codeStyles/codeStyleConfig.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/jarRepositories.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/jpa-buddy.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules/core/client-app/multi-module-project.core.client-app.test.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules/core/example/multi-module-project.core.example.test.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules/core/multi-module-project.core.test.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules/core/spring-boot-IT/multi-module-project.core.spring-boot-IT.test.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules/core/spring-boot-integration-tests-wiremock/multi-module-project.core.spring-boot-integration-tests-wiremock.test.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules/core/spring-boot-rest-assured/multi-module-project.core.spring-boot-rest-assured.test.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules/shared/data-model/target/multi-module-project.shared.data-model.target.test.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules/shared/data-model/target/spotless/multi-module-project.shared.data-model.target.spotless.test.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules/shared/data-model/target/spotless/spotlessMisc/multi-module-project.shared.data-model.target.spotless.spotlessMisc.test.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules/shared/utils/target/multi-module-project.shared.utils.target.test.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules/shared/utils/target/spotless/multi-module-project.shared.utils.target.spotless.test.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules/shared/utils/target/spotless/spotlessMisc/multi-module-project.shared.utils.target.spotless.spotlessMisc.test.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules/shared/utils/utils.multi-module-project.shared.test.test.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules/springboot/client-app/multi-module-project.springboot.client-app.test.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules/springboot/example/multi-module-project.springboot.example.test.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/saveactions_settings.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/0/6/06bdd99070dac1294c32855593a0a2f11189e300" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/0/6/06d7cc826fa9783e39f9bec1d3642505e5ad54e1" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/1/1/112379abeaa792e66d825bfb758c7fd4d21228d5" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/2/4/24139dae656713ba861751fb2c2ac38839349a7a" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/2/5/25121a46205da8a3f9eae81152d93d8205ef7174" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/2/8/284e85af5ba52ac271ba74ed292d27584d098ab4" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/2/a/2afbb999f001938c88fa43fc2ef52abf0f8213e4" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/3/5/353a21120c9ddda85422c5b40cf98f29980c7682" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/3/7/37e533850d6b6ca513be144d29ba268ddf835f99" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/3/8/38923d0364f83f1ee34e3a366911b4e66e99d0be" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/3/a/3a1efa73a9361b02f80f76a2e11b6044378c1596" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/3/a/3a551cc065aa0481b49944f0700a7244f8f9c574" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/3/d/3da434e511215ec7e11873951ca743bdb4398511" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/3/e/3e370da7cff5561c40a7f12a65a953dbeeca5f25" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/4/1/412683dab89752cee38556c9a8207174ee93f33b" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/4/3/43bcb82a65ebac5b52a7d28ce76d8af28871edbc" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/4/4/4460f94e69bd8303628d87aeef4e2b7d7b83f5cc" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/4/c/4c398a839fc23a44e54e0f7ab4cc1eb2649dece2" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/5/0/506e09b01faa9e526aadfd42e62122c82a1317bd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/5/1/51c31de941cdbd1c8d437fa50ce3c398f68b39b8" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/5/9/59225ea0f6f557c6ed9c75eae2245d55d1ceda58" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/5/b/5bbfa66edb4db3c7c33c5181f43510990d3307f9" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/5/f/5f0f660d9c3d546e176bac5faad97f6fd3e4e24e" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/6/2/626a747c8694eaae66f2afb3d1a745b045782c70" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/6/8/68107242a2328e53e3ef392e8ce3a3e56bcf1038" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/7/a/7a87cd2eae56a2e16be8b82e428af31a92835b93" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/7/a/7af600b2c78de39794fa3f10f55b02d0032ca019" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/8/1/81113ae8f21d0a31f91fb6f96616ebf5d82dd480" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/8/b/8bf7a6953313bc25e39564cf1a92dcbf44fe1416" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/8/e/8e1e7fa2fa4bddc2078f8c4f995b48cd6d7531f7" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/9/3/939ef2f273ac67caef8bccd92643b09a25feb900" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/9/7/9791077765a8718f89e613440e5b55deb4c86372" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/9/7/97b968ee8e6c35b697dd8d01db3ab117fe4966ef" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/9/7/97ed12aa37f2e7f20082e87fb94435ad24da53db" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/9/a/9a9f87c45754d04de5330c243d17f079cdd14330" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/9/e/9e367dd4d8b5887a2e1a66eb2fa1fd6fbe15c258" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/9/e/9ef042efe1df77847fad6d24aa4b0b636fff91c3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/a/0/a00f5ce960fdc2f4c17e28e053f1a105e06d0e3b" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/a/1/a1411d0092e7ea105f0841b6efdaad4e9c510345" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/a/e/aea7592e877800a0c9cdbb90987ecf8a30d8f047" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/b/4/b467fb648836b91d162642b5dcdbf479639ae280" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/b/4/b46e904397a02eb6882258d590c8c1268f2eab9a" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/b/a/ba6c981fedd090cd72d09a652b1ef06ec850ea0b" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/c/9/c92b11e7d37cfa7ea943fd7113db4395ca456088" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/c/9/c9645b650daff54e198d24c65c750ec92466110e" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/d/a/da738c1673ca7a12530a469c7181f44e2b333321" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/e/4/e4468e5f5cd1c1ebc44e699190d7d802e224e86e" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/e/9/e9221b2f727f3a754ac2cf3f39135a1aae937eec" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/e/b/eb2b4ef5a79913f2c1042ae194c5fc8a7049e980" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/e/d/ed795e85eaa995091953d8373409404e96eb1330" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/f/0/f07866736216be0ee2aba49e392191aeae700a35" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/f/0/f0971ee8da07e474ca1f6f520b3bb71421a181ae" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/f/0/f0b0f908ca013f20da530c7d98df843ec3e98b02" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/f/b/fbe448ebfc3eb2d4e308f6b8b043666f5b57235e" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/index.pb" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/index.pb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/uiDesigner.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tmp/spotless-register-dependencies" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/quarkus/build/libs/quarkus-0.0.1.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/quarkus/build/tmp/jar/MANIFEST.MF" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/quarkus/starter/build/classes/java/main/com/github/durex/demo/DemoResource.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/quarkus/starter/build/classes/java/test/com/github/durex/demo/DemoResourceTest.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/quarkus/starter/build/jacoco/test.exec" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/quarkus/starter/build/lombok/effective-config/main/lombok-1.config" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/quarkus/starter/build/lombok/effective-config/main/lombok-2.config" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/quarkus/starter/build/lombok/effective-config/main/lombok-3.config" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/quarkus/starter/build/lombok/effective-config/main/lombok-4.config" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/quarkus/starter/build/lombok/effective-config/main/lombok-5.config" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/quarkus/starter/build/lombok/effective-config/test/lombok-1.config" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/quarkus/starter/build/lombok/effective-config/test/lombok-2.config" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/quarkus/starter/build/lombok/effective-config/test/lombok-3.config" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/quarkus/starter/build/lombok/effective-config/test/lombok-4.config" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/quarkus/starter/build/lombok/effective-config/test/lombok-5.config" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/quarkus/starter/build/reports/jacoco/test/html/index.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/quarkus/starter/build/reports/jacoco/test/html/jacoco-resources/branchfc.gif" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/quarkus/starter/build/reports/jacoco/test/html/jacoco-resources/branchnc.gif" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/quarkus/starter/build/reports/jacoco/test/html/jacoco-resources/branchpc.gif" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/quarkus/starter/build/reports/jacoco/test/html/jacoco-resources/bundle.gif" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/quarkus/starter/build/reports/jacoco/test/html/jacoco-resources/class.gif" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/quarkus/starter/build/reports/jacoco/test/html/jacoco-resources/down.gif" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/quarkus/starter/build/reports/jacoco/test/html/jacoco-resources/greenbar.gif" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/quarkus/starter/build/reports/jacoco/test/html/jacoco-resources/group.gif" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/quarkus/starter/build/reports/jacoco/test/html/jacoco-resources/method.gif" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/quarkus/starter/build/reports/jacoco/test/html/jacoco-resources/package.gif" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/quarkus/starter/build/reports/jacoco/test/html/jacoco-resources/prettify.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/quarkus/starter/build/reports/jacoco/test/html/jacoco-resources/prettify.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/quarkus/starter/build/reports/jacoco/test/html/jacoco-resources/redbar.gif" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/quarkus/starter/build/reports/jacoco/test/html/jacoco-resources/report.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/quarkus/starter/build/reports/jacoco/test/html/jacoco-resources/report.gif" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/quarkus/starter/build/reports/jacoco/test/html/jacoco-resources/session.gif" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/quarkus/starter/build/reports/jacoco/test/html/jacoco-resources/sort.gif" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/quarkus/starter/build/reports/jacoco/test/html/jacoco-resources/sort.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/quarkus/starter/build/reports/jacoco/test/html/jacoco-resources/source.gif" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/quarkus/starter/build/reports/jacoco/test/html/jacoco-resources/up.gif" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/quarkus/starter/build/reports/jacoco/test/html/jacoco-sessions.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/quarkus/starter/build/reports/jacoco/test/jacocoTestReport.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/quarkus/starter/build/reports/tests/test/css/base-style.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/quarkus/starter/build/reports/tests/test/css/style.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/quarkus/starter/build/reports/tests/test/index.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/quarkus/starter/build/reports/tests/test/js/report.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/quarkus/starter/build/test-results/test/binary/output.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/quarkus/starter/build/test-results/test/binary/output.bin.idx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/quarkus/starter/build/test-results/test/binary/results.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/quarkus/starter/build/tmp/compileJava/previous-compilation-data.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/quarkus/starter/build/tmp/compileTestJava/previous-compilation-data.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/quarkus/starter/build/tmp/expandedArchives/org.jacoco.agent-0.8.7.jar_3a83c50b4a016f281c4e9f3500d16b55/META-INF/MANIFEST.MF" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/quarkus/starter/build/tmp/expandedArchives/org.jacoco.agent-0.8.7.jar_3a83c50b4a016f281c4e9f3500d16b55/META-INF/maven/org.jacoco/org.jacoco.agent/pom.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/quarkus/starter/build/tmp/expandedArchives/org.jacoco.agent-0.8.7.jar_3a83c50b4a016f281c4e9f3500d16b55/META-INF/maven/org.jacoco/org.jacoco.agent/pom.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/quarkus/starter/build/tmp/expandedArchives/org.jacoco.agent-0.8.7.jar_3a83c50b4a016f281c4e9f3500d16b55/about.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/quarkus/starter/build/tmp/expandedArchives/org.jacoco.agent-0.8.7.jar_3a83c50b4a016f281c4e9f3500d16b55/jacocoagent.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/quarkus/starter/build/tmp/expandedArchives/org.jacoco.agent-0.8.7.jar_3a83c50b4a016f281c4e9f3500d16b55/org/jacoco/agent/AgentJar.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/quarkus/starter/build/tmp/test/quarkus-app-test-model.dat" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/shared/data-model/build/classes/java/main/pl/jlabs/model/Product$ProductBuilder.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/shared/data-model/build/classes/java/main/pl/jlabs/model/Product.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/shared/data-model/build/libs/data-model.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/shared/data-model/build/lombok/effective-config/integrationTest/lombok-1.config" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/shared/data-model/build/lombok/effective-config/main/lombok-1.config" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/shared/data-model/build/lombok/effective-config/test/lombok-1.config" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/shared/data-model/build/tmp/compileJava/previous-compilation-data.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/shared/data-model/build/tmp/jar/MANIFEST.MF" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/shared/mock/build/classes/java/main/com/github/durex/pojo/MockUtils.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/shared/mock/build/classes/java/main/pl/jlabs/model/Product$ProductBuilder.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/shared/mock/build/classes/java/main/pl/jlabs/model/Product.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/shared/mock/build/libs/mock.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/shared/mock/build/libs/pojo.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/shared/mock/build/lombok/effective-config/integrationTest/lombok-1.config" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/shared/mock/build/lombok/effective-config/main/lombok-1.config" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/shared/mock/build/lombok/effective-config/test/lombok-1.config" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/shared/mock/build/tmp/compileJava/previous-compilation-data.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/shared/mock/build/tmp/jar/MANIFEST.MF" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/shared/utils/build/classes/java/main/com/github/durex/json/SerDe.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/shared/utils/build/classes/java/test/com/github/durex/json/SerDeTest$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/shared/utils/build/classes/java/test/com/github/durex/json/SerDeTest$2.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/shared/utils/build/classes/java/test/com/github/durex/json/SerDeTest$3.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/shared/utils/build/classes/java/test/com/github/durex/json/SerDeTest$4.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/shared/utils/build/classes/java/test/com/github/durex/json/SerDeTest$5.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/shared/utils/build/classes/java/test/com/github/durex/json/SerDeTest$6.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/shared/utils/build/classes/java/test/com/github/durex/json/SerDeTest.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/shared/utils/build/classes/java/test/com/github/durex/json/WireMockJunit5Test$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/shared/utils/build/classes/java/test/com/github/durex/json/WireMockJunit5Test.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/shared/utils/build/classes/java/test/com/github/durex/json/model/User$UserBuilder.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/shared/utils/build/classes/java/test/com/github/durex/json/model/User.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/shared/utils/build/jacoco/test.exec" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/shared/utils/build/libs/utils.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/shared/utils/build/lombok/effective-config/integrationTest/lombok-1.config" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/shared/utils/build/lombok/effective-config/main/lombok-1.config" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/shared/utils/build/lombok/effective-config/test/lombok-1.config" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/shared/utils/build/reports/jacoco/test/html/index.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/shared/utils/build/reports/jacoco/test/html/jacoco-resources/branchfc.gif" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/shared/utils/build/reports/jacoco/test/html/jacoco-resources/branchnc.gif" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/shared/utils/build/reports/jacoco/test/html/jacoco-resources/branchpc.gif" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/shared/utils/build/reports/jacoco/test/html/jacoco-resources/bundle.gif" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/shared/utils/build/reports/jacoco/test/html/jacoco-resources/class.gif" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/shared/utils/build/reports/jacoco/test/html/jacoco-resources/down.gif" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/shared/utils/build/reports/jacoco/test/html/jacoco-resources/greenbar.gif" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/shared/utils/build/reports/jacoco/test/html/jacoco-resources/group.gif" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/shared/utils/build/reports/jacoco/test/html/jacoco-resources/method.gif" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/shared/utils/build/reports/jacoco/test/html/jacoco-resources/package.gif" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/shared/utils/build/reports/jacoco/test/html/jacoco-resources/prettify.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/shared/utils/build/reports/jacoco/test/html/jacoco-resources/prettify.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/shared/utils/build/reports/jacoco/test/html/jacoco-resources/redbar.gif" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/shared/utils/build/reports/jacoco/test/html/jacoco-resources/report.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/shared/utils/build/reports/jacoco/test/html/jacoco-resources/report.gif" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/shared/utils/build/reports/jacoco/test/html/jacoco-resources/session.gif" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/shared/utils/build/reports/jacoco/test/html/jacoco-resources/sort.gif" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/shared/utils/build/reports/jacoco/test/html/jacoco-resources/sort.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/shared/utils/build/reports/jacoco/test/html/jacoco-resources/source.gif" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/shared/utils/build/reports/jacoco/test/html/jacoco-resources/up.gif" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/shared/utils/build/reports/jacoco/test/html/jacoco-sessions.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/shared/utils/build/reports/jacoco/test/html/pl.jlabs.utils/Utils.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/shared/utils/build/reports/jacoco/test/html/pl.jlabs.utils/Utils.java.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/shared/utils/build/reports/jacoco/test/html/pl.jlabs.utils/index.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/shared/utils/build/reports/jacoco/test/html/pl.jlabs.utils/index.source.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/shared/utils/build/reports/jacoco/test/jacocoTestReport.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/shared/utils/build/reports/tests/test/css/base-style.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/shared/utils/build/reports/tests/test/css/style.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/shared/utils/build/reports/tests/test/index.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/shared/utils/build/reports/tests/test/js/report.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/shared/utils/build/resources/test/__files/json/user.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/shared/utils/build/resources/test/__files/json/users.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/shared/utils/build/resources/test/json/user.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/shared/utils/build/test-results/test/binary/output.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/shared/utils/build/test-results/test/binary/output.bin.idx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/shared/utils/build/test-results/test/binary/results.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/shared/utils/build/tmp/compileJava/previous-compilation-data.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/shared/utils/build/tmp/compileTestJava/previous-compilation-data.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/shared/utils/build/tmp/expandedArchives/org.jacoco.agent-0.8.7.jar_3a83c50b4a016f281c4e9f3500d16b55/META-INF/MANIFEST.MF" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/shared/utils/build/tmp/expandedArchives/org.jacoco.agent-0.8.7.jar_3a83c50b4a016f281c4e9f3500d16b55/META-INF/maven/org.jacoco/org.jacoco.agent/pom.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/shared/utils/build/tmp/expandedArchives/org.jacoco.agent-0.8.7.jar_3a83c50b4a016f281c4e9f3500d16b55/META-INF/maven/org.jacoco/org.jacoco.agent/pom.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/shared/utils/build/tmp/expandedArchives/org.jacoco.agent-0.8.7.jar_3a83c50b4a016f281c4e9f3500d16b55/about.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/shared/utils/build/tmp/expandedArchives/org.jacoco.agent-0.8.7.jar_3a83c50b4a016f281c4e9f3500d16b55/jacocoagent.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/shared/utils/build/tmp/expandedArchives/org.jacoco.agent-0.8.7.jar_3a83c50b4a016f281c4e9f3500d16b55/org/jacoco/agent/AgentJar.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/shared/utils/build/tmp/jar/MANIFEST.MF" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/springboot/integration-tests/build/classes/java/main/com/github/durex/todo/Application.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/springboot/integration-tests/build/classes/java/main/com/github/durex/todo/SecurityConfig.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/springboot/integration-tests/build/classes/java/main/com/github/durex/todo/TodoController.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/springboot/integration-tests/build/classes/java/main/com/github/durex/todo/WebClientConfig.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/springboot/integration-tests/build/classes/java/test/com/github/durex/todo/ManualSetupIT.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/springboot/integration-tests/build/classes/java/test/com/github/durex/todo/TodoControllerIT.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/springboot/integration-tests/build/classes/java/test/com/github/durex/todo/TodoControllerJUnit5IT.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/springboot/integration-tests/build/classes/java/test/com/github/durex/todo/TodoControllerSpringInitializerIT.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/springboot/integration-tests/build/classes/java/test/com/github/durex/todo/WireMockInitializer.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/springboot/integration-tests/build/jacoco/test.exec" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/springboot/integration-tests/build/lombok/effective-config/main/lombok-1.config" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/springboot/integration-tests/build/lombok/effective-config/test/lombok-1.config" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/springboot/integration-tests/build/reports/jacoco/test/html/index.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/springboot/integration-tests/build/reports/jacoco/test/html/jacoco-resources/branchfc.gif" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/springboot/integration-tests/build/reports/jacoco/test/html/jacoco-resources/branchnc.gif" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/springboot/integration-tests/build/reports/jacoco/test/html/jacoco-resources/branchpc.gif" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/springboot/integration-tests/build/reports/jacoco/test/html/jacoco-resources/bundle.gif" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/springboot/integration-tests/build/reports/jacoco/test/html/jacoco-resources/class.gif" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/springboot/integration-tests/build/reports/jacoco/test/html/jacoco-resources/down.gif" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/springboot/integration-tests/build/reports/jacoco/test/html/jacoco-resources/greenbar.gif" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/springboot/integration-tests/build/reports/jacoco/test/html/jacoco-resources/group.gif" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/springboot/integration-tests/build/reports/jacoco/test/html/jacoco-resources/method.gif" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/springboot/integration-tests/build/reports/jacoco/test/html/jacoco-resources/package.gif" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/springboot/integration-tests/build/reports/jacoco/test/html/jacoco-resources/prettify.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/springboot/integration-tests/build/reports/jacoco/test/html/jacoco-resources/prettify.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/springboot/integration-tests/build/reports/jacoco/test/html/jacoco-resources/redbar.gif" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/springboot/integration-tests/build/reports/jacoco/test/html/jacoco-resources/report.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/springboot/integration-tests/build/reports/jacoco/test/html/jacoco-resources/report.gif" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/springboot/integration-tests/build/reports/jacoco/test/html/jacoco-resources/session.gif" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/springboot/integration-tests/build/reports/jacoco/test/html/jacoco-resources/sort.gif" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/springboot/integration-tests/build/reports/jacoco/test/html/jacoco-resources/sort.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/springboot/integration-tests/build/reports/jacoco/test/html/jacoco-resources/source.gif" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/springboot/integration-tests/build/reports/jacoco/test/html/jacoco-resources/up.gif" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/springboot/integration-tests/build/reports/jacoco/test/html/jacoco-sessions.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/springboot/integration-tests/build/reports/jacoco/test/jacocoTestReport.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/springboot/integration-tests/build/reports/tests/test/css/base-style.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/springboot/integration-tests/build/reports/tests/test/css/style.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/springboot/integration-tests/build/reports/tests/test/index.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/springboot/integration-tests/build/reports/tests/test/js/report.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/springboot/integration-tests/build/resources/main/application.yml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/springboot/integration-tests/build/resources/test/__files/todo-api/big-response-200.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/springboot/integration-tests/build/resources/test/__files/todo-api/response-200.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/springboot/integration-tests/build/test-results/test/binary/output.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/springboot/integration-tests/build/test-results/test/binary/output.bin.idx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/springboot/integration-tests/build/test-results/test/binary/results.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/springboot/integration-tests/build/tmp/compileJava/previous-compilation-data.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/springboot/integration-tests/build/tmp/compileTestJava/previous-compilation-data.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/springboot/integration-tests/build/tmp/expandedArchives/org.jacoco.agent-0.8.7.jar_3a83c50b4a016f281c4e9f3500d16b55/META-INF/MANIFEST.MF" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/springboot/integration-tests/build/tmp/expandedArchives/org.jacoco.agent-0.8.7.jar_3a83c50b4a016f281c4e9f3500d16b55/META-INF/maven/org.jacoco/org.jacoco.agent/pom.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/springboot/integration-tests/build/tmp/expandedArchives/org.jacoco.agent-0.8.7.jar_3a83c50b4a016f281c4e9f3500d16b55/META-INF/maven/org.jacoco/org.jacoco.agent/pom.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/springboot/integration-tests/build/tmp/expandedArchives/org.jacoco.agent-0.8.7.jar_3a83c50b4a016f281c4e9f3500d16b55/about.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/springboot/integration-tests/build/tmp/expandedArchives/org.jacoco.agent-0.8.7.jar_3a83c50b4a016f281c4e9f3500d16b55/jacocoagent.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/springboot/integration-tests/build/tmp/expandedArchives/org.jacoco.agent-0.8.7.jar_3a83c50b4a016f281c4e9f3500d16b55/org/jacoco/agent/AgentJar.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/springboot/rest-assured/build/bootJarMainClassName" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/springboot/rest-assured/build/classes/java/main/com/github/durex/book/BookApplication.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/springboot/rest-assured/build/classes/java/main/com/github/durex/book/controller/BookController.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/springboot/rest-assured/build/classes/java/main/com/github/durex/book/exception/BookNotFoundException.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/springboot/rest-assured/build/classes/java/main/com/github/durex/book/model/Book$BookBuilder.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/springboot/rest-assured/build/classes/java/main/com/github/durex/book/model/Book.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/springboot/rest-assured/build/classes/java/main/com/github/durex/book/model/BookRequest.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/springboot/rest-assured/build/classes/java/main/com/github/durex/book/security/WebSecurityConfig.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/springboot/rest-assured/build/classes/java/main/com/github/durex/book/service/BookService.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/springboot/rest-assured/build/classes/java/test/com/github/durex/book/BookApplicationTest.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/springboot/rest-assured/build/classes/java/test/com/github/durex/book/BookControllerTest.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/springboot/rest-assured/build/jacoco/test.exec" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/springboot/rest-assured/build/libs/rest-assured-plain.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/springboot/rest-assured/build/libs/rest-assured.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/springboot/rest-assured/build/lombok/effective-config/integrationTest/lombok-1.config" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/springboot/rest-assured/build/lombok/effective-config/main/lombok-1.config" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/springboot/rest-assured/build/lombok/effective-config/test/lombok-1.config" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/springboot/rest-assured/build/reports/jacoco/test/html/index.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/springboot/rest-assured/build/reports/jacoco/test/html/jacoco-resources/branchfc.gif" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/springboot/rest-assured/build/reports/jacoco/test/html/jacoco-resources/branchnc.gif" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/springboot/rest-assured/build/reports/jacoco/test/html/jacoco-resources/branchpc.gif" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/springboot/rest-assured/build/reports/jacoco/test/html/jacoco-resources/bundle.gif" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/springboot/rest-assured/build/reports/jacoco/test/html/jacoco-resources/class.gif" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/springboot/rest-assured/build/reports/jacoco/test/html/jacoco-resources/down.gif" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/springboot/rest-assured/build/reports/jacoco/test/html/jacoco-resources/greenbar.gif" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/springboot/rest-assured/build/reports/jacoco/test/html/jacoco-resources/group.gif" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/springboot/rest-assured/build/reports/jacoco/test/html/jacoco-resources/method.gif" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/springboot/rest-assured/build/reports/jacoco/test/html/jacoco-resources/package.gif" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/springboot/rest-assured/build/reports/jacoco/test/html/jacoco-resources/prettify.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/springboot/rest-assured/build/reports/jacoco/test/html/jacoco-resources/prettify.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/springboot/rest-assured/build/reports/jacoco/test/html/jacoco-resources/redbar.gif" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/springboot/rest-assured/build/reports/jacoco/test/html/jacoco-resources/report.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/springboot/rest-assured/build/reports/jacoco/test/html/jacoco-resources/report.gif" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/springboot/rest-assured/build/reports/jacoco/test/html/jacoco-resources/session.gif" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/springboot/rest-assured/build/reports/jacoco/test/html/jacoco-resources/sort.gif" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/springboot/rest-assured/build/reports/jacoco/test/html/jacoco-resources/sort.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/springboot/rest-assured/build/reports/jacoco/test/html/jacoco-resources/source.gif" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/springboot/rest-assured/build/reports/jacoco/test/html/jacoco-resources/up.gif" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/springboot/rest-assured/build/reports/jacoco/test/html/jacoco-sessions.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/springboot/rest-assured/build/reports/jacoco/test/jacocoTestReport.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/springboot/rest-assured/build/reports/tests/test/css/base-style.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/springboot/rest-assured/build/reports/tests/test/css/style.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/springboot/rest-assured/build/reports/tests/test/index.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/springboot/rest-assured/build/reports/tests/test/js/report.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/springboot/rest-assured/build/resources/main/application.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/springboot/rest-assured/build/test-results/test/binary/output.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/springboot/rest-assured/build/test-results/test/binary/output.bin.idx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/springboot/rest-assured/build/test-results/test/binary/results.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/springboot/rest-assured/build/tmp/bootJar/MANIFEST.MF" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/springboot/rest-assured/build/tmp/compileJava/previous-compilation-data.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/springboot/rest-assured/build/tmp/compileTestJava/previous-compilation-data.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/springboot/rest-assured/build/tmp/expandedArchives/org.jacoco.agent-0.8.7.jar_3a83c50b4a016f281c4e9f3500d16b55/META-INF/MANIFEST.MF" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/springboot/rest-assured/build/tmp/expandedArchives/org.jacoco.agent-0.8.7.jar_3a83c50b4a016f281c4e9f3500d16b55/META-INF/maven/org.jacoco/org.jacoco.agent/pom.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/springboot/rest-assured/build/tmp/expandedArchives/org.jacoco.agent-0.8.7.jar_3a83c50b4a016f281c4e9f3500d16b55/META-INF/maven/org.jacoco/org.jacoco.agent/pom.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/springboot/rest-assured/build/tmp/expandedArchives/org.jacoco.agent-0.8.7.jar_3a83c50b4a016f281c4e9f3500d16b55/about.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/springboot/rest-assured/build/tmp/expandedArchives/org.jacoco.agent-0.8.7.jar_3a83c50b4a016f281c4e9f3500d16b55/jacocoagent.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/springboot/rest-assured/build/tmp/expandedArchives/org.jacoco.agent-0.8.7.jar_3a83c50b4a016f281c4e9f3500d16b55/org/jacoco/agent/AgentJar.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/springboot/rest-assured/build/tmp/jar/MANIFEST.MF" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.settings/org.eclipse.buildship.core.prefs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/shared/.settings/org.eclipse.buildship.core.prefs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/springboot/.settings/org.eclipse.buildship.core.prefs" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -266,297 +212,40 @@
     <projectState path="$PROJECT_DIR$">
       <ProjectState />
     </projectState>
-    <projectState path="$PROJECT_DIR$/quarkus/starter/src/main/demo">
-      <ProjectState />
-    </projectState>
-  </component>
-  <component name="ExternalProjectsManager">
-    <system id="GRADLE">
-      <state>
-        <task path="$PROJECT_DIR$">
-          <activation />
-        </task>
-        <task path="$PROJECT_DIR$/library-module">
-          <activation />
-        </task>
-        <task path="$PROJECT_DIR$/server-module">
-          <activation />
-        </task>
-        <task path="$PROJECT_DIR$/client-app">
-          <activation />
-        </task>
-        <task path="$PROJECT_DIR$/shared/utils">
-          <activation />
-        </task>
-        <task path="$PROJECT_DIR$/shared">
-          <activation />
-        </task>
-        <task path="$PROJECT_DIR$/shared/data-model">
-          <activation />
-        </task>
-        <task path="$PROJECT_DIR$/core">
-          <activation />
-        </task>
-        <task path="$PROJECT_DIR$/shared/library-module">
-          <activation />
-        </task>
-        <task path="$PROJECT_DIR$/core/example">
-          <activation />
-        </task>
-        <task path="$PROJECT_DIR$/core/client-app">
-          <activation />
-        </task>
-        <task path="$PROJECT_DIR$/core/spring-boot-integration-tests-wiremock">
-          <activation />
-        </task>
-        <task path="$PROJECT_DIR$/core/spring-boot-rest-assured">
-          <activation />
-        </task>
-        <task path="$PROJECT_DIR$/springboot/example">
-          <activation />
-        </task>
-        <task path="$PROJECT_DIR$/springboot">
-          <activation />
-        </task>
-        <task path="$PROJECT_DIR$/springboot/rest-assured">
-          <activation />
-        </task>
-        <task path="$PROJECT_DIR$/quarkus">
-          <activation />
-        </task>
-        <task path="$PROJECT_DIR$/quarkus/starter">
-          <activation />
-        </task>
-        <task path="$PROJECT_DIR$/springboot/integration-tests">
-          <activation />
-        </task>
-        <task path="$PROJECT_DIR$/shared/pojo">
-          <activation />
-        </task>
-        <projects_view>
-          <tree_state>
-            <expand>
-              <path>
-                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
-                <item name="multi-module-project" type="f1a62948:ProjectNode" />
-              </path>
-              <path>
-                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
-                <item name="multi-module-project" type="f1a62948:ProjectNode" />
-                <item name="shared" type="2d1252cf:ModuleNode" />
-              </path>
-              <path>
-                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
-                <item name="multi-module-project" type="f1a62948:ProjectNode" />
-                <item name="springboot" type="2d1252cf:ModuleNode" />
-              </path>
-            </expand>
-            <select />
-          </tree_state>
-        </projects_view>
-      </state>
-    </system>
-  </component>
-  <component name="FileTemplateManagerImpl">
-    <option name="RECENT_TEMPLATES">
-      <list>
-        <option value="JUnit5 Test Class" />
-        <option value="Class" />
-      </list>
-    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="GitSEFilterConfiguration">
-    <file-type-list>
-      <filtered-out-file-type name="LOCAL_BRANCH" />
-      <filtered-out-file-type name="REMOTE_BRANCH" />
-      <filtered-out-file-type name="TAG" />
-      <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
-    </file-type-list>
-  </component>
   <component name="JpbToolWindowState">
     <option name="myId2FirstActivated">
       <map>
-        <entry key="JPA Inspector" value="true" />
-        <entry key="JPA Palette" value="true" />
         <entry key="JPA Structure" value="true" />
       </map>
     </option>
     <option name="myId2Visible">
       <map>
-        <entry key="JPA Inspector" value="false" />
-        <entry key="JPA Palette" value="false" />
-        <entry key="JPA Structure" value="false" />
+        <entry key="JPA Structure" value="true" />
       </map>
     </option>
   </component>
-  <component name="ProjectId" id="1xGnaeEnLJ8yr3ZAybiNY2nZHBv" />
-  <component name="ProjectLevelVcsManager">
-    <ConfirmationsSetting value="1" id="Add" />
-  </component>
+  <component name="ProjectId" id="1yfrGjH2xZOlu17xoopw7Qh8Rr1" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
-    <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
-    <property name="SONARLINT_PRECOMMIT_ANALYSIS" value="false" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="com.intellij.ide.scratch.ScratchImplUtil$2/New Scratch File" value="PLAIN_TEXT&#10;Groovy" />
-    <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary" value="JUnit5" />
-    <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5" value="" />
-    <property name="create.test.in.the.same.root" value="true" />
-    <property name="jdk.selected.JAVA_MODULE" value="11" />
-    <property name="last_directory_selection" value="$PROJECT_DIR$/shared/utils/src/test/java/com/github/durex/json" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/shared" />
-    <property name="nodejs_package_manager_path" value="npm" />
-    <property name="project.structure.last.edited" value="Modules" />
-    <property name="project.structure.proportion" value="0.15" />
-    <property name="project.structure.side.proportion" value="0.5850575" />
-    <property name="settings.editor.selected.configurable" value="configurable.group.tools.jpab" />
-    <property name="show.run.dashboard.notification" value="false" />
   </component>
-  <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/shared" />
-      <recent name="$PROJECT_DIR$/shared/utils/src/test/resources/__files.json" />
-      <recent name="$PROJECT_DIR$/quarkus" />
-      <recent name="$PROJECT_DIR$/core/spring-boot-rest-assured" />
-      <recent name="$PROJECT_DIR$/core/spring-boot-integration-tests-wiremock" />
-    </key>
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/shared/utils/src/test/resources/__files/json" />
-      <recent name="$PROJECT_DIR$/dependency" />
-      <recent name="$PROJECT_DIR$/common" />
-      <recent name="$PROJECT_DIR$/quarkus/starter/src" />
-      <recent name="$PROJECT_DIR$/springboot/dependencies" />
-    </key>
-    <key name="CreateTestDialog.Recents.Supers">
-      <recent name="" />
-    </key>
-    <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
-      <recent name="com.github.durex.pojo" />
-      <recent name="com.github.durex.json" />
-      <recent name="com.github.durex" />
-    </key>
-    <key name="CreateTestDialog.RecentsKey">
-      <recent name="com.github.durex.json" />
-      <recent name="com.github.durex.demo" />
-    </key>
-    <key name="CopyClassDialog.RECENTS_KEY">
-      <recent name="de.rieckpil.blog" />
-    </key>
+  <component name="RunDashboard">
+    <option name="configurationTypes">
+      <set>
+        <option value="SpringBootApplicationConfigurationType" />
+      </set>
+    </option>
   </component>
-  <component name="RunManager" selected="Gradle.SerDeTest">
-    <configuration name="SerDeTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
-      <ExternalSystemSettings>
-        <option name="executionName" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" value="--tests &quot;com.github.durex.json.SerDeTest&quot;" />
-        <option name="taskDescriptions">
-          <list />
-        </option>
-        <option name="taskNames">
-          <list>
-            <option value=":shared:utils:test" />
-          </list>
-        </option>
-        <option name="vmOptions" />
-      </ExternalSystemSettings>
-      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
-      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
-      <DebugAllEnabled>false</DebugAllEnabled>
-      <method v="2" />
-    </configuration>
-    <configuration name="SerDeTest.testFileWriter" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
-      <ExternalSystemSettings>
-        <option name="executionName" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" value="--tests &quot;com.github.durex.json.SerDeTest.testFileWriter&quot;" />
-        <option name="taskDescriptions">
-          <list />
-        </option>
-        <option name="taskNames">
-          <list>
-            <option value=":shared:utils:test" />
-          </list>
-        </option>
-        <option name="vmOptions" />
-      </ExternalSystemSettings>
-      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
-      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
-      <DebugAllEnabled>false</DebugAllEnabled>
-      <method v="2" />
-    </configuration>
-    <configuration name="SerDeTest.testFileWriterWithPretty" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
-      <ExternalSystemSettings>
-        <option name="executionName" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" value="--tests &quot;com.github.durex.json.SerDeTest.testFileWriterWithPretty&quot;" />
-        <option name="taskDescriptions">
-          <list />
-        </option>
-        <option name="taskNames">
-          <list>
-            <option value=":shared:utils:test" />
-          </list>
-        </option>
-        <option name="vmOptions" />
-      </ExternalSystemSettings>
-      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
-      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
-      <DebugAllEnabled>false</DebugAllEnabled>
-      <method v="2" />
-    </configuration>
-    <configuration name="gradle-multi-module-project:shared:utils [test]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
-      <ExternalSystemSettings>
-        <option name="executionName" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$/shared/utils" />
-        <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" />
-        <option name="taskDescriptions">
-          <list />
-        </option>
-        <option name="taskNames">
-          <list>
-            <option value="test" />
-          </list>
-        </option>
-        <option name="vmOptions" />
-      </ExternalSystemSettings>
-      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
-      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
-      <DebugAllEnabled>false</DebugAllEnabled>
-      <method v="2" />
-    </configuration>
-    <configuration name="gradle-multi-module-project:springboot:rest-assured [test]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
-      <ExternalSystemSettings>
-        <option name="executionName" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$/springboot/rest-assured" />
-        <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" />
-        <option name="taskDescriptions">
-          <list />
-        </option>
-        <option name="taskNames">
-          <list>
-            <option value="test" />
-          </list>
-        </option>
-        <option name="vmOptions" />
-      </ExternalSystemSettings>
-      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
-      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
-      <DebugAllEnabled>false</DebugAllEnabled>
-      <method v="2" />
-    </configuration>
+  <component name="RunManager" selected="Quarkus.multi-module-project.quarkus.starter.main">
     <configuration name="multi-module-project.quarkus.starter.main" type="QuarkusRunConfigurationType" factoryName="Quarkus">
       <module name="multi-module-project.quarkus.starter.main" />
       <QsGradleRunConfiguration>
@@ -581,175 +270,34 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="Application (1)" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
-      <module name="multi-module-project.core.spring-boot-IT.main" />
-      <option name="SPRING_BOOT_MAIN_CLASS" value="com.github.durex.todo.Application" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="Application (2)" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
-      <module name="multi-module-project.springboot.rest-assured.main" />
-      <option name="SPRING_BOOT_MAIN_CLASS" value="com.github.durex.book.BookApplication" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="Application (3)" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
-      <module name="multi-module-project.springboot.spring-boot-IT.main" />
-      <option name="SPRING_BOOT_MAIN_CLASS" value="com.github.durex.todo.Application" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="Application (4)" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
-      <module name="multi-module-project.springboot.rest-assured.main" />
-      <option name="SPRING_BOOT_MAIN_CLASS" value="com.github.durex.book.BookApplication" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="Application (5)" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+    <configuration name="Application" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
       <module name="multi-module-project.springboot.integration-tests.main" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="com.github.durex.todo.Application" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="Application (6)" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+    <configuration name="BookApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
       <module name="multi-module-project.springboot.rest-assured.main" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="com.github.durex.book.BookApplication" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="Application" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
-      <module name="multi-module-project.springboot.rest-assured.main" />
-      <option name="SPRING_BOOT_MAIN_CLASS" value="com.github.durex.book.BookApplication" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="ServerApplication (1)" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
-      <module name="multi-module-project.springboot.example.main" />
-      <option name="SPRING_BOOT_MAIN_CLASS" value="pl.jlabs.server.ServerApplication" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="ServerApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
-      <module name="multi-module-project.core.example.main" />
-      <option name="SPRING_BOOT_MAIN_CLASS" value="pl.jlabs.server.ServerApplication" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="StartApplication (1)" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
-      <module name="multi-module-project.core.client-app.main" />
-      <option name="SPRING_BOOT_MAIN_CLASS" value="com.github.durex.StartApplication" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="StartApplication (2)" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
-      <module name="multi-module-project.springboot.client-app.main" />
-      <option name="SPRING_BOOT_MAIN_CLASS" value="com.github.durex.StartApplication" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="StartApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
-      <module name="core-app.client-app.main" />
-      <option name="SPRING_BOOT_MAIN_CLASS" value="com.github.durex.StartApplication" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <recent_temporary>
-      <list>
-        <item itemvalue="Gradle.SerDeTest" />
-        <item itemvalue="Gradle.SerDeTest.testFileWriter" />
-        <item itemvalue="Gradle.SerDeTest.testFileWriterWithPretty" />
-        <item itemvalue="Gradle.gradle-multi-module-project:shared:utils [test]" />
-        <item itemvalue="Gradle.gradle-multi-module-project:springboot:rest-assured [test]" />
-      </list>
-    </recent_temporary>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="2644e0ff-6390-4c46-86d1-6c488d5f49cb" name="Changes" comment="" />
-      <created>1629990387492</created>
+      <changelist id="ce16b42b-2afe-4f38-886d-149d86eb013d" name="Changes" comment="" />
+      <created>1632653389905</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1629990387492</updated>
-      <workItem from="1631893764185" duration="10595000" />
-      <workItem from="1631931731738" duration="32311000" />
-      <workItem from="1632014934734" duration="2880000" />
-      <workItem from="1632114526507" duration="10299000" />
-      <workItem from="1632153152510" duration="6734000" />
-      <workItem from="1632182587163" duration="13803000" />
-      <workItem from="1632218171208" duration="15924000" />
-      <workItem from="1632276300540" duration="758000" />
-      <workItem from="1632410929806" duration="2257000" />
-      <workItem from="1632414020197" duration="342000" />
-      <workItem from="1632457473092" duration="3701000" />
-      <workItem from="1632495572633" duration="3111000" />
-      <workItem from="1632531136271" duration="7320000" />
-      <workItem from="1632538876848" duration="13250000" />
-      <workItem from="1632571174954" duration="9245000" />
-      <workItem from="1632622329646" duration="2751000" />
-      <workItem from="1632626640028" duration="11659000" />
+      <updated>1632653389905</updated>
+      <workItem from="1632653397194" duration="861000" />
     </task>
-    <task id="LOCAL-00001" summary="init file structure">
-      <created>1632413010862</created>
-      <option name="number" value="00001" />
-      <option name="presentableId" value="LOCAL-00001" />
-      <option name="project" value="LOCAL" />
-      <updated>1632413010862</updated>
-    </task>
-    <task id="LOCAL-00002" summary="test: SerDe unit test&#10;- [x] add pojo project&#10;- [x] WireMock demo&#10;- [x] add more method to SerDe">
-      <created>1632622892868</created>
-      <option name="number" value="00002" />
-      <option name="presentableId" value="LOCAL-00002" />
-      <option name="project" value="LOCAL" />
-      <updated>1632622892868</updated>
-    </task>
-    <task id="LOCAL-00003" summary="chore: update gradle&#10;- [x] drop rest-assured.gradle, use as dependency&#10;- [x] update spotless target file tree&#10;- [x] add more method to SerDe">
-      <created>1632626586950</created>
-      <option name="number" value="00003" />
-      <option name="presentableId" value="LOCAL-00003" />
-      <option name="project" value="LOCAL" />
-      <updated>1632626586950</updated>
-    </task>
-    <task id="LOCAL-00004" summary="chore: mv pojo to mock">
-      <created>1632650409270</created>
-      <option name="number" value="00004" />
-      <option name="presentableId" value="LOCAL-00004" />
-      <option name="project" value="LOCAL" />
-      <updated>1632650409270</updated>
-    </task>
-    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
-  </component>
-  <component name="UnknownFeatures">
-    <option featureType="com.intellij.fileTypeFactory" implementationName="*.env" />
-  </component>
-  <component name="VcsManagerConfiguration">
-    <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
-    <option name="CHECK_NEW_TODO" value="false" />
-    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="init file structure" />
-    <MESSAGE value="test: SerDe unit test&#10;- [x] add pojo project&#10;- [x] WireMock demo&#10;- [x] add more method to SerDe" />
-    <MESSAGE value="chore: update gradle&#10;- [x] drop rest-assured.gradle, use as dependency&#10;- [x] update spotless target file tree&#10;- [x] add more method to SerDe" />
-    <MESSAGE value="chore: mv pojo to mock" />
-    <option name="LAST_COMMIT_MESSAGE" value="chore: mv pojo to mock" />
-  </component>
-  <component name="XSLT-Support.FileAssociations.UIState">
-    <expand />
-    <select />
   </component>
 </project>
