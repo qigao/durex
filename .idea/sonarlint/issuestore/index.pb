@@ -55,9 +55,6 @@ B
 Tspringboot/rest-assured/src/main/java/com/github/durex/book/service/BookService.java,4/1/412683dab89752cee38556c9a8207174ee93f33b
 >
 .gitattributes,2/4/24139dae656713ba861751fb2c2ac38839349a7a
-:
-
-.gitignore,a/5/a5cc2925ca8258af241be7e5b0381edf30266302
 B
 gradle/java.gradle,9/e/9e367dd4d8b5887a2e1a66eb2fa1fd6fbe15c258
 k
