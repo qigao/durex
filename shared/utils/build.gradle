@@ -1,0 +1,9 @@
+apply from: "$rootDir/dependency/jackson.gradle"
+
+dependencies {
+    testImplementation libs.wiremock
+    testImplementation libs.rest.assured
+    testImplementation project(":shared:mock")
+}
+
+

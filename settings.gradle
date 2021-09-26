@@ -1,0 +1,13 @@
+rootProject.name = 'multi-module-project'
+
+apply from: "$rootDir/gradle/modules.gradle"
+
+enableFeaturePreview("VERSION_CATALOGS")
+dependencyResolutionManagement {
+    versionCatalogs {
+        libs {
+            from(files("$rootDir/dependency/versions.toml"))
+        }
+    }
+}
+

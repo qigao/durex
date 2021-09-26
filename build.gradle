@@ -1,0 +1,22 @@
+plugins {
+    alias libs.plugins.lombok
+    alias libs.plugins.spotless
+    alias libs.plugins.editorconfig
+}
+
+allprojects {
+    task hi {
+        group = "fun-tasks"
+        description = "Shows greeting from the project : "
+        doLast { task -> println "Hi from $task.project.name" }
+    }
+    apply plugin: 'eclipse'
+    apply plugin: 'idea'
+}
+
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'org.ec4j.editorconfig'
+    apply from: "$rootDir/gradle/repos.gradle"
+    apply from: "$rootDir/gradle/test.gradle"
+}

@@ -1,0 +1,20 @@
+tasks.withType(Javadoc).configureEach {
+  // Default configuration for all javadoc tasks
+  options.with {
+     memberLevel = JavadocMemberLevel.PROTECTED
+     author = true
+     docTitle = '${rootProject.name} API Documentation'
+     header = "<b>${rootProject.name} ${project.version}</b>"
+     windowTitle = "${rootProject.name} ${project.version} API"
+     bottom = '<font size="-1"><a href="http://github.com/${rootProject.name}/" target="_parent">${rootProject.name}</a></font>'
+     noDeprecated = false
+     noDeprecatedList = false
+     noIndex = false
+     noNavBar = false
+     noTree = false
+     splitIndex = true
+     use = true
+     version = true
+     tags = ["ant.task","noinspection"]
+  }
+}

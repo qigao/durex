@@ -1,0 +1,7 @@
+subprojects {
+    apply plugin: 'io.freefair.lombok'
+    apply from: "$rootDir/gradle/jacoco.gradle"
+    apply from: "$rootDir/gradle/spotless.gradle"
+    apply from: "$rootDir/dependency/common.gradle"
+    apply from: "$rootDir/dependency/junit.gradle"
+}

@@ -1,0 +1,33 @@
+apply plugin: "jacoco"
+
+jacocoTestReport {
+    group = 'Reporting'
+    description = 'Generate Jacoco coverage reports after running tests.'
+    dependsOn test
+    reports {
+        xml.required = true
+        html.required = true
+    }
+}
+
+tasks.test.finalizedBy jacocoTestReport
+tasks.check.dependsOn jacocoTestReport
+
+jacocoTestCoverageVerification {
+    violationRules {
+        rule {
+            element = 'CLASS'
+            limit {
+                counter = 'LINE'
+                value = 'COVEREDRATIO'
+                minimum = 1.0
+            }
+            excludes = [
+                    'io.reflectoring.coverage.part.PartlyCovered',
+                    'io.reflectoring.coverage.ignored.*',
+                    'io.reflectoring.coverage.part.NotCovered'
+            ]
+        }
+    }
+}
+

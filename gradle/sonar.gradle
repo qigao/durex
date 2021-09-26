@@ -1,0 +1,14 @@
+apply plugin: 'org.sonarqube'
+//TODO: qualified by ENV file
+subprojects {
+    sonarqube {
+        properties {
+            property 'sonar.host.url', 'https://localhost:9000'
+            property 'sonar.organization', 'spotbugs'
+            property 'sonar.projectKey', 'com.github.spotbugs.spotbugs'
+            property 'sonar.projectName', 'SpotBugs'
+            property "sonar.coverage.jacoco.xmlReportPaths", jacocoTestReport.map { it.reports.xml.destination }
+        }
+    }
+    project.tasks["sonarqube"].dependsOn jacocoTestReport
+}

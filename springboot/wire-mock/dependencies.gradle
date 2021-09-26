@@ -1,0 +1,4 @@
+dependencies {
+    testImplementation libs.wiremock
+    testRuntimeOnly 'com.h2database:h2'
+}
