@@ -143,19 +143,6 @@
         <module name="multi-module-project.quarkus.starter.main" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel target="11">
-      <module name="client-app" target="11" />
-      <module name="client-app.main" target="11" />
-      <module name="client-app.test" target="11" />
-      <module name="core-app" target="11" />
-      <module name="core-app.client-app" target="11" />
-      <module name="core-app.client-app.main" target="11" />
-      <module name="core-app.client-app.test" target="11" />
-      <module name="core-app.example" target="11" />
-      <module name="core-app.example.main" target="11" />
-      <module name="core-app.example.test" target="11" />
-      <module name="core-app.main" target="11" />
-      <module name="core-app.test" target="11" />
-    </bytecodeTargetLevel>
+    <bytecodeTargetLevel target="11" />
   </component>
 </project>
