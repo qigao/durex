@@ -1,0 +1,7 @@
+dependencies {
+    implementation enforcedPlatform(libs.jackson.bom.get())
+    compileOnly 'com.fasterxml.jackson.core:jackson-annotations'
+    implementation 'com.fasterxml.jackson.core:jackson-databind'
+    implementation 'com.fasterxml.jackson.core:jackson-core'
+    compileOnly libs.validation
+}
