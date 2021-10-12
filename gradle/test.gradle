@@ -18,7 +18,7 @@ test {
     maxParallelForks Runtime.runtime.availableProcessors()
     testLogging {
         events "passed", "skipped", "failed"
-        ///exceptionFormat 'full'
+        exceptionFormat 'full'
     }
     getenv().each { name, value -> environment name, value }
 }

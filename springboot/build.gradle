@@ -3,8 +3,6 @@ plugins {
     alias libs.plugins.spring.bom
     alias libs.plugins.sonarqube
 }
-group = 'com.github.durex.core'
-version = '0.0.1'
 
 subprojects {
     apply plugin: 'org.springframework.boot'

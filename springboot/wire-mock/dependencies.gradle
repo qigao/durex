@@ -1,4 +1,4 @@
 dependencies {
-    testImplementation libs.bundles.wiremock
+    testImplementation libs.wiremock
     testRuntimeOnly 'com.h2database:h2'
 }

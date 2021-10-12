@@ -16,7 +16,6 @@ spotless {
         endWithNewline()
     }
     groovy {
-        target '**/*.groovy'
         target fileTree('.') {
             include '**/*.gradle'
             exclude '**/build/**', '**/build-*/**'
@@ -25,7 +24,6 @@ spotless {
         indentWithSpaces()
     }
     groovyGradle {
-        target '**/*.gradle'
         target fileTree('.') {
             include '**/*.gradle'
             exclude '**/build/**', '**/build-*/**'
