@@ -3,8 +3,12 @@ package com.github.durex.book.model;
 import java.util.Objects;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import lombok.*;
-import org.hibernate.Hibernate;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @Setter
@@ -22,9 +26,11 @@ public class Book {
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;
-    if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-    Book book = (Book) o;
-    return Objects.equals(id, book.id);
+    if (o == null) return false;
+    if (this.getClass() == o.getClass()) {
+      return Objects.equals(id, ((Book) o).id);
+    }
+    return false;
   }
 
   @Override
