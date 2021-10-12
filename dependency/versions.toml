@@ -16,11 +16,7 @@ commons-lang3 = {group = "org.apache.commons", name = "commons-lang3", version =
 guava = {group = 'com.google.guava', name = 'guava', version.ref = 'guava'}
 logback = {group = 'ch.qos.logback', name = 'logback-classic', version.ref = 'logback'}
 
-# Wiremock
-wiremock-jensPiegsa = {group = 'com.github.jensPiegsa', name = 'wiremock-extension', version = '0.4.0'}
-wiremock-jre8 = {group = 'com.github.tomakehurst', name = 'wiremock-jre8', version = '2.31.0'}
-wiremock-lanwen = {group = 'ru.lanwen.wiremock', name = 'wiremock-junit5', version = '1.3.1'}
-wiremock-mkammerer = {group = 'de.mkammerer.wiremock-junit5', name = 'wiremock-junit5', version = '1.1.0'}
+wiremock = {group = 'com.github.tomakehurst', name = 'wiremock-jre8', version = '2.31.0'}
 
 validation = {group = 'javax.validation', name = 'validation-api', version = '2.0.1.Final'}
 rest-assured={ group= 'io.rest-assured', name= 'rest-assured', version= '4.4.0'}
@@ -33,7 +29,6 @@ quarkus-bom = {group = 'io.quarkus.platform', name = 'quarkus-bom', version.ref 
 
 [bundles]
 groovy = ["groovy-core", "groovy-json", "groovy-nio"]
-wiremock = ['wiremock-jre8', 'wiremock-lanwen', 'wiremock-mkammerer', 'wiremock-jensPiegsa']
 
 # Gradle plugins config
 [plugins]
