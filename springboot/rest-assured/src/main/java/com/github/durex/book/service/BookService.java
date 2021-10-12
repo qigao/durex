@@ -29,7 +29,7 @@ public class BookService {
   public List<Book> getAllBooks(int amount) {
 
     if (this.bookStore.size() > amount) {
-      return this.bookStore.subList(0, amount - 1);
+      return this.bookStore.subList(0, amount);
     }
 
     return this.bookStore;
