@@ -1,6 +1,3 @@
-group = 'com.github.durex.shared'
-version = '0.0.1'
-
 subprojects {
     apply plugin: 'io.freefair.lombok'
     apply from: "$rootDir/gradle/jacoco.gradle"
