@@ -1,38 +1,21 @@
 package com.github.durex.todo;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
-import static org.springframework.boot.test.context.SpringBootTest.*;
 
-import com.github.tomakehurst.wiremock.WireMockServer;
+import com.github.durex.utils.BaseWireMock;
 import com.github.tomakehurst.wiremock.client.WireMock;
 import org.eclipse.jetty.http.HttpStatus;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
-@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
-@ContextConfiguration(initializers = {WireMockInitializer.class})
-class TodoControllerIT {
-
-  @Autowired private WireMockServer wireMockServer;
-
+class TodoControllerTest extends BaseWireMock {
   @Autowired private WebTestClient webTestClient;
-
-  @LocalServerPort private Integer port;
-
-  @AfterEach
-  public void afterEach() {
-    this.wireMockServer.resetAll();
-  }
 
   @Test
   void testGetAllTodosShouldReturnDataFromClient() {
-    this.wireMockServer.stubFor(
+    BaseWireMock.wireMockServer.stubFor(
         WireMock.get("/todos")
             .willReturn(
                 aResponse()
@@ -41,9 +24,9 @@ class TodoControllerIT {
                         "[{\"userId\": 1,\"id\": 1,\"title\": \"Learn Spring Boot 3.0\", \"completed\": false},"
                             + "{\"userId\": 1,\"id\": 2,\"title\": \"Learn WireMock\", \"completed\": true}]")));
 
-    this.webTestClient
+    webTestClient
         .get()
-        .uri("http://localhost:" + port + "/api/todos")
+        .uri("/api/todos")
         .exchange()
         .expectStatus()
         .is2xxSuccessful()
@@ -56,16 +39,38 @@ class TodoControllerIT {
 
   @Test
   void testGetAllTodosShouldPropagateErrorMessageFromClient() {
-    this.wireMockServer.stubFor(
+    BaseWireMock.wireMockServer.stubFor(
         WireMock.get("/todos")
             .willReturn(aResponse().withStatus(403).withFixedDelay(2000)) // milliseconds
         );
 
-    this.webTestClient
+    webTestClient
         .get()
-        .uri("http://localhost:" + port + "/api/todos")
+        .uri("/api/todos")
         .exchange()
         .expectStatus()
         .isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR_500);
+  }
+
+  @Test
+  void basicWireMockExample() {
+    BaseWireMock.wireMockServer.stubFor(
+        WireMock.get(WireMock.urlEqualTo("/todos"))
+            .willReturn(
+                aResponse()
+                    .withHeader("Content-Type", MediaType.APPLICATION_JSON_VALUE)
+                    .withBodyFile("todo-api/response-200.json")));
+
+    webTestClient
+        .get()
+        .uri("/api/todos")
+        .exchange()
+        .expectStatus()
+        .isOk()
+        .expectBody()
+        .jsonPath("$.length()")
+        .isEqualTo(3)
+        .jsonPath("$[0].title")
+        .isEqualTo("delectus aut autem");
   }
 }
