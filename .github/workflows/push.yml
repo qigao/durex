@@ -1,11 +1,16 @@
 name: Run Gradle on PRs and Pushes
-on: [ pull_request, push ]
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    types: [ opened,reopened, synchronize ]
 
 jobs:
   setup:
     runs-on: ubuntu-latest
     steps:
-      - name: "Setup Java"
+      - name: Setup Java
         uses: actions/setup-java@v2
         with:
           distribution: 'adopt'
@@ -22,12 +27,7 @@ jobs:
           path: ~/.sonar/cache
           key: ${{ runner.os }}-sonar
           restore-keys: ${{ runner.os }}-sonar
-      - name: Cache Gradle packages
-        uses: actions/cache@v2
-        with:
-          path: ~/.gradle/caches
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
-          restore-keys: ${{ runner.os }}-gradle
+
   build:
     needs: setup
     runs-on: ubuntu-latest
@@ -36,6 +36,9 @@ jobs:
         uses: gradle/gradle-build-action@v2
         with:
           arguments: assemble
+      - uses: gradle/gradle-build-action@v2
+        with:
+          arguments: check
   test:
     needs: build
     runs-on: ubuntu-latest
