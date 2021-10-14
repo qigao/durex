@@ -1,18 +1,18 @@
 package com.github.durex.todo;
 
-import com.github.durex.utils.BaseWireMock;
-import org.eclipse.jetty.http.HttpStatus;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
-import org.springframework.test.web.reactive.server.WebTestClient;
-
 import static com.github.durex.utils.MockConstants.API_TODOS;
 import static com.github.durex.utils.MockConstants.CONTENT_TYPE;
 import static com.github.durex.utils.MockConstants.TODOS;
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 import static com.github.tomakehurst.wiremock.client.WireMock.get;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
+
+import com.github.durex.utils.BaseWireMock;
+import org.eclipse.jetty.http.HttpStatus;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.reactive.server.WebTestClient;
 
 class TodoControllerIT extends BaseWireMock {
   @Autowired private WebTestClient webTestClient;
