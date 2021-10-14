@@ -1,0 +1,26 @@
+name: Run Gradle on PRs and Pushes
+on: [ pull_request, push ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: "Setup Java"
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
+
+      - name: run test
+        uses: eskatos/gradle-command-action@v1
+        with:
+          arguments: test
+        env:
+          ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v1.0.0
+        with:
+          name: test result
+          path: build/reports/tests

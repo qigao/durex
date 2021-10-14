@@ -1,18 +1,9 @@
 package com.github.durex.todo;
 
-import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
-import static com.github.tomakehurst.wiremock.client.WireMock.equalTo;
-import static com.github.tomakehurst.wiremock.client.WireMock.exactly;
-import static com.github.tomakehurst.wiremock.client.WireMock.get;
-import static com.github.tomakehurst.wiremock.client.WireMock.getRequestedFor;
-import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import com.github.durex.utils.BaseWireMock;
 import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.stubbing.ServeEvent;
 import com.github.tomakehurst.wiremock.verification.LoggedRequest;
-import java.util.List;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -21,12 +12,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
+import java.util.List;
+
+import static com.github.durex.utils.MockConstants.API_TODOS;
+import static com.github.durex.utils.MockConstants.CONTENT_TYPE;
+import static com.github.durex.utils.MockConstants.TODOS;
+import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
+import static com.github.tomakehurst.wiremock.client.WireMock.equalTo;
+import static com.github.tomakehurst.wiremock.client.WireMock.exactly;
+import static com.github.tomakehurst.wiremock.client.WireMock.get;
+import static com.github.tomakehurst.wiremock.client.WireMock.getRequestedFor;
+import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class ManualSetupIT extends BaseWireMock {
 
-  public static final String API_TODO = "/api/todos";
-  public static final String CONTENT_TYPE = "Content-Type";
-  public static final String TODOS = "/todos";
   @Autowired private WebTestClient webTestClient;
 
   @Test
@@ -41,7 +42,7 @@ class ManualSetupIT extends BaseWireMock {
 
     webTestClient
         .get()
-        .uri(API_TODO)
+        .uri(API_TODOS)
         .exchange()
         .expectStatus()
         .isOk()
@@ -60,7 +61,7 @@ class ManualSetupIT extends BaseWireMock {
                     .withHeader(CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                     .withBody("[]")));
 
-    webTestClient.get().uri(API_TODO).exchange().expectStatus().is5xxServerError();
+    webTestClient.get().uri(API_TODOS).exchange().expectStatus().is5xxServerError();
   }
 
   @Test
@@ -78,7 +79,7 @@ class ManualSetupIT extends BaseWireMock {
 
     webTestClient
         .get()
-        .uri(API_TODO)
+        .uri(API_TODOS)
         .exchange()
         .expectStatus()
         .isOk()
@@ -99,7 +100,7 @@ class ManualSetupIT extends BaseWireMock {
 
     webTestClient
         .get()
-        .uri(API_TODO)
+        .uri(API_TODOS)
         .exchange()
         .expectStatus()
         .isOk()

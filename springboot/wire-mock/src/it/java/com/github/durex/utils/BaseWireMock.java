@@ -2,6 +2,7 @@ package com.github.durex.utils;
 
 import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -9,6 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 
+@Slf4j
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class BaseWireMock {
   protected static WireMockServer wireMockServer;
@@ -32,8 +34,8 @@ public class BaseWireMock {
 
   @BeforeEach
   void clearWireMock() {
-    System.out.println("Stored stubbings: " + wireMockServer.getStubMappings().size());
+    log.info("Stored stubbings: " + wireMockServer.getStubMappings().size());
     wireMockServer.resetAll();
-    System.out.println("Stored stubbings after reset: " + wireMockServer.getStubMappings().size());
+    log.info("Stored stubbings after reset: " + wireMockServer.getStubMappings().size());
   }
 }
