@@ -33,6 +33,7 @@ jobs:
       - name: run gradle assemble
         uses: gradle/gradle-build-action@v2
         with:
+          gradle-version: current
           arguments: assemble
       - uses: gradle/gradle-build-action@v2
         with:
