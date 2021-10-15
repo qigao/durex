@@ -37,7 +37,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: run gradle assemble
-        run: ./gradlew springboot:wire-mock:assemble
+        run: gradlew springboot:wire-mock:assemble
   test:
     needs: build
     runs-on: ubuntu-latest
