@@ -34,6 +34,7 @@ jobs:
     needs: setup
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v2
       - name: run gradle assemble
         run: ./gradlew springboot:wire-mock:assemble
   test:
@@ -48,6 +49,7 @@ jobs:
     needs: [ setup,test ]
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v2
       - name: run integration test
         run: ./gradlew springboot:wire-mock:integrationTest
 
