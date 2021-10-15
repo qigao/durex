@@ -29,28 +29,21 @@ jobs:
             ~/.gradle/caches
             ~/.gradle/wrapper
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-          restore-keys: |
-          ${{ runner.os }}-gradle-
+          restore-keys: ${{ runner.os }}-gradle-
   build:
     needs: setup
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - uses: actions/cache@v2
-        with:
-          restore-keys: |
-            - ${{ runner.os }}-gradle-
       - name: run gradle assemble
-      run: ./gradlew springboot:wire-mock:assemble
+        run: ./gradlew springboot:wire-mock:assemble
   test:
     needs: build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - uses: actions/cache@v2
-        with:
-          restore-keys: |
-            - ${{ runner.os }}-gradle-
       - name: run gradle test
         run: ./gradlew springboot:wire-mock:test
 
@@ -60,9 +53,6 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: actions/cache@v2
-        with:
-          restore-keys: |
-            - ${{ runner.os }}-gradle-
       - name: run integration test
         run: ./gradlew springboot:wire-mock:integrationTest
 
