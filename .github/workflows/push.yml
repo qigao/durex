@@ -37,20 +37,20 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: run gradle assemble
-        run: ./gradlew assemble
+        run: ./gradle springboot:wire-mock:assemble
   test:
     needs: build
     runs-on: ubuntu-latest
     steps:
       - name: run gradle test
-        run: ./gradlew test
+        run: ./gradlew springboot:wire-mock:test
 
   integrationTest:
     needs: test
     runs-on: ubuntu-latest
     steps:
       - name: run integration test
-        run: ./gradlew integrationTest
+        run: ./gradlew springboot:wire-mock:integrationTest
 
   sonarcloud:
     runs-on: ubuntu-latest
