@@ -10,22 +10,17 @@ jobs:
   setup:
     runs-on: ubuntu-latest
     steps:
+      - name: CheckOut code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
       - name: Setup Java
         uses: actions/setup-java@v2
         with:
           distribution: 'adopt'
           java-version: 11
           architecture: x64
-      - name: CheckOut and Cache dependenices
-        uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-          path: |
-            ~/.gradle/caches
-            gradle/wrapper
-            key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-            restore-keys: |
-            ${{ runner.os }}-gradle-
+          cache: gradle
       - name: Validate Gradle wrapper
         uses: gradle/wrapper-validation-action@v1
       - name: Grant execute permission for gradlew
