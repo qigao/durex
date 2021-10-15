@@ -15,10 +15,19 @@ jobs:
         with:
           distribution: 'adopt'
           java-version: 11
-          check-latest: true
-      - uses: actions/checkout@v2
+          architecture: x64
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+      - name: CheckOut and Cache dependenices
+        uses: actions/checkout@v2
         with:
           fetch-depth: 0
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+            key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+            restore-keys: |
+            ${{ runner.os }}-gradle-
       - name: Cache SonarCloud packages
         uses: actions/cache@v2
         with:
@@ -31,31 +40,21 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: run gradle assemble
-        uses: gradle/gradle-build-action@v2
-        with:
-          gradle-version: current
-          arguments: assemble
-      - uses: gradle/gradle-build-action@v2
-        with:
-          arguments: check
+        run: ./gradlew assemble
   test:
     needs: build
     runs-on: ubuntu-latest
-
     steps:
-      - name: run test
-        uses: gradle/gradle-build-action@v2
-        with:
-          arguments: test
+      - name: run gradle test
+        run: ./gradlew test
 
   integrationTest:
     needs: test
     runs-on: ubuntu-latest
     steps:
       - name: run integration test
-        uses: gradle/gradle-build-action@v2
-        with:
-          arguments: integrationTest
+        run: ./gradlew integrationTest
+
   sonarcloud:
     runs-on: ubuntu-latest
     needs: test
