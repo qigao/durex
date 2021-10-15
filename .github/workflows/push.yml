@@ -31,13 +31,8 @@ jobs:
           path: ~/.sonar/cache
           key: ${{ runner.os }}-sonar
           restore-keys: ${{ runner.os }}-sonar
-
-  build:
-    needs: setup
-    runs-on: ubuntu-latest
-    steps:
       - name: run gradle assemble
-        run: gradlew springboot:wire-mock:assemble
+        run: ./gradlew springboot:wire-mock:assemble
   test:
     needs: build
     runs-on: ubuntu-latest
