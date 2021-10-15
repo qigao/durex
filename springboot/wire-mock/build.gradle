@@ -1,2 +1,1 @@
-//apply from: "tasks.gradle"
 apply from: "dependencies.gradle"

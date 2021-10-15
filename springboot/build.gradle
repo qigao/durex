@@ -11,6 +11,6 @@ subprojects {
     apply from: "$rootDir/gradle/jacoco.gradle"
     apply from: "$rootDir/gradle/spotless.gradle"
     apply from: "$rootDir/dependency/common.gradle"
+    apply from: "$rootDir/gradle/sonar.gradle"
     apply from: "$rootDir/springboot/dependency/springboot.gradle"
-
 }
