@@ -59,17 +59,16 @@ jobs:
     needs: [ setup,test ]
     steps:
       - uses: actions/checkout@v2
-      - name: Analyze with SonarCloud
+      - name: Cache Gradle
+        uses: actions/cache@v2
         with:
-          projectBaseDir: springboot/wire-mock
-          args: >
-            -Dsonar.organization=power-durex-app
-            -Dsonar.projectKey=qigao_durex
-            -Dsonar.coverage.jacoco.xmlReportPaths=build/reports/jacoco/test/jacocoTestReport.xml
-            -Dsonar.sources=src/**
-            -Dsonar.test.exclusions=itest/**
-            -Dsonar.tests=test/**
-            -Dsonar.verbose=true
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+            ~/.sonar/cache
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: ${{ runner.os }}-gradle-
+      - name: Analyze with SonarCloud
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
