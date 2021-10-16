@@ -96,7 +96,6 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
           restore-keys: ${{ runner.os }}-gradle-
       - name: Analyze with SonarCloud
-        uses: sonarsource/sonarcloud-github-action@master
         with:
           projectBaseDir: springboot/wire-mock/
           args: >
@@ -105,8 +104,9 @@ jobs:
             -Dsonar.coverage.jacoco.xmlReportPaths=build/reports/jacoco/jacocoTestReport.xml
             -Dsonar.sources=src/
             -Dsonar.test.exclusions=it/**
-            -Dsonar.tests=tests/**
+            -Dsonar.tests=tests/
             -Dsonar.verbose=true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: ./gradlew sonarqube --info
