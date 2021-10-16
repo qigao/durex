@@ -3,7 +3,6 @@ plugins {
     alias libs.plugins.spring.bom
     alias libs.plugins.sonarqube
 }
-
 subprojects {
     apply plugin: 'org.springframework.boot'
     apply plugin: 'io.spring.dependency-management'
@@ -11,6 +10,6 @@ subprojects {
     apply from: "$rootDir/gradle/jacoco.gradle"
     apply from: "$rootDir/gradle/spotless.gradle"
     apply from: "$rootDir/dependency/common.gradle"
-    apply from: "$rootDir/gradle/sonar.gradle"
     apply from: "$rootDir/springboot/dependency/springboot.gradle"
+    apply from: "$rootDir/gradle/sonar.gradle"
 }

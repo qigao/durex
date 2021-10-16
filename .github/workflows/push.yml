@@ -52,15 +52,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Cache Gradle
-        uses: actions/cache@v2
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-            ~/.sonar/cache
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-          restore-keys: ${{ runner.os }}-gradle-
       - name: run gradle test
         run: ./gradlew springboot:wire-mock:test
 
@@ -69,15 +60,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Cache Gradle
-        uses: actions/cache@v2
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-            ~/.sonar/cache
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-          restore-keys: ${{ runner.os }}-gradle-
       - name: run integration test
         run: ./gradlew springboot:wire-mock:integrationTest
 
@@ -86,27 +68,8 @@ jobs:
     needs: [ setup,test ]
     steps:
       - uses: actions/checkout@v2
-      - name: Cache Gradle
-        uses: actions/cache@v2
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-            ~/.sonar/cache
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-          restore-keys: ${{ runner.os }}-gradle-
       - name: Analyze with SonarCloud
-        run: ./gradlew sonarqube --info
-        with:
-          projectBaseDir: springboot/wire-mock/
-          args: >
-            -Dsonar.organization=power-durex-app
-            -Dsonar.projectKey=qigao_durex
-            -Dsonar.coverage.jacoco.xmlReportPaths=build/reports/jacoco/jacocoTestReport.xml
-            -Dsonar.sources=src/
-            -Dsonar.test.exclusions=it/**
-            -Dsonar.tests=tests/
-            -Dsonar.verbose=true
+        run: ./gradlew sonarqube --info -Dsonar.projectBaseDir=springboot/wire-mock/
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
