@@ -96,6 +96,7 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
           restore-keys: ${{ runner.os }}-gradle-
       - name: Analyze with SonarCloud
+        run: ./gradlew sonarqube --info
         with:
           projectBaseDir: springboot/wire-mock/
           args: >
@@ -109,4 +110,3 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: ./gradlew sonarqube --info
