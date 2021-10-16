@@ -4,5 +4,6 @@ sonarqube {
         property "sonar.projectKey", "qigao_durex"
         property "sonar.organization", "power-durex-app"
         property "sonar.host.url", "https://sonarcloud.io"
+        property "sonar.coverage.jacoco.xmlReportPaths", "$projectDir.parentFile.path/build/reports/jacoco/jacocoTestReport.xml"
     }
 }

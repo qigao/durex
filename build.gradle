@@ -2,7 +2,6 @@ plugins {
     alias libs.plugins.lombok
     alias libs.plugins.spotless
     alias libs.plugins.editorconfig
-    alias libs.plugins.sonarqube
 }
 
 allprojects {
@@ -20,5 +19,4 @@ subprojects {
     apply plugin: 'org.ec4j.editorconfig'
     apply from: "$rootDir/gradle/repos.gradle"
     apply from: "$rootDir/gradle/test.gradle"
-    apply from: "$rootDir/gradle/sonar.gradle"
 }
