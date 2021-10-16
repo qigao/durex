@@ -58,8 +58,18 @@ jobs:
     needs: [ setup,test ]
     steps:
       - uses: actions/checkout@v2
-      - name: Build and analyze
+      - name: Analyze with SonarCloud
+        uses: sonarsource/sonarcloud-github-action@master
+        with:
+          projectBaseDir: my-custom-directory
+          args: >
+            -Dsonar.organization=power-durex-app
+            -Dsonar.projectKey=qigao_durex
+            -Dsonar.java.coverage.reportPaths=springboot/wire-mock/build/jacoco/test.exec
+            -Dsonar.sources=springboot/wire-mock/src/main/
+            -Dsonar.test.exclusions=springboot/wire-mock/src/itest
+            -Dsonar.tests=springboot/wire-mock/src/test/
+            -Dsonar.verbose=true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: ./gradlew springboot:wire-mock:build sonarqube --info
