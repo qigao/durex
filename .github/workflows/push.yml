@@ -61,14 +61,14 @@ jobs:
       - name: Analyze with SonarCloud
         uses: sonarsource/sonarcloud-github-action@master
         with:
-          projectBaseDir: my-custom-directory
+          projectBaseDir: springboot/wire-mock
           args: >
             -Dsonar.organization=power-durex-app
             -Dsonar.projectKey=qigao_durex
-            -Dsonar.java.coverage.reportPaths=springboot/wire-mock/build/jacoco/test.exec
-            -Dsonar.sources=springboot/wire-mock/src/main/
-            -Dsonar.test.exclusions=springboot/wire-mock/src/itest
-            -Dsonar.tests=springboot/wire-mock/src/test/
+            -Dsonar.coverage.jacoco.xmlReportPaths=build/reports/jacoco/test/jacocoTestReport.xml
+            -Dsonar.sources=src/**
+            -Dsonar.test.exclusions=itest/**
+            -Dsonar.tests=test/**
             -Dsonar.verbose=true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
