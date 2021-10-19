@@ -39,3 +39,4 @@ sonarqube = {id = "org.sonarqube", version = "3.3"}
 spotless = {id = "com.diffplug.spotless", version = '5.15.0'}
 spring-bom = {id = "io.spring.dependency-management", version = "1.0.11.RELEASE"}
 springboot = {id = "org.springframework.boot", version = "2.5.4"}
+git = {id="org.ajoberstar.grgit",version="4.1.0"}
