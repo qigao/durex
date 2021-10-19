@@ -8,7 +8,9 @@ allprojects {
     task hi {
         group = "fun-tasks"
         description = "Shows greeting from the project : "
-        doLast { task -> println "Hi from $task.project.name" }
+        doLast { task ->
+            println "Hi from $task.project.name"
+        }
     }
     apply plugin: 'eclipse'
     apply plugin: 'idea'
@@ -19,18 +21,4 @@ subprojects {
     apply plugin: 'org.ec4j.editorconfig'
     apply from: "$rootDir/gradle/repos.gradle"
     apply from: "$rootDir/gradle/test.gradle"
-}
-
-def getWorkingBranch() {
-    def gitBranch = "Unknown branch"
-    try {
-        def workingDir = new File("${project.projectDir}")
-        def result = 'git rev-parse --abbrev-ref HEAD'.execute(null, workingDir)
-        result.waitFor()
-        if (result.exitValue() == 0) {
-            gitBranch = result.text.trim()
-        }
-    } catch (e) {
-    }
-    return gitBranch
 }

@@ -7,40 +7,59 @@ on:
     types: [ opened,reopened, synchronize ]
 
 jobs:
+  setup:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: ./.github/workflows/config-action
+
   build:
     needs: setup
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: action/cache@v2
+      - uses: actions/cache@v2
         id: restore-build
         with:
           path: ./*
           key: ${{ github.sha }}
       - name: run gradle assemble
         run: ./gradlew quarkus:starter:assemble
-  test:
-    needs: [ setup,build ]
+  check:
+    needs: build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: action/cache@v2
+      - uses: actions/cache@v2
         id: restore-build
         with:
           path: ./*
           key: ${{ github.sha }}
-      - name: Analyze with SonarCloud
-        run: ./gradlew quarkus:starter:check sonarqube -Dsonar.organization=power-durex-app -Dsonar.pullrequest.key=${{github.event.pull_request.number}} --info
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-
-  integrationTest:
-    needs: [ setup,test ]
+      - name: Validate Code
+        run: ./gradlew quarkus:starter:check
+  sonar:
+    needs: check
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: action/cache@v2
+      - uses: actions/cache@v2
+        id: restore-build
+        with:
+          path: ./*
+          key: ${{ github.sha }}
+      - id: sonar_vars
+        uses: ./.github/workflows/env-action
+      - name: Analyze with SonarCloud
+        run: ./gradlew quarkus:starter:sonarqube -Dsonar.organization=power-durex-app -Dsonar.pullrequest.key=${{ steps.sonar_vars.outputs.sonar_key }} --info
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+  integrationTest:
+    needs: check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/cache@v2
         id: restore-build
         with:
           path: ./*
