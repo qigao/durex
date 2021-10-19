@@ -27,14 +27,6 @@ public class SerDe {
     jsonMapper.configure(DeserializationFeature.READ_ENUMS_USING_TO_STRING, true);
   }
 
-  public static void configure(SerializationFeature feature, boolean state) {
-    jsonMapper.configure(feature, state);
-  }
-
-  public static void configure(DeserializationFeature feature, boolean state) {
-    jsonMapper.configure(feature, state);
-  }
-
   public static <T> T toObject(final Class<T> type, final String json) throws IOException {
     return jsonMapper.readValue(json, type);
   }
