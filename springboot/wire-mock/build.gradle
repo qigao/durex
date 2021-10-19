@@ -6,14 +6,15 @@ apply plugin: 'org.sonarqube'
 
 sonarqube {
     properties {
+        property "sonar.host.url", "https://sonarcloud.io"
         property "sonar.projectBaseDir", "$projectDir"
-        property "sonar.projectKey", "com.github.durex:WireMock"
+        property "sonar.projectKey", "com.github.durex:wire-mock"
         property "sonar.projectName", "WireMock"
-        property "sonar.host.url", "http://192.168.2.108:9000"
         property "sonar.branch.name", project.gitBranch()
-        property "sonar.sources", "$projectDir/src/main/java"
-        property "sonar.working.directory", "$projectDir/build/sonar"
-        property "sonar.java.binaries", "$projectDir/build/classes"
-        property "sonar.coverage.jacoco.xmlReportPaths", "$projectDir/build/reports/jacoco/test/jacocoTestReport.xml"
+        property "sonar.sources", "src/main/java"
+        property "sonar.working.directory", "build/sonar"
+        property "sonar.java.binaries", "build/classes"
+        property "sonar.java.test.binaries", "build/classes/java/test"
+        property "sonar.coverage.jacoco.xmlReportPaths", "build/reports/jacoco/test/jacocoTestReport.xml"
     }
 }

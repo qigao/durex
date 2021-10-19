@@ -1,20 +1,19 @@
 package com.github.durex.json;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.github.durex.json.model.User;
-import com.github.tomakehurst.wiremock.WireMockServer;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
-import java.io.IOException;
-import java.util.List;
-
 import static com.github.durex.pojo.MockUtils.getMockURL;
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 import static com.github.tomakehurst.wiremock.client.WireMock.get;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.github.durex.json.model.User;
+import com.github.tomakehurst.wiremock.WireMockServer;
+import java.io.IOException;
+import java.util.List;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 class WireMockJunit5Test {
   WireMockServer wireMockServer;

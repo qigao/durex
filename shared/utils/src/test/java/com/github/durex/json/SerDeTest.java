@@ -1,10 +1,11 @@
 package com.github.durex.json;
 
+import static com.github.durex.pojo.MockUtils.getMockDirectory;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.github.durex.json.model.User;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.io.TempDir;
-
 import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
 import java.io.FileReader;
@@ -15,10 +16,8 @@ import java.io.StringWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
-
-import static com.github.durex.pojo.MockUtils.getMockDirectory;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 class SerDeTest {
   public static final String USER_LIST_JSON = "/json/users.json";
