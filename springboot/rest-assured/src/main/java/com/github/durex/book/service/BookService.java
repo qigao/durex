@@ -3,9 +3,9 @@ package com.github.durex.book.service;
 import com.github.durex.book.exception.BookNotFoundException;
 import com.github.durex.book.model.Book;
 import com.github.durex.book.model.BookRequest;
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -19,7 +19,7 @@ public class BookService {
     book.setIsbn(bookRequest.getIsbn());
     book.setAuthor(bookRequest.getAuthor());
     book.setTitle(bookRequest.getTitle());
-    book.setId(Math.abs(ThreadLocalRandom.current().nextLong()));
+    book.setId(new SecureRandom().nextLong());
 
     bookStore.add(book);
 

@@ -1,4 +1,3 @@
-
 plugins {
     alias libs.plugins.sonarqube
 }
@@ -12,13 +11,15 @@ apply plugin: 'org.sonarqube'
 
 sonarqube {
     properties {
+        property "sonar.host.url", "https://sonarcloud.io"
         property "sonar.projectBaseDir", "$projectDir"
         property "sonar.projectKey", "com.github.durex:utils"
         property "sonar.projectName", "utils"
         property "sonar.branch.name", project.gitBranch()
-        property "sonar.sources", "$projectDir/src/main/java"
-        property "sonar.working.directory", "$projectDir/build/sonar"
-        property "sonar.java.binaries", "$projectDir/build/classes"
-        property "sonar.coverage.jacoco.xmlReportPaths", "$projectDir/build/reports/jacoco/test/jacocoTestReport.xml"
+        property "sonar.sources", "src/main/java"
+        property "sonar.working.directory", "build/sonar"
+        property "sonar.java.binaries", "build/classes"
+        property "sonar.java.test.binaries", "build/classes/java/test"
+        property "sonar.coverage.jacoco.xmlReportPaths", "build/reports/jacoco/test/jacocoTestReport.xml"
     }
 }

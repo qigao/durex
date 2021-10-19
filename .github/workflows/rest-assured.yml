@@ -1,4 +1,4 @@
-name: Run Gradle on PRs and Pushes
+name: Rest-Assured Project Validation
 on:
   push:
     branches:
@@ -12,8 +12,6 @@ jobs:
     steps:
       - name: CheckOut code
         uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
       - name: Setup JDK
         uses: actions/setup-java@v2
         with:
@@ -29,6 +27,7 @@ jobs:
             ~/.gradle/caches
             ~/.gradle/wrapper
             ~/.sonar/cache
+            springboot/rest-assured
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
           restore-keys: ${{ runner.os }}-gradle-
   build:
@@ -52,10 +51,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: run gradle test
-        run: ./gradlew springboot:rest-assured:test
       - name: Analyze with SonarCloud
-        run: ./gradlew springboot:rest-assured:sonarqube --info
+        run: ./gradlew springboot:rest-assured:check sonarqube  -Dsonar.organization=power-durex-app  --info
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}

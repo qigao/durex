@@ -1,4 +1,4 @@
-name: Run Gradle on PRs and Pushes
+name: Utils Project Validation
 on:
   push:
     branches:
@@ -12,8 +12,6 @@ jobs:
     steps:
       - name: CheckOut code
         uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
       - name: Setup JDK
         uses: actions/setup-java@v2
         with:
@@ -43,28 +41,18 @@ jobs:
             ~/.gradle/caches
             ~/.gradle/wrapper
             ~/.sonar/cache
+            shared/utils/build
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
           restore-keys: ${{ runner.os }}-gradle-
       - name: run gradle assemble
-        run: ./gradlew springboot:wire-mock:assemble
+        run: ./gradlew shared:utils:assemble
   test:
     needs: [ setup,build ]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: run gradle test
-        run: ./gradlew springboot:wire-mock:test
       - name: Analyze with SonarCloud
-        run: ./gradlew sonarqube --info -Dsonar.projectBaseDir=springboot/wire-mock/
+        run: ./gradlew shared:utils:check sonarqube -Dsonar.organization=power-durex-app --info
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-
-  integrationTest:
-    needs: [ setup,test ]
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: run integration test
-        run: ./gradlew springboot:wire-mock:integrationTest
-
