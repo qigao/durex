@@ -4,9 +4,6 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
-
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -14,6 +11,8 @@ import java.io.OutputStream;
 import java.io.Reader;
 import java.io.Writer;
 import java.net.URL;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class SerDe {
@@ -25,14 +24,6 @@ public class SerDe {
     jsonMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
     jsonMapper.configure(SerializationFeature.WRITE_ENUMS_USING_TO_STRING, true);
     jsonMapper.configure(DeserializationFeature.READ_ENUMS_USING_TO_STRING, true);
-  }
-
-  public static void configure(SerializationFeature feature, boolean state) {
-    jsonMapper.configure(feature, state);
-  }
-
-  public static void configure(DeserializationFeature feature, boolean state) {
-    jsonMapper.configure(feature, state);
   }
 
   public static <T> T toObject(final Class<T> type, final String json) throws IOException {

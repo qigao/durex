@@ -1,12 +1,11 @@
 package com.github.durex.pojo;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
-
 import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class MockUtils {
