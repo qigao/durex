@@ -4,6 +4,7 @@ plugins {
 dependencies {
     implementation 'org.dmfs:http-client-mockutils:1.16.2'
 }
+
 apply plugin: 'org.sonarqube'
 
 sonarqube {
