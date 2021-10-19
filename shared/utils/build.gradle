@@ -1,4 +1,3 @@
-apply from: "$rootDir/dependency/jackson.gradle"
 plugins {
     alias libs.plugins.sonarqube
 }
@@ -7,15 +6,14 @@ dependencies {
     testImplementation libs.rest.assured
     testImplementation project(":shared:mock")
 }
-
+apply from: "$rootDir/dependency/jackson.gradle"
 apply plugin: 'org.sonarqube'
 
 sonarqube {
     properties {
         property "sonar.projectBaseDir", "$projectDir"
-        property "sonar.projectKey", "com.github.durex:WireMock"
-        property "sonar.projectName", "WireMock"
-        property "sonar.host.url", "http://192.168.2.108:9000"
+        property "sonar.projectKey", "com.github.durex:utils"
+        property "sonar.projectName", "utils"
         property "sonar.branch.name", project.gitBranch()
         property "sonar.sources", "$projectDir/src/main/java"
         property "sonar.working.directory", "$projectDir/build/sonar"

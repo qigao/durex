@@ -46,16 +46,16 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
           restore-keys: ${{ runner.os }}-gradle-
       - name: run gradle assemble
-        run: ./gradlew springboot:wire-mock:assemble
+        run: ./gradlew quarkus:quarkus-starter:assemble
   test:
     needs: [ setup,build ]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - name: run gradle test
-        run: ./gradlew springboot:wire-mock:test
+        run: ./gradlew quarkus:quarkus-starter:test
       - name: Analyze with SonarCloud
-        run: ./gradlew sonarqube --info -Dsonar.projectBaseDir=springboot/wire-mock/
+        run: ./gradlew quarkus:quarkus-starter:sonarqube --info
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
@@ -66,5 +66,5 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: run integration test
-        run: ./gradlew springboot:wire-mock:integrationTest
+        run: ./gradlew quarkus:quarkus-starter:integrationTest
 
