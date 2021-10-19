@@ -20,3 +20,12 @@ subprojects {
     apply from: "$rootDir/gradle/repos.gradle"
     apply from: "$rootDir/gradle/test.gradle"
 }
+
+static def gitBranch() {
+    def branch = ""
+    def proc = "git rev-parse --abbrev-ref HEAD".execute()
+    proc.in.eachLine { line -> branch = line }
+    proc.err.eachLine { line -> println line }
+    proc.waitFor()
+    branch
+}

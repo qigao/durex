@@ -1,31 +1,32 @@
 sourceSets {
-    itest {
-        compileClasspath += main.output + test.output
-        runtimeClasspath += main.output + test.output
+    integrationTest {
         java {
-            srcDirs("src/itest")
+            compileClasspath += main.output + test.output
+            runtimeClasspath += main.output + test.output
+            srcDir file('src/it/java')
         }
+        resources.srcDir file('src/it/resources')
     }
 }
 configurations {
-    itestImplementation.extendsFrom testImplementation
-    itestRuntimeOnly.extendsFrom testRuntimeOnly
+    integrationTestImplementation.extendsFrom testImplementation
+    integrationTestRuntimeOnly.extendsFrom testRuntimeOnly
 }
 
-task itest(type: Test) {
+task integrationTest(type: Test) {
     description = 'Integration tests.'
     group = 'verification'
     useJUnitPlatform {
         excludeEngines 'junit-vintage'
     }
-    testClassesDirs = sourceSets.itest.output.classesDirs
-    classpath = sourceSets.itest.runtimeClasspath
+    testClassesDirs = sourceSets.integrationTest.output.classesDirs
+    classpath = sourceSets.integrationTest.runtimeClasspath
     maxParallelForks Runtime.runtime.availableProcessors()
 
-    outputs.upToDateWhen { false } // other way: inputs.upToDateWhen { false }
+    outputs.upToDateWhen { false }
 
     shouldRunAfter test
 }
 
-check.dependsOn itest
+check.dependsOn integrationTest
 

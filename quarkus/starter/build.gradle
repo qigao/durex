@@ -1,7 +1,21 @@
 dependencies {
     implementation 'org.dmfs:http-client-mockutils:1.16.2'
 }
+plugins {
+    alias libs.plugins.sonarqube
+}
+apply plugin: 'org.sonarqube'
 
-repositories {
-    mavenCentral()
+sonarqube {
+    properties {
+        property "sonar.projectBaseDir", "$projectDir"
+        property "sonar.projectKey", "com.github.durex:WireMock"
+        property "sonar.projectName", "WireMock"
+        property "sonar.host.url", "http://192.168.2.108:9000"
+        property "sonar.branch.name", project.gitBranch()
+        property "sonar.sources", "$projectDir/src/main/java"
+        property "sonar.working.directory", "$projectDir/build/sonar"
+        property "sonar.java.binaries", "$projectDir/build/classes"
+        property "sonar.coverage.jacoco.xmlReportPaths", "$projectDir/build/reports/jacoco/test/jacocoTestReport.xml"
+    }
 }
