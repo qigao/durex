@@ -9,7 +9,8 @@ sonarqube {
         property "sonar.projectBaseDir", "$projectDir"
         property "sonar.projectKey", "com.github.durex:rest-assured"
         property "sonar.projectName", "RestAssured"
-        property "sonar.branch.name", project.gitBranch()
+        property "sonar.pullrequest.branch", project.getWorkingBranch()
+        property "sonar.pullrequest.base", "master"
         property "sonar.sources", "src/main/java"
         property "sonar.working.directory", "build/sonar"
         property "sonar.java.binaries", "build/classes"

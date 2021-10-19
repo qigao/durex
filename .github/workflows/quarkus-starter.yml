@@ -12,6 +12,8 @@ jobs:
     steps:
       - name: CheckOut code
         uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
       - name: Setup JDK
         uses: actions/setup-java@v2
         with:
@@ -41,7 +43,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Analyze with SonarCloud
-        run: ./gradlew quarkus:starter:check sonarqube -Dsonar.organization=power-durex-app --info
+        run: ./gradlew quarkus:starter:check sonarqube -Dsonar.organization=power-durex-app -Dsonar.pullrequest.key=${{github.event.pull_request.number}} --info
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
