@@ -14,7 +14,8 @@ class BookTest {
     var book2 = MockData.givenBooks();
     var book3 = MockData.buildBookRequest();
     assertEquals(book1, book1);
-    assertNotEquals(null, book1);
+    Book nullBook = null;
+    assertNotEquals(book1, nullBook);
     assertNotEquals(book1, book3);
     assertTrue(book1.equals(book2) && book2.equals(book1));
     assertEquals(book1.hashCode(), book2.hashCode());

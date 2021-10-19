@@ -2,7 +2,6 @@ plugins {
     alias libs.plugins.lombok
     alias libs.plugins.spotless
     alias libs.plugins.editorconfig
-    alias libs.plugins.git
 }
 
 allprojects {
@@ -22,9 +21,16 @@ subprojects {
     apply from: "$rootDir/gradle/test.gradle"
 }
 
-apply plugin: 'org.ajoberstar.grgit'
-
 def getWorkingBranch() {
-    ext.repo = grgit.open()
-    return ext.repo.branch.current.name
+    def gitBranch = "Unknown branch"
+    try {
+        def workingDir = new File("${project.projectDir}")
+        def result = 'git rev-parse --abbrev-ref HEAD'.execute(null, workingDir)
+        result.waitFor()
+        if (result.exitValue() == 0) {
+            gitBranch = result.text.trim()
+        }
+    } catch (e) {
+    }
+    return gitBranch
 }

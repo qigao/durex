@@ -41,7 +41,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Analyze with SonarCloud
-        run: ./gradlew springboot:wire-mock:check sonarqube  -Dsonar.organization=power-durex-app  --info
+        run: ./gradlew springboot:wire-mock:check sonarqube  -Dsonar.organization=power-durex-app  -Dsonar.pullrequest.key=${{github.event.issue.number}} --info
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
