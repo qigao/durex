@@ -13,10 +13,9 @@ runs:
         PUSH_TO_MASTER: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' }}
       run: |
         if ${PUSH_TO_MASTER} == true; then
-           echo "::set-output name=SONAR_KEY::-Dsonar.branch.name=master"
-           echo "merge code to master"
+           echo "Analyze master branch"
         else
            echo "::set-output name=SONAR_KEY::-Dsonar.pullrequest.key=${{ github.event.pull_request.number}}"
-           echo "push code to pull_request"
+           echo "Analyze pull_request"
         fi
       shell: bash
