@@ -15,7 +15,6 @@ sonarqube {
         property "sonar.projectBaseDir", "$projectDir"
         property "sonar.projectKey", "com.github.durex:utils"
         property "sonar.projectName", "utils"
-        property "sonar.pullrequest.base", "master"
         property "sonar.sources", "src/main/java"
         property "sonar.working.directory", "build/sonar"
         property "sonar.java.binaries", "build/classes"
