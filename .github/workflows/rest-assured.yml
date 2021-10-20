@@ -11,6 +11,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
       - uses: ./.github/workflows/config-action
   build:
     needs: setup
@@ -49,7 +51,7 @@ jobs:
       - id: sonar_vars
         uses: ./.github/workflows/env-action
       - name: Analyze with SonarCloud
-        run: ./gradlew springboot:rest-assured:sonarqube  -Dsonar.organization=power-durex-app  -Dsonar.pullrequest.key=${{ steps.sonar_vars.outputs.sonar_key }} --info
+        run: ./gradlew springboot:rest-assured:sonarqube  -Dsonar.organization=power-durex-app ${{ steps.sonar_vars.outputs.sonar_key }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
