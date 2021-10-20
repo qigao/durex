@@ -10,49 +10,54 @@ jobs:
   setup:
     runs-on: ubuntu-latest
     steps:
-      - name: CheckOut code
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v2
         with:
           fetch-depth: 0
-      - name: Setup JDK
-        uses: actions/setup-java@v2
-        with:
-          distribution: 'temurin'
-          java-version: 11
-          architecture: x64
-      - name: Validate Gradle wrapper
-        uses: gradle/wrapper-validation-action@v1
-      - name: Cache Gradle
-        uses: actions/cache@v2
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-          restore-keys: ${{ runner.os }}-gradle-
+      - uses: ./.github/workflows/templates/config-action
+      - uses: ./.github/workflows/templates/cache-action
   build:
     needs: setup
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - uses: ./.github/workflows/templates/cache-action
       - name: run gradle assemble
         run: ./gradlew quarkus:starter:assemble
-  test:
-    needs: [ setup,build ]
+  check:
+    needs: build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - uses: ./.github/workflows/templates/cache-action
+      - name: Validate Code
+        run: ./gradlew quarkus:starter:check
+  sonar:
+    needs: check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - uses: ./.github/workflows/templates/cache-action
+      - id: sonar_vars
+        uses: ./.github/workflows/templates/env-action
       - name: Analyze with SonarCloud
-        run: ./gradlew quarkus:starter:check sonarqube -Dsonar.organization=power-durex-app -Dsonar.pullrequest.key=${{github.event.pull_request.number}} --info
+        run: ./gradlew quarkus:starter:sonarqube -Dsonar.organization=power-durex-app ${{ steps.sonar_vars.outputs.sonar_key }} --info
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-
   integrationTest:
-    needs: [ setup,test ]
+    needs: check
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - uses: ./.github/workflows/templates/cache-action
       - name: run integration test
         run: ./gradlew quarkus:starter:integrationTest
 

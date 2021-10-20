@@ -1,4 +1,4 @@
-name: Wire-Mock Project Validation
+name: Shared Utils Project Validation
 on:
   push:
     branches:
@@ -23,8 +23,8 @@ jobs:
           fetch-depth: 0
       - uses: ./.github/workflows/templates/cache-action
       - name: run gradle assemble
-        run: ./gradlew springboot:wire-mock:assemble
-  check:
+        run: ./gradlew shared:utils:assemble
+  Check:
     needs: build
     runs-on: ubuntu-latest
     steps:
@@ -33,7 +33,7 @@ jobs:
           fetch-depth: 0
       - uses: ./.github/workflows/templates/cache-action
       - name: Validate Code
-        run: ./gradlew springboot:wire-mock:check
+        run: ./gradlew shared:utils:check
   sonar:
     needs: check
     runs-on: ubuntu-latest
@@ -45,16 +45,7 @@ jobs:
       - id: sonar_vars
         uses: ./.github/workflows/templates/env-action
       - name: Analyze with SonarCloud
-        run: ./gradlew springboot:wire-mock:sonarqube  -Dsonar.organization=power-durex-app ${{ steps.sonar_vars.outputs.sonar_key }} --info
+        run: ./gradlew shared:utils:sonarqube -Dsonar.organization=power-durex-app ${{ steps.sonar_vars.outputs.sonar_key }} --info
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-  integrationTest:
-    needs: check
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: ./.github/workflows/templates/cache-action
-      - name: run integration test
-        run: ./gradlew springboot:wire-mock:integrationTest
-

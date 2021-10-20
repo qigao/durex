@@ -33,3 +33,5 @@ out/
 /server-module/HELP.md
 
 dev-notes.txt
+
+.env

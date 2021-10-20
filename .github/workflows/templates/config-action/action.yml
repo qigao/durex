@@ -1,0 +1,17 @@
+name: 'Setup Action'
+description: 'Checkout Code and Setup JDK'
+runs:
+  using: "composite"
+  steps:
+    - name: CheckOut action code
+      uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - name: Setup JDK
+      uses: actions/setup-java@v2
+      with:
+        distribution: 'temurin'
+        java-version: 11
+        architecture: x64
+    - name: Validate Gradle wrapper
+      uses: gradle/wrapper-validation-action@v1
