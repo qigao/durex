@@ -21,7 +21,7 @@ jobs:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
-      - uses: ./.github/workflows/templates/cache-cation
+      - uses: ./.github/workflows/templates/cache-action
       - name: run gradle assemble
         run: ./gradlew springboot:rest-assured:assemble
   check:
@@ -31,7 +31,7 @@ jobs:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
-      - uses: ./.github/workflows/templates/cache-cation
+      - uses: ./.github/workflows/templates/cache-action
       - name: Validate Code
         run: ./gradlew springboot:rest-assured:check
   sonar:
@@ -59,7 +59,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: ./.github/workflows/templates/cache-cation
+      - uses: ./.github/workflows/templates/cache-action
       - name: run integration test
         run: ./gradlew springboot:rest-assured:integrationTest
 

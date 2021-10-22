@@ -21,7 +21,7 @@ jobs:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
-      - uses: ./.github/workflows/templates/cache-cation
+      - uses: ./.github/workflows/templates/cache-action
       - name: run gradle assemble
         run: ./gradlew shared:utils:assemble
   Check:
@@ -31,7 +31,7 @@ jobs:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
-      - uses: ./.github/workflows/templates/cache-cation
+      - uses: ./.github/workflows/templates/cache-action
       - name: Validate Code
         run: ./gradlew shared:utils:check
   sonar:
@@ -41,7 +41,7 @@ jobs:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
-      - uses: ./.github/workflows/templates/cache-cation
+      - uses: ./.github/workflows/templates/cache-action
       - id: sonar_vars
         uses: ./.github/workflows/templates/env-action
       - name: Analyze with SonarCloud

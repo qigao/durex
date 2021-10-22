@@ -14,26 +14,26 @@ jobs:
         with:
           fetch-depth: 0
       - uses: ./.github/workflows/templates/config-action
-      - uses: ./.github/workflows/templates/cache-cation
+      - uses: ./.github/workflows/templates/cache-action
   build:
     needs: setup
     runs-on: ubuntu-latest
     steps:
-      - uses: ./.github/workflows/templates/cache-cation
+      - uses: ./.github/workflows/templates/cache-action
       - name: run gradle assemble
         run: ./gradlew quarkus:starter:assemble
   check:
     needs: build
     runs-on: ubuntu-latest
     steps:
-      - uses: ./.github/workflows/templates/cache-cation
+      - uses: ./.github/workflows/templates/cache-action
       - name: Validate Code
         run: ./gradlew quarkus:starter:check
   sonar:
     needs: check
     runs-on: ubuntu-latest
     steps:
-      - uses: ./.github/workflows/templates/cache-cation
+      - uses: ./.github/workflows/templates/cache-action
       - id: sonar_vars
         uses: ./.github/workflows/templates/env-action
       - name: Analyze with SonarCloud
@@ -45,7 +45,7 @@ jobs:
     needs: check
     runs-on: ubuntu-latest
     steps:
-      - uses: ./.github/workflows/templates/cache-cation
+      - uses: ./.github/workflows/templates/cache-action
       - name: run integration test
         run: ./gradlew quarkus:starter:integrationTest
 
