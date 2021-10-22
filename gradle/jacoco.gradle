@@ -10,9 +10,6 @@ jacocoTestReport {
     }
 }
 
-tasks.test.finalizedBy jacocoTestReport
-tasks.check.dependsOn jacocoTestReport
-
 jacocoTestCoverageVerification {
     violationRules {
         rule {
@@ -30,4 +27,6 @@ jacocoTestCoverageVerification {
         }
     }
 }
-jacocoTestCoverageVerification.dependsOn jacocoTestReport
+tasks.test.finalizedBy jacocoTestReport
+tasks.check.dependsOn jacocoTestReport
+tasks.check.dependsOn jacocoTestCoverageVerification
