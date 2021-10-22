@@ -30,4 +30,4 @@ jacocoTestCoverageVerification {
         }
     }
 }
-
+jacocoTestCoverageVerification.dependsOn jacocoTestReport
