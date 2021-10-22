@@ -1,0 +1,36 @@
+= Durex
+a java template project for high code quality development
+
+== Environment Variables
+
+a typical .env files looks like
+
+[source,ini]
+--
+# starting line comment out supported
+FOO=foo
+BAR="bar"
+BAZ='~/projects/sonar'
+--
+
+'#' is allowed at the beginning of a line
+
+=== SetEnv
+
+copy .env.templates to .env at the root dir, update to whatever you need
+
+[source,bash]
+--
+> chmod +x scripts/setEnv.sh
+> source scripts/setEnv.sh
+--
+
+=== UnsetEnv
+
+to make environment variables from your .env files unusable
+
+[source,bash]
+--
+> chmod +x scripts/unsetEnv.sh
+> source scripts/unsetEnv.sh
+--

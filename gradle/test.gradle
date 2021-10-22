@@ -1,16 +1,3 @@
-def static getenv(path = ".env") {
-    def env = [:]
-
-    def file = new File(path)
-    if (file.exists()) {
-        file.eachLine { line ->
-            def (name, value) = line.tokenize("=")
-            env[name.trim()] = value.trim()
-        }
-    }
-    return env
-}
-
 test {
     useJUnitPlatform {
         excludeEngines 'junit-vintage'
@@ -20,6 +7,5 @@ test {
         events "passed", "skipped", "failed"
         exceptionFormat 'full'
     }
-    getenv().each { name, value -> environment name, value }
 }
 apply from: "$rootDir/gradle/integrationTest.gradle"
