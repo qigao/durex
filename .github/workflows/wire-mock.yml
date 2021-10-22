@@ -54,8 +54,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/cache@v2
-        id: ./.github/workflows/templates/cache-action
+      - uses: ./.github/workflows/templates/cache-action
       - name: run integration test
         run: ./gradlew springboot:wire-mock:integrationTest
 
