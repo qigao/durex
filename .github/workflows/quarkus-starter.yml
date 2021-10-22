@@ -45,6 +45,8 @@ jobs:
       - uses: ./.github/workflows/templates/cache-action
       - id: sonar_vars
         uses: ./.github/workflows/templates/env-action
+      - name: Generate Coverage Report
+        run: ./gradlew quarkus:starter:jacocoTestCoverageVerification
       - name: Analyze with SonarCloud
         run: ./gradlew quarkus:starter:sonarqube -Dsonar.organization=power-durex-app ${{ steps.sonar_vars.outputs.sonar_key }} --info
         env:
