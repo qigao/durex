@@ -19,6 +19,9 @@ jobs:
     needs: setup
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
       - uses: ./.github/workflows/templates/cache-action
       - name: run gradle assemble
         run: ./gradlew quarkus:starter:assemble
@@ -26,6 +29,9 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
       - uses: ./.github/workflows/templates/cache-action
       - name: Validate Code
         run: ./gradlew quarkus:starter:check
@@ -33,6 +39,9 @@ jobs:
     needs: check
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
       - uses: ./.github/workflows/templates/cache-action
       - id: sonar_vars
         uses: ./.github/workflows/templates/env-action
@@ -45,6 +54,9 @@ jobs:
     needs: check
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
       - uses: ./.github/workflows/templates/cache-action
       - name: run integration test
         run: ./gradlew quarkus:starter:integrationTest

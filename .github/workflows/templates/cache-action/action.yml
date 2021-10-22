@@ -3,9 +3,6 @@ description: 'Cache everything'
 runs:
   using: "composite"
   steps:
-    - uses: actions/checkout@v2
-      with:
-        fetch-depth: 0
     - name: Cache Build
       uses: actions/cache@v2
       id: restore-build
