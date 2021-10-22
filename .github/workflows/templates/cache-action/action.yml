@@ -1,0 +1,15 @@
+name: 'Cache Action'
+description: 'Cache everything'
+runs:
+  using: "composite"
+  steps:
+    - name: Cache Build
+      uses: actions/cache@v2
+      id: restore-build
+      with:
+        path: |
+          ./*
+          ~/.sonar/cache
+          ~/.gradle/caches
+          ~/.gradle/wrapper
+        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
