@@ -9,6 +9,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.NaturalId;
 
 @Getter
 @Setter
@@ -19,22 +20,20 @@ import lombok.ToString;
 @Entity
 public class Book {
   @Id private Long id;
-  private String isbn;
+  @NaturalId private String isbn;
   private String title;
   private String author;
 
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;
-    if (o == null) return false;
-    if (this.getClass() == o.getClass()) {
-      return Objects.equals(id, ((Book) o).id);
-    }
-    return false;
+    if (!(o instanceof Book)) return false;
+    Book book = (Book) o;
+    return Objects.equals(getIsbn(), book.getIsbn());
   }
 
   @Override
   public int hashCode() {
-    return 0;
+    return Objects.hash(getIsbn());
   }
 }

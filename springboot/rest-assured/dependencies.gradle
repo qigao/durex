@@ -2,4 +2,5 @@ dependencies {
     testRuntimeOnly 'com.h2database:h2'
     testImplementation libs.rest.assured
     testImplementation 'io.rest-assured:spring-mock-mvc'
+    testImplementation libs.equals.verifier
 }
