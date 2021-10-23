@@ -45,7 +45,7 @@ jobs:
       - id: sonar_vars
         uses: ./.github/workflows/templates/env-action
       - name: Generate JacocoReport
-        run: ./gradlew shared:utils:jacocoTestReport
+        run: ./gradlew shared:utils:jacocoTestReport -x test
       - name: Analyze with SonarCloud
         run: ./gradlew shared:utils:sonarqube -Dsonar.organization=power-durex-app ${{ steps.sonar_vars.outputs.sonar_key }}
         env:
