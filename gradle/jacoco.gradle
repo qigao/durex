@@ -28,5 +28,3 @@ jacocoTestCoverageVerification {
     }
 }
 tasks.test.finalizedBy jacocoTestReport
-tasks.check.dependsOn jacocoTestReport
-tasks.check.dependsOn jacocoTestCoverageVerification
