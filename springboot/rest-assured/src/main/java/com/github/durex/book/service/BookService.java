@@ -14,12 +14,13 @@ public class BookService {
   private final List<Book> bookStore = new ArrayList<>();
 
   public Long createNewBook(BookRequest bookRequest) {
-    Book book = new Book();
-
-    book.setIsbn(bookRequest.getIsbn());
-    book.setAuthor(bookRequest.getAuthor());
-    book.setTitle(bookRequest.getTitle());
-    book.setId(new SecureRandom().nextLong());
+    Book book =
+        Book.builder()
+            .isbn(bookRequest.getIsbn())
+            .author(bookRequest.getAuthor())
+            .title(bookRequest.getTitle())
+            .id(new SecureRandom().nextLong())
+            .build();
 
     bookStore.add(book);
 
