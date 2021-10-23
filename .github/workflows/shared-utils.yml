@@ -34,13 +34,6 @@ jobs:
       - uses: ./.github/workflows/templates/cache-action
       - name: Validate Code
         run: ./gradlew shared:utils:check
-      - id: sonar_vars
-        uses: ./.github/workflows/templates/env-action
-      - name: Analyze with SonarCloud
-        run: ./gradlew shared:utils:sonarqube -Dsonar.organization=power-durex-app ${{ steps.sonar_vars.outputs.sonar_key }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v2
         with:

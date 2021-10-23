@@ -11,6 +11,9 @@ groovy-core = {module = "org.codehaus.groovy:groovy", version.ref = "groovy"}
 groovy-json = {module = "org.codehaus.groovy:groovy-json", version.ref = "groovy"}
 groovy-nio = {module = "org.codehaus.groovy:groovy-nio", version.ref = "groovy"}
 
+# Test
+equals-verifier= {module = 'nl.jqno.equalsverifier:equalsverifier',   version = '3.7.2'}
+
 # Groups
 commons-lang3 = {group = "org.apache.commons", name = "commons-lang3", version = {strictly = "[3.8, 4.0[", prefer = "3.9"}}
 guava = {group = 'com.google.guava', name = 'guava', version.ref = 'guava'}
