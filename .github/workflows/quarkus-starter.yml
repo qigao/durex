@@ -35,21 +35,16 @@ jobs:
       - uses: ./.github/workflows/templates/cache-action
       - name: Validate Code
         run: ./gradlew quarkus:starter:check
-  sonar:
-    needs: check
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-      - uses: ./.github/workflows/templates/cache-action
-      - id: sonar_vars
-        uses: ./.github/workflows/templates/env-action
       - name: Analyze with SonarCloud
-        run: ./gradlew quarkus:starter:sonarqube -Dsonar.organization=power-durex-app ${{ steps.sonar_vars.outputs.sonar_key }} --info
+        run: ./gradlew quarkus:starter:sonarqube -Dsonar.organization=power-durex-app ${{ steps.sonar_vars.outputs.sonar_key }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v2
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: /home/runner/work/durex/quarkus/starter/build/reports/jacoco/test/jacocoTestReport.xml
   integrationTest:
     needs: check
     runs-on: ubuntu-latest
@@ -60,4 +55,3 @@ jobs:
       - uses: ./.github/workflows/templates/cache-action
       - name: run integration test
         run: ./gradlew quarkus:starter:integrationTest
-
