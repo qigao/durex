@@ -1,13 +1,21 @@
 package com.github.durex.json;
 
+import static com.github.durex.json.model.WeekDay.MONDAY;
+import static com.github.durex.pojo.MockUtils.getMockDirectory;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.hasProperty;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.github.durex.json.model.Div;
 import com.github.durex.json.model.Text;
 import com.github.durex.json.model.User;
 import com.github.durex.json.model.WeekDay;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.io.TempDir;
-
 import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
 import java.io.FileReader;
@@ -20,17 +28,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.List;
-
-import static com.github.durex.json.model.WeekDay.MONDAY;
-import static com.github.durex.pojo.MockUtils.getMockDirectory;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.containsInAnyOrder;
-import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.Matchers.hasProperty;
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.is;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 class SerDeTest {
   public static final String USER_LIST_JSON = "/json/users.json";
