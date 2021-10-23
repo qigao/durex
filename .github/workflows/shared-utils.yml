@@ -34,6 +34,8 @@ jobs:
       - uses: ./.github/workflows/templates/cache-action
       - name: Validate Code
         run: ./gradlew shared:utils:check
+      - name: Generate JacocoReport
+        run: ./gradlew shared:utils:jacocoTestReport
   sonar:
     needs: check
     runs-on: ubuntu-latest
@@ -44,8 +46,6 @@ jobs:
       - uses: ./.github/workflows/templates/cache-action
       - id: sonar_vars
         uses: ./.github/workflows/templates/env-action
-      - name: Generate JacocoReport
-        run: ./gradlew shared:utils:jacocoTestReport -x test
       - name: Analyze with SonarCloud
         run: ./gradlew shared:utils:sonarqube -Dsonar.organization=power-durex-app ${{ steps.sonar_vars.outputs.sonar_key }}
         env:
