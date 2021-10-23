@@ -34,22 +34,6 @@ jobs:
       - uses: ./.github/workflows/templates/cache-action
       - name: Validate Code
         run: ./gradlew springboot:rest-assured:check
-  sonar:
-    needs: check
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-      - uses: actions/cache@v2
-        id: restore-build
-        with:
-          path: ./*
-          key: ${{ github.sha }}
-      - id: sonar_vars
-        uses: ./.github/workflows/templates/env-action
-      - name: Generate JacocoReport
-        run: ./gradlew springboot:rest-assured:jacocoTestReport
       - name: Analyze with SonarCloud
         run: ./gradlew springboot:rest-assured:sonarqube  -Dsonar.organization=power-durex-app ${{ steps.sonar_vars.outputs.sonar_key }}
         env:

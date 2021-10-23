@@ -34,16 +34,6 @@ jobs:
       - uses: ./.github/workflows/templates/cache-action
       - name: Validate Code
         run: ./gradlew shared:utils:check
-      - name: Generate JacocoReport
-        run: ./gradlew shared:utils:jacocoTestReport
-  sonar:
-    needs: check
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-      - uses: ./.github/workflows/templates/cache-action
       - id: sonar_vars
         uses: ./.github/workflows/templates/env-action
       - name: Analyze with SonarCloud
