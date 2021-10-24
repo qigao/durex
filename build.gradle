@@ -1,7 +1,7 @@
 plugins {
     alias libs.plugins.lombok
-    alias libs.plugins.spotless
-    alias libs.plugins.editorconfig
+    alias glibs.plugins.spotless
+    alias glibs.plugins.editorconfig
 }
 
 allprojects {

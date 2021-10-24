@@ -4,5 +4,5 @@ dependencies {
     implementation 'io.quarkus:quarkus-resteasy'
     implementation 'io.quarkus:quarkus-arc'
     testImplementation 'io.quarkus:quarkus-junit5'
-    testImplementation libs.rest.assured
+    testImplementation tlibs.rest.assured
 }

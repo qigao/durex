@@ -1,9 +1,9 @@
 plugins {
-    alias libs.plugins.sonarqube
+    alias glibs.plugins.sonarqube
 }
 dependencies {
-    testImplementation libs.wiremock
-    testImplementation libs.rest.assured
+    testImplementation tlibs.wiremock
+    testImplementation tlibs.rest.assured
     testImplementation project(":shared:mock")
 }
 apply from: "$rootDir/dependency/jackson.gradle"
