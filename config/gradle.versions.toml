@@ -1,0 +1,11 @@
+# versions for libraries
+[versions]
+editorconfig = "0.0.3"
+sonar = "3.3"
+spotless = "5.15.0"
+
+# Gradle plugins config
+[plugins]
+editorconfig = {id = "org.ec4j.editorconfig", version.ref = "editorconfig"}
+sonarqube = {id = "org.sonarqube", version.ref = "sonar"}
+spotless = {id = "com.diffplug.spotless", version.ref = "spotless"}

@@ -1,0 +1,15 @@
+# versions for libraries
+[versions]
+junit = "5.8.0"
+equals = "3.7.2"
+wiremock = "2.31.0"
+rest-assured = "4.4.0"
+
+# Libs config
+[libraries]
+
+# Test
+junit5-bom = {group = 'org.junit', name = 'junit-bom', version.ref = 'junit'}
+equals-verifier = {module = 'nl.jqno.equalsverifier:equalsverifier',   version.ref = 'equals'}
+wiremock = {group = 'com.github.tomakehurst', name = 'wiremock-jre8', version.ref = 'wiremock'}
+rest-assured={ group= 'io.rest-assured', name= 'rest-assured', version.ref = 'rest-assured'}
