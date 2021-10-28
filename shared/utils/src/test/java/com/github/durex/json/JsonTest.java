@@ -1,6 +1,6 @@
 package com.github.durex.json;
 
-import static com.github.durex.json.model.WeekDay.MONDAY;
+import static com.github.durex.model.WeekDay.MONDAY;
 import static com.github.durex.pojo.MockUtils.getMockDirectory;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
@@ -8,14 +8,15 @@ import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.hasProperty;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.samePropertyValuesAs;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.github.durex.json.model.Div;
-import com.github.durex.json.model.Text;
-import com.github.durex.json.model.User;
-import com.github.durex.json.model.WeekDay;
+import com.github.durex.model.Div;
+import com.github.durex.model.Text;
+import com.github.durex.model.User;
+import com.github.durex.model.WeekDay;
 import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
 import java.io.FileReader;
@@ -31,54 +32,58 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
-class SerDeTest {
+class JsonTest {
   public static final String USER_LIST_JSON = "/json/users.json";
   public static final String USER_JSON = "/json/user.json";
   public static final String TEST_JSON = "test.json";
   public static final String TITLE = "title1";
+  public static final String WIDGET_JSON = "src/test/resources/json/widget.json";
+  public static final String WIDGET_DIV = "/widget/div";
+  public static final String WIDGET_TEXT = "/widget/text";
+  public static final String WIDGET_TEXT_SIZE = "/widget/text/size";
   @TempDir Path tempDir;
 
   @Test
   void testFileToObject() throws IOException {
     var path = getMockDirectory(USER_JSON);
-    var user = SerDe.toObject(path.toFile(), User.class);
+    var user = Json.read(path.toFile(), User.class);
     assertEquals(1, user.getId());
   }
 
   @Test
   void testFileToObjectList() throws IOException {
     var path = getMockDirectory(USER_LIST_JSON);
-    var userList = SerDe.toObject(path.toFile(), new TypeReference<List<User>>() {});
+    var userList = Json.read(path.toFile(), new TypeReference<List<User>>() {});
     assertEquals(200, userList.size());
   }
 
   @Test
   void testByteToObject() throws IOException {
     var path = getMockDirectory(USER_JSON);
-    var user = SerDe.toObject(Files.readAllBytes(path), User.class);
+    var user = Json.read(Files.readAllBytes(path), User.class);
     assertEquals(1, user.getId());
   }
 
   @Test
   void testStringToObject() throws IOException {
     var path = getMockDirectory(USER_JSON);
-    var user = SerDe.toObject(Files.readString(path), User.class);
+    var user = Json.read(Files.readString(path), User.class);
     assertEquals(1, user.getId());
   }
 
   @Test
   void testStringToObjectList() throws IOException {
     var path = getMockDirectory(USER_LIST_JSON);
-    var userList = SerDe.toObject(Files.readString(path), new TypeReference<List<User>>() {});
+    var userList = Json.read(Files.readString(path), new TypeReference<List<User>>() {});
     assertEquals(200, userList.size());
   }
 
   @Test
   void testByteToObjectList() throws IOException {
     var path = getMockDirectory(USER_LIST_JSON);
-    var userList = SerDe.toObject(Files.readAllBytes(path), new TypeReference<List<User>>() {});
+    var userList = Json.read(Files.readAllBytes(path), new TypeReference<List<User>>() {});
     assertEquals(200, userList.size());
-    var listToBytes = SerDe.toBytes(userList);
+    var listToBytes = Json.toBytes(userList);
     assertTrue(listToBytes.length > 1024);
   }
 
@@ -86,7 +91,7 @@ class SerDeTest {
   void testOnlineFileToObject() throws IOException {
     var path = getMockDirectory(USER_JSON);
     var url = path.toUri().toURL();
-    var user = SerDe.toObject(url, User.class);
+    var user = Json.read(url, User.class);
     assertEquals(1, user.getId());
   }
 
@@ -94,14 +99,14 @@ class SerDeTest {
   void testOnlineFileToObjectList() throws IOException {
     var path = getMockDirectory(USER_LIST_JSON);
     var url = path.toUri().toURL();
-    var user = SerDe.toObject(url, new TypeReference<List<User>>() {});
+    var user = Json.read(url, new TypeReference<List<User>>() {});
     assertEquals(200, user.size());
   }
 
   @Test
   void testObjectToString() throws IOException {
     User user = givenUser();
-    String serialized = SerDe.toString(user);
+    String serialized = Json.toString(user);
     assertTrue(serialized.contains("1"));
     assertTrue(serialized.contains(TITLE));
   }
@@ -109,14 +114,14 @@ class SerDeTest {
   @Test
   void testInputStreamToObject() throws IOException {
     InputStream input = new FileInputStream(getMockDirectory(USER_JSON).toString());
-    var user = SerDe.toObject(input, User.class);
+    var user = Json.read(input, User.class);
     assertEquals(1, user.getId());
   }
 
   @Test
   void testInputStreamToObjectList() throws IOException {
     InputStream input = new FileInputStream(getMockDirectory(USER_LIST_JSON).toString());
-    var user = SerDe.toObject(input, new TypeReference<List<User>>() {});
+    var user = Json.read(input, new TypeReference<List<User>>() {});
     assertEquals(200, user.size());
   }
 
@@ -124,7 +129,7 @@ class SerDeTest {
   void testReaderToObject() throws IOException {
     var path = getMockDirectory(USER_JSON);
     Reader reader = new FileReader(path.toString());
-    var user = SerDe.toObject(reader, User.class);
+    var user = Json.read(reader, User.class);
     assertEquals(1, user.getId());
   }
 
@@ -132,7 +137,7 @@ class SerDeTest {
   void testReaderToObjectList() throws IOException {
     var path = getMockDirectory(USER_LIST_JSON);
     Reader reader = new FileReader(path.toString());
-    var user = SerDe.toObject(reader, new TypeReference<List<User>>() {});
+    var user = Json.read(reader, new TypeReference<List<User>>() {});
     assertEquals(200, user.size());
   }
 
@@ -140,29 +145,31 @@ class SerDeTest {
   void testReaderToObjectArray() throws IOException {
     var path = getMockDirectory(USER_LIST_JSON);
     Reader reader = new FileReader(path.toString());
-    var user = SerDe.toObject(reader, User[].class);
+    var user = Json.read(reader, User[].class);
     assertEquals(200, user.length);
   }
 
   @Test
   void testFileWriter() throws IOException {
     User user = givenUser();
-    SerDe.toFile(user, tempDir.resolve(TEST_JSON).toFile());
-    assertTrue(tempDir.resolve(TEST_JSON).toFile().exists());
+    Json.write(user, tempDir.resolve(TEST_JSON).toFile());
+    var obj = Json.read(tempDir.resolve(TEST_JSON).toFile(), User.class);
+    assertThat(user, samePropertyValuesAs(obj));
   }
 
   @Test
   void testFileWriterWithPretty() throws IOException {
     User user = givenUser();
-    SerDe.toFileWithPretty(user, tempDir.resolve(TEST_JSON).toFile());
-    assertTrue(tempDir.resolve(TEST_JSON).toFile().exists());
+    Json.writeWithPretty(user, tempDir.resolve(TEST_JSON).toFile());
+    var obj = Json.read(tempDir.resolve(TEST_JSON).toFile(), User.class);
+    assertThat(user, samePropertyValuesAs(obj));
   }
 
   @Test
   void testObjectToWriter() throws IOException {
     User user = givenUser();
     StringWriter writer = new StringWriter();
-    SerDe.toWriter(user, writer);
+    Json.write(user, writer);
     assertTrue(writer.toString().contains(TITLE));
   }
 
@@ -170,97 +177,96 @@ class SerDeTest {
   void testObjectToOutputStream() throws IOException {
     User user = givenUser();
     ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-    SerDe.toOutputStream(user, outputStream);
+    Json.write(user, outputStream);
     assertTrue(outputStream.toString().contains(TITLE));
   }
 
   @Test
-  void whenSerializingJava8DateAndReadingValue_thenCorrect() throws IOException {
+  void whenSerializingJava8DateAndReadingValue() throws IOException {
     String stringDate = "\"2020-12-20\"";
-    LocalDate result = SerDe.toObject(stringDate, LocalDate.class);
+    LocalDate result = Json.read(stringDate, LocalDate.class);
     assertThat(result.toString(), containsString("2020-12-20"));
   }
 
   @Test
-  void whenDeserializingLocalDateTime_thenCorrect() throws IOException {
+  void whenDeserializingLocalDateTime() throws IOException {
     LocalDate now = LocalDate.now();
-    String converted = SerDe.toString(now);
-    LocalDate restored = SerDe.toObject(converted, LocalDate.class);
+    String converted = Json.toString(now);
+    LocalDate restored = Json.read(converted, LocalDate.class);
     assertThat(now, is(restored));
   }
 
   @Test
   void testEnumSerializingClass() throws IOException {
-    String mondayString = SerDe.toString(MONDAY.name());
+    String mondayString = Json.toString(MONDAY.name());
     assertThat("\"MONDAY\"", containsString(mondayString));
   }
 
   @Test
   void testEnumDeserializingClass() throws IOException {
-    String mondayString = SerDe.toString(MONDAY.name());
-    WeekDay day = SerDe.toObject(mondayString, WeekDay.class);
+    String mondayString = Json.toString(MONDAY.name());
+    WeekDay day = Json.read(mondayString, WeekDay.class);
     assertEquals(MONDAY, day);
   }
 
   @Test
   void testJsonNodeByPath() throws IOException {
     String str = "{\"name\":\"peter\", \"age\":\"20\"}";
-    Integer value = SerDe.findJsonNode(str, "/age", Integer.class);
+    Integer value = Json.findNode(str, "/age", Integer.class);
     assertEquals(20, value);
   }
 
   @Test
   void testJsonNodeByPathWithJsonFile() throws IOException {
-    var path = Paths.get("src/test/resources/json/widget.json");
-    Integer value = SerDe.findJsonNode(path.toFile(), "/widget/text/size", Integer.class);
+    var path = Paths.get(WIDGET_JSON);
+    Integer value = Json.findNode(path.toFile(), WIDGET_TEXT_SIZE, Integer.class);
     assertEquals(36, value);
   }
 
   @Test
   void testJsonNodeByPathWithJsonUrl() throws IOException {
-    var path = Paths.get("src/test/resources/json/widget.json");
-    Integer value = SerDe.findJsonNode(path.toUri().toURL(), "/widget/text/size", Integer.class);
+    var path = Paths.get(WIDGET_JSON);
+    Integer value = Json.findNode(path.toUri().toURL(), WIDGET_TEXT_SIZE, Integer.class);
     assertEquals(36, value);
   }
 
   @Test
   void testJsonNodeByPathWithJsonReader() throws IOException {
-    var path = Paths.get("src/test/resources/json/widget.json");
+    var path = Paths.get(WIDGET_JSON);
     Reader reader = new FileReader(path.toString());
-    Integer value = SerDe.findJsonNode(reader, "/widget/text/size", Integer.class);
+    Integer value = Json.findNode(reader, WIDGET_TEXT_SIZE, Integer.class);
     assertEquals(36, value);
   }
 
   @Test
   void testJsonNodeByPathWithJsonInputStream() throws IOException {
-    var path = Paths.get("src/test/resources/json/widget.json");
+    var path = Paths.get(WIDGET_JSON);
     InputStream input = new FileInputStream(path.toString());
-    Integer value = SerDe.findJsonNode(input, "/widget/text/size", Integer.class);
+    Integer value = Json.findNode(input, WIDGET_TEXT_SIZE, Integer.class);
     assertEquals(36, value);
   }
 
   @Test
   void testJsonNodeByPathWithJsonBytes() throws IOException {
-    var path = Paths.get("src/test/resources/json/widget.json");
-    Integer value =
-        SerDe.findJsonNode(Files.readAllBytes(path), "/widget/text/size", Integer.class);
+    var path = Paths.get(WIDGET_JSON);
+    Integer value = Json.findNode(Files.readAllBytes(path), WIDGET_TEXT_SIZE, Integer.class);
     assertEquals(36, value);
   }
 
   @Test
   void testJsonNodeByPathWithJsonString() throws IOException {
-    var path = Paths.get("src/test/resources/json/widget.json");
-    var value = SerDe.findJsonNode(Files.readString(path), "/widget/text", Text.class);
+    var path = Paths.get(WIDGET_JSON);
+    var value = Json.findNode(Files.readString(path), WIDGET_TEXT, Text.class);
     assertEquals(36, value.getSize());
     assertEquals("text1", value.getName());
   }
 
   @Test
   void testJsonNodeByPathWithJsonReaderTypedReferenceList() throws IOException {
-    var path = Paths.get("src/test/resources/json/widget.json");
+    var path = Paths.get(WIDGET_JSON);
     var value =
-        SerDe.findJsonNode(
-            new FileReader(path.toString()), "/widget/div", new TypeReference<List<Div>>() {});
+        Json.findNode(
+            new FileReader(path.toString()), WIDGET_DIV, new TypeReference<List<Div>>() {});
     assertThat(value, hasSize(3));
     assertThat(
         value,
@@ -272,10 +278,10 @@ class SerDeTest {
 
   @Test
   void testJsonNodeByPathWithJsonInputStreamTypedReferenceList() throws IOException {
-    var path = Paths.get("src/test/resources/json/widget.json");
+    var path = Paths.get(WIDGET_JSON);
     var value =
-        SerDe.findJsonNode(
-            new FileInputStream(path.toString()), "/widget/div", new TypeReference<List<Div>>() {});
+        Json.findNode(
+            new FileInputStream(path.toString()), WIDGET_DIV, new TypeReference<List<Div>>() {});
     assertThat(value, hasSize(3));
     assertThat(
         value,
@@ -287,9 +293,8 @@ class SerDeTest {
 
   @Test
   void testJsonNodeByPathWithJsonUrlTypedReferenceList() throws IOException {
-    var path = Paths.get("src/test/resources/json/widget.json");
-    var value =
-        SerDe.findJsonNode(path.toUri().toURL(), "/widget/div", new TypeReference<List<Div>>() {});
+    var path = Paths.get(WIDGET_JSON);
+    var value = Json.findNode(path.toUri().toURL(), WIDGET_DIV, new TypeReference<List<Div>>() {});
     assertThat(value, hasSize(3));
     assertThat(
         value,
@@ -301,10 +306,9 @@ class SerDeTest {
 
   @Test
   void testJsonNodeByPathWithJsonStringTypedReferenceList() throws IOException {
-    var path = Paths.get("src/test/resources/json/widget.json");
+    var path = Paths.get(WIDGET_JSON);
     var value =
-        SerDe.findJsonNode(
-            Files.readString(path), "/widget/div", new TypeReference<List<Div>>() {});
+        Json.findNode(Files.readString(path), WIDGET_DIV, new TypeReference<List<Div>>() {});
     assertThat(value, hasSize(3));
     assertThat(
         value,
@@ -316,10 +320,9 @@ class SerDeTest {
 
   @Test
   void testJsonNodeByPathWithJsonBytesTypedReferenceList() throws IOException {
-    var path = Paths.get("src/test/resources/json/widget.json");
+    var path = Paths.get(WIDGET_JSON);
     var value =
-        SerDe.findJsonNode(
-            Files.readAllBytes(path), "/widget/div", new TypeReference<List<Div>>() {});
+        Json.findNode(Files.readAllBytes(path), WIDGET_DIV, new TypeReference<List<Div>>() {});
     assertThat(value, hasSize(3));
     assertThat(
         value,
@@ -331,8 +334,8 @@ class SerDeTest {
 
   @Test
   void testJsonNodeByPathWithJsonFileTypedReferenceList() throws IOException {
-    var path = Paths.get("src/test/resources/json/widget.json");
-    var value = SerDe.findJsonNode(path.toFile(), "/widget/div", new TypeReference<List<Div>>() {});
+    var path = Paths.get(WIDGET_JSON);
+    var value = Json.findNode(path.toFile(), WIDGET_DIV, new TypeReference<List<Div>>() {});
     assertThat(value, hasSize(3));
     assertThat(
         value,
@@ -343,6 +346,6 @@ class SerDeTest {
   }
 
   private User givenUser() {
-    return User.builder().id(1).title(TITLE).build();
+    return User.builder().id(1).userId(2).title(TITLE).completed(true).build();
   }
 }

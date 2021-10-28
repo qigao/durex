@@ -13,19 +13,19 @@ groovy-nio = {module = "org.codehaus.groovy:groovy-nio", version.ref = "groovy"}
 
 # Groups
 commons-lang3 = {group = "org.apache.commons", name = "commons-lang3", version = {strictly = "[3.8, 4.0[", prefer = "3.9"}}
+commons-io = {group =  'commons-io', name='commons-io',version='2.11.0'}
 guava = {group = 'com.google.guava', name = 'guava', version.ref = 'guava'}
 logback = {group = 'ch.qos.logback', name = 'logback-classic', version.ref = 'logback'}
 
 # Ser/De
 validation = {group = 'javax.validation', name = 'validation-api', version = '2.0.1.Final'}
-opencsv = {module = 'com.opencsv:opencsv',version='5.5.2'}
 jackson-bom = {group = 'com.fasterxml.jackson', name = 'jackson-bom', version = '2.12.5'}
 
 quarkus-bom = {group = 'io.quarkus.platform', name = 'quarkus-bom', version.ref = 'quarkus'}
 
 [bundles]
 groovy = ["groovy-core", "groovy-json", "groovy-nio"]
-
+commons = ['commons-lang3','commons-io']
 # Gradle plugins config
 [plugins]
 lombok = {id = "io.freefair.lombok", version = "6.2.0"}
