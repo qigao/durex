@@ -16,6 +16,6 @@ runs:
            echo "Analyze master branch"
         else
            echo "::set-output name=SONAR_KEY::-Dsonar.pullrequest.key=${{ github.event.pull_request.number}}"
-           echo "Analyze pull_request"
+           echo "Analyze pull request"
         fi
       shell: bash

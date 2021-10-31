@@ -32,11 +32,15 @@ jobs:
         with:
           fetch-depth: 0
       - uses: ./.github/workflows/templates/cache-action
-      - name: Validate Code
+      - name: Execute Related Check tasks
         run: ./gradlew shared:utils:check
-      - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v2
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          files: /home/runner/work/durex/durex/shared/utils/build/reports/jacoco/test/jacocoTestReport.xml
+      - name: Validate Code Coverage
+        run: ./gradlew shared:utils:jacocoTestCoverageVerification
+      - id: sonar_vars
+        uses: ./.github/workflows/templates/env-action
+      - name: Analyze with SonarCloud
+        run: ./gradlew shared:utils:sonarqube -Dsonar.organization=power-durex-app ${{ steps.sonar_vars.outputs.sonar_key }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
