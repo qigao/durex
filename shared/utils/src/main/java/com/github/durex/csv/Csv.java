@@ -135,9 +135,6 @@ public class Csv {
   }
 
   private static <T> CsvSchema buildWriterSchema(Class<T> tClass) {
-    if (!writeSchema.usesHeader()) {
-      return writeSchema;
-    } else {
       CsvSchema.Builder tmpSchema = writeSchema.rebuild();
       CsvSchema typedSchema = csvMapper.typedSchemaFor(tClass);
       Iterator<CsvSchema.Column> iterator = typedSchema.iterator();
@@ -145,6 +142,5 @@ public class Csv {
               Spliterators.spliteratorUnknownSize(iterator, Spliterator.ORDERED), false)
           .forEach(tmpSchema::addColumn);
       return tmpSchema.build();
-    }
   }
 }
