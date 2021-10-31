@@ -7,6 +7,7 @@ dependencies {
     testImplementation project(":shared:mock")
 }
 apply from: "$rootDir/dependency/jackson.gradle"
+apply from: "$rootDir/dependency/apache.gradle"
 apply plugin: 'org.sonarqube'
 
 sonarqube {

@@ -1,4 +1,4 @@
-package com.github.durex.json.model;
+package com.github.durex.model;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

@@ -19,6 +19,16 @@ jacocoTestCoverageVerification {
                 value = 'COVEREDRATIO'
                 minimum = 1.0
             }
+            limit {
+                counter = 'BRANCH'
+                value = 'COVEREDRATIO'
+                minimum = 1.0
+            }
+            limit {
+                counter = 'COMPLEXITY'
+                value = 'COVEREDRATIO'
+                minimum = 0.3
+            }
             excludes = [
                     'io.reflectoring.coverage.part.PartlyCovered',
                     'io.reflectoring.coverage.ignored.*',

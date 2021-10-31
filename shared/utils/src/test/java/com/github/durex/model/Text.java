@@ -1,4 +1,4 @@
-package com.github.durex.json.model;
+package com.github.durex.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,9 +11,13 @@ import lombok.ToString;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Div {
-  int width;
-  int height;
-  String id;
+public class Text {
+  String data;
+  Integer size;
+  String style;
   String name;
+  Integer hOffset;
+  Integer vOffset;
+  String alignment;
+  String onMouseUp;
 }

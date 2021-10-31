@@ -7,7 +7,7 @@ import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.github.durex.json.model.User;
+import com.github.durex.model.User;
 import com.github.tomakehurst.wiremock.WireMockServer;
 import java.io.IOException;
 import java.util.List;
@@ -20,7 +20,7 @@ class WireMockJunit5Test {
   WireMockServer wireMockServer;
   static final String USER_LIST_JSON = "/json/users.json";
   static final String USER_JSON = "/json/user.json";
-  private final String route = "/junit5/json";
+  static final String ROUTE = "/junit5/json";
   static final String CONTENT_TYPE = "Content-Type";
   static final String TEXT_PLAIN = "text/plain";
 
@@ -38,26 +38,26 @@ class WireMockJunit5Test {
   @Test
   void testOnlineFileToObjectList() throws IOException {
     wireMockServer.stubFor(
-        get(urlEqualTo(route))
+        get(urlEqualTo(ROUTE))
             .willReturn(
                 aResponse()
                     .withHeader(CONTENT_TYPE, TEXT_PLAIN)
                     .withStatus(200)
                     .withBodyFile(USER_LIST_JSON)));
-    var user = SerDe.toObject(getMockURL(USER_LIST_JSON), new TypeReference<List<User>>() {});
+    var user = Json.read(getMockURL(USER_LIST_JSON), new TypeReference<List<User>>() {});
     assertEquals(200, user.size());
   }
 
   @Test
   void testOnlineFileToObject() throws IOException {
     wireMockServer.stubFor(
-        get(urlEqualTo(route))
+        get(urlEqualTo(ROUTE))
             .willReturn(
                 aResponse()
                     .withHeader(CONTENT_TYPE, TEXT_PLAIN)
                     .withStatus(200)
                     .withBodyFile(USER_JSON)));
-    var user = SerDe.toObject(getMockURL(USER_JSON), User.class);
+    var user = Json.read(getMockURL(USER_JSON), User.class);
     assertEquals(1, user.getId());
   }
 }
