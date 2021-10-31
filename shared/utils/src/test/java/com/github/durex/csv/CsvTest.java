@@ -4,10 +4,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectReader;
-import com.fasterxml.jackson.dataformat.csv.CsvMapper;
-import com.fasterxml.jackson.dataformat.csv.CsvParser;
 import com.fasterxml.jackson.dataformat.csv.CsvSchema;
 import com.github.durex.model.OnlineCourse;
 import java.io.ByteArrayOutputStream;
@@ -20,11 +16,6 @@ import java.io.StringWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.List;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
@@ -185,25 +176,5 @@ class CsvTest {
 
   private OnlineCourse givenBookC() {
     return new OnlineCourse("Complete Java MasterClass", "Udemy", 200);
-  }
-
-  @Test
-  @Disabled
-  void parses_csv_to_object_list_in_one_read() throws Exception {
-    String csv = "id,name\n1,Red\n2,Green\n3,Blue";
-    CsvMapper mapper = new CsvMapper().enable(CsvParser.Feature.WRAP_AS_ARRAY);
-    CsvSchema schema = mapper.schemaFor(ColourData.class).withColumnSeparator(',');
-    ObjectReader reader = mapper.readerFor(new TypeReference<List<ColourData>>() {}).with(schema);
-    assertThat(
-        reader.readValue(csv),
-        contains(new ColourData(1, "Red"), new ColourData(2, "Green"), new ColourData(3, "Blue")));
-  }
-
-  @Data
-  @NoArgsConstructor
-  @AllArgsConstructor
-  static class ColourData {
-    int id;
-    String name;
   }
 }
