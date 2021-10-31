@@ -36,6 +36,10 @@ jobs:
         run: ./gradlew springboot:wire-mock:check
       - name: Validate Code Coverage
         run: ./gradlew springboot:wire-mock:jacocoTestCoverageVerification
+  sonar:
+    needs: check
+    runs-on: ubuntu-latest
+    steps:
       - id: sonar_vars
         uses: ./.github/workflows/templates/env-action
       - name: Analyze with SonarCloud
