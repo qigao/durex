@@ -37,13 +37,6 @@ jobs:
         run: ./gradlew quarkus:starter:check
       - name: Validate Code Coverage
         run: ./gradlew quarkus:starter:jacocoTestCoverageVerification
-  sonar:
-    needs: check
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
       - id: sonar_vars
         uses: ./.github/workflows/templates/env-action
       - name: Analyze with SonarCloud

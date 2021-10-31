@@ -11,7 +11,7 @@ class BookTest {
   }
 
   @Test
-  public void testToString() {
+  void testToString() {
     ToStringVerifier.forClass(Book.class).verify();
   }
 }
