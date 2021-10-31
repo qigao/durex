@@ -24,7 +24,7 @@ jobs:
       - uses: ./.github/workflows/templates/cache-action
       - name: run gradle assemble
         run: ./gradlew shared:utils:assemble
-  Check:
+  check:
     needs: build
     runs-on: ubuntu-latest
     steps:
@@ -36,6 +36,10 @@ jobs:
         run: ./gradlew shared:utils:check
       - name: Validate Code Coverage
         run: ./gradlew shared:utils:jacocoTestCoverageVerification
+  sonar:
+    needs: check
+    runs-on: ubuntu-latest
+    steps:
       - id: sonar_vars
         uses: ./.github/workflows/templates/env-action
       - name: Analyze with SonarCloud
