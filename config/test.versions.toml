@@ -4,7 +4,7 @@ junit = "5.8.0"
 equalsverifier = "3.7.2"
 wiremock = "2.31.0"
 rest-assured = "4.4.0"
-
+to-string-verifier = "1.4.8"
 # Libs config
 [libraries]
 
@@ -13,3 +13,4 @@ junit5-bom = {group = 'org.junit', name = 'junit-bom', version.ref = 'junit'}
 equalsverifier = {module = 'nl.jqno.equalsverifier:equalsverifier',   version.ref = 'equalsverifier'}
 wiremock = {group = 'com.github.tomakehurst', name = 'wiremock-jre8', version.ref = 'wiremock'}
 rest-assured={ group= 'io.rest-assured', name= 'rest-assured', version.ref = 'rest-assured'}
+jparams={ group = 'com.jparams',name='to-string-verifier',version.ref='to-string-verifier'}
