@@ -6,9 +6,6 @@ repositories{
            } */
         url "https://maven.aliyun.com/repository/public"
     }
-    maven{
-        url 'https://jitpack.io'
-    }
     gradlePluginPortal()
     maven { url 'https://maven-central.storage.googleapis.com' }
     mavenCentral()

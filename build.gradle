@@ -22,4 +22,5 @@ subprojects {
     apply plugin: 'org.ec4j.editorconfig'
     apply from: "$rootDir/gradle/repos.gradle"
     apply from: "$rootDir/gradle/test.gradle"
+    apply from: "$rootDir/gradle/integrationTest.gradle"
 }

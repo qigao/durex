@@ -8,4 +8,3 @@ test {
         exceptionFormat 'full'
     }
 }
-apply from: "$rootDir/gradle/integrationTest.gradle"
