@@ -1,4 +1,4 @@
-package com.github.durex.json;
+package com.github.durex.utils;
 
 import static com.github.durex.model.WeekDay.MONDAY;
 import static com.github.durex.pojo.MockUtils.getMockDirectory;

@@ -1,4 +1,4 @@
-package com.github.durex.csv;
+package com.github.durex.utils;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.MappingIterator;
