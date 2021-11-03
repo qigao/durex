@@ -1,4 +1,4 @@
-name: Wire-Mock Project Validation
+name: Wire-Mock Project
 on:
   push:
     branches:
@@ -20,12 +20,40 @@ jobs:
         with:
           fetch-depth: 0
       - uses: ./.github/workflows/templates/config-action
+  check:
+    name: Check Project
+    runs-on: ubuntu-latest
+    needs: setup
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
       - name: run gradle assemble
         run: ./gradlew springboot:wire-mock:assemble
       - name: Execute Related Check tasks
         run: ./gradlew springboot:wire-mock:check
       - name: Validate Code Coverage
         run: ./gradlew springboot:wire-mock:jacocoTestCoverageVerification
+      - uses: ./.github/workflows/templates/cache-action
+      - name: Cache build result
+        uses: actions/cache@v2
+        with:
+          path: springboot/wire-mock/build
+          key:  ${{ runner.os }}-gradle-build-wire-mock-project-${{ github.run_id }}
+  sonar:
+    name: Sonar Analisys
+    runs-on: ubuntu-latest
+    needs: check
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - uses: ./.github/workflows/templates/cache-action
+      - name: Cache build result
+        uses: actions/cache@v2
+        with:
+          path: springboot/wire-mock/build
+          key:  ${{ runner.os }}-gradle-build-wire-mock-project-${{ github.run_id }}
       - id: pr_vars
         uses: ./.github/workflows/templates/env-action
       - name: Analyze with SonarCloud
@@ -33,6 +61,20 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+  IT:
+    name: Integration Tests
+    runs-on: ubuntu-latest
+    needs: check
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - uses: ./.github/workflows/templates/cache-action
+      - name: Cache build result
+        uses: actions/cache@v2
+        with:
+          path: springboot/wire-mock/build
+          key:  ${{ runner.os }}-gradle-build-wire-mock-project-${{ github.run_id }}
       - name: run integration test
         run: ./gradlew springboot:wire-mock:integrationTest
 

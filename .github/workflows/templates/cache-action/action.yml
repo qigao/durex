@@ -7,10 +7,10 @@ runs:
       uses: actions/cache@v2
       with:
         path: ~/.gradle/caches
-        key: ${{ runner.os }}-gradle-caches-${{ hashFiles('**/*.gradle', '**/*.gradle.kts') }}
+        key: ${{ runner.os }}-gradle-caches-${{ github.run_number }}-${{ github.run_id }}
     - name: Setup Gradle Wrapper Cache
       uses: actions/cache@v2
       with:
         path: ~/.gradle/wrapper
-        key: ${{ runner.os }}-gradle-wrapper-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties') }}
+        key: ${{ runner.os }}-gradle-wrapper-${{ github.run_number }}-${{ github.run_id }}
 

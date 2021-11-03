@@ -1,4 +1,4 @@
-name: Shared Utils Project Validation
+name: Shared Utils Project
 on:
   push:
     branches:
@@ -20,12 +20,40 @@ jobs:
         with:
           fetch-depth: 0
       - uses: ./.github/workflows/templates/config-action
+  check:
+    name: Check Project
+    runs-on: ubuntu-latest
+    needs: setup
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
       - name: run gradle assemble
         run: ./gradlew shared:utils:assemble
       - name: Execute Related Check tasks
         run: ./gradlew shared:utils:check
       - name: Validate Code Coverage
         run: ./gradlew shared:utils:jacocoTestCoverageVerification
+      - uses: ./.github/workflows/templates/cache-action
+      - name: Cache build result
+        uses: actions/cache@v2
+        with:
+          path: shared/utils/build
+          key:  ${{ runner.os }}-gradle-build-shared-utils-project-${{ github.run_id }}
+  sonar:
+    name: Sonar Analisys
+    runs-on: ubuntu-latest
+    needs: check
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - uses: ./.github/workflows/templates/cache-action
+      - name: Cache build result
+        uses: actions/cache@v2
+        with:
+          path: shared/utils/build
+          key:  ${{ runner.os }}-gradle-build-shared-utils-project-${{ github.run_id }}
       - id: pr_vars
         uses: ./.github/workflows/templates/env-action
       - name: Analyze with SonarCloud
