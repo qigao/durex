@@ -41,7 +41,7 @@ jobs:
           path: shared/utils/build
           key:  ${{ runner.os }}-gradle-build-shared-utils-project-${{ github.run_id }}
   sonar:
-    name: Sonar Analisys
+    name: Sonar Analysis
     runs-on: ubuntu-latest
     needs: check
     steps:
