@@ -39,7 +39,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: shared/utils/build
-          key:  ${{ runner.os }}-gradle-build-shared-utils-project
+          key:  ${{ runner.os }}-gradle-build-shared-utils-project-${{ github.run_id }}
   sonar:
     name: Sonar Analisys
     runs-on: ubuntu-latest
@@ -53,7 +53,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: shared/utils/build
-          key:  ${{ runner.os }}-gradle-build-shared-utils-project
+          key:  ${{ runner.os }}-gradle-build-shared-utils-project-${{ github.run_id }}
       - id: pr_vars
         uses: ./.github/workflows/templates/env-action
       - name: Analyze with SonarCloud
