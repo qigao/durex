@@ -42,7 +42,7 @@ jobs:
           path: springboot/rest-assured/build
           key:  ${{ runner.os }}-gradle-build-rest-assured-project-${{ github.run_id }}
   sonar:
-    name: Sonar Analisys
+    name: Sonar Analysis
     runs-on: ubuntu-latest
     needs: check
     steps:
