@@ -3,8 +3,14 @@ on:
   push:
     branches:
       - master
+    paths:
+      - 'quarkus/starter/**'
+      - '.github/workflows/quarkus-starter.yml'
   pull_request:
     types: [ opened,reopened, synchronize ]
+    paths:
+      - 'quarkus/starter/**'
+      - '.github/workflows/quarkus-starter.yml'
 
 jobs:
   setup:
@@ -15,32 +21,16 @@ jobs:
           fetch-depth: 0
       - uses: ./.github/workflows/templates/config-action
       - uses: ./.github/workflows/templates/cache-action
-  build:
-    needs: setup
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-      - uses: ./.github/workflows/templates/cache-action
       - name: run gradle assemble
         run: ./gradlew quarkus:starter:assemble
-  check:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-      - uses: ./.github/workflows/templates/cache-action
       - name: Execute Related Check tasks
         run: ./gradlew quarkus:starter:check
       - name: Validate Code Coverage
         run: ./gradlew quarkus:starter:jacocoTestCoverageVerification
-      - id: sonar_vars
+      - id: pr_vars
         uses: ./.github/workflows/templates/env-action
       - name: Analyze with SonarCloud
-        run: ./gradlew quarkus:starter:sonarqube -Dsonar.organization=power-durex-app ${{ steps.sonar_vars.outputs.sonar_key }}
+        run: ./gradlew quarkus:starter:sonarqube -Dsonar.organization=power-durex-app ${{ steps.pr_vars.outputs.sonar_key }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}

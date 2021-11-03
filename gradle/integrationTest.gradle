@@ -27,4 +27,3 @@ task integrationTest(type: Test) {
 
     shouldRunAfter test
 }
-

@@ -3,8 +3,14 @@ on:
   push:
     branches:
       - master
+    paths:
+      - 'shared/utils/**'
+      - '.github/workflows/shared-utils.yml'
   pull_request:
     types: [ opened,reopened, synchronize ]
+    paths:
+      - 'shared/utils/**'
+      - '.github/workflows/shared-utils.yml'
 
 jobs:
   setup:
@@ -14,32 +20,16 @@ jobs:
         with:
           fetch-depth: 0
       - uses: ./.github/workflows/templates/config-action
-  build:
-    needs: setup
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-      - uses: ./.github/workflows/templates/cache-action
       - name: run gradle assemble
         run: ./gradlew shared:utils:assemble
-  check:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-      - uses: ./.github/workflows/templates/cache-action
       - name: Execute Related Check tasks
         run: ./gradlew shared:utils:check
       - name: Validate Code Coverage
         run: ./gradlew shared:utils:jacocoTestCoverageVerification
-      - id: sonar_vars
+      - id: pr_vars
         uses: ./.github/workflows/templates/env-action
       - name: Analyze with SonarCloud
-        run: ./gradlew shared:utils:sonarqube -Dsonar.organization=power-durex-app ${{ steps.sonar_vars.outputs.sonar_key }}
+        run: ./gradlew shared:utils:sonarqube -Dsonar.organization=power-durex-app ${{ steps.pr_vars.outputs.sonar_key }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
