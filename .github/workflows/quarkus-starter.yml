@@ -22,31 +22,21 @@ jobs:
           fetch-depth: 0
       - uses: ./.github/workflows/templates/config-action
 
-  build:
-    name: Build Quarkus Starter Project
+  check:
+    name: Check Project
     runs-on: ubuntu-latest
     needs: setup
     steps:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
-      - uses: ./.github/workflows/templates/cache-action
       - name: run gradle assemble
         run: ./gradlew quarkus:starter:assemble
-
-  check:
-    name: Check Quarkus Starter Project
-    runs-on: ubuntu-latest
-    needs: build
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-      - uses: ./.github/workflows/templates/cache-action
       - name: Execute Related Check tasks
         run: ./gradlew quarkus:starter:check
       - name: Validate Code Coverage
         run: ./gradlew quarkus:starter:jacocoTestCoverageVerification
+      - uses: ./.github/workflows/templates/cache-action
       - name: Cache build result
         uses: actions/cache@v2
         with:

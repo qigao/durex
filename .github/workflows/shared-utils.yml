@@ -20,30 +20,21 @@ jobs:
         with:
           fetch-depth: 0
       - uses: ./.github/workflows/templates/config-action
-  build:
-    name: Build Project
+  check:
+    name: Check Project
     runs-on: ubuntu-latest
     needs: setup
     steps:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
-      - uses: ./.github/workflows/templates/cache-action
       - name: run gradle assemble
         run: ./gradlew shared:utils:assemble
-  check:
-    name: Check Project
-    runs-on: ubuntu-latest
-    needs: build
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-      - uses: ./.github/workflows/templates/cache-action
       - name: Execute Related Check tasks
         run: ./gradlew shared:utils:check
       - name: Validate Code Coverage
         run: ./gradlew shared:utils:jacocoTestCoverageVerification
+      - uses: ./.github/workflows/templates/cache-action
       - name: Cache build result
         uses: actions/cache@v2
         with:
