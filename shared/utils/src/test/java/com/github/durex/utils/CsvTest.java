@@ -1,4 +1,4 @@
-package com.github.durex.csv;
+package com.github.durex.utils;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;

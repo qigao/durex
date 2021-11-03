@@ -1,4 +1,4 @@
-package com.github.durex.json;
+package com.github.durex.utils;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
