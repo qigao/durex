@@ -36,3 +36,5 @@ out/
 dev-notes.txt
 
 .env
+
+logs

@@ -8,6 +8,6 @@ subprojects {
     apply plugin: 'io.freefair.lombok'
     apply from: "$rootDir/gradle/jacoco.gradle"
     apply from: "$rootDir/gradle/spotless.gradle"
-    apply from: "$rootDir/dependency/common.gradle"
-    apply from: "$rootDir/springboot/dependency/springboot.gradle"
+    apply from: "$rootDir/exts/common.gradle"
+    apply from: "$rootDir/exts/spring.gradle"
 }

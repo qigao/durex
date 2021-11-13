@@ -3,7 +3,7 @@
 groovy = "3.0.9"
 guava = "30.1.1-jre"
 logback = "1.2.6"
-quarkus = "2.2.3.Final"
+
 # Libs config
 [libraries]
 # Modules
@@ -21,14 +21,13 @@ logback = {group = 'ch.qos.logback', name = 'logback-classic', version.ref = 'lo
 validation = {group = 'javax.validation', name = 'validation-api', version = '2.0.1.Final'}
 jackson-bom = {group = 'com.fasterxml.jackson', name = 'jackson-bom', version = '2.12.5'}
 
-quarkus-bom = {group = 'io.quarkus.platform', name = 'quarkus-bom', version.ref = 'quarkus'}
 
 [bundles]
 groovy = ["groovy-core", "groovy-json", "groovy-nio"]
 commons = ['commons-lang3','commons-io']
+
 # Gradle plugins config
 [plugins]
 lombok = {id = "io.freefair.lombok", version = "6.2.0"}
-quarkus = {id = 'io.quarkus', version.ref = 'quarkus'}
 spring-bom = {id = "io.spring.dependency-management", version = "1.0.11.RELEASE"}
 springboot = {id = "org.springframework.boot", version = "2.5.4"}

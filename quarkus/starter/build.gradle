@@ -1,9 +1,6 @@
 plugins {
     alias glibs.plugins.sonarqube
 }
-dependencies {
-    implementation 'org.dmfs:http-client-mockutils:1.16.2'
-}
 
 apply plugin: 'org.sonarqube'
 
@@ -13,10 +10,5 @@ sonarqube {
         property "sonar.projectBaseDir", "$projectDir"
         property "sonar.projectKey", "com.github.durex:Qurkus-starter"
         property "sonar.projectName", "Starter"
-        property "sonar.sources", "src/main/java"
-        property "sonar.working.directory", "build/sonar"
-        property "sonar.java.binaries", "build/classes"
-        property "sonar.java.test.binaries", "build/classes/java/test"
-        property "sonar.coverage.jacoco.xmlReportPaths", "build/reports/jacoco/test/jacocoTestReport.xml"
     }
 }

@@ -6,13 +6,16 @@ enableFeaturePreview("VERSION_CATALOGS")
 dependencyResolutionManagement {
     versionCatalogs {
         libs {
-            from(files("$rootDir/config/libs.versions.toml"))
+            from(files("$rootDir/versions/libs.versions.toml"))
         }
         tlibs {
-            from(files("$rootDir/config/test.versions.toml"))
+            from(files("$rootDir/versions/test.versions.toml"))
         }
         glibs {
-            from(files("$rootDir/config/gradle.versions.toml"))
+            from(files("$rootDir/versions/gradle.versions.toml"))
+        }
+        qlibs {
+            from(files("$rootDir/versions/quarkus.versions.toml"))
         }
     }
 }
