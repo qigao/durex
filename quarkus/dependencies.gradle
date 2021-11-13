@@ -1,5 +1,5 @@
 dependencies {
-    implementation enforcedPlatform(libs.quarkus.bom.get())
+    implementation enforcedPlatform(qlibs.quarkus.bom.get())
     implementation 'io.quarkus:quarkus-resteasy-jackson'
     implementation 'io.quarkus:quarkus-resteasy'
     implementation 'io.quarkus:quarkus-arc'
