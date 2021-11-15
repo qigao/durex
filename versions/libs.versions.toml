@@ -21,10 +21,16 @@ logback = {group = 'ch.qos.logback', name = 'logback-classic', version.ref = 'lo
 validation = {group = 'javax.validation', name = 'validation-api', version = '2.0.1.Final'}
 jackson-bom = {group = 'com.fasterxml.jackson', name = 'jackson-bom', version = '2.12.5'}
 
+# Id generator
+uuid = {group = 'com.github.f4b6a3', name = 'uuid-creator', version = '4.1.3'}
+ulid = {group = 'com.github.f4b6a3', name = 'ulid-creator', version = '4.1.2'}
+tsid = {group = 'com.github.f4b6a3', name = 'tsid-creator', version = '4.1.1'}
+ksuid = {group = 'com.github.f4b6a3', name = 'ksuid-creator', version = '2.2.0'}
 
 [bundles]
 groovy = ["groovy-core", "groovy-json", "groovy-nio"]
 commons = ['commons-lang3','commons-io']
+idCreator = ['uuid','ulid','tsid','ksuid']
 
 # Gradle plugins config
 [plugins]
