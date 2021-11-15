@@ -30,6 +30,6 @@ class IDFactoryTest {
     LocalDateTime triggerTime =
         LocalDateTime.ofInstant(Instant.ofEpochMilli(time), TimeZone.getDefault().toZoneId());
     LocalDateTime actualDateTime = LocalDateTime.now();
-    assertThat(actualDateTime, LocalDateTimeMatchers.within(5, ChronoUnit.MILLIS, triggerTime));
+    assertThat(actualDateTime, LocalDateTimeMatchers.within(1, ChronoUnit.SECONDS, triggerTime));
   }
 }
