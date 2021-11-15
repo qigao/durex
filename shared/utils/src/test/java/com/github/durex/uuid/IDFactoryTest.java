@@ -25,7 +25,7 @@ class IDFactoryTest {
 
   @Test
   void testUlid() {
-    String id = getId(IDType.ULID);
+    String id = getId();
     long time = Ulid.from(id).getTime();
     LocalDateTime triggerTime =
         LocalDateTime.ofInstant(Instant.ofEpochMilli(time), TimeZone.getDefault().toZoneId());
