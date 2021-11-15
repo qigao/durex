@@ -14,3 +14,4 @@ equalsverifier = {module = 'nl.jqno.equalsverifier:equalsverifier',   version.re
 wiremock = {group = 'com.github.tomakehurst', name = 'wiremock-jre8', version.ref = 'wiremock'}
 rest-assured={ group= 'io.rest-assured', name= 'rest-assured', version.ref = 'rest-assured'}
 jparams={ group = 'com.jparams',name='to-string-verifier',version.ref='to-string-verifier'}
+hamcrest-date={ group = 'org.exparity', name = 'hamcrest-date', version  = '2.0.7'}
