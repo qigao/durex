@@ -1,6 +1,8 @@
 plugins {
     alias glibs.plugins.sonarqube
 }
+group = 'com.github.durex'
+version = '0.1'
 
 apply plugin: 'org.sonarqube'
 
