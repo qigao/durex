@@ -12,7 +12,6 @@ allprojects {
             println "Hi from $task.project.name"
         }
     }
-    apply plugin: 'eclipse'
     apply plugin: 'idea'
     project.buildDir = 'build'
 }

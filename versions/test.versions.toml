@@ -5,8 +5,11 @@ equalsverifier = "3.7.2"
 wiremock = "2.31.0"
 rest-assured = "4.4.0"
 to-string-verifier = "1.4.8"
+h2 = "1.4.200"
+testcontainers = "1.16.2"
 # Libs config
 [libraries]
+h2db={group="com.h2database", name="h2", version.ref="h2" }
 
 # Test
 junit5-bom = {group = 'org.junit', name = 'junit-bom', version.ref = 'junit'}
@@ -15,3 +18,4 @@ wiremock = {group = 'com.github.tomakehurst', name = 'wiremock-jre8', version.re
 rest-assured={ group= 'io.rest-assured', name= 'rest-assured', version.ref = 'rest-assured'}
 jparams={ group = 'com.jparams',name='to-string-verifier',version.ref='to-string-verifier'}
 hamcrest-date={ group = 'org.exparity', name = 'hamcrest-date', version  = '2.0.7'}
+test-containers-bom={ group = 'org.testcontainers', name = 'testcontainers-bom', version.ref = 'testcontainers'}

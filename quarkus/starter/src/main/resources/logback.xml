@@ -31,11 +31,11 @@
     </encoder>
   </appender>
 
-  <root level="DEBUG">
+  <root level="info">
     <appender-ref ref="console" />
     <appender-ref ref="RollingFile" />
   </root>
-  <logger name="com.github.durex" level="trace" additivity="false">
+  <logger name="com.github.durex" level="debug" additivity="false">
     <appender-ref ref="RollingFile" />
     <appender-ref ref="console" />
   </logger>

@@ -12,3 +12,16 @@ sonarqube {
         property "sonar.projectName", "Starter"
     }
 }
+
+jacocoTestReport {
+    afterEvaluate {
+        classDirectories.setFrom(files(classDirectories.files.collect {
+            fileTree(dir: it, exclude: '**/repository/**'
+            )
+        }))
+    }
+}
+
+dependencies {
+    testImplementation project(":shared:utils")
+}

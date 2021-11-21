@@ -1,0 +1,17 @@
+# versions for libraries
+[versions]
+# version for spring
+springboot = "2.5.4"
+spring-bom = "1.0.11.RELEASE"
+
+# Libs config
+[libraries]
+# spring-boot-starter-web
+
+[bundles]
+
+
+# Gradle plugins config
+[plugins]
+spring-bom = {id = "io.spring.dependency-management", version.ref = "spring-bom"}
+springboot = {id = "org.springframework.boot", version.ref = "springboot"}

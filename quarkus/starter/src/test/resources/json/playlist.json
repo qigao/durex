@@ -1,0 +1,40 @@
+{
+	"id": 1,
+	"total": 5,
+	"title": "The Cradles",
+	"duration": 200,
+	"description": " a list of musics for your baby",
+	"cover": "http://music.mummyway.com/38352658567418874/cover.jpg",
+	"musics": [
+		{
+			"id": 1,
+			"title": "The Cradle",
+			"duration": 200,
+			"voice": "basic",
+			"artist": "Schubert",
+			"description": "soft kitty",
+			"cover": "http://music.mummyway.com/38352658567418874/cover.jpg",
+			"url": "http://music.mummyway.com/38352658567418874/1.mp3"
+		},
+		{
+			"id": 2,
+			"title": "The Cradle",
+			"duration": 200,
+			"voice": "basic",
+			"artist": "Chopin",
+			"description": "soft kitty",
+			"cover": "http://music.mummyway.com/38352658567418874/cover.jpg",
+			"url": "http://music.mummyway.com/38352658567418874/2.mp3"
+		},
+		{
+			"id": 3,
+			"title": "The Cradle",
+			"duration": 200,
+			"voice": "basic",
+			"artist": "Mozart",
+			"description": "soft kitty",
+			"cover": "http://music.mummyway.com/38352658567418874/cover.jpg",
+			"url": "http://music.mummyway.com/38352658567418874/3.mp3"
+		}
+	]
+}

@@ -2,4 +2,5 @@ dependencies {
     implementation libs.guava
     implementation libs.logback
     implementation libs.bundles.idCreator
+    implementation libs.bundles.commons
 }

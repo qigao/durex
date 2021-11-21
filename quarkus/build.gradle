@@ -8,7 +8,8 @@ subprojects {
     apply from: "$rootDir/gradle/jacoco.gradle"
     apply from: "$rootDir/gradle/spotless.gradle"
     apply from: "$rootDir/exts/common.gradle"
-    apply from: "$rootDir/quarkus/dependencies.gradle"
+    apply from: "$rootDir/exts/quarkus.gradle"
+    apply from: "$rootDir/exts/container.gradle"
     configurations.all {
         exclude group: "org.jboss.slf4j"
     }
