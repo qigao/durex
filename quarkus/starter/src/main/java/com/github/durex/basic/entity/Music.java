@@ -30,7 +30,7 @@ import lombok.ToString;
 public class Music {
   @Id
   @Column(name = "id", unique = true, nullable = false)
-  private Long id;
+  private String id;
 
   @Column(name = "url", nullable = false, columnDefinition = "TEXT")
   private String url;

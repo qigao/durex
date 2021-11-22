@@ -1,7 +1,6 @@
 package com.github.durex.basic.service;
 
 import com.github.durex.basic.entity.Music;
-import com.github.durex.basic.exception.MusicNotFoundException;
 import com.github.durex.basic.model.MusicRequest;
 import com.github.durex.basic.repository.MusicRepository;
 import com.github.durex.basic.util.EntityMapper;
@@ -10,6 +9,7 @@ import java.util.List;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
+import javax.ws.rs.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
 
 @ApplicationScoped
@@ -18,16 +18,16 @@ public class MusicService {
 
   @Inject MusicRepository musicRepository;
 
-  public Music getMusicByIdAndEditor(Long id, String editor) throws MusicNotFoundException {
+  public Music getMusicByIdAndEditor(String id, String editor) {
     return musicRepository
         .find("from Music where (editor is null or editor =?1) and id = ?2", editor, id)
         .stream()
         .findFirst()
         .orElseThrow(
             () -> {
-              var audioError = String.format("Music id: %d, editor: %s not found", id, editor);
+              var audioError = String.format("Music id: %s, editor: %s not found", id, editor);
               log.error(audioError);
-              return new MusicNotFoundException(audioError);
+              return new NotFoundException(audioError);
             });
   }
 
@@ -56,8 +56,7 @@ public class MusicService {
   }
 
   @Transactional
-  public Music updateMusic(Long id, String editor, MusicRequest m3U8)
-      throws MusicNotFoundException {
+  public Music updateMusic(String id, String editor, MusicRequest m3U8) {
     var m3u8ToUpdate = getMusicByIdAndEditor(id, editor);
     log.info("find music by id: {}", m3u8ToUpdate);
 
@@ -74,9 +73,9 @@ public class MusicService {
   }
 
   @Transactional
-  public void deleteMusic(Long id, String editor) throws MusicNotFoundException {
+  public void deleteMusic(String id, String editor) {
     var audioToUpdate = getMusicByIdAndEditor(id, editor);
     log.info("find music by id: {}", audioToUpdate);
-    musicRepository.deleteById(id);
+    musicRepository.delete("from Music where id=?1", id);
   }
 }

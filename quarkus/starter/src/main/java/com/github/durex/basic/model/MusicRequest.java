@@ -21,8 +21,7 @@ import org.eclipse.microprofile.openapi.annotations.media.Schema;
 @Schema(name = "MusicRequest", description = "Music Request Schema")
 public class MusicRequest {
   @Schema(description = "歌曲ID")
-  @NotBlank
-  private Long id;
+  private @NotBlank String id;
 
   @Schema(description = "曲名", example = "东风破", required = true)
   @NotBlank(message = "曲名不能为空")

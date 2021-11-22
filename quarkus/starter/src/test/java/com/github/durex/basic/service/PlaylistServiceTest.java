@@ -3,7 +3,6 @@ package com.github.durex.basic.service;
 import static org.junit.jupiter.api.Assertions.*;
 
 import com.github.durex.MysqlResources;
-import com.github.durex.basic.exception.PlayListNotFoundException;
 import com.github.durex.basic.model.PlayListRequest;
 import com.github.durex.utils.Json;
 import io.quarkus.test.common.QuarkusTestResource;
@@ -37,28 +36,22 @@ class PlaylistServiceTest {
 
   @Test
   @Order(10)
-  void createPlaylist() throws PlayListNotFoundException, IOException {
+  void createPlaylist() throws IOException {
     var jsonFile = "src/test/resources/json/playlist.json";
     var requestJson = Json.read(Paths.get(jsonFile).toFile(), PlayListRequest.class);
     var playlist = playlistService.createPlaylist(null, requestJson);
-    assert (playlist.getId() == 1);
+    assertEquals("1", playlist.getId());
   }
 
   @Test
   @Order(15)
-  void testCreatePlaylistWithSameName() throws IOException, PlayListNotFoundException {
+  void testCreatePlaylistWithSameName() throws IOException {
     var jsonFile = "src/test/resources/json/playlist.json";
     var playListRequest = Json.read(Paths.get(jsonFile).toFile(), PlayListRequest.class);
-    playListRequest.setId(2L);
+    playListRequest.setId("2");
     var playlist = playlistService.createPlaylist("d1e5nqreqo", playListRequest);
-    var playlist2 = playlistService.getPlaylist(2L);
-    assert (playlist2.getMusics().size() == 3);
-  }
-
-  @Test
-  @Order(30)
-  void testGetPlaylistNotFound() {
-    assertThrows(PlayListNotFoundException.class, () -> playlistService.getPlaylist(100L));
+    var playlist2 = playlistService.getPlaylist("2");
+    assertEquals(3, playlist2.getMusics().size());
   }
 
   @Test

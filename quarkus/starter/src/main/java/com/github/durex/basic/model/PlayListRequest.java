@@ -21,8 +21,7 @@ import org.eclipse.microprofile.openapi.annotations.media.Schema;
 @Schema(name = "PlayListRequest", description = "PlayList of music files")
 public class PlayListRequest {
   @Schema(description = "歌单ID", required = true)
-  @NotBlank
-  private Long id;
+  private @NotBlank String id;
 
   @Schema(description = "歌单名", example = "东风破西风", required = true)
   @NotBlank(message = "歌单名不能为空")

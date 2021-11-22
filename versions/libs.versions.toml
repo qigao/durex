@@ -2,7 +2,6 @@
 [versions]
 groovy = '3.0.9'
 guava = '30.1.1-jre'
-logback = '1.2.6'
 lombok = '6.2.0'
 
 # Libs config
@@ -16,7 +15,6 @@ groovy-nio = {module = 'org.codehaus.groovy:groovy-nio', version.ref = 'groovy'}
 commons-lang3 = {group = 'org.apache.commons', name = 'commons-lang3', version = {strictly = '[3.8, 4.0[', prefer = '3.9'}}
 commons-io = {group =  'commons-io', name='commons-io',version='2.11.0'}
 guava = {group = 'com.google.guava', name = 'guava', version.ref = 'guava'}
-logback = {group = 'ch.qos.logback', name = 'logback-classic', version.ref = 'logback'}
 
 # Ser/De
 validation = {group = 'javax.validation', name = 'validation-api', version = '2.0.1.Final'}

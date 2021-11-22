@@ -2,7 +2,6 @@ package com.github.durex.basic.service;
 
 import com.github.durex.basic.entity.Music;
 import com.github.durex.basic.entity.PlayList;
-import com.github.durex.basic.exception.PlayListNotFoundException;
 import com.github.durex.basic.model.PlayListRequest;
 import com.github.durex.basic.repository.PlaylistRepository;
 import com.github.durex.basic.util.EntityMapper;
@@ -11,6 +10,7 @@ import java.util.List;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
+import javax.ws.rs.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
 
 @ApplicationScoped
@@ -28,14 +28,15 @@ public class PlaylistService {
         .list();
   }
 
-  public PlayList getPlaylist(Long id) throws PlayListNotFoundException {
+  public PlayList getPlaylist(String id) {
     return playlistRepository
-        .findByIdOptional(id)
+        .find("from PlayList where id=?1", id)
+        .firstResultOptional()
         .orElseThrow(
             () -> {
-              var playlistError = String.format("Playlist with id: %dl not found", id);
+              var playlistError = String.format("Playlist with id: %s not found", id);
               log.error(playlistError);
-              return new PlayListNotFoundException(playlistError);
+              return new NotFoundException(playlistError);
             });
   }
 
@@ -47,8 +48,7 @@ public class PlaylistService {
   }
 
   @Transactional
-  public PlayList updatePlaylist(Long id, String editor, PlayListRequest playList)
-      throws PlayListNotFoundException {
+  public PlayList updatePlaylist(String id, String editor, PlayListRequest playList) {
     var playlistToUpdate = getPlaylist(id);
     List<Music> musicEntityList = EntityMapper.musicEntityListMapper(playList);
 
@@ -87,7 +87,7 @@ public class PlaylistService {
   }
 
   @Transactional
-  public void deletePlaylist(Long id) {
-    playlistRepository.deleteById(id);
+  public void deletePlaylist(String id) {
+    playlistRepository.delete("from PlayList where id=?1", id);
   }
 }

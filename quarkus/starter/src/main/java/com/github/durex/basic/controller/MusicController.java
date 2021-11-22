@@ -2,7 +2,6 @@ package com.github.durex.basic.controller;
 
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 
-import com.github.durex.basic.exception.MusicNotFoundException;
 import com.github.durex.basic.exceptionhandler.ExceptionHandler;
 import com.github.durex.basic.model.MusicRequest;
 import com.github.durex.basic.service.MusicService;
@@ -39,7 +38,7 @@ public class MusicController {
   @Inject MusicService musicService;
 
   @GET
-  @Path("")
+  @Path("/")
   @Operation(summary = "获取音乐信息 ", description = "获取音乐，可分页获取， 默认10条")
   @APIResponses(
       value = {
@@ -77,8 +76,7 @@ public class MusicController {
           @Encoded
           int start,
       @DefaultValue("10") @Parameter(description = "end of query range") @QueryParam("end") @Encoded
-          int end)
-      throws MusicNotFoundException {
+          int end) {
     return EntityMapper.musicRequestListMapper(
         musicService.getMusicsByTitleAndEditor(title, editor, start, end));
   }
@@ -111,12 +109,11 @@ public class MusicController {
                     schema = @Schema(implementation = ExceptionHandler.ErrorResponseBody.class)))
       })
   public MusicRequest getMusic(
-      @Parameter(description = "音乐ID ") @PathParam("id") Long id,
+      @Parameter(description = "音乐ID ") @PathParam("id") String id,
       @Parameter(description = "用户ID，用户ID存在时为私有音乐，仅用户自己可见，用户ID为空时，音乐为公共音乐，所有用户均可查询")
           @QueryParam("editor")
           @Encoded
-          String editor)
-      throws MusicNotFoundException {
+          String editor) {
     return EntityMapper.musicEntityToRequest(musicService.getMusicByIdAndEditor(id, editor));
   }
 
@@ -148,10 +145,9 @@ public class MusicController {
                     schema = @Schema(implementation = ExceptionHandler.ErrorResponseBody.class)))
       })
   public MusicRequest updateMusic(
-      @Parameter(description = "音乐ID ") @PathParam("id") Long id,
+      @Parameter(description = "音乐ID ") @PathParam("id") String id,
       @QueryParam("editor") @Encoded String editor,
-      MusicRequest musicRequest)
-      throws MusicNotFoundException {
+      MusicRequest musicRequest) {
     var music = musicService.updateMusic(id, editor, musicRequest);
     return EntityMapper.musicEntityToRequest(music);
   }
@@ -178,8 +174,7 @@ public class MusicController {
                     schema = @Schema(implementation = ExceptionHandler.ErrorResponseBody.class)))
       })
   public Response deleteMusic(
-      @PathParam("id") Long id, @QueryParam("editor") @Encoded String editor)
-      throws MusicNotFoundException {
+      @PathParam("id") String id, @QueryParam("editor") @Encoded String editor) {
     musicService.deleteMusic(id, editor);
     return Response.status(Response.Status.NO_CONTENT).build();
   }

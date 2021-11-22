@@ -2,7 +2,6 @@ package com.github.durex.basic.controller;
 
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 
-import com.github.durex.basic.exception.PlayListNotFoundException;
 import com.github.durex.basic.exceptionhandler.ExceptionHandler;
 import com.github.durex.basic.model.PlayListRequest;
 import com.github.durex.basic.service.PlaylistService;
@@ -77,8 +76,7 @@ public class PlaylistController {
           @Encoded
           int start,
       @DefaultValue("10") @Parameter(description = "end of query range") @QueryParam("end") @Encoded
-          int end)
-      throws PlayListNotFoundException {
+          int end) {
     var playlist = playlistService.getPlayListByEditorAndTitle(title, editor, start, end);
     return EntityMapper.playListToRequest(playlist);
   }
@@ -103,7 +101,7 @@ public class PlaylistController {
                     mediaType = "application/json",
                     schema = @Schema(implementation = ExceptionHandler.ErrorResponseBody.class)))
       })
-  public PlayListRequest getPlaylist(@PathParam("id") Long id) throws PlayListNotFoundException {
+  public PlayListRequest getPlaylist(@PathParam("id") String id) {
     var playlist = playlistService.getPlaylist(id);
     return EntityMapper.playListToRequest(playlist);
   }
@@ -129,10 +127,9 @@ public class PlaylistController {
                     schema = @Schema(implementation = ExceptionHandler.ErrorResponseBody.class)))
       })
   public PlayListRequest updatePlaylist(
-      @PathParam("id") Long id,
+      @PathParam("id") String id,
       @QueryParam("editor") @Encoded String editor,
-      PlayListRequest playList)
-      throws PlayListNotFoundException {
+      PlayListRequest playList) {
     var m3u8s = playlistService.updatePlaylist(id, editor, playList);
     return EntityMapper.playListToRequest(m3u8s);
   }
@@ -153,7 +150,7 @@ public class PlaylistController {
                     mediaType = "application/json",
                     schema = @Schema(implementation = ExceptionHandler.ErrorResponseBody.class)))
       })
-  public Response deletePlaylist(@PathParam("id") Long id) {
+  public Response deletePlaylist(@PathParam("id") String id) {
     playlistService.deletePlaylist(id);
     return Response.status(Response.Status.NO_CONTENT).build();
   }
