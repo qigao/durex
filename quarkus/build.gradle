@@ -10,7 +10,5 @@ subprojects {
     apply from: "$rootDir/exts/common.gradle"
     apply from: "$rootDir/exts/quarkus.gradle"
     apply from: "$rootDir/exts/container.gradle"
-    configurations.all {
-        exclude group: "ch.qos.logback "
-    }
+
 }

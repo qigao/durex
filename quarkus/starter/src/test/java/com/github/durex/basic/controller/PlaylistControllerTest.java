@@ -39,7 +39,7 @@ class PlaylistControllerTest {
   @Test
   @Order(100)
   void testGetPlaylist_Return404() {
-    given().when().get("/v1/playlist/100").then().statusCode(400);
+    given().when().get("/v1/playlist/100").then().statusCode(404);
   }
 
   @Test
@@ -74,7 +74,7 @@ class PlaylistControllerTest {
         .when()
         .contentType(APPLICATION_JSON)
         .body(
-            "{\"id\":6,\"voice\":\"basic\",\"title\":\"The Cradle\",\"artist\":\"Mozart\",\"url\":\"http://localhost/music/demo.mp3\"}")
+            "{\"id\":6,\"title\":\"The Cradle\",\"artist\":\"Mozart\",\"playUrl\":\"http://localhost/music/demo.mp3\"}")
         .post("/v1/music?editor=d1e5nqreqo")
         .then()
         .statusCode(200)
@@ -87,7 +87,7 @@ class PlaylistControllerTest {
     var jsonFile = "src/test/resources/json/playlist.json";
     var requestJson = Json.read(Paths.get(jsonFile).toFile(), PlayListRequest.class);
     var newMusicJson =
-        "{\"id\":\"6\",\"voice\":\"basic\",\"duration\":200,\"title\":\"The Cradle\",\"artist\":\"Mozart\",\"url\":\"http://localhost/music/demo.mp3\"}";
+        "{\"id\":\"6\",\"duration\":200,\"title\":\"The Cradle\",\"artist\":\"Mozart\",\"playUrl\":\"http://localhost/music/demo.mp3\"}";
     var newMusic = Json.read(newMusicJson, MusicRequest.class);
     requestJson.getMusics().add(newMusic);
     given()

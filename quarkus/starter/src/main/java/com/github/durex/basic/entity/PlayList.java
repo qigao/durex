@@ -32,31 +32,31 @@ import lombok.ToString;
 @Table(name = "playlist")
 public class PlayList {
   @Id
-  @Column(name = "id", unique = true, nullable = false)
+  @Column(name = "id", unique = true, nullable = false, columnDefinition = "VARCHAR(128)")
   private String id;
 
-  @Column(name = "title")
+  @Column(name = "title", columnDefinition = "VARCHAR(255)")
   private String title;
 
-  @Column(name = "description")
+  @Column(name = "description", columnDefinition = "VARCHAR(255)")
   private String description;
 
-  @Column(name = "cover")
-  private String cover;
+  @Column(name = "coverUrl", columnDefinition = "VARCHAR(1024)")
+  private String coverUrl;
 
-  @Column(name = "total")
+  @Column(name = "total", columnDefinition = "INT default 0")
   private int total;
 
-  @Column(name = "editor")
+  @Column(name = "editor", columnDefinition = "VARCHAR(255)")
   private String editor;
 
-  @Column(name = "duration")
+  @Column(name = "duration", columnDefinition = "INT default 0")
   private int duration;
 
-  @Column(name = "create_time")
+  @Column(name = "create_time", columnDefinition = "DATETIME")
   private LocalDateTime createTime;
 
-  @Column(name = "update_time")
+  @Column(name = "update_time", columnDefinition = "DATETIME")
   private LocalDateTime updateTime;
 
   @ManyToMany(cascade = CascadeType.MERGE)

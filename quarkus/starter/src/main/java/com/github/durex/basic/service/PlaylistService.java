@@ -53,7 +53,7 @@ public class PlaylistService {
     List<Music> musicEntityList = EntityMapper.musicEntityListMapper(playList);
 
     playlistToUpdate.setUpdateTime(LocalDateTime.now());
-    playlistToUpdate.setCover(playList.getCover());
+    playlistToUpdate.setCoverUrl(playList.getCoverUrl());
     playlistToUpdate.setDescription(playList.getDescription());
     playlistToUpdate.setEditor(editor);
     playlistToUpdate.setTitle(playList.getTitle());
@@ -73,7 +73,7 @@ public class PlaylistService {
         PlayList.builder()
             .id(playListRequest.getId())
             .createTime(LocalDateTime.now())
-            .cover(playListRequest.getCover())
+            .coverUrl(playListRequest.getCoverUrl())
             .description(playListRequest.getDescription())
             .editor(editor)
             .title(playListRequest.getTitle())

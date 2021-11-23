@@ -29,31 +29,31 @@ import lombok.ToString;
 @Table(name = "music")
 public class Music {
   @Id
-  @Column(name = "id", unique = true, nullable = false)
+  @Column(name = "id", unique = true, nullable = false, columnDefinition = "VARCHAR(255)")
   private String id;
 
-  @Column(name = "url", nullable = false, columnDefinition = "TEXT")
-  private String url;
-
-  @Column(name = "voice", nullable = false, columnDefinition = "TEXT")
-  private String voice;
+  @Column(name = "playUrl", nullable = false, columnDefinition = "VARCHAR(1024)")
+  private String playUrl;
 
   @Column(name = "duration", columnDefinition = "INT")
   private int duration;
 
-  @Column(name = "cover", columnDefinition = "TEXT")
-  private String cover;
+  @Column(name = "coverUrl", columnDefinition = "VARCHAR(1024)")
+  private String coverUrl;
 
-  @Column(name = "title", nullable = false, columnDefinition = "TEXT")
+  @Column(name = "title", nullable = false, columnDefinition = "VARCHAR(255)")
   private String title;
 
-  @Column(name = "artist", columnDefinition = "TEXT")
+  @Column(name = "musicType", nullable = false, columnDefinition = "INT default 0")
+  private int musicType;
+
+  @Column(name = "artist", columnDefinition = "VARCHAR(255)")
   private String artist;
 
-  @Column(name = "editor", columnDefinition = "TEXT")
+  @Column(name = "editor", columnDefinition = "VARCHAR(255)")
   private String editor;
 
-  @Column(name = "description", columnDefinition = "TEXT")
+  @Column(name = "description", columnDefinition = "VARCHAR(1024)")
   private String description;
 
   @Column(name = "create_time", columnDefinition = "DATETIME")

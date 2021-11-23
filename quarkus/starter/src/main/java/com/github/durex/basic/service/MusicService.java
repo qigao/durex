@@ -56,18 +56,18 @@ public class MusicService {
   }
 
   @Transactional
-  public Music updateMusic(String id, String editor, MusicRequest m3U8) {
+  public Music updateMusic(String id, String editor, MusicRequest musicRequest) {
     var m3u8ToUpdate = getMusicByIdAndEditor(id, editor);
     log.info("find music by id: {}", m3u8ToUpdate);
 
     m3u8ToUpdate.setUpdateTime(LocalDateTime.now());
-    m3u8ToUpdate.setArtist(m3U8.getArtist());
-    m3u8ToUpdate.setCover(m3U8.getCover());
-    m3u8ToUpdate.setDuration(m3U8.getDuration());
-    m3u8ToUpdate.setDescription(m3U8.getDescription());
-    m3u8ToUpdate.setUrl(m3U8.getUrl());
+    m3u8ToUpdate.setArtist(musicRequest.getArtist());
+    m3u8ToUpdate.setCoverUrl(musicRequest.getCoverUrl());
+    m3u8ToUpdate.setDuration(musicRequest.getDuration());
+    m3u8ToUpdate.setDescription(musicRequest.getDescription());
+    m3u8ToUpdate.setPlayUrl(musicRequest.getPlayUrl());
     m3u8ToUpdate.setEditor(editor);
-    m3u8ToUpdate.setTitle(m3U8.getTitle());
+    m3u8ToUpdate.setTitle(musicRequest.getTitle());
     musicRepository.persist(m3u8ToUpdate);
     return m3u8ToUpdate;
   }

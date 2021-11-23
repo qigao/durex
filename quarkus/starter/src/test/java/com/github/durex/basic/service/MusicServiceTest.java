@@ -87,7 +87,7 @@ class MusicServiceTest {
   @Order(80)
   void createMusic() throws IOException, NotFoundException {
     var json =
-        "{\"id\":\"5\",\"voice\":\"basic\",\"title\":\"The Cradle\",\"artist\":\"Schubert\",\"url\":\"http://localhost/music/demo.mp3\"}";
+        "{\"id\":\"5\",\"title\":\"The Cradle\",\"artist\":\"Schubert\",\"playUrl\":\"http://localhost/music/demo.mp3\"}";
     var musicRequest = Json.read(json, MusicRequest.class);
     var music = musicServiceService.createMusic("d1e5nqreqo", musicRequest);
     assertEquals("5", musicServiceService.getMusicByIdAndEditor("5", "d1e5nqreqo").getId());
@@ -97,9 +97,20 @@ class MusicServiceTest {
   @Order(90)
   void createMusicEditorIsNULL() throws IOException, NotFoundException {
     var json =
-        "{\"id\":\"6\",\"voice\":\"basic\",\"title\":\"The Cradle\",\"artist\":\"Schubert\",\"url\":\"http://localhost/music/demo.mp3\"}";
+        "{\"id\":\"6\",\"title\":\"The Cradle\",\"artist\":\"Schubert\",\"playUrl\":\"http://localhost/music/demo.mp3\"}";
     var musicRequest = Json.read(json, MusicRequest.class);
     var music = musicServiceService.createMusic("d1e5nqreqo", musicRequest);
     assertEquals("6", musicServiceService.getMusicByIdAndEditor("6", null).getId());
+  }
+
+  @Test
+  @Order(100)
+  void updateMusic() throws IOException, NotFoundException {
+    var json =
+        "{\"id\":\"3\",\"title\":\"The Cradle\",\"artist\":\"Mozart\",\"playUrl\":\"http://localhost/music/demo.mp3\"}";
+    var musicRequest = Json.read(json, MusicRequest.class);
+    var music = musicServiceService.updateMusic("3", "d1e5nqreqo", musicRequest);
+    assertEquals(
+        "Mozart", musicServiceService.getMusicByIdAndEditor("3", "d1e5nqreqo").getArtist());
   }
 }

@@ -18,18 +18,20 @@ import org.eclipse.microprofile.openapi.annotations.media.Schema;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-@Schema(name = "PlayListRequest", description = "PlayList of music files")
+@Schema(name = "PlayListRequest", description = "歌单结构描述")
 public class PlayListRequest {
-  @Schema(description = "歌单ID", required = true)
-  private @NotBlank String id;
+  @Schema(description = "歌单ID", example = "1231dfasdf234", required = true)
+  @NotBlank(message = "歌单ID不能为空")
+  @Size(max = 128, message = "歌单ID长度不能超过128")
+  private String id;
 
   @Schema(description = "歌单名", example = "东风破西风", required = true)
   @NotBlank(message = "歌单名不能为空")
-  @Size(max = 250, message = "歌单名长度不能超过250")
+  @Size(max = 255, message = "歌单ID长度不能超过255")
   private String title;
 
-  @Schema(description = "描述", example = "最厉害")
-  @Size(max = 100, message = "描述长度不能超过100")
+  @Schema(description = "歌曲描述", example = "最厉害")
+  @Size(max = 255, message = "歌曲描述长度不能超过255")
   private String description;
 
   @Schema(
@@ -37,13 +39,13 @@ public class PlayListRequest {
       example = "http://music.mummyway.com/music/cover/1316098.jpg",
       required = true)
   @NotBlank(message = "图片链接不能为空")
-  @Size(max = 250, message = "播放地址长度不能超过 250")
-  private String cover;
+  @Size(max = 1024, message = "图片链接长度不能超过1024")
+  private String coverUrl;
 
-  @Schema(description = "歌曲列表总时长", example = "2000")
+  @Schema(description = "歌曲列表总时长,可为0，服务端会合计", example = "0")
   private int duration;
 
-  @Schema(description = "歌曲列表总数", example = "20")
+  @Schema(description = "歌曲列表总数，可为0，服务端会合计", example = "0")
   private int total;
 
   @Schema(description = "歌曲列表")

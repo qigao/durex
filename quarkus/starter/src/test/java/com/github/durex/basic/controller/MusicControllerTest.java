@@ -44,7 +44,7 @@ class MusicControllerTest {
   @Test
   @Order(40)
   void getMusicByID_without_editor_Return404() {
-    given().when().get("/v1/music/5").then().statusCode(400);
+    given().when().get("/v1/music/5").then().statusCode(404);
   }
 
   @Test
@@ -72,7 +72,7 @@ class MusicControllerTest {
         .when()
         .contentType(APPLICATION_JSON)
         .body(
-            "{\"id\":\"4\",\"voice\":\"basic\",\"title\":\"The Cradle\",\"artist\":\"Schubert\",\"url\":\"http://localhost/music/demo.mp3\"}")
+            "{\"id\":\"4\",\"title\":\"The Cradle\",\"artist\":\"Schubert\",\"playUrl\":\"http://localhost/music/demo.mp3\"}")
         .put("/v1/music/4?editor=d1e5nqreqo")
         .then()
         .statusCode(200);
@@ -88,7 +88,7 @@ class MusicControllerTest {
   @Order(90)
   void deleteMusicByID_Return204_Then_CheckByID_Return404() {
     given().when().delete("/v1/music/2?editor=d1e5nqreqo").then().statusCode(204);
-    given().when().get("/v1/music/2?editor=d1e5nqreqo").then().statusCode(400);
+    given().when().get("/v1/music/2?editor=d1e5nqreqo").then().statusCode(404);
   }
 
   @Test
@@ -98,7 +98,7 @@ class MusicControllerTest {
         .when()
         .contentType(APPLICATION_JSON)
         .body(
-            "{\"id\":\"5\",\"voice\":\"basic\",\"title\":\"The Cradle\",\"artist\":\"Schubert\",\"url\":\"http://localhost/music/demo.mp3\"}")
+            "{\"id\":\"5\",\"title\":\"The Cradle\",\"artist\":\"Schubert\",\"playUrl\":\"http://localhost/music/demo.mp3\"}")
         .post("/v1/music?editor=d1e5nqreqo")
         .then()
         .statusCode(200)

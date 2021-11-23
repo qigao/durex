@@ -7,4 +7,5 @@ test {
         events "passed", "skipped", "failed"
         exceptionFormat 'full'
     }
+    systemProperty "java.util.logging.manager", "org.jboss.logmanager.LogManager"
 }

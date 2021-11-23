@@ -38,3 +38,4 @@ dev-notes.txt
 .env
 
 logs
+*.log

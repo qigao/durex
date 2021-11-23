@@ -14,37 +14,36 @@ public class EntityMapper {
   public static MusicRequest musicEntityToRequest(Music music) {
     return MusicRequest.builder()
         .artist(music.getArtist())
-        .cover(music.getCover())
+        .coverUrl(music.getCoverUrl())
         .description(music.getDescription())
-        .url(music.getUrl())
+        .playUrl(music.getPlayUrl())
         .id(music.getId())
         .duration(music.getDuration())
         .title(music.getTitle())
-        .voice(music.getVoice())
+        .musicType(music.getMusicType())
         .build();
   }
 
   public static Music musicRequestToEntity(MusicRequest musicRequest) {
     return Music.builder()
         .artist(musicRequest.getArtist())
-        .cover(musicRequest.getCover())
+        .coverUrl(musicRequest.getCoverUrl())
         .description(musicRequest.getDescription())
-        .url(musicRequest.getUrl())
+        .playUrl(musicRequest.getPlayUrl())
         .id(musicRequest.getId())
         .duration(musicRequest.getDuration())
         .title(musicRequest.getTitle())
-        .voice(musicRequest.getVoice())
+        .musicType(musicRequest.getMusicType())
         .build();
   }
 
   public static PlayListRequest playListToRequest(PlayList playList) {
-    List<MusicRequest> m3u8EntityList =
-        musicRequestListMapper(playList).stream().collect(Collectors.toList());
+    List<MusicRequest> m3u8EntityList = musicRequestListMapper(playList);
     return PlayListRequest.builder()
         .id(playList.getId())
         .title(playList.getTitle())
         .description(playList.getDescription())
-        .cover(playList.getCover())
+        .coverUrl(playList.getCoverUrl())
         .total(m3u8EntityList.size())
         .description(playList.getDescription())
         .duration(playList.getDuration())

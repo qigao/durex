@@ -7,7 +7,9 @@ repositories{
         url "https://maven.aliyun.com/repository/public"
     }
     gradlePluginPortal()
-    maven { url 'https://maven-central.storage.googleapis.com' }
-    mavenCentral()
+    google()
+    maven{
+        url "https://repo1.maven.org/maven2"
+    }
 }
 
