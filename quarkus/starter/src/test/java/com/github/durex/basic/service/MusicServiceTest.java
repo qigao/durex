@@ -59,7 +59,7 @@ class MusicServiceTest {
   @Order(40)
   void getMusicsByTitleAndEditor_editor_title_bothNULL() {
     var music = musicServiceService.getMusicsByTitleAndEditor(null, null, 0, 5);
-    assertEquals(0, music.size());
+    assertEquals(1, music.size());
   }
 
   @Test
@@ -77,7 +77,7 @@ class MusicServiceTest {
   }
 
   @Test
-  @Order(70)
+  @Order(60)
   void getMusicsByTitleAndEditor_editor_isNotNULL() {
     var music = musicServiceService.getMusicsByTitleAndEditor("爱", "d1e5nqreqo", 0, 5);
     assertEquals(4, music.size());

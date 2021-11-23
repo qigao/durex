@@ -69,6 +69,13 @@ class PlaylistServiceTest {
   }
 
   @Test
+  @Order(65)
+  void testGetPlaylistWithoutEditorAndTitle() throws IOException {
+    var playlist = playlistService.getPlayListByEditorAndTitle(null, null, 0, 5);
+    assertEquals(1, playlist.size());
+  }
+
+  @Test
   @Order(70)
   void testGetPlaylistByEditorAndTitle() {
     var playlist = playlistService.getPlayListByEditorAndTitle("The Cradles", "d1e5nqreqo", 0, 5);

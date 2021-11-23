@@ -32,9 +32,12 @@ public class MusicService {
   }
 
   public List<Music> getMusicsByTitleAndEditor(String title, String editor, int start, int end) {
+    if (title == null) {
+      return getMusicsByEditor(editor, start, end);
+    }
     return musicRepository
         .find(
-            "from Music where (title like concat('%',?1,'%')  or title is null) and (editor is null or editor =?2)",
+            "from Music where (title like concat('%',?1,'%')) and (editor is null or editor =?2)",
             title, editor)
         .page(start, end)
         .list();

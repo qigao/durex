@@ -20,9 +20,12 @@ public class PlaylistService {
 
   public List<PlayList> getPlayListByEditorAndTitle(
       String title, String editor, int start, int end) {
+    if (title == null) {
+      return getPlayListByEditor(editor, start, end);
+    }
     return playlistRepository
         .find(
-            "from PlayList where (title like concat('%',?1,'%')  or title is null) and (editor=?2 or editor is null)",
+            "from PlayList where title like concat('%',?1,'%') and (editor=?2 or editor is null)",
             title, editor)
         .page(start, end)
         .list();

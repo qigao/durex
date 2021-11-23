@@ -2,11 +2,13 @@ package com.github.durex.basic.controller;
 
 import static io.restassured.RestAssured.given;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
-import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.*;
 
 import com.github.durex.MysqlResources;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
+import java.nio.file.Paths;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.MethodOrderer;
@@ -94,14 +96,27 @@ class MusicControllerTest {
   @Test
   @Order(100)
   void createMusic_Return200() {
+    var music = "src/test/resources/json/music/music1.json";
     given()
         .when()
         .contentType(APPLICATION_JSON)
-        .body(
-            "{\"id\":\"5\",\"title\":\"The Cradle\",\"artist\":\"Schubert\",\"playUrl\":\"http://localhost/music/demo.mp3\"}")
-        .post("/v1/music?editor=d1e5nqreqo")
+        .body(Paths.get(music).toFile())
+        .post("/v1/music?editor=1231dfasdf234")
         .then()
         .statusCode(200)
         .body("artist", equalTo("Schubert"));
+    given()
+        .when()
+        .get("/v1/music/wtVNDNP3YfqCOH7wKXStcEc61U1?editor=1231dfasdf234")
+        .then()
+        .statusCode(200)
+        .body("artist", equalTo("Schubert"));
+    given()
+        .when()
+        .get("/v1/music?editor=1231dfasdf234")
+        .then()
+        .statusCode(200)
+        .body("size()", Matchers.equalTo(1))
+        .body("artist", Matchers.hasItems("Schubert"));
   }
 }

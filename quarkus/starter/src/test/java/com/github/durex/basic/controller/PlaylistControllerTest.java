@@ -3,6 +3,7 @@ package com.github.durex.basic.controller;
 import static io.restassured.RestAssured.given;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasItems;
 
 import com.github.durex.MysqlResources;
 import com.github.durex.basic.model.MusicRequest;
@@ -119,5 +120,27 @@ class PlaylistControllerTest {
   @Order(150)
   void testDeletePlaylist_Return200() {
     given().when().delete("/v1/playlist/1").then().statusCode(204);
+  }
+
+  @Test
+  void testGetAllPlaylist_Return200() throws IOException {
+    var jsonFile = "src/test/resources/json/playlist.json";
+    var requestJson = Json.read(Paths.get(jsonFile).toFile(), PlayListRequest.class);
+    given()
+        .when()
+        .contentType(APPLICATION_JSON)
+        .body(Json.toBytes(requestJson))
+        .post("/v1/playlist?editor=12e2d3")
+        .then()
+        .statusCode(200);
+    given()
+        .when()
+        .get("/v1/playlist?editor=12e2d3")
+        .then()
+        .statusCode(200)
+        .body("[0].musics.size()", equalTo(3))
+        .body("[0].duration", equalTo(3 * 200))
+        .body("[0].total", equalTo(3))
+        .body("[0].musics.title", hasItems("爱情转移"));
   }
 }
