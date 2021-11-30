@@ -3,7 +3,6 @@ package com.github.durex.support;
 import io.quarkus.test.common.QuarkusTestResourceLifecycleManager;
 import java.util.Collections;
 import java.util.Map;
-import org.junit.ClassRule;
 import org.testcontainers.containers.MySQLContainer;
 
 @SuppressWarnings("rawtypes")

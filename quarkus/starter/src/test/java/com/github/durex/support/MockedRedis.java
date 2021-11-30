@@ -1,10 +1,9 @@
 package com.github.durex.support;
 
 import io.quarkus.test.common.*;
+import java.util.*;
 import org.junit.*;
 import org.testcontainers.containers.*;
-
-import java.util.*;
 
 @SuppressWarnings("rawtypes")
 public class MockedRedis implements QuarkusTestResourceLifecycleManager {

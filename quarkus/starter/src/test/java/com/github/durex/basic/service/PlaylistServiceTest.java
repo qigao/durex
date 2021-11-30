@@ -3,9 +3,9 @@ package com.github.durex.basic.service;
 import static org.junit.jupiter.api.Assertions.*;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.github.durex.support.MockedMysql;
 import com.github.durex.basic.model.MusicRequest;
 import com.github.durex.basic.model.PlayListRequest;
+import com.github.durex.support.MockedMysql;
 import com.github.durex.utils.Json;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
