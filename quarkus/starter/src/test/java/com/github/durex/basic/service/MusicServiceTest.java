@@ -2,7 +2,7 @@ package com.github.durex.basic.service;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import com.github.durex.MysqlResources;
+import com.github.durex.support.MockedMysql;
 import com.github.durex.basic.model.MusicRequest;
 import com.github.durex.utils.Json;
 import io.quarkus.test.common.QuarkusTestResource;
@@ -19,9 +19,9 @@ import org.junit.jupiter.api.TestMethodOrder;
 
 @QuarkusTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-@QuarkusTestResource(value = MysqlResources.class, parallel = true)
+@QuarkusTestResource(value = MockedMysql.class)
 class MusicServiceTest {
-  static MysqlResources mysql = new MysqlResources();
+  static MockedMysql mysql = new MockedMysql();
   @Inject MusicService musicServiceService;
 
   @BeforeAll

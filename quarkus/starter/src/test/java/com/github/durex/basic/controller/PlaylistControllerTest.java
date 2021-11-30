@@ -5,7 +5,8 @@ import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasItems;
 
-import com.github.durex.MysqlResources;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.github.durex.support.MockedMysql;
 import com.github.durex.basic.model.MusicRequest;
 import com.github.durex.basic.model.PlayListRequest;
 import com.github.durex.utils.Json;
@@ -13,6 +14,8 @@ import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.util.List;
+
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -23,9 +26,12 @@ import org.junit.jupiter.api.TestMethodOrder;
 
 @QuarkusTest
 @TestMethodOrder(OrderAnnotation.class)
-@QuarkusTestResource(value = MysqlResources.class, parallel = true)
+@QuarkusTestResource(value = MockedMysql.class)
 class PlaylistControllerTest {
-  static MysqlResources mysql = new MysqlResources();
+  public static final String JSON_DATA_DIR = "src/test/resources/json";
+  public static final String PLAYLIST_JSON = JSON_DATA_DIR + "/playlist/demo.json";
+  public static final String MUSIC_JSON = JSON_DATA_DIR + "/music/music.json";
+  static MockedMysql mysql = new MockedMysql();
 
   @BeforeAll
   static void setUp() {
@@ -46,8 +52,7 @@ class PlaylistControllerTest {
   @Test
   @Order(120)
   void testCreatePlayList_Return200() throws IOException {
-    var jsonFile = "src/test/resources/json/playlist.json";
-    var requestJson = Json.read(Paths.get(jsonFile).toFile(), PlayListRequest.class);
+    var requestJson = Json.read(Paths.get(PLAYLIST_JSON).toFile(), PlayListRequest.class);
     given()
         .when()
         .contentType(APPLICATION_JSON)
@@ -74,22 +79,18 @@ class PlaylistControllerTest {
     given()
         .when()
         .contentType(APPLICATION_JSON)
-        .body(
-            "{\"id\":6,\"title\":\"The Cradle\",\"artist\":\"Mozart\",\"playUrl\":\"http://localhost/music/demo.mp3\"}")
+        .body(Paths.get(MUSIC_JSON).toFile())
         .post("/v1/music?editor=d1e5nqreqo")
         .then()
         .statusCode(200)
-        .body("artist", Matchers.equalTo("Mozart"));
+        .body("artist", Matchers.equalTo("Schubert"));
   }
 
   @Test
   @Order(140)
   void testAdd1MusicToPlaylist_Return200() throws IOException {
-    var jsonFile = "src/test/resources/json/playlist.json";
-    var requestJson = Json.read(Paths.get(jsonFile).toFile(), PlayListRequest.class);
-    var newMusicJson =
-        "{\"id\":\"6\",\"duration\":200,\"title\":\"The Cradle\",\"artist\":\"Mozart\",\"playUrl\":\"http://localhost/music/demo.mp3\"}";
-    var newMusic = Json.read(newMusicJson, MusicRequest.class);
+    var requestJson = Json.read(Paths.get(PLAYLIST_JSON).toFile(), PlayListRequest.class);
+    var newMusic = Json.read(Paths.get(MUSIC_JSON).toFile(), MusicRequest.class);
     requestJson.getMusics().add(newMusic);
     given()
         .when()
@@ -104,8 +105,7 @@ class PlaylistControllerTest {
   @Test
   @Order(145)
   void testRemove1MusicToPlaylist_Return200() throws IOException {
-    var jsonFile = "src/test/resources/json/playlist.json";
-    var requestJson = Json.read(Paths.get(jsonFile).toFile(), PlayListRequest.class);
+    var requestJson = Json.read(Paths.get(PLAYLIST_JSON).toFile(), PlayListRequest.class);
     given()
         .when()
         .contentType(APPLICATION_JSON)
@@ -124,8 +124,7 @@ class PlaylistControllerTest {
 
   @Test
   void testGetAllPlaylist_Return200() throws IOException {
-    var jsonFile = "src/test/resources/json/playlist.json";
-    var requestJson = Json.read(Paths.get(jsonFile).toFile(), PlayListRequest.class);
+    var requestJson = Json.read(Paths.get(PLAYLIST_JSON).toFile(), PlayListRequest.class);
     given()
         .when()
         .contentType(APPLICATION_JSON)
@@ -142,5 +141,53 @@ class PlaylistControllerTest {
         .body("[0].duration", equalTo(3 * 200))
         .body("[0].total", equalTo(3))
         .body("[0].musics.title", hasItems("爱情转移"));
+  }
+
+  @Test
+  @Order(160)
+  void testUpdatePlaylist_return200() throws IOException {
+    var jsonFile = JSON_DATA_DIR + "/playlist/real.json";
+    var musicList = JSON_DATA_DIR + "/music/music5.json";
+    var musicListRequest =
+        Json.read(Paths.get(musicList).toFile(), new TypeReference<List<MusicRequest>>() {});
+    musicListRequest.forEach(
+        music -> {
+          try {
+            given()
+                .when()
+                .contentType(APPLICATION_JSON)
+                .body(Json.toString(music))
+                .post("/v1/music?editor=d1e5nqreqo")
+                .then()
+                .statusCode(200);
+          } catch (IOException e) {
+            e.printStackTrace();
+          }
+        });
+
+    var requestJson = Json.read(Paths.get(jsonFile).toFile(), PlayListRequest.class);
+    given()
+        .when()
+        .contentType(APPLICATION_JSON)
+        .body(Json.toString(requestJson))
+        .post("/v1/playlist?editor=12e2d3")
+        .then()
+        .statusCode(200);
+    var updateRequest = Json.read(Paths.get(jsonFile).toFile(), PlayListRequest.class);
+    updateRequest.setCoverUrl("http://localhost/music/demo.jpeg");
+    given()
+        .when()
+        .contentType(APPLICATION_JSON)
+        .body(Json.toString(updateRequest))
+        .put("/v1/playlist/1tVNDNP3YfqCOH7wKXStcEc61UP")
+        .then()
+        .statusCode(200);
+    given()
+        .when()
+        .contentType(APPLICATION_JSON)
+        .get("/v1/playlist?editor=12e2d3")
+        .then()
+        .statusCode(200)
+        .body("[0].coverUrl", equalTo("http://localhost/music/demo.jpeg"));
   }
 }

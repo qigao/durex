@@ -7,7 +7,7 @@ sonarqube {
     properties {
         property "sonar.host.url", "https://sonarcloud.io"
         property "sonar.projectBaseDir", "$projectDir"
-        property "sonar.projectKey", "com.github.durex:rest-assured"
-        property "sonar.projectName", "RestAssured"
+        property "sonar.projectKey", "com.github.durex:$projectName"
+        property "sonar.projectName", "RestAssured Demo Project"
     }
 }

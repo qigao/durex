@@ -70,6 +70,8 @@ public class MusicService {
     m3u8ToUpdate.setDescription(musicRequest.getDescription());
     m3u8ToUpdate.setPlayUrl(musicRequest.getPlayUrl());
     m3u8ToUpdate.setEditor(editor);
+    m3u8ToUpdate.setChannels(musicRequest.getChannels());
+    m3u8ToUpdate.setSampleRate(musicRequest.getSampleRate());
     m3u8ToUpdate.setTitle(musicRequest.getTitle());
     musicRepository.persist(m3u8ToUpdate);
     return m3u8ToUpdate;

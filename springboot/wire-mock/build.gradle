@@ -7,7 +7,7 @@ sonarqube {
     properties {
         property "sonar.host.url", "https://sonarcloud.io"
         property "sonar.projectBaseDir", "$projectDir"
-        property "sonar.projectKey", "com.github.durex:wire-mock"
-        property "sonar.projectName", "WireMock"
+        property "sonar.projectKey", "com.github.durex:$projectName"
+        property "sonar.projectName", "WireMock Demo Project"
     }
 }

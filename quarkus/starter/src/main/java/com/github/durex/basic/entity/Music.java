@@ -62,6 +62,12 @@ public class Music {
   @Column(name = "update_time", columnDefinition = "DATETIME")
   private LocalDateTime updateTime;
 
+  @Column(name = "sampleRate", columnDefinition = "INT default 44")
+  private int sampleRate;
+
+  @Column(name = "channels", columnDefinition = "INT default 2")
+  private int channels;
+
   @ManyToMany(mappedBy = "musics")
   @ToString.Exclude
   private List<PlayList> playList;

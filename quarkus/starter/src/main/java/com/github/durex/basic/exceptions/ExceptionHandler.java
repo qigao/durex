@@ -1,4 +1,4 @@
-package com.github.durex.basic.exceptionhandler;
+package com.github.durex.basic.exceptions;
 
 import javax.ws.rs.NotFoundException;
 import javax.ws.rs.core.Response;

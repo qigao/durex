@@ -41,6 +41,12 @@ public class MusicRequest {
   @Schema(description = "音乐来源,0：小象，1：喜马拉雅,2:问问", example = "0")
   private int musicType;
 
+  @Schema(description = "采样率，单位：K", example = "44")
+  private int sampleRate;
+
+  @Schema(description = "声道数，单位：个", example = "2")
+  private int channels;
+
   @Schema(
       description = "播放链接",
       example = "http://music.mummyway.com/music/media/1316098.m3u8",

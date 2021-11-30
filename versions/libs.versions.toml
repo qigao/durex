@@ -7,9 +7,9 @@ lombok = '6.2.0'
 # Libs config
 [libraries]
 # Modules
-groovy-core = {module = 'org.codehaus.groovy:groovy', version.ref = 'groovy'}
-groovy-json = {module = 'org.codehaus.groovy:groovy-json', version.ref = 'groovy'}
-groovy-nio = {module = 'org.codehaus.groovy:groovy-nio', version.ref = 'groovy'}
+# groovy-core = {module = 'org.codehaus.groovy:groovy', version.ref = 'groovy'}
+# groovy-json = {module = 'org.codehaus.groovy:groovy-json', version.ref = 'groovy'}
+# groovy-nio = {module = 'org.codehaus.groovy:groovy-nio', version.ref = 'groovy'}
 
 # Groups
 commons-lang3 = {group = 'org.apache.commons', name = 'commons-lang3', version = {strictly = '[3.8, 4.0[', prefer = '3.9'}}
@@ -21,10 +21,12 @@ guava = {group = 'com.google.guava', name = 'guava', version.ref = 'guava'}
 
 mybatis-generator= {group = 'org.mybatis.generator', name = 'mybatis-generator', version = '1.3.6'}
 
+# exceptions
+unchecked= {group = 'com.pivovarit', name = 'throwing-function', version = '1.5.1'}
+
 # Ser/De
 validation = {group = 'javax.validation', name = 'validation-api', version = '2.0.1.Final'}
 jackson-bom = {group = 'com.fasterxml.jackson', name = 'jackson-bom', version = '2.12.5'}
-gson = {group = 'com.google.code.gson', name = 'gson', version = '2.2'}
 fastjson = {group = 'com.alibaba', name = 'fastjson', version = '1.2.47'}
 
 # alibaba
@@ -33,6 +35,7 @@ druid={group='com.alibaba', name='druid-spring-boot-starter', version='1.2.8'}
 
 slf4j = {group = 'org.slf4j', name = 'slf4j-api', version = '1.7.25'}
 jboss-logmanager = {group = 'org.jboss.logmanager', name = 'jboss-logmanager', version = '2.1.18.Final'}
+
 # Id generator
 uuid = {group = 'com.github.f4b6a3', name = 'uuid-creator', version = '4.1.3'}
 ulid = {group = 'com.github.f4b6a3', name = 'ulid-creator', version = '4.1.2'}
@@ -40,7 +43,7 @@ tsid = {group = 'com.github.f4b6a3', name = 'tsid-creator', version = '4.1.1'}
 ksuid = {group = 'com.github.f4b6a3', name = 'ksuid-creator', version = '2.2.0'}
 
 [bundles]
-groovy = ['groovy-core', 'groovy-json', 'groovy-nio']
+# groovy = ['groovy-core', 'groovy-json', 'groovy-nio']
 commons = ['commons-lang3','commons-io']
 idCreator = ['uuid','ulid','tsid','ksuid']
 

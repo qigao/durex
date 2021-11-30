@@ -7,8 +7,8 @@ subprojects {
     apply plugin: 'io.quarkus'
     apply from: "$rootDir/gradle/jacoco.gradle"
     apply from: "$rootDir/gradle/spotless.gradle"
-    apply from: "$rootDir/exts/common.gradle"
-    apply from: "$rootDir/exts/quarkus.gradle"
-    apply from: "$rootDir/exts/container.gradle"
+    apply from: "$rootDir/library/common.gradle"
+    apply from: "$rootDir/library/quarkus.gradle"
+    apply from: "$rootDir/library/container.gradle"
 
 }

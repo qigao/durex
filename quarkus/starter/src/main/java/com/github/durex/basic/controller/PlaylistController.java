@@ -2,7 +2,7 @@ package com.github.durex.basic.controller;
 
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 
-import com.github.durex.basic.exceptionhandler.ExceptionHandler;
+import com.github.durex.basic.exceptions.ExceptionHandler;
 import com.github.durex.basic.model.PlayListRequest;
 import com.github.durex.basic.service.PlaylistService;
 import com.github.durex.basic.util.EntityMapper;
@@ -47,21 +47,21 @@ public class PlaylistController {
             description = "Success",
             content =
                 @Content(
-                    mediaType = "application/json",
+                    mediaType = APPLICATION_JSON,
                     schema = @Schema(implementation = PlayListRequest.class))),
         @APIResponse(
             responseCode = "404",
             description = "Playlist not found",
             content =
                 @Content(
-                    mediaType = "application/json",
+                    mediaType = APPLICATION_JSON,
                     schema = @Schema(implementation = ExceptionHandler.ErrorResponseBody.class))),
         @APIResponse(
             responseCode = "400",
             description = "music file find error",
             content =
                 @Content(
-                    mediaType = "application/json",
+                    mediaType = APPLICATION_JSON,
                     schema = @Schema(implementation = ExceptionHandler.ErrorResponseBody.class)))
       })
   public List<PlayListRequest> getPlaylist(
@@ -91,14 +91,14 @@ public class PlaylistController {
             description = "Success",
             content =
                 @Content(
-                    mediaType = "application/json",
+                    mediaType = APPLICATION_JSON,
                     schema = @Schema(implementation = PlayListRequest.class))),
         @APIResponse(
             responseCode = "404",
             description = "Playlist not found",
             content =
                 @Content(
-                    mediaType = "application/json",
+                    mediaType = APPLICATION_JSON,
                     schema = @Schema(implementation = ExceptionHandler.ErrorResponseBody.class)))
       })
   public PlayListRequest getPlaylist(@PathParam("id") String id) {
@@ -116,14 +116,14 @@ public class PlaylistController {
             description = "Success",
             content =
                 @Content(
-                    mediaType = "application/json",
+                    mediaType = APPLICATION_JSON,
                     schema = @Schema(implementation = PlayListRequest.class))),
         @APIResponse(
             responseCode = "404",
             description = "Playlist not found",
             content =
                 @Content(
-                    mediaType = "application/json",
+                    mediaType = APPLICATION_JSON,
                     schema = @Schema(implementation = ExceptionHandler.ErrorResponseBody.class)))
       })
   public PlayListRequest updatePlaylist(
@@ -147,7 +147,7 @@ public class PlaylistController {
             description = "PlayList not found",
             content =
                 @Content(
-                    mediaType = "application/json",
+                    mediaType = APPLICATION_JSON,
                     schema = @Schema(implementation = ExceptionHandler.ErrorResponseBody.class)))
       })
   public Response deletePlaylist(@PathParam("id") String id) {
@@ -165,14 +165,14 @@ public class PlaylistController {
             description = "Success",
             content =
                 @Content(
-                    mediaType = "application/json",
+                    mediaType = APPLICATION_JSON,
                     schema = @Schema(implementation = PlayListRequest.class))),
         @APIResponse(
             responseCode = "400",
             description = "Error creating a new playlist",
             content =
                 @Content(
-                    mediaType = "application/json",
+                    mediaType = APPLICATION_JSON,
                     schema = @Schema(implementation = ExceptionHandler.ErrorResponseBody.class)))
       })
   public PlayListRequest createPlaylist(

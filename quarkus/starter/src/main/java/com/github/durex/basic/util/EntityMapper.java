@@ -20,6 +20,8 @@ public class EntityMapper {
         .id(music.getId())
         .duration(music.getDuration())
         .title(music.getTitle())
+        .channels(music.getChannels())
+        .sampleRate(music.getSampleRate())
         .musicType(music.getMusicType())
         .build();
   }
@@ -33,6 +35,8 @@ public class EntityMapper {
         .id(musicRequest.getId())
         .duration(musicRequest.getDuration())
         .title(musicRequest.getTitle())
+        .channels(musicRequest.getChannels())
+        .sampleRate(musicRequest.getSampleRate())
         .musicType(musicRequest.getMusicType())
         .build();
   }

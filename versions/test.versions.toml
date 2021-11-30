@@ -16,6 +16,7 @@ junit5-bom = {group = 'org.junit', name = 'junit-bom', version.ref = 'junit'}
 equalsverifier = {module = 'nl.jqno.equalsverifier:equalsverifier',   version.ref = 'equalsverifier'}
 wiremock = {group = 'com.github.tomakehurst', name = 'wiremock-jre8', version.ref = 'wiremock'}
 rest-assured={ group= 'io.rest-assured', name= 'rest-assured', version.ref = 'rest-assured'}
-jparams={ group = 'com.jparams',name='to-string-verifier',version.ref='to-string-verifier'}
-hamcrest-date={ group = 'org.exparity', name = 'hamcrest-date', version  = '2.0.7'}
+jparams={ group = 'com.jparams',name='to-string-verifier',version.ref ='to-string-verifier'}
+hamcrest= {group = 'org.hamcrest', name = 'hamcrest', version = '2.2'}
+hamcrest-date={ group = 'org.exparity', name = 'hamcrest-date', version = '2.0.7'}
 test-containers-bom={ group = 'org.testcontainers', name = 'testcontainers-bom', version.ref = 'testcontainers'}

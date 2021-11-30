@@ -2,7 +2,7 @@ package com.github.durex.basic.controller;
 
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 
-import com.github.durex.basic.exceptionhandler.ExceptionHandler;
+import com.github.durex.basic.exceptions.ExceptionHandler;
 import com.github.durex.basic.model.MusicRequest;
 import com.github.durex.basic.service.MusicService;
 import com.github.durex.basic.util.EntityMapper;
@@ -47,21 +47,21 @@ public class MusicController {
             description = "Success",
             content =
                 @Content(
-                    mediaType = "application/json",
+                    mediaType = APPLICATION_JSON,
                     schema = @Schema(implementation = MusicRequest.class))),
         @APIResponse(
             responseCode = "404",
             description = "music file not found",
             content =
                 @Content(
-                    mediaType = "application/json",
+                    mediaType = APPLICATION_JSON,
                     schema = @Schema(implementation = ExceptionHandler.ErrorResponseBody.class))),
         @APIResponse(
             responseCode = "400",
             description = "music file find error",
             content =
                 @Content(
-                    mediaType = "application/json",
+                    mediaType = APPLICATION_JSON,
                     schema = @Schema(implementation = ExceptionHandler.ErrorResponseBody.class)))
       })
   public List<MusicRequest> getMusic(
@@ -91,21 +91,21 @@ public class MusicController {
             description = "Success",
             content =
                 @Content(
-                    mediaType = "application/json",
+                    mediaType = APPLICATION_JSON,
                     schema = @Schema(implementation = MusicRequest.class))),
         @APIResponse(
             responseCode = "404",
             description = "music file not found",
             content =
                 @Content(
-                    mediaType = "application/json",
+                    mediaType = APPLICATION_JSON,
                     schema = @Schema(implementation = ExceptionHandler.ErrorResponseBody.class))),
         @APIResponse(
             responseCode = "400",
             description = "music file find error",
             content =
                 @Content(
-                    mediaType = "application/json",
+                    mediaType = APPLICATION_JSON,
                     schema = @Schema(implementation = ExceptionHandler.ErrorResponseBody.class)))
       })
   public MusicRequest getMusic(
@@ -127,21 +127,21 @@ public class MusicController {
             description = "Success",
             content =
                 @Content(
-                    mediaType = "application/json",
+                    mediaType = APPLICATION_JSON,
                     schema = @Schema(implementation = MusicRequest.class))),
         @APIResponse(
             responseCode = "404",
             description = "Music not found",
             content =
                 @Content(
-                    mediaType = "application/json",
+                    mediaType = APPLICATION_JSON,
                     schema = @Schema(implementation = ExceptionHandler.ErrorResponseBody.class))),
         @APIResponse(
             responseCode = "400",
             description = "music file update error",
             content =
                 @Content(
-                    mediaType = "application/json",
+                    mediaType = APPLICATION_JSON,
                     schema = @Schema(implementation = ExceptionHandler.ErrorResponseBody.class)))
       })
   public MusicRequest updateMusic(
@@ -163,14 +163,14 @@ public class MusicController {
             description = "music not found",
             content =
                 @Content(
-                    mediaType = "application/json",
+                    mediaType = APPLICATION_JSON,
                     schema = @Schema(implementation = ExceptionHandler.ErrorResponseBody.class))),
         @APIResponse(
             responseCode = "400",
             description = "music file delete error",
             content =
                 @Content(
-                    mediaType = "application/json",
+                    mediaType = APPLICATION_JSON,
                     schema = @Schema(implementation = ExceptionHandler.ErrorResponseBody.class)))
       })
   public Response deleteMusic(
@@ -189,14 +189,14 @@ public class MusicController {
             description = "Success",
             content =
                 @Content(
-                    mediaType = "application/json",
+                    mediaType = APPLICATION_JSON,
                     schema = @Schema(implementation = MusicRequest.class))),
         @APIResponse(
             responseCode = "400",
             description = "music file create error",
             content =
                 @Content(
-                    mediaType = "application/json",
+                    mediaType = APPLICATION_JSON,
                     schema = @Schema(implementation = ExceptionHandler.ErrorResponseBody.class)))
       })
   public MusicRequest createMusic(

@@ -6,15 +6,13 @@ dependencies {
     testImplementation tlibs.rest.assured
     testImplementation project(":shared:mock")
 }
-apply from: "$rootDir/exts/jackson.gradle"
-apply from: "$rootDir/exts/apache.gradle"
 apply plugin: 'org.sonarqube'
 
 sonarqube {
     properties {
         property "sonar.host.url", "https://sonarcloud.io"
         property "sonar.projectBaseDir", "$projectDir"
-        property "sonar.projectKey", "com.github.durex:utils"
+        property "sonar.projectKey", "com.github.durex:$projectName"
         property "sonar.projectName", "utils"
     }
 }

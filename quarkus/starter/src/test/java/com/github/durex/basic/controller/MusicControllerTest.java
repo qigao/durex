@@ -1,13 +1,10 @@
 package com.github.durex.basic.controller;
 
-import static io.restassured.RestAssured.given;
-import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
-import static org.hamcrest.Matchers.*;
-
-import com.github.durex.MysqlResources;
+import com.github.durex.basic.model.MusicRequest;
+import com.github.durex.support.MockedMysql;
+import com.github.durex.utils.Json;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
-import java.nio.file.Paths;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -16,11 +13,22 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
+import java.io.IOException;
+import java.nio.file.Paths;
+
+import static io.restassured.RestAssured.given;
+import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
+import static org.hamcrest.Matchers.equalTo;
+
 @QuarkusTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-@QuarkusTestResource(value = MysqlResources.class)
+@QuarkusTestResource(value = MockedMysql.class)
 class MusicControllerTest {
-  static MysqlResources mysql = new MysqlResources();
+  public static final String EDITOR_PARAM = "editor=d1e5nqreqo";
+  public static final String V1_MUSIC = "/v1/music";
+  public static final String SCHUBERT = "Schubert";
+  public static final String MUSIC_JSON = "src/test/resources/json/music/music.json";
+  static MockedMysql mysql = new MockedMysql();
 
   @BeforeAll
   static void setUp() {
@@ -37,7 +45,8 @@ class MusicControllerTest {
   void getMusicByID_Return200() {
     given()
         .when()
-        .get("/v1/music/1?editor=d1e5nqreqo")
+        .header("x-auth", "this is a test")
+        .get(V1_MUSIC + "/1?" + EDITOR_PARAM)
         .then()
         .statusCode(200)
         .body("id", equalTo("1"));
@@ -46,77 +55,79 @@ class MusicControllerTest {
   @Test
   @Order(40)
   void getMusicByID_without_editor_Return404() {
-    given().when().get("/v1/music/5").then().statusCode(404);
+    given().when().get(V1_MUSIC + "/" + "5").then().statusCode(404);
   }
 
   @Test
   @Order(50)
   void getMusicByID_without_editor_Return200() {
-    given().when().get("/v1/music/4").then().statusCode(200).body("id", equalTo("4"));
+    given().when().get(V1_MUSIC + "/4").then().statusCode(200).body("id", equalTo("4"));
   }
 
   @Test
   @Order(60)
   void getMusicByID_with_editor_Return200() {
-    given().when().get("/v1/music").then().statusCode(200);
+    given().when().get(V1_MUSIC).then().statusCode(200);
   }
 
   @Test
   @Order(70)
   void getMusicByID_with_title_editor_Return200() {
-    given().when().get("/v1/music?editor=d1e5nqreqo&title=爱").then().statusCode(200);
+    given().when().get(V1_MUSIC + "?" + EDITOR_PARAM + "&title=爱").then().statusCode(200);
   }
 
   @Test
   @Order(80)
-  void updateMusicByID_EditorID_Return200() {
+  void updateMusicByID_EditorID_Return200() throws IOException {
+    var musicRequest = Json.read(Paths.get(MUSIC_JSON).toFile(), MusicRequest.class);
+    musicRequest.setId("4");
     given()
         .when()
         .contentType(APPLICATION_JSON)
-        .body(
-            "{\"id\":\"4\",\"title\":\"The Cradle\",\"artist\":\"Schubert\",\"playUrl\":\"http://localhost/music/demo.mp3\"}")
-        .put("/v1/music/4?editor=d1e5nqreqo")
+        .body(Json.toString(musicRequest))
+        .put(V1_MUSIC + "/4?" + EDITOR_PARAM)
         .then()
         .statusCode(200);
     given()
         .when()
-        .get("/v1/music/4?editor=d1e5nqreqo")
+        .get(V1_MUSIC + "/4?" + EDITOR_PARAM)
         .then()
         .statusCode(200)
-        .body("artist", equalTo("Schubert"));
+        .body("artist", equalTo(SCHUBERT));
   }
 
   @Test
   @Order(90)
   void deleteMusicByID_Return204_Then_CheckByID_Return404() {
-    given().when().delete("/v1/music/2?editor=d1e5nqreqo").then().statusCode(204);
-    given().when().get("/v1/music/2?editor=d1e5nqreqo").then().statusCode(404);
+    given().when().delete(V1_MUSIC + "/2?" + EDITOR_PARAM).then().statusCode(204);
+    given().when().get(V1_MUSIC + "/2?" + EDITOR_PARAM).then().statusCode(404);
   }
 
   @Test
   @Order(100)
-  void createMusic_Return200() {
-    var music = "src/test/resources/json/music/music1.json";
+  void createMusic_Return200() throws IOException {
+    var musicRequest = Json.read(Paths.get(MUSIC_JSON).toFile(), MusicRequest.class);
+    musicRequest.setId("wtVNDNP3YfqCOH7wKXStcEc61U1");
     given()
         .when()
         .contentType(APPLICATION_JSON)
-        .body(Paths.get(music).toFile())
-        .post("/v1/music?editor=1231dfasdf234")
+        .body(Json.toString(musicRequest))
+        .post(V1_MUSIC + "?editor=1231dfasdf234")
         .then()
         .statusCode(200)
-        .body("artist", equalTo("Schubert"));
+        .body("artist", equalTo(SCHUBERT));
     given()
         .when()
-        .get("/v1/music/wtVNDNP3YfqCOH7wKXStcEc61U1?editor=1231dfasdf234")
+        .get(V1_MUSIC + "/wtVNDNP3YfqCOH7wKXStcEc61U1?editor=1231dfasdf234")
         .then()
         .statusCode(200)
-        .body("artist", equalTo("Schubert"));
+        .body("artist", equalTo(SCHUBERT));
     given()
         .when()
-        .get("/v1/music?editor=1231dfasdf234")
+        .get(V1_MUSIC + "?editor=1231dfasdf234")
         .then()
         .statusCode(200)
         .body("size()", Matchers.equalTo(1))
-        .body("artist", Matchers.hasItems("Schubert"));
+        .body("artist", Matchers.hasItems(SCHUBERT));
   }
 }
