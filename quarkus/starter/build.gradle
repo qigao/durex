@@ -10,7 +10,7 @@ sonarqube {
     properties {
         property "sonar.host.url", "https://sonarcloud.io"
         property "sonar.projectBaseDir", "$projectDir"
-        property "sonar.projectKey", "com.github.durex:$projectName"
+        property "sonar.projectKey", "com.github.durex:Quarkus-starter"
         property "sonar.projectName", "Quarkus Starter Project"
     }
 }
