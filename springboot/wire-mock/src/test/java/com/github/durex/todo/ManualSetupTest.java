@@ -1,8 +1,5 @@
 package com.github.durex.todo;
 
-import static com.github.durex.utils.MockConstants.API_TODOS;
-import static com.github.durex.utils.MockConstants.CONTENT_TYPE;
-import static com.github.durex.utils.MockConstants.TODOS;
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 import static com.github.tomakehurst.wiremock.client.WireMock.equalTo;
 import static com.github.tomakehurst.wiremock.client.WireMock.exactly;
@@ -12,6 +9,8 @@ import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.github.durex.utils.BaseWireMock;
+import com.github.durex.utils.MockConstants;
+import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.stubbing.ServeEvent;
 import com.github.tomakehurst.wiremock.verification.LoggedRequest;
 import java.util.List;
@@ -32,15 +31,15 @@ class ManualSetupTest extends BaseWireMock {
   @Order(1)
   void basicWireMockExample() {
     BaseWireMock.wireMockServer.stubFor(
-        get(TODOS)
+        WireMock.get(MockConstants.TODOS)
             .willReturn(
                 aResponse()
-                    .withHeader(CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                    .withHeader(MockConstants.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                     .withBody("[]")));
 
     webTestClient
         .get()
-        .uri(API_TODOS)
+        .uri(MockConstants.API_TODOS)
         .exchange()
         .expectStatus()
         .isOk()
@@ -56,28 +55,30 @@ class ManualSetupTest extends BaseWireMock {
         get(urlEqualTo("/users"))
             .willReturn(
                 aResponse()
-                    .withHeader(CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                    .withHeader(MockConstants.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                     .withBody("[]")));
 
-    webTestClient.get().uri(API_TODOS).exchange().expectStatus().is5xxServerError();
+    webTestClient.get().uri(MockConstants.API_TODOS).exchange().expectStatus().is5xxServerError();
   }
 
   @Test
   void wireMockRequestMatchingPriority() {
     BaseWireMock.wireMockServer.stubFor(
-        get(urlEqualTo(TODOS))
+        get(urlEqualTo(MockConstants.TODOS))
             .atPriority(1)
             .willReturn(
                 aResponse()
-                    .withHeader(CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                    .withHeader(MockConstants.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                     .withBody("[]")));
 
     BaseWireMock.wireMockServer.stubFor(
-        get(urlEqualTo(TODOS)).atPriority(10).willReturn(aResponse().withStatus(500)));
+        get(urlEqualTo(MockConstants.TODOS))
+            .atPriority(10)
+            .willReturn(aResponse().withStatus(500)));
 
     webTestClient
         .get()
-        .uri(API_TODOS)
+        .uri(MockConstants.API_TODOS)
         .exchange()
         .expectStatus()
         .isOk()
@@ -89,16 +90,16 @@ class ManualSetupTest extends BaseWireMock {
   @Test
   void wireMockRequestMatchingWithData() {
     BaseWireMock.wireMockServer.stubFor(
-        get(urlEqualTo(TODOS))
+        get(urlEqualTo(MockConstants.TODOS))
             .willReturn(
                 aResponse()
-                    .withHeader(CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                    .withHeader(MockConstants.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                     .withBodyFile("todo-api/response-200.json")
                     .withFixedDelay(1_000)));
 
     webTestClient
         .get()
-        .uri(API_TODOS)
+        .uri(MockConstants.API_TODOS)
         .exchange()
         .expectStatus()
         .isOk()
@@ -110,7 +111,7 @@ class ManualSetupTest extends BaseWireMock {
 
     BaseWireMock.wireMockServer.verify(
         exactly(1),
-        getRequestedFor(urlEqualTo(TODOS))
+        getRequestedFor(urlEqualTo(MockConstants.TODOS))
             .withHeader("Accept", equalTo("application/json"))
             .withHeader("X-Auth", equalTo("duke")));
 

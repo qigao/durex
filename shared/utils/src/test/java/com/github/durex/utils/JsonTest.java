@@ -29,6 +29,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.List;
+import org.hamcrest.MatcherAssert;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
@@ -267,8 +268,8 @@ class JsonTest {
     var value =
         Json.findNode(
             new FileReader(path.toString()), WIDGET_DIV, new TypeReference<List<Div>>() {});
-    assertThat(value, hasSize(3));
-    assertThat(
+    MatcherAssert.assertThat(value, hasSize(3));
+    MatcherAssert.assertThat(
         value,
         containsInAnyOrder(
             hasProperty("name", is("avatar01")),
@@ -282,8 +283,8 @@ class JsonTest {
     var value =
         Json.findNode(
             new FileInputStream(path.toString()), WIDGET_DIV, new TypeReference<List<Div>>() {});
-    assertThat(value, hasSize(3));
-    assertThat(
+    MatcherAssert.assertThat(value, hasSize(3));
+    MatcherAssert.assertThat(
         value,
         containsInAnyOrder(
             hasProperty("name", is("avatar01")),
@@ -295,8 +296,8 @@ class JsonTest {
   void testJsonNodeByPathWithJsonUrlTypedReferenceList() throws IOException {
     var path = Paths.get(WIDGET_JSON);
     var value = Json.findNode(path.toUri().toURL(), WIDGET_DIV, new TypeReference<List<Div>>() {});
-    assertThat(value, hasSize(3));
-    assertThat(
+    MatcherAssert.assertThat(value, hasSize(3));
+    MatcherAssert.assertThat(
         value,
         containsInAnyOrder(
             hasProperty("name", is("avatar01")),
@@ -309,8 +310,8 @@ class JsonTest {
     var path = Paths.get(WIDGET_JSON);
     var value =
         Json.findNode(Files.readString(path), WIDGET_DIV, new TypeReference<List<Div>>() {});
-    assertThat(value, hasSize(3));
-    assertThat(
+    MatcherAssert.assertThat(value, hasSize(3));
+    MatcherAssert.assertThat(
         value,
         containsInAnyOrder(
             hasProperty("name", is("avatar01")),
@@ -323,8 +324,8 @@ class JsonTest {
     var path = Paths.get(WIDGET_JSON);
     var value =
         Json.findNode(Files.readAllBytes(path), WIDGET_DIV, new TypeReference<List<Div>>() {});
-    assertThat(value, hasSize(3));
-    assertThat(
+    MatcherAssert.assertThat(value, hasSize(3));
+    MatcherAssert.assertThat(
         value,
         containsInAnyOrder(
             hasProperty("name", is("avatar01")),
@@ -336,8 +337,8 @@ class JsonTest {
   void testJsonNodeByPathWithJsonFileTypedReferenceList() throws IOException {
     var path = Paths.get(WIDGET_JSON);
     var value = Json.findNode(path.toFile(), WIDGET_DIV, new TypeReference<List<Div>>() {});
-    assertThat(value, hasSize(3));
-    assertThat(
+    MatcherAssert.assertThat(value, hasSize(3));
+    MatcherAssert.assertThat(
         value,
         containsInAnyOrder(
             hasProperty("name", is("avatar01")),
