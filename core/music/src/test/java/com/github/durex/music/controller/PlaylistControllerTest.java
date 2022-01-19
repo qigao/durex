@@ -25,7 +25,7 @@ import org.junit.jupiter.api.TestMethodOrder;
 
 @QuarkusTest
 @TestMethodOrder(OrderAnnotation.class)
-@QuarkusTestResource(value = MockedMysql.class, parallel = true)
+@QuarkusTestResource(value = MockedMysql.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class PlaylistControllerTest {
   public static final String EDITOR = "?editor=81";
