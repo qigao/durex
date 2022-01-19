@@ -12,7 +12,6 @@ import com.github.durex.music.entity.Music;
 import com.github.durex.music.util.EntityMapper;
 import com.github.durex.music.util.support.Data;
 import com.github.durex.music.util.support.MockedMysql;
-import com.github.durex.utils.Json;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import java.io.IOException;
@@ -117,9 +116,6 @@ class MusicRepositoryTest {
       musicJpa.setId(String.valueOf(i + 10));
       musicRepository.createMusic(musicJpa);
     }
-    var musicsAll = musicRepository.findAllMusics();
-    assertEquals(10, musicsAll.size());
-    System.out.println(Json.toString(musicsAll));
     var musics = musicRepository.findMusicByEditorAndDeviceWithPage(EDITOR, DEVICE, 0, 5);
     List<String> idLists = musics.stream().map(Music::getId).collect(Collectors.toList());
     assertEquals(5, musics.size());

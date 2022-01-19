@@ -86,13 +86,6 @@ public class MusicRepository {
         .getResultList();
   }
 
-  public List<Music> findAllMusics() {
-    var cb = em.getCriteriaBuilder();
-    var query = cb.createQuery(Music.class);
-    query.from(Music.class);
-    return em.createQuery(query).getResultList();
-  }
-
   public List<Music> findMusicByEditorAndDeviceWithPage(
       String editor, String device, int start, int size) {
     var cb = em.getCriteriaBuilder();
