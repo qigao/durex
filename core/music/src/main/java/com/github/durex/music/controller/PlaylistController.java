@@ -39,7 +39,6 @@ import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 @Consumes(APPLICATION_JSON)
 @Tag(name = "Playlist")
 @Slf4j
-@SuppressWarnings("rawtypes")
 @Logged
 @Auth
 public class PlaylistController {
@@ -56,7 +55,7 @@ public class PlaylistController {
       description = "Success",
       content =
           @Content(mediaType = APPLICATION_JSON, schema = @Schema(implementation = RespData.class)))
-  public RespData getPlaylist(
+  public RespData<Object> getPlaylist(
       @Parameter(description = "用户ID，用户ID存在时为私有音乐，仅用户自己可见，用户ID为空时，音乐为公共音乐，所有用户均可查询")
           @QueryParam("editor")
           @Encoded
@@ -84,7 +83,7 @@ public class PlaylistController {
       description = "Success",
       content =
           @Content(mediaType = APPLICATION_JSON, schema = @Schema(implementation = RespData.class)))
-  public RespData getPlaylist(@PathParam("id") String id) {
+  public RespData<Object> getPlaylist(@PathParam("id") String id) {
     var playlist = playlistService.findPlayListById(id);
     var playlistResp = EntityMapper.playListToResp(playlist);
     return RespData.builder().result(200).msg(SUCCESS).data(playlistResp).build();
@@ -98,7 +97,7 @@ public class PlaylistController {
       description = "Success",
       content =
           @Content(mediaType = APPLICATION_JSON, schema = @Schema(implementation = RespData.class)))
-  public RespData updatePlaylist(
+  public RespData<Object> updatePlaylist(
       @PathParam("id") String id,
       @QueryParam("editor") @Encoded String editor,
       PlayListRequest playList) {
@@ -116,7 +115,7 @@ public class PlaylistController {
       description = "Success",
       content =
           @Content(mediaType = APPLICATION_JSON, schema = @Schema(implementation = RespData.class)))
-  public RespData deletePlaylist(@PathParam("id") String id) {
+  public RespData<Object> deletePlaylist(@PathParam("id") String id) {
     var affectedRows = playlistService.deletePlaylist(id);
     log.info("delete playlist affectedRows: {}", affectedRows);
     return RespData.builder().result(200).msg(SUCCESS).build();
@@ -133,7 +132,7 @@ public class PlaylistController {
       description = "Success",
       content =
           @Content(mediaType = APPLICATION_JSON, schema = @Schema(implementation = RespData.class)))
-  public RespData createPlaylistWithID(
+  public RespData<Object> createPlaylistWithID(
       @QueryParam("editor") @Encoded String editor, PlayListRequest playList) {
     var id = playlistService.createPlaylist(editor, playList);
     log.info("created playlist ID: {}", id);
@@ -148,7 +147,7 @@ public class PlaylistController {
       description = "Success",
       content =
           @Content(mediaType = APPLICATION_JSON, schema = @Schema(implementation = RespData.class)))
-  public RespData updateMusicToPlayList(
+  public RespData<Object> updateMusicToPlayList(
       @PathParam("id") String id,
       @QueryParam("editor") @Encoded String editor,
       MusicIDListRequest musicIDRequest) {
@@ -170,7 +169,7 @@ public class PlaylistController {
       description = "Success",
       content =
           @Content(mediaType = APPLICATION_JSON, schema = @Schema(implementation = RespData.class)))
-  public RespData deleteMusicsFromPlayList(
+  public RespData<Object> deleteMusicsFromPlayList(
       @PathParam("id") String id,
       @QueryParam("editor") @Encoded String editor,
       MusicIDListRequest musicIDList) {
@@ -188,7 +187,7 @@ public class PlaylistController {
       description = "Success",
       content =
           @Content(mediaType = APPLICATION_JSON, schema = @Schema(implementation = RespData.class)))
-  public RespData updateMusicWithOrderToPlayList(
+  public RespData<Object> updateMusicWithOrderToPlayList(
       @PathParam("id") String id,
       @QueryParam("editor") @Encoded String editor,
       List<OrderedMusicRequest> musicIDRequest) {

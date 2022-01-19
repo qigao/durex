@@ -35,7 +35,6 @@ import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 @Produces(APPLICATION_JSON)
 @Consumes(APPLICATION_JSON)
 @Tag(name = "Music")
-@SuppressWarnings("rawtypes")
 @Slf4j
 @Param
 @Logged
@@ -51,7 +50,7 @@ public class MusicController {
       description = "Success",
       content =
           @Content(mediaType = APPLICATION_JSON, schema = @Schema(implementation = RespData.class)))
-  public RespData getMusic(
+  public RespData<Object> getMusic(
       @Parameter(description = "用户ID，用户ID存在时为私有音乐，仅用户自己可见，用户ID为空时，音乐为公共音乐，所有用户均可查询")
           @QueryParam("editor")
           @Encoded
@@ -86,7 +85,7 @@ public class MusicController {
       description = "Success",
       content =
           @Content(mediaType = APPLICATION_JSON, schema = @Schema(implementation = RespData.class)))
-  public RespData getMusic(
+  public RespData<Object> getMusic(
       @Parameter(description = "音乐ID ") @PathParam("id") String id,
       @Parameter(description = "用户ID，用户ID存在时为私有音乐，仅用户自己可见，用户ID为空时，音乐为公共音乐，所有用户均可查询")
           @QueryParam("editor")
@@ -107,7 +106,7 @@ public class MusicController {
       description = "Success",
       content =
           @Content(mediaType = APPLICATION_JSON, schema = @Schema(implementation = RespData.class)))
-  public RespData updateMusic(
+  public RespData<Object> updateMusic(
       @Parameter(description = "音乐ID ") @PathParam("id") String id,
       @QueryParam("editor") @Encoded String editor,
       MusicRequest musicRequest) {
@@ -126,7 +125,7 @@ public class MusicController {
       description = "Success",
       content =
           @Content(mediaType = APPLICATION_JSON, schema = @Schema(implementation = RespData.class)))
-  public RespData deleteMusic(
+  public RespData<Object> deleteMusic(
       @PathParam("id") String id, @QueryParam("editor") @Encoded String editor) {
     musicService.deleteMusic(id, editor);
     return RespData.builder().result(200).msg(SUCCESS).build();
@@ -142,7 +141,7 @@ public class MusicController {
       description = "Success",
       content =
           @Content(mediaType = APPLICATION_JSON, schema = @Schema(implementation = RespData.class)))
-  public RespData createMusic(
+  public RespData<Object> createMusic(
       @Parameter(description = "用户ID") @QueryParam("editor") @Encoded String editor,
       MusicRequest musicRequest) {
     musicService.createMusic(editor, musicRequest);
