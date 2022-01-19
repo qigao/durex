@@ -23,7 +23,6 @@ import javax.ws.rs.NotFoundException;
 import org.hamcrest.MatcherAssert;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -115,7 +114,7 @@ class MusicRepositoryTest {
     var music = Data.givenAMusic();
     var musicJpa = EntityMapper.musicJPARequestToEntity(music, EDITOR);
     for (int i = 0; i < 10; i++) {
-      musicJpa.setId(String.valueOf(i+10));
+      musicJpa.setId(String.valueOf(i + 10));
       musicRepository.createMusic(musicJpa);
     }
     var musicsAll = musicRepository.findAllMusics();
