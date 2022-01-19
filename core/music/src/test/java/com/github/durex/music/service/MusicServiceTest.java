@@ -19,7 +19,7 @@ import org.junit.jupiter.api.TestMethodOrder;
 
 @QuarkusTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-@QuarkusTestResource(value = MockedMysql.class)
+@QuarkusTestResource(value = MockedMysql.class, parallel = true)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class MusicServiceTest {
   public static final String EDITOR_ID = "d1e5nqreqo";
