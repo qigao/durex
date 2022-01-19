@@ -23,6 +23,7 @@ import javax.ws.rs.NotFoundException;
 import org.hamcrest.MatcherAssert;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -114,8 +115,7 @@ class MusicRepositoryTest {
     var music = Data.givenAMusic();
     var musicJpa = EntityMapper.musicJPARequestToEntity(music, EDITOR);
     for (int i = 0; i < 10; i++) {
-      musicJpa.setId(String.valueOf(i));
-      musicJpa.setDevice(i + "device");
+      musicJpa.setId(String.valueOf(i+10));
       musicRepository.createMusic(musicJpa);
     }
     var musicsAll = musicRepository.findAllMusics();
@@ -124,11 +124,11 @@ class MusicRepositoryTest {
     var musics = musicRepository.findMusicByEditorAndDeviceWithPage(EDITOR, DEVICE, 0, 5);
     List<String> idLists = musics.stream().map(Music::getId).collect(Collectors.toList());
     assertEquals(5, musics.size());
-    assertThat(idLists, hasItems("0", "1", "2", "3", "4"));
+    assertThat(idLists, hasItems("10", "11", "12", "13", "14"));
     var musics2 = musicRepository.findMusicByEditorAndDeviceWithPage(EDITOR, DEVICE, 1, 5);
     List<String> idLists2 = musics2.stream().map(Music::getId).collect(Collectors.toList());
     assertEquals(5, musics2.size());
-    assertThat(idLists2, hasItems("5", "6", "7", "8", "9"));
+    assertThat(idLists2, hasItems("15", "16", "17", "18", "19"));
   }
 
   @Test

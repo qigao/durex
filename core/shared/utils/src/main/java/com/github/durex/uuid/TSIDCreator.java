@@ -1,9 +1,9 @@
 package com.github.durex.uuid;
 
-import com.github.f4b6a3.tsid.TsidCreator;
+import com.github.f4b6a3.tsid.TsidFactory;
 
 class TSIDCreator implements Creator {
   public String generate() {
-    return TsidCreator.getTsid1024().toString();
+    return TsidFactory.newInstance1024().create().toString();
   }
 }

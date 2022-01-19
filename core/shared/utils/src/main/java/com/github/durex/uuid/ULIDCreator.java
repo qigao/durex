@@ -1,9 +1,9 @@
 package com.github.durex.uuid;
 
-import com.github.f4b6a3.ulid.UlidCreator;
+import com.github.f4b6a3.ulid.UlidFactory;
 
 class ULIDCreator implements Creator {
   public String generate() {
-    return UlidCreator.getMonotonicUlid().toString();
+    return UlidFactory.newInstance().create().toString();
   }
 }

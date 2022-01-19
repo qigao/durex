@@ -1,9 +1,9 @@
 package com.github.durex.uuid;
 
-import com.github.f4b6a3.ksuid.KsuidCreator;
+import com.github.f4b6a3.ksuid.KsuidFactory;
 
 class KSUIDCreator implements Creator {
   public String generate() {
-    return KsuidCreator.getKsuidNs().toString();
+    return KsuidFactory.newInstance().create().toString();
   }
 }
