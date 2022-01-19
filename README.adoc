@@ -1,4 +1,4 @@
-= Durex
+= Cosmos
 
 a java template project for high code quality development
 
@@ -26,30 +26,29 @@ copy .env.templates to .env at the root dir, update to whatever you need
 > source scripts/setEnv.sh
 --
 
-=== UnsetEnv
-
-to make environment variables from your .env files unusable
+=== Build Native
 
 [source,bash]
 --
-> chmod +x scripts/unsetEnv.sh
-> source scripts/unsetEnv.sh
+gradle core:music:quarkusBuild  -Dquarkus.package.type=native -Dquarkus.native.container-build=true
 --
 
-== Clean workflows run histories
-
-to delete unwanted workflows run histories, we have two ways:
-
-* Manually
+=== Build UberJar
 
 [source,bash]
 --
-> agi fzf jq
-> chmod +x srcipts/cleanWorkflows.sh
-> scripts/cleanWorkflows.sh qigao/durex
+gradle core:music:quarkusBuild  -Dquarkus.package.type=uber-jar
 --
 
-* Automatically
+=== Build Docker
+[source,bash]
+--
+docker build -f core/music/src/main/docker/Dockerfile.native -t core/music .
+--
 
-see nightly_cleanup from workflows/nightly_cleanup.yml
+=== Run Docker
 
+[source,bash]
+--
+ docker-compose  -f core/music/src/main/docker/docker-compose.yml up
+--

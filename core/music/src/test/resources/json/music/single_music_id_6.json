@@ -1,0 +1,15 @@
+{
+	"id": "6",
+	"title": "The Cradle",
+	"artist": "Schubert",
+	"description": "摇篮曲，最好的之一",
+	"musicType": 0,
+	"duration": 200,
+	"channels": 2,
+	"sampleRate": 44,
+	"voiceName": "Mum's voice",
+	"device": "12345678",
+	"editor": "ABCD001",
+	"coverUrl": "http://49.232.95.123:8180/icon/34e8aa702fcf1ecfa9f6093c63de77fa.jpeg",
+	"playUrl": "http://localhost/music/demo.mp3"
+}

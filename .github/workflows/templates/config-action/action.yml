@@ -10,8 +10,7 @@ runs:
     - name: Setup JDK
       uses: actions/setup-java@v2
       with:
-        distribution: 'temurin'
-        java-version: 11
-        architecture: x64
+        distribution: 'microsoft'
+        java-version: '11'
     - name: Validate Gradle wrapper
       uses: gradle/wrapper-validation-action@v1

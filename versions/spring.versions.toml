@@ -1,0 +1,19 @@
+# versions for libraries
+[versions]
+# version for spring
+springboot = "2.5.4"
+spring-bom = "1.0.11.RELEASE"
+
+# Libs config
+[libraries]
+
+pager = { group = 'com.github.pagehelper', name = 'pagehelper-spring-boot-starter', version = '1.2.5' }
+mybatis = { group = 'org.mybatis.spring.boot', name = 'mybatis-spring-boot-starter', version = '1.3.1' }
+
+[bundles]
+
+
+# Gradle plugins config
+[plugins]
+spring-bom = { id = "io.spring.dependency-management", version.ref = "spring-bom" }
+springboot = { id = "org.springframework.boot", version.ref = "springboot" }

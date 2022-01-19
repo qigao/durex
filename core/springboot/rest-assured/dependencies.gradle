@@ -1,0 +1,7 @@
+dependencies {
+    testRuntimeOnly  tlibs.h2db
+    testImplementation tlibs.rest.assured
+    testImplementation 'io.rest-assured:spring-mock-mvc'
+    testImplementation tlibs.equalsverifier
+    testImplementation tlibs.jparams
+}

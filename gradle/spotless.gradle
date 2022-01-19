@@ -14,14 +14,6 @@ spotless {
         indentWithSpaces(2)
         endWithNewline()
     }
-    groovy {
-        target fileTree('.') {
-            include '**/*.groovy'
-            exclude '**/build/**', '**/build-*/**'
-        }
-        greclipse()
-        indentWithSpaces()
-    }
     groovyGradle {
         target fileTree('.') {
             include '**/*.gradle'
@@ -33,8 +25,7 @@ spotless {
     json {
         target fileTree('.') {
             include '**/*.json'
-            include '**/*.xsd'
-            exclude '**/build/**', '**/build-*/**'
+             exclude '**/build/**', '**/build-*/**'
         }
         eclipseWtp('json')
     }
@@ -71,10 +62,4 @@ spotless {
         trimTrailingWhitespace()
         endWithNewline()
     }
-    task format {
-        doLast {
-            println 'format!'
-        }
-    }
-    tasks.format.dependsOn 'spotlessApply'
 }

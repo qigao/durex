@@ -1,0 +1,10 @@
+dependencies {
+    testImplementation enforcedPlatform(tlibs.junit5.bom.get())
+    testImplementation 'org.junit.jupiter:junit-jupiter-api'
+    testImplementation 'org.junit.jupiter:junit-jupiter-params'
+    testImplementation tlibs.hamcrest
+    testImplementation tlibs.hamcrest.date
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
+    testImplementation 'org.junit.platform:junit-platform-launcher:1.8.2'
+    compileOnly tlibs.api.guardian
+}

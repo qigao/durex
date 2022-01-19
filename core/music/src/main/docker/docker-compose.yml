@@ -1,0 +1,26 @@
+version: "3.7"
+
+services:
+  db:
+    image: mariadb:10.4.8
+    container_name: db
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    ports:
+      - "3306:3306"
+    environment:
+      - LANG=C.UTF-8
+      - MYSQL_ROOT_PASSWORD=secret
+      - MYSQL_DATABASE=music
+  app:
+    image: core/music:latest
+    container_name: app
+    links:
+      - db
+    ports:
+      - "8260:8080"
+    hostname: app
+    volumes:
+      - ./logs:/tmp/logs
+    depends_on:
+      - db
+    restart: on-failure

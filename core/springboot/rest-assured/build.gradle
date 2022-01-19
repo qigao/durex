@@ -1,0 +1,13 @@
+plugins {
+    alias glibs.plugins.sonarqube
+}
+apply from: "dependencies.gradle"
+apply plugin: 'org.sonarqube'
+sonarqube {
+    properties {
+        property "sonar.host.url", "https://sonarcloud.io"
+        property "sonar.projectBaseDir", "$projectDir"
+        property "sonar.projectKey", "com.github.durex:$project.name"
+        property "sonar.projectName", "RestAssured Demo Project"
+    }
+}

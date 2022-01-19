@@ -1,4 +1,4 @@
-rootProject.name = 'Durex'
+rootProject.name = 'Durex Template Projects'
 
 apply from: "$rootDir/gradle/modules.gradle"
 
@@ -11,11 +11,14 @@ dependencyResolutionManagement {
         tlibs {
             from(files("$rootDir/versions/test.versions.toml"))
         }
-        glibs {
-            from(files("$rootDir/versions/gradle.versions.toml"))
-        }
         qlibs {
             from(files("$rootDir/versions/quarkus.versions.toml"))
+        }
+        slibs {
+            from(files("$rootDir/versions/spring.versions.toml"))
+        }
+        glibs {
+            from(files("$rootDir/versions/gradle.versions.toml"))
         }
     }
 }

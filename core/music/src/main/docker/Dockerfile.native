@@ -1,0 +1,9 @@
+FROM registry.access.redhat.com/ubi8/ubi-minimal
+EXPOSE 8080
+WORKDIR /work/
+COPY core/music/.env /work/.env
+COPY scripts/setEnv.sh /work/env.sh
+COPY core/music/build/*-runner /work/runner
+RUN chmod 775 /work
+ENTRYPOINT ["/bin/bash" , "-c", "cd /work/ &&source env.sh && ./runner -Dquarkus.http.host=0.0.0.0"]
+

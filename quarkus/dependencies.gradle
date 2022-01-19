@@ -1,8 +1,0 @@
-dependencies {
-    implementation enforcedPlatform(qlibs.quarkus.bom.get())
-    implementation 'io.quarkus:quarkus-resteasy-jackson'
-    implementation 'io.quarkus:quarkus-resteasy'
-    implementation 'io.quarkus:quarkus-arc'
-    testImplementation 'io.quarkus:quarkus-junit5'
-    testImplementation tlibs.rest.assured
-}

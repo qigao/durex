@@ -4,12 +4,12 @@ on:
     branches:
       - master
     paths:
-      - 'shared/utils/**'
+      - 'core/shared/utils/**'
       - '.github/workflows/shared-utils.yml'
   pull_request:
     types: [ opened,reopened, synchronize ]
     paths:
-      - 'shared/utils/**'
+      - 'core/shared/utils/**'
       - '.github/workflows/shared-utils.yml'
 
 jobs:
@@ -29,11 +29,11 @@ jobs:
         with:
           fetch-depth: 0
       - name: run gradle assemble
-        run: ./gradlew shared:utils:assemble
+        run: ./gradlew core:shared:utils:assemble
       - name: Execute Related Check tasks
-        run: ./gradlew shared:utils:check
+        run: ./gradlew core:shared:utils:check
       - name: Validate Code Coverage
-        run: ./gradlew shared:utils:jacocoTestCoverageVerification
+        run: ./gradlew core:shared:utils:jacocoTestCoverageVerification
       - uses: ./.github/workflows/templates/cache-action
       - name: Cache build result
         uses: actions/cache@v2
@@ -57,7 +57,7 @@ jobs:
       - id: pr_vars
         uses: ./.github/workflows/templates/env-action
       - name: Analyze with SonarCloud
-        run: ./gradlew shared:utils:sonarqube -Dsonar.organization=power-durex-app ${{ steps.pr_vars.outputs.sonar_key }}
+        run: ./gradlew core:shared:utils:sonarqube -Dsonar.organization=power-durex-app ${{ steps.pr_vars.outputs.sonar_key }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}

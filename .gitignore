@@ -20,6 +20,7 @@ bin/
 *.iml
 *.ipr
 out/
+.jpb
 
 ### NetBeans ###
 /nbproject/private/
@@ -38,3 +39,4 @@ dev-notes.txt
 .env
 
 logs
+*.log
