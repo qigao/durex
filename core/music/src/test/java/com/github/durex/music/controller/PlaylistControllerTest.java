@@ -28,15 +28,17 @@ import org.junit.jupiter.api.TestMethodOrder;
 @QuarkusTestResource(value = MockedMysql.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class PlaylistControllerTest {
-  public static final String EDITOR = "?editor=81";
 
-  public static final String PLAYLIST = "/v1/playlist/";
-  public static final String PLAYLIST_WITH_EDITOR = "/v1/playlist" + EDITOR;
-  public static final String MUSIC_WITH_EDITOR = "/v1/music" + EDITOR;
+  public static final String V1_PLAYLIST = "/v1/playlist/";
+  public static final String V1_MUSIC = "/v1/music";
   public static final String RESULT = "result";
   public static final String MUSIC_ID_A = "abcd1234";
   public static final String MUSIC_ID_B = "abcd5678";
   public static final String MUSICS_ID = "data.musics.id";
+  public static final String EDITOR = "editor";
+  public static final String EDITOR_81 = "81";
+  public static final String DEVICE_ID = "deviceId";
+  public static final String ID = "id";
   static MockedMysql mysql = new MockedMysql();
   private String UNIQUE_ID = "";
 
@@ -61,14 +63,21 @@ class PlaylistControllerTest {
                     .when()
                     .contentType(APPLICATION_JSON)
                     .body(Json.toString(music))
-                    .post(MUSIC_WITH_EDITOR)
+                    .queryParam(EDITOR, EDITOR_81)
+                    .post(V1_MUSIC)
                     .then()
                     .statusCode(200);
               } catch (IOException e) {
                 e.printStackTrace();
               }
             });
-    given().when().get(MUSIC_WITH_EDITOR).then().statusCode(200).body("data.size()", equalTo(5));
+    given()
+        .when()
+        .queryParam(EDITOR, EDITOR_81)
+        .get(V1_MUSIC)
+        .then()
+        .statusCode(200)
+        .body("data.size()", equalTo(5));
     // Create playlist
     var requestJson = Data.givenPlayListWithInitialMusics();
     requestJson.setTitle("test");
@@ -77,7 +86,8 @@ class PlaylistControllerTest {
             .when()
             .contentType(APPLICATION_JSON)
             .body(Json.toString(requestJson))
-            .post(PLAYLIST_WITH_EDITOR)
+            .queryParam(EDITOR, EDITOR_81)
+            .post(V1_PLAYLIST)
             .then()
             .statusCode(200)
             .extract()
@@ -86,10 +96,10 @@ class PlaylistControllerTest {
     given()
         .when()
         .contentType(APPLICATION_JSON)
-        .get(PLAYLIST_WITH_EDITOR + "&deviceId=abcd")
+        .queryParam(EDITOR, EDITOR_81)
+        .queryParam(DEVICE_ID, "abcd")
+        .get(V1_PLAYLIST)
         .then()
-        .log()
-        .all()
         .statusCode(200)
         .body("data.title", hasItems("test"));
   }
@@ -104,7 +114,8 @@ class PlaylistControllerTest {
         .when()
         .contentType(APPLICATION_JSON)
         .body(Json.toString(music7))
-        .post(MUSIC_WITH_EDITOR)
+        .queryParam(EDITOR, EDITOR_81)
+        .post(V1_MUSIC)
         .then()
         .statusCode(200);
     var music8 = Data.givenAMusic();
@@ -113,7 +124,8 @@ class PlaylistControllerTest {
         .when()
         .contentType(APPLICATION_JSON)
         .body(Json.toString(music8))
-        .post(MUSIC_WITH_EDITOR)
+        .queryParam(EDITOR, EDITOR_81)
+        .post(V1_MUSIC)
         .then()
         .statusCode(200);
     // Then add musics to playlist
@@ -122,7 +134,9 @@ class PlaylistControllerTest {
         .when()
         .contentType(APPLICATION_JSON)
         .body(Json.toString(musicIDList))
-        .put(PLAYLIST + "update/" + UNIQUE_ID + EDITOR)
+        .queryParam(EDITOR, EDITOR_81)
+        .pathParam(ID, UNIQUE_ID)
+        .put(V1_PLAYLIST + "update/{id}")
         .then()
         .statusCode(200)
         .body(RESULT, equalTo(200));
@@ -130,7 +144,9 @@ class PlaylistControllerTest {
     given()
         .when()
         .contentType(APPLICATION_JSON)
-        .get(PLAYLIST + UNIQUE_ID + EDITOR)
+        .queryParam(EDITOR, EDITOR_81)
+        .pathParam(ID, UNIQUE_ID)
+        .get(V1_PLAYLIST + "{id}")
         .then()
         .statusCode(200)
         .body(MUSICS_ID, hasItems("7", "8"));
@@ -139,7 +155,9 @@ class PlaylistControllerTest {
         .when()
         .contentType(APPLICATION_JSON)
         .body(Json.toString(musicIDList))
-        .delete(PLAYLIST + "update/" + UNIQUE_ID + EDITOR)
+        .queryParam(EDITOR, EDITOR_81)
+        .pathParam(ID, UNIQUE_ID)
+        .delete(V1_PLAYLIST + "update/{id}")
         .then()
         .statusCode(200)
         .body("result", equalTo(200));
@@ -147,7 +165,9 @@ class PlaylistControllerTest {
     given()
         .when()
         .contentType(APPLICATION_JSON)
-        .get(PLAYLIST + UNIQUE_ID + EDITOR)
+        .queryParam(EDITOR, EDITOR_81)
+        .pathParam(ID, UNIQUE_ID)
+        .get(V1_PLAYLIST + "{id}")
         .then()
         .statusCode(200)
         .body(MUSICS_ID, not(hasItems("7", "8")));
@@ -163,7 +183,8 @@ class PlaylistControllerTest {
         .when()
         .contentType(APPLICATION_JSON)
         .body(Json.toString(musicA))
-        .post(MUSIC_WITH_EDITOR)
+        .queryParam(EDITOR, EDITOR_81)
+        .post(V1_MUSIC)
         .then()
         .statusCode(200);
     var musicB = Data.givenAMusic();
@@ -172,7 +193,8 @@ class PlaylistControllerTest {
         .when()
         .contentType(APPLICATION_JSON)
         .body(Json.toString(musicB))
-        .post(MUSIC_WITH_EDITOR)
+        .queryParam(EDITOR, EDITOR_81)
+        .post(V1_MUSIC)
         .then()
         .statusCode(200);
     var musicAWithOrderA = OrderedMusicRequest.builder().musicId(MUSIC_ID_A).order(1).build();
@@ -182,7 +204,9 @@ class PlaylistControllerTest {
         .when()
         .contentType(APPLICATION_JSON)
         .body(Json.toString(List.of(musicAWithOrderA, musicBWithOrderB)))
-        .put(PLAYLIST + "order/" + UNIQUE_ID + EDITOR)
+        .queryParam(EDITOR, EDITOR_81)
+        .pathParam(ID, UNIQUE_ID)
+        .put(V1_PLAYLIST + "order/{id}")
         .then()
         .statusCode(200)
         .body(RESULT, equalTo(200));
@@ -190,10 +214,10 @@ class PlaylistControllerTest {
     given()
         .when()
         .contentType(APPLICATION_JSON)
-        .get(PLAYLIST + UNIQUE_ID + EDITOR)
+        .queryParam(EDITOR, EDITOR_81)
+        .pathParam(ID, UNIQUE_ID)
+        .get(V1_PLAYLIST + "{id}")
         .then()
-        .log()
-        .all()
         .statusCode(200)
         .body(MUSICS_ID, hasItems(MUSIC_ID_A, MUSIC_ID_B))
         .body("data.musics.order", hasItems(1, 2));
@@ -203,7 +227,9 @@ class PlaylistControllerTest {
         .when()
         .contentType(APPLICATION_JSON)
         .body(Json.toString(musicIDList))
-        .delete(PLAYLIST + "update/" + UNIQUE_ID + EDITOR)
+        .queryParam(EDITOR, EDITOR_81)
+        .pathParam(ID, UNIQUE_ID)
+        .delete(V1_PLAYLIST + "update/{id}")
         .then()
         .statusCode(200)
         .body("result", equalTo(200));
@@ -211,7 +237,9 @@ class PlaylistControllerTest {
     given()
         .when()
         .contentType(APPLICATION_JSON)
-        .get(PLAYLIST + UNIQUE_ID + EDITOR)
+        .queryParam(EDITOR, EDITOR_81)
+        .pathParam(ID, UNIQUE_ID)
+        .get(V1_PLAYLIST + "{id}")
         .then()
         .statusCode(200)
         .body(MUSICS_ID, not(hasItems(MUSIC_ID_A, MUSIC_ID_B)));
@@ -227,13 +255,17 @@ class PlaylistControllerTest {
         .when()
         .contentType(APPLICATION_JSON)
         .body(Json.toString(requestJson))
-        .put(PLAYLIST + UNIQUE_ID + EDITOR)
+        .queryParam(EDITOR, EDITOR_81)
+        .pathParam(ID, UNIQUE_ID)
+        .put(V1_PLAYLIST + "{id}")
         .then()
         .statusCode(200);
     // check the playlist title
     given()
         .when()
-        .get(PLAYLIST + UNIQUE_ID + EDITOR)
+        .queryParam(EDITOR, EDITOR_81)
+        .pathParam(ID, UNIQUE_ID)
+        .get(V1_PLAYLIST + "{id}")
         .then()
         .statusCode(200)
         .body("data.title", equalTo("aaa"));
@@ -241,14 +273,18 @@ class PlaylistControllerTest {
     given()
         .when()
         .contentType(APPLICATION_JSON)
-        .delete(PLAYLIST + UNIQUE_ID + EDITOR)
+        .queryParam(EDITOR, EDITOR_81)
+        .pathParam(ID, UNIQUE_ID)
+        .delete(V1_PLAYLIST + "{id}")
         .then()
         .statusCode(200);
     // check playlist
     given()
         .header("X-AUTH-KEY", "wrong-key")
         .when()
-        .get(PLAYLIST + UNIQUE_ID + EDITOR)
+        .queryParam(EDITOR, EDITOR_81)
+        .pathParam(ID, UNIQUE_ID)
+        .get(V1_PLAYLIST + "{id}")
         .then()
         .statusCode(200)
         .body("result", equalTo(404));

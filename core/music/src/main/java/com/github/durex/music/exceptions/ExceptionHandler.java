@@ -8,23 +8,22 @@ import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
 @Provider
-@SuppressWarnings("rawtypes")
 public class ExceptionHandler implements ExceptionMapper<Exception> {
 
   @Override
   public Response toResponse(Exception exception) {
     if (exception instanceof NotFoundException) {
       return Response.status(Response.Status.OK)
-          .entity(new RespData(404, exception.getMessage(), ""))
+          .entity(RespData.builder().result(404).msg(exception.getMessage()).data(null).build())
           .build();
     }
     if (exception instanceof IOException) {
       return Response.status(Response.Status.OK)
-          .entity(new RespData(400, exception.getMessage(), ""))
+          .entity(RespData.builder().result(400).msg(exception.getMessage()).data(null).build())
           .build();
     }
     return Response.status(Response.Status.OK)
-        .entity(new RespData(500, "Unknown Error", ""))
+        .entity(RespData.builder().result(500).msg(exception.getMessage()).data(null).build())
         .build();
   }
 }

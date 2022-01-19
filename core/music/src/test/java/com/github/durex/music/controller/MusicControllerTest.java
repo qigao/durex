@@ -28,7 +28,6 @@ import org.junit.jupiter.api.TestMethodOrder;
 @QuarkusTestResource(value = MockedMysql.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class MusicControllerTest {
-  public static final String EDITORA = "?editor=d1e5nqreqo";
   public static final String V1_MUSIC = "/v1/music/";
   public static final String SCHUBERT = "Schubert";
   public static final String DATA_ARTIST = "data.artist";
@@ -40,6 +39,9 @@ class MusicControllerTest {
   public static final String DATA_ID = "data.id";
   public static final String DATA_VOICE_NAME = "data.voiceName";
   public static final String MSG = "msg";
+  public static final String EDITOR = "editor";
+  public static final String ID = "id";
+  public static final String EDITOR_ID2 = "1231dfasdf234";
   static MockedMysql mysql = new MockedMysql();
   @Inject MusicService musicService;
 
@@ -67,7 +69,9 @@ class MusicControllerTest {
 
     given()
         .when()
-        .get(V1_MUSIC + "1" + EDITORA)
+        .queryParam(EDITOR, EDITOR_ID)
+        .pathParam(ID, "1")
+        .get(V1_MUSIC + "{id}")
         .then()
         .body(RESPONSE_RESULT, Matchers.equalTo(200))
         .body(MSG, Matchers.equalTo(SUCCESS))
@@ -90,7 +94,9 @@ class MusicControllerTest {
   void getMusicByEditorAndDeviceReturn200() {
     given()
         .when()
-        .get(V1_MUSIC + "1" + EDITORA)
+        .queryParam(EDITOR, EDITOR_ID)
+        .pathParam(ID, "1")
+        .get(V1_MUSIC + "{id}")
         .then()
         .body(RESPONSE_RESULT, Matchers.equalTo(200))
         .body(MSG, Matchers.equalTo(SUCCESS))
@@ -122,7 +128,13 @@ class MusicControllerTest {
   @Test
   @Order(70)
   void getMusicByIDWithTitleEditorReturn200() {
-    given().when().get(V1_MUSIC + "?" + EDITORA + "&title=爱").then().statusCode(200);
+    given()
+        .when()
+        .queryParam(EDITOR, EDITOR_ID)
+        .queryParam("title", "爱移")
+        .get(V1_MUSIC)
+        .then()
+        .statusCode(200);
   }
 
   @Test
@@ -135,12 +147,16 @@ class MusicControllerTest {
         .when()
         .contentType(APPLICATION_JSON)
         .body(Json.toString(musicRequest))
-        .put(V1_MUSIC + "3" + EDITORA)
+        .queryParam(EDITOR, EDITOR_ID)
+        .pathParam(ID, "3")
+        .put(V1_MUSIC + "{id}")
         .then()
         .statusCode(200);
     given()
         .when()
-        .get(V1_MUSIC + "3" + EDITORA)
+        .queryParam(EDITOR, EDITOR_ID)
+        .pathParam(ID, "3")
+        .get(V1_MUSIC + "{id}")
         .then()
         .statusCode(200)
         .body(DATA_ARTIST, equalTo(SCHUBERT));
@@ -149,8 +165,20 @@ class MusicControllerTest {
   @Test
   @Order(90)
   void deleteMusicByIDReturn200ThenCheckByIDReturn404() {
-    given().when().delete(V1_MUSIC + "2" + EDITORA).then().statusCode(200);
-    given().when().get(V1_MUSIC + "2" + EDITORA).then().statusCode(200);
+    given()
+        .when()
+        .queryParam(EDITOR, EDITOR_ID)
+        .pathParam(ID, "3")
+        .delete(V1_MUSIC + "{id}")
+        .then()
+        .statusCode(200);
+    given()
+        .when()
+        .queryParam(EDITOR, EDITOR_ID)
+        .pathParam(ID, "3")
+        .get(V1_MUSIC + "{id}")
+        .then()
+        .statusCode(200);
   }
 
   @Test
@@ -162,25 +190,31 @@ class MusicControllerTest {
         .when()
         .contentType(APPLICATION_JSON)
         .body(Json.toString(musicRequest))
-        .post(V1_MUSIC + "?editor=1231dfasdf234")
+        .queryParam(EDITOR, EDITOR_ID2)
+        .post(V1_MUSIC)
         .then()
         .statusCode(200)
         .body(RESPONSE_RESULT, equalTo(200));
     given()
         .when()
-        .get(V1_MUSIC + "wtVNDNP3YfqCOH7wKXStcEc61U1?editor=1231dfasdf234")
+        .queryParam(EDITOR, EDITOR_ID2)
+        .pathParam(ID, MUSIC_ID)
+        .get(V1_MUSIC + "{id}")
         .then()
         .statusCode(200)
         .body(DATA_ARTIST, equalTo(SCHUBERT));
     given()
         .when()
-        .get(V1_MUSIC + "?editor=1231dfasdf234&deviceId=12345678")
+        .queryParam(EDITOR, EDITOR_ID2)
+        .queryParam("deviceId", "12345678")
+        .get(V1_MUSIC)
         .then()
         .statusCode(200)
         .body(DATA_ARTIST, Matchers.hasItems(SCHUBERT));
     given()
         .when()
-        .get(V1_MUSIC + "?editor=1231dfasdf234")
+        .queryParam(EDITOR, EDITOR_ID2)
+        .get(V1_MUSIC)
         .then()
         .statusCode(200)
         .body(DATA_ARTIST, hasItems(SCHUBERT));
