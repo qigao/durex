@@ -3,7 +3,6 @@ package com.github.durex.book.controller;
 import com.github.durex.book.model.Book;
 import com.github.durex.book.model.BookRequest;
 import com.github.durex.book.service.BookService;
-
 import java.util.List;
 import javax.validation.Valid;
 import org.springframework.http.HttpHeaders;

@@ -1,11 +1,10 @@
 package com.github.durex.uuid;
 
-import static com.github.durex.uuid.UniqID.getId;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import com.github.f4b6a3.ulid.Ulid;
 import com.github.durex.utils.IDType;
+import com.github.f4b6a3.ulid.Ulid;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;

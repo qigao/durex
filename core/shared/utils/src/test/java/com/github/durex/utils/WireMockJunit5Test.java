@@ -6,9 +6,9 @@ import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.github.durex.model.User;
 import com.github.durex.pojo.MockUtils;
 import com.github.tomakehurst.wiremock.WireMockServer;
-import com.github.durex.model.User;
 import java.io.IOException;
 import java.util.List;
 import org.junit.jupiter.api.AfterEach;

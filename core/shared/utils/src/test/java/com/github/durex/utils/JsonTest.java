@@ -13,8 +13,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.github.durex.model.Text;
 import com.github.durex.model.Div;
+import com.github.durex.model.Text;
 import com.github.durex.model.User;
 import com.github.durex.model.WeekDay;
 import java.io.ByteArrayOutputStream;
