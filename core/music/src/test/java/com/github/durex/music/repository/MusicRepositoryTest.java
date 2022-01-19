@@ -115,7 +115,7 @@ class MusicRepositoryTest {
     var musicJpa = EntityMapper.musicJPARequestToEntity(music, EDITOR);
     for (int i = 0; i < 10; i++) {
       musicJpa.setId(String.valueOf(i));
-      musicJpa.setDevice(i +"device");
+      musicJpa.setDevice(i + "device");
       musicRepository.createMusic(musicJpa);
     }
     var musicsAll = musicRepository.findAllMusics();
