@@ -4,12 +4,12 @@ on:
     branches:
       - master
     paths:
-      - 'quarkus/starter/**'
+      - 'core/music/**'
       - '.github/workflows/quarkus-starter.yml'
   pull_request:
     types: [ opened,reopened, synchronize ]
     paths:
-      - 'quarkus/starter/**'
+      - 'core/music/**'
       - '.github/workflows/quarkus-starter.yml'
 
 jobs:

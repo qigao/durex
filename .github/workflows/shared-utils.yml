@@ -4,12 +4,12 @@ on:
     branches:
       - master
     paths:
-      - 'shared/utils/**'
+      - 'core/shared/utils/**'
       - '.github/workflows/shared-utils.yml'
   pull_request:
     types: [ opened,reopened, synchronize ]
     paths:
-      - 'shared/utils/**'
+      - 'core/shared/utils/**'
       - '.github/workflows/shared-utils.yml'
 
 jobs:

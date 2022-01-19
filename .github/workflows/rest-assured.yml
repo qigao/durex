@@ -4,12 +4,12 @@ on:
     branches:
       - master
     paths:
-      - 'springboot/rest-assured/**'
+      - 'core/springboot/rest-assured/**'
       - '.github/workflows/rest-assured.yml'
   pull_request:
     types: [ opened,reopened, synchronize ]
     paths:
-      - 'springboot/rest-assured/**'
+      - 'core/springboot/rest-assured/**'
       - '.github/workflows/rest-assured.yml'
 
 jobs:

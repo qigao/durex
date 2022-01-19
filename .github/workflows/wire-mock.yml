@@ -4,12 +4,12 @@ on:
     branches:
       - master
     paths:
-      - 'springboot/wire-mock/**'
+      - 'core/springboot/wire-mock/**'
       - '.github/workflows/wire-mock.yml'
   pull_request:
     types: [ opened,reopened, synchronize ]
     paths:
-      - 'springboot/wire-mock/**'
+      - 'core/springboot/wire-mock/**'
       - '.github/workflows/wire-mock.yml'
 
 jobs:
