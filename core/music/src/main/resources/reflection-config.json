@@ -1,0 +1,20 @@
+[
+	{
+		"name": "com.github.durex.uuid.UniqID",
+		"allDeclaredConstructors": true,
+		"allPublicConstructors": true,
+		"allDeclaredMethods": true,
+		"allPublicMethods": true,
+		"allDeclaredFields": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "com.github.durex.utils",
+		"allDeclaredConstructors": true,
+		"allPublicConstructors": true,
+		"allDeclaredMethods": true,
+		"allPublicMethods": true,
+		"allDeclaredFields": true,
+		"allPublicFields": true
+	}
+]

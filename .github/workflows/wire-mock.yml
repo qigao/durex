@@ -29,11 +29,11 @@ jobs:
         with:
           fetch-depth: 0
       - name: run gradle assemble
-        run: ./gradlew springboot:wire-mock:assemble
+        run: ./gradlew core:springboot:wire-mock:assemble
       - name: Execute Related Check tasks
-        run: ./gradlew springboot:wire-mock:check
+        run: ./gradlew core:springboot:wire-mock:check
       - name: Validate Code Coverage
-        run: ./gradlew springboot:wire-mock:jacocoTestCoverageVerification
+        run: ./gradlew core:springboot:wire-mock:jacocoTestCoverageVerification
       - uses: ./.github/workflows/templates/cache-action
       - name: Cache build result
         uses: actions/cache@v2
@@ -57,7 +57,7 @@ jobs:
       - id: pr_vars
         uses: ./.github/workflows/templates/env-action
       - name: Analyze with SonarCloud
-        run: ./gradlew springboot:wire-mock:sonarqube  -Dsonar.organization=power-durex-app ${{ steps.pr_vars.outputs.sonar_key }}
+        run: ./gradlew core:springboot:wire-mock:sonarqube  -Dsonar.organization=power-durex-app ${{ steps.pr_vars.outputs.sonar_key }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
@@ -76,5 +76,5 @@ jobs:
           path: springboot/wire-mock/build
           key:  ${{ runner.os }}-gradle-build-wire-mock-project-${{ github.run_id }}
       - name: run integration test
-        run: ./gradlew springboot:wire-mock:integrationTest
+        run: ./gradlew core:springboot:wire-mock:integrationTest
 

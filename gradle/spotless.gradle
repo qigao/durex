@@ -62,10 +62,4 @@ spotless {
         trimTrailingWhitespace()
         endWithNewline()
     }
-    task format {
-        doLast {
-            println 'format!'
-        }
-    }
-    tasks.format.dependsOn 'spotlessApply'
 }

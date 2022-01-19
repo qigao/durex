@@ -6,6 +6,6 @@ spotless = "5.15.0"
 
 # Gradle plugins config
 [plugins]
-editorconfig = {id = "org.ec4j.editorconfig", version.ref = "editorconfig"}
-sonarqube = {id = "org.sonarqube", version.ref = "sonar"}
-spotless = {id = "com.diffplug.spotless", version.ref = "spotless"}
+editorconfig = { id = "org.ec4j.editorconfig", version.ref = "editorconfig" }
+sonarqube = { id = "org.sonarqube", version.ref = "sonar" }
+spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }

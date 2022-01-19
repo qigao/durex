@@ -31,11 +31,11 @@ jobs:
         with:
           fetch-depth: 0
       - name: run gradle assemble
-        run: ./gradlew quarkus:starter:assemble
+        run: ./gradlew core:music:assemble
       - name: Execute Related Check tasks
-        run: ./gradlew quarkus:starter:check
+        run: ./gradlew core:music:check
       - name: Validate Code Coverage
-        run: ./gradlew quarkus:starter:jacocoTestCoverageVerification
+        run: ./gradlew core:music:jacocoTestCoverageVerification
       - uses: ./.github/workflows/templates/cache-action
       - name: Cache build result
         uses: actions/cache@v2
@@ -59,7 +59,7 @@ jobs:
       - id: pr_vars
         uses: ./.github/workflows/templates/env-action
       - name: Analyze with SonarCloud
-        run: ./gradlew quarkus:starter:sonarqube -Dsonar.organization=power-durex-app ${{ steps.pr_vars.outputs.sonar_key }}
+        run: ./gradlew core:music:sonarqube -Dsonar.organization=power-durex-app ${{ steps.pr_vars.outputs.sonar_key }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
@@ -78,4 +78,4 @@ jobs:
           path: quarkus/starter/build
           key:  ${{ runner.os }}-gradle-build-quarkus-starter-project-${{ github.run_id }}
       - name: run integration test
-        run: ./gradlew quarkus:starter:integrationTest
+        run: ./gradlew core:music:integrationTest

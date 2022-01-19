@@ -30,11 +30,11 @@ jobs:
         with:
           fetch-depth: 0
       - name: run gradle assemble
-        run: ./gradlew springboot:rest-assured:assemble
+        run: ./gradlew core:springboot:rest-assured:assemble
       - name: Execute Related Check tasks
-        run: ./gradlew springboot:rest-assured:check
+        run: ./gradlew core:springboot:rest-assured:check
       - name: Validate Code Coverage
-        run: ./gradlew springboot:rest-assured:jacocoTestCoverageVerification
+        run: ./gradlew core:springboot:rest-assured:jacocoTestCoverageVerification
       - uses: ./.github/workflows/templates/cache-action
       - name: Cache build result
         uses: actions/cache@v2
@@ -58,7 +58,7 @@ jobs:
       - id: pr_vars
         uses: ./.github/workflows/templates/env-action
       - name: Analyze with SonarCloud
-        run: ./gradlew springboot:rest-assured:sonarqube  -Dsonar.organization=power-durex-app ${{ steps.pr_vars.outputs.sonar_key }}
+        run: ./gradlew core:springboot:rest-assured:sonarqube  -Dsonar.organization=power-durex-app ${{ steps.pr_vars.outputs.sonar_key }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
@@ -77,5 +77,5 @@ jobs:
           path: springboot/rest-assured/build
           key:  ${{ runner.os }}-gradle-build-rest-assured-project-${{ github.run_id }}
       - name: run integration test
-        run: ./gradlew springboot:rest-assured:integrationTest
+        run: ./gradlew core:springboot:rest-assured:integrationTest
 

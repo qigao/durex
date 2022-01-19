@@ -1,8 +1,6 @@
 dependencies {
-    implementation libs.guava
     implementation libs.bundles.idCreator
     implementation libs.bundles.commons
     implementation libs.validation
-    implementation libs.slf4j
     implementation libs.unchecked
 }

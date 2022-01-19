@@ -1,0 +1,54 @@
+[
+	{
+		"id": "wtVNDNP3YfqCOH7wKXStcEc61U1",
+		"title": "Dream The Relaxation",
+		"artist": "Schubert",
+		"description": "soft kitty",
+		"musicType": 0,
+		"device": "abcd",
+		"playUrl": "http://49.232.95.123:8180/dream_the_relaxation/index.m3u8",
+		"duration": 200,
+		"coverUrl": "http://49.232.95.123:8180/icon/34e8aa702fcf1ecfa9f6093c63de77fa.jpeg"
+	},
+	{
+		"id": "wtVNDNP3YfqCOH7wKXStcEc61U2",
+		"title": "Cradle",
+		"artist": "Schubert",
+		"description": "soft kitty",
+		"musicType": 0,
+		"playUrl": "http://49.232.95.123:8180/schubert/index.m3u8",
+		"duration": 200,
+		"coverUrl": "http://49.232.95.123:8180/icon/d8131068bd9d67953539c50fcae81bfc.jpeg"
+	},
+	{
+		"id": "wtVNDNP3YfqCOH7wKXStcEc61U3",
+		"title": "Cello Music",
+		"artist": "Cello",
+		"description": "warm kitty",
+		"musicType": 0,
+		"playUrl": "http://49.232.95.123:8180/haydn_cello/index.m3u8",
+		"duration": 200,
+		"coverUrl": "http://49.232.95.123:8180/icon/d8131068bd9d67953539c50fcae81bfc.jpeg"
+	},
+	{
+		"id": "wtVNDNP3YfqCOH7wKXStcEc61U4",
+		"title": "Impact Moderato",
+		"artist": "From India",
+		"description": "pur pur pur",
+		"musicType": 0,
+		"playUrl": "http://49.232.95.123:8180/impact_moderato/index.m3u8",
+		"duration": 200,
+		"coverUrl": "http://49.232.95.123:8180/icon/d8131068bd9d67953539c50fcae81bfc.jpeg"
+	},
+	{
+		"id": "wtVNDNP3YfqCOH7wKXStcEc61U5",
+		"title": "The Water is Wide",
+		"artist": "The sky is blue",
+		"description": "kitty wantted",
+		"musicType": 0,
+		"playUrl": "http://49.232.95.123:8180/water_is_wide/index.m3u8",
+		"duration": 200,
+		"coverUrl": "http://49.232.95.123:8180/icon/d8131068bd9d67953539c50fcae81bfc.jpeg"
+	}
+]
+

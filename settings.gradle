@@ -1,4 +1,4 @@
-rootProject.name = 'Durex'
+rootProject.name = 'Durex Template Projects'
 
 apply from: "$rootDir/gradle/modules.gradle"
 
