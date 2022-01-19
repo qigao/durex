@@ -71,21 +71,21 @@ class MusicRepositoryTest {
   }
 
   @Test
-  @Order(110)
+  @Order(111)
   void testFindMusicByIdAndEditorReturnException() {
     assertThrows(
         NotFoundException.class, () -> musicRepository.findMusicsByIdAndEditor("123", EDITOR));
   }
 
   @Test
-  @Order(110)
+  @Order(112)
   void testFindMusicByIdAndEditorWhenEditorIsNull() {
     assertThrows(
         NotFoundException.class, () -> musicRepository.findMusicsByIdAndEditor("123", null));
   }
 
   @Test
-  @Order(110)
+  @Order(113)
   void testFindMusicByIdAndEditorWhenEditorIsEmpty() {
     assertThrows(NotFoundException.class, () -> musicRepository.findMusicsByIdAndEditor("123", ""));
   }
@@ -138,21 +138,21 @@ class MusicRepositoryTest {
   }
 
   @Test
-  @Order(145)
+  @Order(146)
   void testFindMusicByEditorAndDeviceWithPageWhenEditorIsEmpty() {
     var musics = musicRepository.findMusicByEditorAndDeviceWithPage("", DEVICE, 0, 5);
     assertEquals(0, musics.size());
   }
 
   @Test
-  @Order(145)
+  @Order(147)
   void testFindMusicByEditorAndDeviceWithPageWhenDeviceIsEmpty() {
     var musics = musicRepository.findMusicByEditorAndDeviceWithPage("", "", 0, 5);
     assertEquals(0, musics.size());
   }
 
   @Test
-  @Order(145)
+  @Order(148)
   void testFindMusicByEditorAndDeviceWithPageWhenDeviceIsNull() {
     var musics = musicRepository.findMusicByEditorAndDeviceWithPage("", null, 0, 5);
     assertEquals(0, musics.size());
@@ -173,14 +173,14 @@ class MusicRepositoryTest {
   }
 
   @Test
-  @Order(155)
+  @Order(153)
   void testFindMusicByTitleAndEditorAndTitleIsNull() {
     var musics = musicRepository.findMusicsByTitleAndEditorWithPage(null, EDITOR, 0, 5);
     assertEquals(0, musics.size());
   }
 
   @Test
-  @Order(155)
+  @Order(154)
   void testFindMusicByTitleAndEditorWhenEditorIsEmpty() {
     var musics = musicRepository.findMusicsByTitleAndEditorWithPage(null, "", 0, 5);
     assertEquals(0, musics.size());
@@ -239,7 +239,7 @@ class MusicRepositoryTest {
   }
 
   @Test
-  @Order(185)
+  @Order(183)
   void testFindMusicsByTitleAndDeviceWithNullDevice() {
     var musics = musicRepository.findMusicsByTitleAndDevice("Cra", null);
     assertEquals(1, musics.size());
@@ -260,7 +260,7 @@ class MusicRepositoryTest {
   }
 
   @Test
-  @Order(186)
+  @Order(187)
   void testFindMusicsByTitleAndDeviceWithNullDeviceAndTitleIsEmtpy() {
     var musics = musicRepository.findMusicsByTitleAndDevice("", null);
     assertEquals(0, musics.size());
@@ -281,7 +281,7 @@ class MusicRepositoryTest {
   }
 
   @Test
-  @Order(192)
+  @Order(193)
   void testFindMusicsByEditorWhenEditorIsEmpty() {
     var musics = musicRepository.findMusicsByEditor("", 0, 5);
     assertEquals(1, musics.size());
