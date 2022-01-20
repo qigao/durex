@@ -12,6 +12,8 @@ allprojects {
             println "Hi from $task.project.name"
         }
     }
+    group 'com.github.durex'
+    version '0.1.0'
     apply plugin: 'idea'
     project.buildDir = 'build'
 }
