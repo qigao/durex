@@ -23,7 +23,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-class ManualSetupIT extends BaseWireMock {
+class ManualSetupTest extends BaseWireMock {
 
   public static final String LENGTH = "$.length()";
   @Autowired private WebTestClient webTestClient;

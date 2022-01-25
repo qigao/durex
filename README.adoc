@@ -1,6 +1,6 @@
-= Cosmos
+= Durex
 
-a java template project for high code quality development
+a multi-module java template project for high code quality development
 
 == Environment Variables
 
@@ -10,8 +10,8 @@ a typical .env files looks like
 --
 # starting line comment out supported
 FOO=foo
-BAR="bar"
-BAZ='~/projects/sonar'
+BAR=bar
+BAZ=~/projects/sonar
 --
 
 '#' is allowed at the beginning of a line
@@ -26,12 +26,24 @@ copy .env.templates to .env at the root dir, update to whatever you need
 > source scripts/setEnv.sh
 --
 
-=== Build Native
+== Build
+
+=== Build For Native Image
+
+==== Build Native
 
 [source,bash]
 --
 gradle core:music:quarkusBuild  -Dquarkus.package.type=native -Dquarkus.native.container-build=true
 --
+
+==== Build Docker
+[source,bash]
+--
+docker build -f core/music/src/main/docker/Dockerfile.native -t core/music .
+--
+
+== Build for Java Image
 
 === Build UberJar
 
@@ -43,10 +55,10 @@ gradle core:music:quarkusBuild  -Dquarkus.package.type=uber-jar
 === Build Docker
 [source,bash]
 --
-docker build -f core/music/src/main/docker/Dockerfile.native -t core/music .
+docker build -f core/music/src/main/docker/Dockerfile.jvm -t core/music .
 --
 
-=== Run Docker
+== Run Docker
 
 [source,bash]
 --
