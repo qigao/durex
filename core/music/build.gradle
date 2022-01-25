@@ -25,6 +25,9 @@ jacocoTestReport {
         }))
     }
 }
+test {
+    systemProperty "java.util.logging.manager", "org.jboss.logmanager.LogManager"
+}
 
 dependencies {
     implementation project(":core:shared:utils")
