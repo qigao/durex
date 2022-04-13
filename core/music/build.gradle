@@ -33,5 +33,5 @@ dependencies {
     implementation project(":core:shared:utils")
 }
 
-apply from: "$rootDir/library/quarkus.gradle"
-apply from: "$rootDir/library/container.gradle"
+apply from: "$rootDir/gradle/library/quarkus.gradle"
+apply from: "$rootDir/gradle/library/container.gradle"

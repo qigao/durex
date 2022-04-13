@@ -1,6 +1,6 @@
 # versions for libraries
 [versions]
-quarkus = "2.6.2.Final"
+quarkus = "2.8.0.Final"
 # Libs config
 [libraries]
 quarkus-bom = { group = 'io.quarkus.platform', name = 'quarkus-bom', version.ref = 'quarkus' }

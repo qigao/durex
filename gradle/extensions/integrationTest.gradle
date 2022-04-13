@@ -1,5 +1,5 @@
 sourceSets {
-    integrationTest {
+    IT {
         java {
             compileClasspath += main.output + test.output
             runtimeClasspath += main.output + test.output
@@ -13,14 +13,14 @@ configurations {
     integrationTestRuntimeOnly.extendsFrom testRuntimeOnly
 }
 
-task integrationTest(type: Test) {
+task IT(type: Test) {
     description = 'Integration tests.'
     group = 'verification'
     useJUnitPlatform {
         excludeEngines 'junit-vintage'
     }
-    testClassesDirs = sourceSets.integrationTest.output.classesDirs
-    classpath = sourceSets.integrationTest.runtimeClasspath
+    testClassesDirs = sourceSets.IT.output.classesDirs
+    classpath = sourceSets.IT.runtimeClasspath
     maxParallelForks Runtime.runtime.availableProcessors()
 
     outputs.upToDateWhen { false }

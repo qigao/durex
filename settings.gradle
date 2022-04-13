@@ -1,24 +1,24 @@
 rootProject.name = 'Durex Template Projects'
 
-apply from: "$rootDir/gradle/modules.gradle"
+apply from: "$rootDir/gradle/extensions/modules.gradle"
 
 enableFeaturePreview("VERSION_CATALOGS")
 dependencyResolutionManagement {
     versionCatalogs {
         libs {
-            from(files("$rootDir/versions/libs.versions.toml"))
+            from(files("$rootDir/gradle/versions/libs.versions.toml"))
         }
         tlibs {
-            from(files("$rootDir/versions/test.versions.toml"))
+            from(files("$rootDir/gradle/versions/test.versions.toml"))
         }
         qlibs {
-            from(files("$rootDir/versions/quarkus.versions.toml"))
+            from(files("$rootDir/gradle/versions/quarkus.versions.toml"))
         }
         slibs {
-            from(files("$rootDir/versions/spring.versions.toml"))
+            from(files("$rootDir/gradle/versions/spring.versions.toml"))
         }
         glibs {
-            from(files("$rootDir/versions/gradle.versions.toml"))
+            from(files("$rootDir/gradle/versions/gradle.versions.toml"))
         }
     }
 }
