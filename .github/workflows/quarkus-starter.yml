@@ -63,19 +63,19 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-  IT:
-    name: Integration Tests
-    runs-on: ubuntu-latest
-    needs: check
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-      - uses: ./.github/workflows/templates/cache-action
-      - name: Cache build result
-        uses: actions/cache@v2
-        with:
-          path: quarkus/starter/build
-          key:  ${{ runner.os }}-gradle-build-quarkus-starter-project-${{ github.run_id }}
-      - name: run integration test
-        run: ./gradlew core:music:integrationTest
+#  IT:
+#    name: Integration Tests
+#    runs-on: ubuntu-latest
+#    needs: check
+#    steps:
+#      - uses: actions/checkout@v2
+#        with:
+#          fetch-depth: 0
+#      - uses: ./.github/workflows/templates/cache-action
+#      - name: Cache build result
+#        uses: actions/cache@v2
+#        with:
+#          path: quarkus/starter/build
+#          key:  ${{ runner.os }}-gradle-build-quarkus-starter-project-${{ github.run_id }}
+#      - name: run integration test
+#        run: ./gradlew core:music:integrationTest

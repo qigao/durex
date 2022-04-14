@@ -2,7 +2,7 @@
 [versions]
 junit = "5.8.2"
 equalsverifier = "3.7.2"
-wiremock = "2.31.0"
+wiremock = "2.33.1"
 rest-assured = "4.4.0"
 to-string-verifier = "1.4.8"
 h2 = "1.4.200"
