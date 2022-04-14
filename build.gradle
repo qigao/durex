@@ -1,7 +1,7 @@
 plugins {
-    alias libs.plugins.lombok
-    alias glibs.plugins.spotless
-    alias glibs.plugins.editorconfig
+    alias vLibs.plugins.lombok
+    alias gLibs.plugins.spotless
+    alias gLibs.plugins.editorconfig
 }
 
 allprojects {
@@ -23,5 +23,4 @@ subprojects {
     apply plugin: 'org.ec4j.editorconfig'
     apply from: "$rootDir/gradle/extensions/repos.gradle"
     apply from: "$rootDir/gradle/extensions/test.gradle"
-    apply from: "$rootDir/gradle/extensions/integrationTest.gradle"
 }

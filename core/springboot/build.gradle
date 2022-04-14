@@ -1,6 +1,6 @@
 plugins {
-    alias slibs.plugins.springboot
-    alias slibs.plugins.spring.bom
+    alias sLibs.plugins.springboot
+    alias sLibs.plugins.spring.bom
 }
 subprojects {
     apply plugin: 'org.springframework.boot'

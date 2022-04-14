@@ -1,6 +1,6 @@
 dependencies {
-    implementation libs.bundles.idCreator
-    implementation libs.bundles.commons
-    implementation libs.validation
-    implementation libs.unchecked
+    implementation vLibs.bundles.idCreator
+    implementation vLibs.bundles.commons
+    implementation vLibs.validation
+    implementation vLibs.unchecked
 }
