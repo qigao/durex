@@ -1,5 +1,5 @@
 plugins {
-    alias glibs.plugins.sonarqube
+    alias gLibs.plugins.sonarqube
 }
 apply from: "dependencies.gradle"
 apply plugin: 'org.sonarqube'

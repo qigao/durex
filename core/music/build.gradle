@@ -1,6 +1,6 @@
 plugins {
-    alias glibs.plugins.sonarqube
-    alias qlibs.plugins.quarkus
+    alias gLibs.plugins.sonarqube
+    alias qLibs.plugins.quarkus
 }
 
 apply plugin: 'org.sonarqube'

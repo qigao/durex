@@ -1,10 +1,11 @@
 # versions for libraries
 [versions]
 quarkus = "2.8.0.Final"
+logback = '0.11.0'
 # Libs config
 [libraries]
 quarkus-bom = { group = 'io.quarkus.platform', name = 'quarkus-bom', version.ref = 'quarkus' }
-logback = { group = 'io.quarkiverse.logging.logback', name = 'quarkus-logging-logback', version = '0.9.0' }
+logback = { group = 'io.quarkiverse.logging.logback', name = 'quarkus-logging-logback', version.ref = 'logback' }
 # Gradle plugins config
 [plugins]
 quarkus = { id = 'io.quarkus', version.ref = 'quarkus' }
