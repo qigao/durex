@@ -10,6 +10,6 @@
 	"voiceName": "Mum's voice",
 	"device": "12345678",
 	"editor": "ABCD001",
-	"coverUrl": "http://49.232.95.123:8180/icon/34e8aa702fcf1ecfa9f6093c63de77fa.jpeg",
+	"coverUrl": "http://localhost:8080/icon/34e8aa702fcf1ecfa9f6093c63de77fa.jpeg",
 	"playUrl": "http://localhost/music/demo.mp3"
 }

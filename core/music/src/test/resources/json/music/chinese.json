@@ -6,11 +6,11 @@
 		"description": "soft kitty",
 		"musicType": 0,
 		"device": "a001",
-		"playUrl": "http://49.232.95.123:8180/dream_the_relaxation/index.m3u8",
+		"playUrl": "http://localhost:8080/dream_the_relaxation/index.m3u8",
 		"duration": 200,
 		"createTime": "2019-01-01 00:00:00",
 		"updateTime": "2019-01-01 00:00:00",
-		"coverUrl": "http://49.232.95.123:8180/icon/34e8aa702fcf1ecfa9f6093c63de77fa.jpeg"
+		"coverUrl": "http://localhost:8080/icon/34e8aa702fcf1ecfa9f6093c63de77fa.jpeg"
 	},
 	{
 		"id": "2",
@@ -19,11 +19,11 @@
 		"description": "soft kitty",
 		"musicType": 0,
 		"device": "a001",
-		"playUrl": "http://49.232.95.123:8180/dream_the_relaxation/index.m3u8",
+		"playUrl": "http://localhost:8080/dream_the_relaxation/index.m3u8",
 		"duration": 200,
 		"createTime": "2019-01-01 00:00:00",
 		"updateTime": "2019-01-01 00:00:00",
-		"coverUrl": "http://49.232.95.123:8180/icon/34e8aa702fcf1ecfa9f6093c63de77fa.jpeg"
+		"coverUrl": "http://localhost:8080/icon/34e8aa702fcf1ecfa9f6093c63de77fa.jpeg"
 	},
 	{
 		"id": "3",
@@ -33,10 +33,10 @@
 		"description": "soft kitty",
 		"musicType": 0,
 		"device": "a001",
-		"playUrl": "http://49.232.95.123:8180/dream_the_relaxation/index.m3u8",
+		"playUrl": "http://localhost:8080/dream_the_relaxation/index.m3u8",
 		"duration": 200,
 		"createTime": "2019-01-01 00:00:00",
 		"updateTime": "2019-01-01 00:00:00",
-		"coverUrl": "http://49.232.95.123:8180/icon/34e8aa702fcf1ecfa9f6093c63de77fa.jpeg"
+		"coverUrl": "http://localhost:8080/icon/34e8aa702fcf1ecfa9f6093c63de77fa.jpeg"
 	}
 ]

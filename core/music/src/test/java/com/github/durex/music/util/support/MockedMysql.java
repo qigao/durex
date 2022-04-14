@@ -7,13 +7,14 @@ import org.testcontainers.containers.MySQLContainer;
 
 @SuppressWarnings("rawtypes")
 public class MockedMysql implements QuarkusTestResourceLifecycleManager {
+  public static final String MYSQL_8 = "mysql:8.0.19";
   private MySQLContainer mySQLContainer;
 
   @Override
   public Map<String, String> start() {
     mySQLContainer =
         (MySQLContainer)
-            new MySQLContainer("mysql:8.0.19")
+            new MySQLContainer(MYSQL_8)
                 .withDatabaseName("music")
                 .withUsername("root")
                 .withPassword("secret")
