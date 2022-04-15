@@ -16,9 +16,9 @@
 				"musicType": 0,
 				"sampleRate": 44,
 				"channels": 2,
-				"playUrl": "http://49.232.95.123:8180/dream_the_relaxation/index.m3u8",
+				"playUrl": "http://localhost:8080/dream_the_relaxation/index.m3u8",
 				"duration": 200,
-				"coverUrl": "http://49.232.95.123:8180/icon/34e8aa702fcf1ecfa9f6093c63de77fa.jpeg"
+				"coverUrl": "http://localhost:8080/icon/34e8aa702fcf1ecfa9f6093c63de77fa.jpeg"
 			},
 			{
 				"id": "wtVNDNP3YfqCOH7wKXStcEc61U2",
@@ -28,9 +28,9 @@
 				"musicType": 0,
 				"sampleRate": 44,
 				"channels": 2,
-				"playUrl": "http://49.232.95.123:8180/schubert/index.m3u8",
+				"playUrl": "http://localhost:8080/schubert/index.m3u8",
 				"duration": 200,
-				"coverUrl": "http://49.232.95.123:8180/icon/d8131068bd9d67953539c50fcae81bfc.jpeg"
+				"coverUrl": "http://localhost:8080/icon/d8131068bd9d67953539c50fcae81bfc.jpeg"
 			},
 			{
 				"id": "wtVNDNP3YfqCOH7wKXStcEc61U3",
@@ -40,9 +40,9 @@
 				"musicType": 0,
 				"sampleRate": 44,
 				"channels": 2,
-				"playUrl": "http://49.232.95.123:8180/haydn_cello/index.m3u8",
+				"playUrl": "http://localhost:8080/haydn_cello/index.m3u8",
 				"duration": 200,
-				"coverUrl": "http://49.232.95.123:8180/icon/d8131068bd9d67953539c50fcae81bfc.jpeg"
+				"coverUrl": "http://localhost:8080/icon/d8131068bd9d67953539c50fcae81bfc.jpeg"
 			},
 			{
 				"id": "wtVNDNP3YfqCOH7wKXStcEc61U4",
@@ -52,9 +52,9 @@
 				"musicType": 0,
 				"sampleRate": 44,
 				"channels": 2,
-				"playUrl": "http://49.232.95.123:8180/impact_moderato/index.m3u8",
+				"playUrl": "http://localhost:8080/impact_moderato/index.m3u8",
 				"duration": 200,
-				"coverUrl": "http://49.232.95.123:8180/icon/d8131068bd9d67953539c50fcae81bfc.jpeg"
+				"coverUrl": "http://localhost:8080/icon/d8131068bd9d67953539c50fcae81bfc.jpeg"
 			},
 			{
 				"id": "wtVNDNP3YfqCOH7wKXStcEc61U5",
@@ -64,9 +64,9 @@
 				"musicType": 0,
 				"sampleRate": 44,
 				"channels": 2,
-				"playUrl": "http://49.232.95.123:8180/water_is_wide/index.m3u8",
+				"playUrl": "http://localhost:8080/water_is_wide/index.m3u8",
 				"duration": 200,
-				"coverUrl": "http://49.232.95.123:8180/icon/d8131068bd9d67953539c50fcae81bfc.jpeg"
+				"coverUrl": "http://localhost:8080/icon/d8131068bd9d67953539c50fcae81bfc.jpeg"
 			}
 		]
 	},
@@ -86,9 +86,9 @@
 				"musicType": 0,
 				"sampleRate": 44,
 				"channels": 2,
-				"playUrl": "http://49.232.95.123:8180/dream_the_relaxation/index.m3u8",
+				"playUrl": "http://localhost:8080/dream_the_relaxation/index.m3u8",
 				"duration": 200,
-				"coverUrl": "http://49.232.95.123:8180/icon/34e8aa702fcf1ecfa9f6093c63de77fa.jpeg"
+				"coverUrl": "http://localhost:8080/icon/34e8aa702fcf1ecfa9f6093c63de77fa.jpeg"
 			},
 			{
 				"id": "wtVNDNP3YfqCOH7wKXStcEc61U2",
@@ -98,9 +98,9 @@
 				"musicType": 0,
 				"sampleRate": 44,
 				"channels": 2,
-				"playUrl": "http://49.232.95.123:8180/schubert/index.m3u8",
+				"playUrl": "http://localhost:8080/schubert/index.m3u8",
 				"duration": 200,
-				"coverUrl": "http://49.232.95.123:8180/icon/d8131068bd9d67953539c50fcae81bfc.jpeg"
+				"coverUrl": "http://localhost:8080/icon/d8131068bd9d67953539c50fcae81bfc.jpeg"
 			},
 			{
 				"id": "wtVNDNP3YfqCOH7wKXStcEc61U3",
@@ -110,9 +110,9 @@
 				"musicType": 0,
 				"sampleRate": 44,
 				"channels": 2,
-				"playUrl": "http://49.232.95.123:8180/haydn_cello/index.m3u8",
+				"playUrl": "http://localhost:8080/haydn_cello/index.m3u8",
 				"duration": 200,
-				"coverUrl": "http://49.232.95.123:8180/icon/d8131068bd9d67953539c50fcae81bfc.jpeg"
+				"coverUrl": "http://localhost:8080/icon/d8131068bd9d67953539c50fcae81bfc.jpeg"
 			},
 			{
 				"id": "wtVNDNP3YfqCOH7wKXStcEc61U4",
@@ -122,9 +122,9 @@
 				"musicType": 0,
 				"sampleRate": 44,
 				"channels": 2,
-				"playUrl": "http://49.232.95.123:8180/impact_moderato/index.m3u8",
+				"playUrl": "http://localhost:8080/impact_moderato/index.m3u8",
 				"duration": 200,
-				"coverUrl": "http://49.232.95.123:8180/icon/d8131068bd9d67953539c50fcae81bfc.jpeg"
+				"coverUrl": "http://localhost:8080/icon/d8131068bd9d67953539c50fcae81bfc.jpeg"
 			},
 			{
 				"id": "wtVNDNP3YfqCOH7wKXStcEc61U5",
@@ -134,9 +134,9 @@
 				"musicType": 0,
 				"sampleRate": 44,
 				"channels": 2,
-				"playUrl": "http://49.232.95.123:8180/water_is_wide/index.m3u8",
+				"playUrl": "http://localhost:8080/water_is_wide/index.m3u8",
 				"duration": 200,
-				"coverUrl": "http://49.232.95.123:8180/icon/d8131068bd9d67953539c50fcae81bfc.jpeg"
+				"coverUrl": "http://localhost:8080/icon/d8131068bd9d67953539c50fcae81bfc.jpeg"
 			}
 		]
 	}

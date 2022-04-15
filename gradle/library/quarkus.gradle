@@ -13,7 +13,7 @@ dependencies {
     implementation 'io.quarkus:quarkus-redis-client'
     implementation 'io.quarkus:quarkus-reactive-mysql-client'
 
-    implementation qLibs.logback
+    testImplementation 'net.java.dev.jna:jna:5.11.0'
     testImplementation 'io.rest-assured:rest-assured'
     testImplementation 'io.quarkus:quarkus-junit5'
     testImplementation 'io.quarkus:quarkus-junit5-mockito'

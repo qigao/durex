@@ -9,7 +9,7 @@ sonarqube {
     properties {
         property "sonar.host.url", "https://sonarcloud.io"
         property "sonar.projectBaseDir", "$projectDir"
-        property "sonar.projectKey", "com.xiavan.aihome:$project.name"
+        property "sonar.projectKey", "com.github.durex:$project.name"
         property "sonar.projectName", "Quarkus Starter Project"
     }
 }
@@ -24,9 +24,6 @@ jacocoTestReport {
             )
         }))
     }
-}
-test {
-    systemProperty "java.util.logging.manager", "org.jboss.logmanager.LogManager"
 }
 
 dependencies {

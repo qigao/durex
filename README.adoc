@@ -18,49 +18,9 @@ BAZ=~/projects/sonar
 
 === SetEnv
 
-copy .env.templates to .env at the root dir, update to whatever you need
+copy .env.templates to .env at the module dir, update to whatever you need
 
 [source,bash]
---
 > chmod +x scripts/setEnv.sh
 > source scripts/setEnv.sh
---
-
-== Build
-
-=== Build For Native Image
-
-==== Build Native
-
-[source,bash]
---
-gradle core:music:quarkusBuild  -Dquarkus.package.type=native -Dquarkus.native.container-build=true
---
-
-==== Build Docker
-[source,bash]
---
-docker build -f core/music/src/main/docker/Dockerfile.native -t core/music .
---
-
-== Build for Java Image
-
-=== Build UberJar
-
-[source,bash]
---
-gradle core:music:quarkusBuild  -Dquarkus.package.type=uber-jar
---
-
-=== Build Docker
-[source,bash]
---
-docker build -f core/music/src/main/docker/Dockerfile.jvm -t core/music .
---
-
-== Run Docker
-
-[source,bash]
---
- docker-compose  -f core/music/src/main/docker/docker-compose.yml up
 --
