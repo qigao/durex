@@ -2,8 +2,6 @@ plugins {
     alias gLibs.plugins.sonarqube
 }
 dependencies {
-    testImplementation tLibs.wiremock
-    testImplementation tLibs.rest.assured
     testImplementation project(":core:shared:mock")
 }
 apply plugin: 'org.sonarqube'

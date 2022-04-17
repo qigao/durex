@@ -1,12 +1,14 @@
 apply plugin: 'java-library'
 
-compileJava{
+compileJava {
     sourceCompatibility = 11
     targetCompatibility = 11
 }
 tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8'
     options.compilerArgs += ['-Xdoclint:none', '-Xlint:none', '-nowarn']
+    options.fork = true
+    options.incremental = true
 }
 tasks.withType(Javadoc).configureEach {
     options.encoding = 'UTF-8'

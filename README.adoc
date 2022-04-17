@@ -21,6 +21,5 @@ BAZ=~/projects/sonar
 copy .env.templates to .env at the module dir, update to whatever you need
 
 [source,bash]
-> chmod +x scripts/setEnv.sh
-> source scripts/setEnv.sh
+>  export $(cat .env | xargs)
 --

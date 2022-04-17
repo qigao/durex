@@ -2,9 +2,11 @@ dependencies {
     testImplementation enforcedPlatform(tLibs.junit5.bom.get())
     testImplementation 'org.junit.jupiter:junit-jupiter-api'
     testImplementation 'org.junit.jupiter:junit-jupiter-params'
-    testImplementation tLibs.hamcrest
-    testImplementation tLibs.hamcrest.date
+    testImplementation tLibs.bundles.check
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
     testImplementation 'org.junit.platform:junit-platform-launcher:1.8.2'
     compileOnly tLibs.api.guardian
+    testImplementation tLibs.bundles.unit.test
+    testImplementation tLibs.bundles.cucumber
+    testImplementation tLibs.faker
 }

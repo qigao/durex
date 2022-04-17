@@ -1,0 +1,50 @@
+dependencies {
+    jooqGenerator project(":core:shared:jooq")
+}
+apply from: "$rootDir/gradle/library/sqldb.gradle"
+
+jooq {
+    version = dbLibs.versions.jooq
+    configurations {
+        main {
+            generateSchemaSourceOnCompilation = false
+            generationTool {
+                generator {
+                    database {
+                        name = 'org.jooq.meta.extensions.ddl.DDLDatabase'
+                        properties {
+                            property {
+                                key = 'scripts'
+                                value = 'database/schema/mysql.sql'
+                            }
+                            property {
+                                key = 'sort'
+                                value = 'semantic'
+                            }
+                            property {
+                                key = 'unqualifiedSchema'
+                                value = 'none'
+                            }
+                            property {
+                                key = 'defaultNameCase'
+                                value = 'as_is'
+                            }
+                        }
+                    }
+                    strategy {
+                        name = "com.github.durex.jooq.PrefixStrategy"
+                    }
+                    generate {
+                        records = true
+                        immutablePojos = true
+                        fluentSetters = true
+                    }
+                    target {
+                        packageName = "com.github.durex.api"
+                        directory = "$projectDir/src/gen/java"
+                    }
+                }
+            }
+        }
+    }
+}

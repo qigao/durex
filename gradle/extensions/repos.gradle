@@ -1,11 +1,4 @@
 repositories{
-    maven {
-/*            credentials {
-               username = "${repoUser}"
-               password = "${repoPass}"
-           } */
-        url "https://maven.aliyun.com/repository/public"
-    }
     gradlePluginPortal()
     google()
     maven{

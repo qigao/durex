@@ -7,4 +7,6 @@ test {
         events "passed", "skipped", "failed"
         exceptionFormat 'full'
     }
+    maxHeapSize = '1G'
+    maxParallelForks = Runtime.runtime.availableProcessors().intdiv(2) ?: 1
 }

@@ -13,8 +13,7 @@ import org.eclipse.microprofile.openapi.annotations.tags.Tag;
     },
     info =
         @Info(
-            title = "XiaVan Music API",
+            title = "Demo Music API",
             version = "0.0.1",
-            contact =
-                @Contact(name = "Xia Van", url = "http://mummyway.com", email = "xxx@xiavann.com")))
+            contact = @Contact(name = "Durex Music", url = "https://github.com/qigao/durex")))
 public class SwaggerConfig extends Application {}

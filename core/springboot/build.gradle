@@ -7,4 +7,5 @@ subprojects {
     apply plugin: 'io.spring.dependency-management'
     apply plugin: 'io.freefair.lombok'
     apply from: "$rootDir/gradle/library/spring.gradle"
+    apply from: "$rootDir/gradle/extensions/intTest.gradle"
 }

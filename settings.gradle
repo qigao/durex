@@ -19,5 +19,11 @@ dependencyResolutionManagement {
         gLibs {
             from(files("$rootDir/gradle/versions/gradle.versions.toml"))
         }
+        dbLibs {
+            from(files("$rootDir/gradle/versions/sql.versions.toml"))
+        }
+        jLibs {
+            from(files("$rootDir/gradle/versions/jakarta.versions.toml"))
+        }
     }
 }

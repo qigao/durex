@@ -1,0 +1,9 @@
+# versions for libraries
+[versions]
+jakarta = "9.1.0"
+
+
+# Libs config
+[libraries]
+jakarta-bom = { group = 'jakarta.platform', name = 'jakarta.jakartaee-bom', version.ref = 'jakarta' }
+

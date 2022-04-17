@@ -1,8 +1,5 @@
-// MySQL
-
-// PostgreSQL
-
-// Oracle
-
-// MSSQL
-
+dependencies {
+    implementation dbLibs.bundles.jooq
+    implementation dbLibs.postgre
+    implementation dbLibs.mysql
+}

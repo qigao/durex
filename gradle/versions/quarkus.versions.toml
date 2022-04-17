@@ -1,11 +1,13 @@
 # versions for libraries
 [versions]
-quarkus = "2.8.0.Final"
-
+quarkus = "2.8.1.Final"
+jandex = "0.12.0"
 # Libs config
 [libraries]
-quarkus-bom = { group = 'io.quarkus.platform', name = 'quarkus-bom', version.ref = 'quarkus' }
+quarkus-bom = { group = 'io.quarkus', name = 'quarkus-bom', version.ref = 'quarkus' }
+logback = { group = 'io.quarkiverse.logging.logback', name = 'quarkus-logging-logback', version = '0.11.0' }
 
 # Gradle plugins config
 [plugins]
 quarkus = { id = 'io.quarkus', version.ref = 'quarkus' }
+jandex = { id = 'org.kordamp.gradle.jandex', version.ref = 'jandex' }
