@@ -7,7 +7,7 @@ jooq {
     version = dbLibs.versions.jooq
     configurations {
         main {
-            //            generateSchemaSourceOnCompilation = false
+            generateSchemaSourceOnCompilation = false
             generationTool {
                 generator {
                     database {
