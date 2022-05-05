@@ -36,3 +36,8 @@ jobs:
         run: ./gradlew core:music:check
       - name: Validate Code Coverage
         run: ./gradlew core:music:jacocoTestCoverageVerification
+      - name: Cache build result
+        uses: actions/cache@v2
+        with:
+          path: core/music
+          key:  ${{ runner.os }}-gradle-build-quarkus-project-${{ github.run_id }}
