@@ -42,6 +42,7 @@ class MusicServiceTest {
     String music_id = UniqID.getId();
     assertThrows(ApiException.class, () -> service.getMusicById(music_id));
   }
+
   @Test
   void testGetMusicsByTitle() {
     Mockito.when(repository.findByTitle(anyString())).thenReturn(DemoMusicData.givenSomeMusics(5));
@@ -67,8 +68,10 @@ class MusicServiceTest {
   void testGetMusicsByTitleWithWildCard_NotFound() {
     Mockito.when(repository.findByTitle(anyString(), any(WildCardType.class)))
         .thenReturn(List.of());
-    assertThrows(ApiException.class, () -> service.getMusicsByTitle("title", WildCardType.CONTAINS));
+    assertThrows(
+        ApiException.class, () -> service.getMusicsByTitle("title", WildCardType.CONTAINS));
   }
+
   @Test
   void testCreateMusic() {
     Mockito.when(repository.save(any(Music.class))).thenReturn(1);
