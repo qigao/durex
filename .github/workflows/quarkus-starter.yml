@@ -18,23 +18,15 @@ env:
   DATABASE_NAME: music
   DATABASE_HOST: localhost
 jobs:
-  setup:
-    name: Setup Java Project
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-      - uses: ./.github/workflows/templates/config-action
-
   check:
     name: Check Project
     runs-on: ubuntu-latest
-    needs: setup
     steps:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
+      - name: Setup Java Project
+        uses: ./.github/workflows/templates/config-action
       - name: generate schema
         run: ./gradlew core:shared:schema:music:repo:generateJooq
       - name: run gradle assemble
@@ -43,10 +35,9 @@ jobs:
         run: ./gradlew core:music:check
       - name: Validate Code Coverage
         run: ./gradlew core:music:jacocoTestCoverageVerification
-      - id: pr_vars
-        uses: ./.github/workflows/templates/env-action
-      - name: Analyze with SonarCloud
-        run: ./gradlew core:music:sonarqube -Dsonar.organization=power-durex-app ${{ steps.pr_vars.outputs.sonar_key }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      - name: Cache build result
+        uses: actions/cache@v2
+        with:
+          path: core/music
+          key:  ${{ runner.os }}-gradle-build-quarkus-project-${{ github.run_id }}
+ 
