@@ -43,7 +43,6 @@ jobs:
         run: ./gradlew core:music:check
       - name: Validate Code Coverage
         run: ./gradlew core:music:jacocoTestCoverageVerification
-      - name: Sonar Analysis
       - id: pr_vars
         uses: ./.github/workflows/templates/env-action
       - name: Analyze with SonarCloud
