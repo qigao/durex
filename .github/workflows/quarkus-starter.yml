@@ -47,8 +47,8 @@ jobs:
       - name: Cache build result
         uses: actions/cache@v2
         with:
-          path: quarkus/starter/build
-          key: ${{ runner.os }}-gradle-build-quarkus-starter-project-${{ github.run_id }}
+          path: core/music
+          key: ${{ runner.os }}-gradle-build-quarkus-project-${{ github.run_id }}
   sonar:
     name: Sonar Analysis
     runs-on: ubuntu-latest
