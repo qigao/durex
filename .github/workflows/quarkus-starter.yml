@@ -11,7 +11,12 @@ on:
     paths:
       - 'core/music/**'
       - '.github/workflows/quarkus-starter.yml'
-
+env:
+  DATABASE_USERNAME: music
+  DATABASE_PASSWORD: secret
+  DATABASE_PORT: 3306
+  DATABASE_NAME: music
+  DATABASE_HOST: localhost
 jobs:
   setup:
     name: Setup Java Project
@@ -33,7 +38,7 @@ jobs:
       - name: generate schema
         run: ./gradlew core:shared:schema:music:repo:generateJooq
       - name: run gradle assemble
-        run: ./gradlew core:music:assemble
+        run: ./gradlew core:music:assemble -DDATABASE_USERNAME="$DATABASE_USERNAME" -DDATABASE_PASSWORD="$DATABASE_PASSWORD" -DDATABASE_PORT="$DATABASE_PORT" -DDATABASE_NAME="$DATABASE_NAME" -DDATABASE_HOST="$DATABASE_HOST"
       - name: Execute Related Check tasks
         run: ./gradlew core:music:check
       - name: Validate Code Coverage
@@ -43,7 +48,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: quarkus/starter/build
-          key:  ${{ runner.os }}-gradle-build-quarkus-starter-project-${{ github.run_id }}
+          key: ${{ runner.os }}-gradle-build-quarkus-starter-project-${{ github.run_id }}
   sonar:
     name: Sonar Analysis
     runs-on: ubuntu-latest
@@ -57,7 +62,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: quarkus/starter/build
-          key:  ${{ runner.os }}-gradle-build-quarkus-starter-project-${{ github.run_id }}
+          key: ${{ runner.os }}-gradle-build-quarkus-starter-project-${{ github.run_id }}
       - id: pr_vars
         uses: ./.github/workflows/templates/env-action
       - name: Analyze with SonarCloud
