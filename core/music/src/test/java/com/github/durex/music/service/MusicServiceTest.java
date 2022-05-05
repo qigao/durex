@@ -1,5 +1,12 @@
 package com.github.durex.music.service;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyList;
+import static org.mockito.ArgumentMatchers.anyString;
+
 import com.github.durex.music.api.Music;
 import com.github.durex.music.repository.MusicRepository;
 import com.github.durex.music.support.DemoMusicData;
@@ -8,26 +15,19 @@ import com.github.durex.sqlbuilder.enums.WildCardType;
 import com.github.durex.uuid.UniqID;
 import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.mockito.InjectMock;
+import java.util.List;
+import java.util.Optional;
+import javax.inject.Inject;
 import org.apache.commons.lang3.ArrayUtils;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-
-import javax.inject.Inject;
-import java.util.List;
-import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyList;
-import static org.mockito.ArgumentMatchers.anyString;
 
 @QuarkusTest
 class MusicServiceTest {
 
   @InjectMock MusicRepository repository;
   @Inject MusicService service;
+
   @Test
   void testGetMusicById() {
     Mockito.when(repository.findById(anyString()))

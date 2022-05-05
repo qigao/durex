@@ -1,5 +1,10 @@
 package com.github.durex.music.controller;
 
+import static io.restassured.RestAssured.given;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.when;
+
 import com.github.durex.music.api.Music;
 import com.github.durex.music.service.MusicService;
 import com.github.durex.music.support.DemoMusicData;
@@ -8,21 +13,16 @@ import com.github.durex.uuid.UniqID;
 import io.quarkus.test.common.http.TestHTTPEndpoint;
 import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.mockito.InjectMock;
+import java.io.IOException;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
-
-import java.io.IOException;
-
-import static io.restassured.RestAssured.given;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.when;
 
 @QuarkusTest
 @TestHTTPEndpoint(MusicController.class)
 class MusicControllerTest {
   public static final String APPLICATION_JSON = "application/json";
   @InjectMock MusicService service;
+
   @Test
   void testGetMusicByTitle() {
     when(service.getMusicsByTitle(any())).thenReturn(DemoMusicData.givenSomeMusics(5));
