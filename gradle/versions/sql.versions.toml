@@ -1,0 +1,35 @@
+# versions for libraries
+[versions]
+querydsl = '5.0.0'
+jooq = '3.16.6'
+flyway = '8.5.9'
+hikaricp = '5.0.1'
+# Libs config
+[libraries]
+
+mybatis-generator = { group = 'org.mybatis.generator', name = 'mybatis-generator', version = '1.3.6' }
+
+## SQL realted libs
+# QueryDsl
+querydsl-apt = { group = 'com.querydsl', name = 'querydsl-apt', version.ref = 'querydsl' }
+querydsl-core = { group = 'com.querydsl', name = 'querydsl-core', version.ref = 'querydsl' }
+querydsl-jpa = { group = 'com.querydsl', name = 'querydsl-jpa', version.ref = 'querydsl' }
+
+# Jooq
+jooq-core = { group = 'org.jooq', name = 'jooq', version.ref = 'jooq' }
+jooq-meta = { group = 'org.jooq', name = 'jooq-meta', version.ref = 'jooq' }
+jooq-codegen = { group = 'org.jooq', name = 'jooq-codegen', version.ref = 'jooq' }
+jooq-ext = { group = 'org.jooq', name = 'jooq-meta-extensions', version.ref = 'jooq' }
+# data immigration
+flyway = { group = 'org.flywaydb', name = 'flyway-core', version.ref = 'flyway' }
+flyway-mysql = { group = 'org.flywaydb', name = 'flyway-mysql', version.ref = 'flyway' }
+# SQL driver
+postgre = { group = 'org.postgresql', name = 'postgresql', version = '42.3.4' }
+mysql = { group = 'mysql', name = 'mysql-connector-java', version = '8.0.28' }
+
+hikaricp = { group = 'com.zaxxer', name = 'HikariCP', version.ref = 'hikaricp' }
+
+[bundles]
+querydsl = ['querydsl-apt', 'querydsl-core', 'querydsl-jpa']
+jooq = ['jooq-core', 'jooq-meta', 'jooq-codegen', 'jooq-ext', 'hikaricp']
+

@@ -1,0 +1,25 @@
+sourceSets {
+    intTest {
+        java {
+            compileClasspath += main.output + test.output
+            runtimeClasspath += main.output + test.output
+            srcDir file('src/intTest/java')
+        }
+        resources.srcDir file('src/intTest/resources')
+    }
+}
+configurations {
+    intTestImplementation.extendsFrom testImplementation
+    intTestRuntimeOnly.extendsFrom testRuntimeOnly
+}
+
+tasks.register('intTest', Test) {
+    description = 'Integration tests.'
+    group = 'verification'
+    useJUnitPlatform {
+        excludeEngines 'junit-vintage'
+    }
+
+    testClassesDirs = sourceSets.intTest.output.classesDirs
+    classpath = sourceSets.intTest.runtimeClasspath
+ }

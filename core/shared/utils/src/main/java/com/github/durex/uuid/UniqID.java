@@ -1,6 +1,5 @@
 package com.github.durex.uuid;
 
-import com.github.durex.utils.IDType;
 import java.util.EnumMap;
 import java.util.Map;
 import java.util.function.Supplier;

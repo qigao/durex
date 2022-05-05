@@ -25,9 +25,13 @@ spotless {
     json {
         target fileTree('.') {
             include '**/*.json'
-             exclude '**/build/**', '**/build-*/**'
+            exclude '**/build/**', '**/build-*/**'
         }
         eclipseWtp('json')
+    }
+    sql {
+        target '**/*.sql'
+        dbeaver()
     }
     format 'xml', {
         target fileTree('.') {

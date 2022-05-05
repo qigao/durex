@@ -19,7 +19,8 @@ jacocoTestReport {
         classDirectories.setFrom(files(classDirectories.files.collect {
             fileTree(dir: it, exclude: [
                 '**/exceptions/**',
-                '**/entity/**'
+                '**/entity/**',
+                '**/repository/**',
             ]
             )
         }))
@@ -28,7 +29,16 @@ jacocoTestReport {
 
 dependencies {
     implementation project(":core:shared:utils")
+    implementation project(":core:shared:jooq")
+    implementation project(":core:shared:schema:music:json")
+    implementation project(":core:shared:schema:music:repo")
+    implementation project(":core:shared:jakarta-utils")
+    implementation qLibs.logback
 }
 
 apply from: "$rootDir/gradle/library/quarkus.gradle"
-apply from: "$rootDir/gradle/library/container.gradle"
+apply from: "$rootDir/gradle/library/sqldb.gradle"
+apply from: "$rootDir/gradle/extensions/intTest.gradle"
+
+
+

@@ -1,0 +1,22 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"title": "PlayList",
+	"description": "An PlayList description",
+	"type": "object",
+	"properties": {
+		"id": {
+			"type": "string",
+			"required": true
+		},
+		"title": {
+			"type": "string",
+			"required": true
+		},
+		"description": {
+			"type": "string"
+		},
+		"cover_id": {
+			"type": "string"
+		}
+	}
+}

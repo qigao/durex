@@ -1,72 +1,123 @@
 package com.github.durex.music.service;
 
-import com.github.durex.music.entity.Music;
-import com.github.durex.music.model.MusicRequest;
+import static com.github.durex.shared.exceptions.model.ErrorCode.DELETE_ERROR;
+import static com.github.durex.shared.exceptions.model.ErrorCode.EMPTY_PARAM;
+import static com.github.durex.shared.exceptions.model.ErrorCode.ENTITY_NOT_FOUND;
+import static com.github.durex.shared.exceptions.model.ErrorCode.INSERT_ERROR;
+import static com.github.durex.shared.exceptions.model.ErrorCode.UPDATE_ERROR;
+
+import com.github.durex.music.api.Music;
 import com.github.durex.music.repository.MusicRepository;
-import com.github.durex.music.util.EntityMapper;
-import java.time.LocalDateTime;
+import com.github.durex.shared.exceptions.ApiException;
+import com.github.durex.shared.utils.Helper;
+import com.github.durex.sqlbuilder.enums.WildCardType;
 import java.util.List;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import javax.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.ArrayUtils;
 
 @ApplicationScoped
 @Slf4j
 public class MusicService {
 
-  @Inject MusicRepository musicRepository;
+  public static final String MUSIC_NOT_FOUND = "music not found";
+  public static final String ID_IS_EMPTY = "id is empty";
+  public static final String MUSIC_NOT_UPDATED = "music not updated";
+  public static final String MUSIC_NOT_DELETED = "music not deleted";
+  public static final String TITLE_IS_EMPTY = "title is empty";
+  @Inject MusicRepository repository;
 
-  public Music getMusicByIdAndEditor(String id, String editor) {
-    return musicRepository.findMusicsByIdAndEditor(id, editor);
+  public Music getMusicById(String id) {
+    var realId =
+        Helper.makeOptional(id).orElseThrow(() -> new ApiException(ID_IS_EMPTY, EMPTY_PARAM));
+    return repository.findById(realId).orElseThrow(() -> new ApiException("", ENTITY_NOT_FOUND));
   }
 
-  public List<Music> getMusicsByEditorAndDevice(String editor, String device, int start, int end) {
-    return musicRepository.findMusicByEditorAndDeviceWithPage(editor, device, start, end);
+  public List<Music> getMusicsByTitle(String title) {
+    var realTitle =
+        Helper.makeOptional(title).orElseThrow(() -> new ApiException(TITLE_IS_EMPTY, EMPTY_PARAM));
+    var result = repository.findByTitle(realTitle);
+    if (result.isEmpty()) throw new ApiException(MUSIC_NOT_FOUND);
+    return result;
   }
 
-  public List<Music> getMusicsByTitleAndEditor(String title, String editor, int start, int end) {
-    if (title == null || title.isEmpty()) {
-      return musicRepository.findMusicsByEditor(editor, start, end);
-    }
-    return musicRepository.findMusicsByTitleAndEditorWithPage(title, editor, start, end);
+  public List<Music> getMusicsByTitle(String title, WildCardType wildCardEnum) {
+    var realTitle =
+        Helper.makeOptional(title).orElseThrow(() -> new ApiException(TITLE_IS_EMPTY, EMPTY_PARAM));
+    var result = repository.findByTitle(realTitle, wildCardEnum);
+    if (result.isEmpty()) throw new ApiException(MUSIC_NOT_FOUND, ENTITY_NOT_FOUND);
+    return result;
   }
 
-  public List<Music> getMusicsByEditor(String editor, int start, int end) {
-    return musicRepository.findMusicsByEditor(editor, start, end);
+  @Transactional
+  public int createMusic(Music music) {
+    var saved = repository.save(music);
+    if (saved == 0) {
+      throw new ApiException("music not created");
+    } else return saved;
   }
 
-  public void createMusic(String editor, MusicRequest musicRequest) {
-    var m3u8 = EntityMapper.musicRequestToEntity(musicRequest);
-    m3u8.setCreateTime(LocalDateTime.now());
-    if (editor != null) {
-      m3u8.setEditor(editor);
-    }
-    musicRepository.createMusic(m3u8);
+  @Transactional
+  public int[] createMusic(List<Music> musics) {
+    var created = repository.save(musics);
+    if (ArrayUtils.isEmpty(created)) {
+      throw new ApiException("music not created", INSERT_ERROR);
+    } else return created;
   }
 
-  public void updateMusic(String id, String editor, MusicRequest musicRequest) {
-    var musicByIdAndEditor = getMusicByIdAndEditor(id, editor);
-    log.info("find music by id: {}", musicByIdAndEditor);
-
-    musicByIdAndEditor.setUpdateTime(LocalDateTime.now());
-    musicByIdAndEditor.setArtist(musicRequest.getArtist());
-    musicByIdAndEditor.setCoverUrl(musicRequest.getCoverUrl());
-    musicByIdAndEditor.setDuration(musicRequest.getDuration());
-    musicByIdAndEditor.setDescription(musicRequest.getDescription());
-    musicByIdAndEditor.setPlayUrl(musicRequest.getPlayUrl());
-    musicByIdAndEditor.setEditor(editor);
-    musicByIdAndEditor.setChannels(musicRequest.getChannels());
-    musicByIdAndEditor.setSampleRate(musicRequest.getSampleRate());
-    musicByIdAndEditor.setTitle(musicRequest.getTitle());
-    musicByIdAndEditor.setDevice(musicRequest.getDevice());
-    musicByIdAndEditor.setStoryId(musicRequest.getStoryId());
-
-    musicRepository.updateMusic(musicByIdAndEditor);
+  @Transactional
+  public int updateMusic(Music music) {
+    var updated = repository.update(music);
+    if (updated == 0) {
+      throw new ApiException(MUSIC_NOT_UPDATED, UPDATE_ERROR);
+    } else return updated;
   }
 
-  public void deleteMusic(String id, String editor) {
-    var audioToUpdate = getMusicByIdAndEditor(id, editor);
-    log.info("Deleting music by id: {}", audioToUpdate);
-    musicRepository.deleteMusicById(id);
+  @Transactional
+  public int[] updateMusic(List<Music> musics) {
+    var updated = repository.update(musics);
+    if (ArrayUtils.isEmpty(updated)) {
+      throw new ApiException(MUSIC_NOT_UPDATED, UPDATE_ERROR);
+    } else return updated;
+  }
+
+  @Transactional
+  public int deleteMusicById(String id) {
+    var realId = Helper.makeOptional(id).orElseThrow(() -> new ApiException(ID_IS_EMPTY));
+    var deleted = repository.deleteById(realId);
+    if (deleted == 0) {
+      throw new ApiException(MUSIC_NOT_DELETED, DELETE_ERROR);
+    } else return deleted;
+  }
+
+  @Transactional
+  public int deleteMusicByTitle(String title) {
+    var realTitle =
+        Helper.makeOptional(title).orElseThrow(() -> new ApiException(TITLE_IS_EMPTY, EMPTY_PARAM));
+    var deleted = repository.deleteByTitle(realTitle);
+    if (deleted == 0) {
+      throw new ApiException(MUSIC_NOT_DELETED, DELETE_ERROR);
+    } else return deleted;
+  }
+
+  @Transactional
+  public int deleteMusicByTitle(String title, WildCardType wildCardEnum) {
+
+    var realTitle =
+        Helper.makeOptional(title).orElseThrow(() -> new ApiException(TITLE_IS_EMPTY, EMPTY_PARAM));
+    var deleted = repository.deleteByTitle(realTitle, wildCardEnum);
+    if (deleted == 0) {
+      throw new ApiException(MUSIC_NOT_DELETED, DELETE_ERROR);
+    } else return deleted;
+  }
+
+  @Transactional
+  public int delete(List<String> musicIds) {
+    var deleted = repository.delete(musicIds);
+    if (deleted == 0) {
+      throw new ApiException(MUSIC_NOT_DELETED, DELETE_ERROR);
+    } else return deleted;
   }
 }

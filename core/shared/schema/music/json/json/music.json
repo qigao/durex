@@ -1,0 +1,50 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"title": "Music",
+	"description": "An Music description",
+	"type": "object",
+	"properties": {
+		"id": {
+			"type": "string",
+			"required": true,
+			"description": "The id of the music",
+			"minLength": 64,
+			"maxLength": 128
+		},
+		"title": {
+			"type": "string",
+			"required": true
+		},
+		"description": {
+			"type": "string"
+		},
+		"play_id": {
+			"type": "string",
+			"required": true
+		},
+		"cover_id": {
+			"type": "string"
+		},
+		"artist_id": {
+			"type": "string"
+		},
+		"lyric_id": {
+			"type": "string"
+		},
+		"duration": {
+			"type": "integer"
+		},
+		"sample_rate": {
+			"type": "integer"
+		},
+		"bit_rate": {
+			"type": "integer"
+		},
+		"channels": {
+			"type": "integer"
+		},
+		"music_type": {
+			"type": "integer"
+		}
+	}
+}

@@ -1,0 +1,19 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"title": "CreatorPlayList",
+	"description": "A Creator's PlayList",
+	"type": "object",
+	"properties": {
+		"id": {
+			"type": "string",
+			"required": true
+		},
+		"playlists": {
+			"description": "music description info",
+			"type": "array",
+			"items": {
+				"$ref": "playListMusic.json"
+			}
+		}
+	}
+}

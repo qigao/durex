@@ -30,6 +30,8 @@ jobs:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
+      - name: generate schema
+        run: ./gradlew core:shared:schema:music:repo:generateJooq
       - name: run gradle assemble
         run: ./gradlew core:music:assemble
       - name: Execute Related Check tasks

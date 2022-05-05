@@ -16,6 +16,9 @@ allprojects {
     version '0.1.0'
     apply plugin: 'idea'
     project.buildDir = 'build'
+    tasks.withType(Copy).all {
+        duplicatesStrategy 'exclude'
+    }
 }
 
 subprojects {
