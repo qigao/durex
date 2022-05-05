@@ -39,7 +39,7 @@ public class MusicService {
     var realTitle =
         Helper.makeOptional(title).orElseThrow(() -> new ApiException(TITLE_IS_EMPTY, EMPTY_PARAM));
     var result = repository.findByTitle(realTitle);
-    if (result.isEmpty()) throw new ApiException(MUSIC_NOT_FOUND);
+    if (result.isEmpty()) throw new ApiException(MUSIC_NOT_FOUND, ENTITY_NOT_FOUND);
     return result;
   }
 
