@@ -18,16 +18,16 @@ import org.jooq.impl.DefaultConfiguration;
 @Slf4j
 @Singleton
 public final class DslContextProducer {
-  @ConfigProperty(name = "quarkus.datasource.jdbc.url")
+  @ConfigProperty(name = "hikaricp.datasource.jdbc.url")
   private String databaseUrl;
 
-  @ConfigProperty(name = "quarkus.datasource.username")
+  @ConfigProperty(name = "hikaricp.datasource.username")
   private String databaseUser;
 
-  @ConfigProperty(name = "quarkus.datasource.password")
+  @ConfigProperty(name = "hikaricp.datasource.password")
   private String databasePassword;
 
-  @ConfigProperty(name = "quarkus.datasource.jdbc.max-size", defaultValue = "5")
+  @ConfigProperty(name = "hikaricp.datasource.jdbc.max-size", defaultValue = "5")
   private int maxPoolSize;
 
   @Produces
@@ -41,13 +41,12 @@ public final class DslContextProducer {
   }
 
   private HikariDataSource getHikariDataSource() {
-
-    HikariConfig hc = new HikariConfig();
-    hc.setUsername(databaseUser);
-    hc.setPassword(databasePassword);
-    hc.setJdbcUrl(databaseUrl);
-    hc.setMaximumPoolSize(maxPoolSize);
-    return new HikariDataSource(hc);
+    var hikariConfig = new HikariConfig();
+    hikariConfig.setUsername(databaseUser);
+    hikariConfig.setPassword(databasePassword);
+    hikariConfig.setJdbcUrl(databaseUrl);
+    hikariConfig.setMaximumPoolSize(maxPoolSize);
+    return new HikariDataSource(hikariConfig);
   }
 
   private Configuration getConfiguration() {
