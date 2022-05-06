@@ -11,6 +11,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.validation.constraints.NotNull;
 import lombok.extern.slf4j.Slf4j;
@@ -19,7 +20,7 @@ import org.jooq.Condition;
 import org.jooq.DSLContext;
 
 @Slf4j
-@ApplicationScoped
+@RequestScoped
 public class CreatorPlayListRepository {
   public static final Condition DELETED_FLAG = PLAYLIST.DELETED_FLAG.eq(0);
   @Inject DSLContext dsl;
