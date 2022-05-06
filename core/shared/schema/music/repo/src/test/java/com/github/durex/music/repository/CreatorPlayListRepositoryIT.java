@@ -9,7 +9,6 @@ import com.github.durex.music.api.PlayList;
 import com.github.durex.music.support.DemoMusicData;
 import com.github.durex.uuid.UniqID;
 import io.quarkus.test.junit.QuarkusTest;
-
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.inject.Inject;

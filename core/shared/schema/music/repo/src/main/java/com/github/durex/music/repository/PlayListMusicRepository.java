@@ -10,7 +10,6 @@ import com.github.durex.music.mapper.PlayListMusicMapper;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
-import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.validation.constraints.NotNull;
