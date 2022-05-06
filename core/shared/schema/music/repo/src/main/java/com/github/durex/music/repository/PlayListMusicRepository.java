@@ -10,7 +10,7 @@ import com.github.durex.music.mapper.PlayListMusicMapper;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
-import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.validation.constraints.NotNull;
 import lombok.extern.slf4j.Slf4j;
@@ -18,7 +18,7 @@ import org.jooq.Condition;
 import org.jooq.DSLContext;
 
 @Slf4j
-@ApplicationScoped
+@RequestScoped
 public class PlayListMusicRepository {
   public static final Condition NOT_DELETED = MUSIC.DELETED_FLAG.eq(0);
   @Inject DSLContext dsl;

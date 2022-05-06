@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.validation.constraints.NotNull;
 import lombok.extern.slf4j.Slf4j;
@@ -19,7 +19,7 @@ import org.jooq.Condition;
 import org.jooq.DSLContext;
 
 @Slf4j
-@ApplicationScoped
+@RequestScoped
 public class PlayListRepository {
   public static final Condition NOT_DELETED = PLAYLIST.DELETED_FLAG.eq(0);
   public static final String ERROR_DELETING_PLAY_LIST = "Error deleting PlayList";
