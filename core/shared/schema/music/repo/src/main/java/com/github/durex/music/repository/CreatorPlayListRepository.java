@@ -1,7 +1,7 @@
 package com.github.durex.music.repository;
 
-import static com.github.durex.api.Tables.CREATOR_PLAYLIST;
-import static com.github.durex.api.Tables.PLAYLIST;
+import static com.github.durex.api.tables.TCreatorPlaylist.CREATOR_PLAYLIST;
+import static com.github.durex.api.tables.TPlaylist.PLAYLIST;
 
 import com.github.durex.api.tables.records.RCreatorPlaylist;
 import com.github.durex.api.tables.records.RPlaylist;

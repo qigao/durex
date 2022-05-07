@@ -12,10 +12,9 @@ public class PrefixStrategy extends DefaultGeneratorStrategy {
       case POJO:
         return "Q" + outputName;
       case RECORD:
-        return "R" + outputName.replaceAll("Record", "");
-
+        return "R" + outputName.replace("Record", "");
       default:
-        return outputName;
+        return "T" + outputName;
     }
   }
 }
