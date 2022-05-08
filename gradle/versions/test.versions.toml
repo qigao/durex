@@ -6,29 +6,28 @@ wiremock = "2.33.2"
 rest-assured = "5.0.1"
 to-string-verifier = "1.4.8"
 h2 = "1.4.200"
-cucumber = "7.3.2"
+
 # Libs config
 [libraries]
 h2db = { group = "com.h2database", name = "h2", version.ref = "h2" }
 
 # Test
 junit5-bom = { group = 'org.junit', name = 'junit-bom', version.ref = 'junit' }
+junit-launcher = { group = 'org.junit.platform', name = 'junit-platform-launcher', version = '1.8.2' }
 equalsverifier = { module = 'nl.jqno.equalsverifier:equalsverifier', version.ref = 'equalsverifier' }
 wiremock = { group = 'com.github.tomakehurst', name = 'wiremock-jre8', version.ref = 'wiremock' }
 rest-assured = { group = 'io.rest-assured', name = 'rest-assured', version.ref = 'rest-assured' }
-rest-assured-xml= { group = 'io.rest-assured', name = 'xml-path', version.ref = 'rest-assured' }
+rest-assured-xml = { group = 'io.rest-assured', name = 'xml-path', version.ref = 'rest-assured' }
 jparams = { group = 'com.jparams', name = 'to-string-verifier', version.ref = 'to-string-verifier' }
 hamcrest = { group = 'org.hamcrest', name = 'hamcrest', version = '2.2' }
 hamcrest-date = { group = 'org.exparity', name = 'hamcrest-date', version = '2.0.7' }
 api-guardian = { group = 'org.apiguardian', name = 'apiguardian-api', version = '1.1.2' }
 mockito = { group = 'org.mockito', name = 'mockito-core', version = '4.5.1' }
-cucumber-junit = { group = 'io.cucumber', name = 'cucumber-junit', version.ref = 'cucumber' }
-cucumber-jvm = { group = 'io.cucumber', name = 'cucumber-java', version.ref = 'cucumber' }
+cucumber-bom = { group = 'io.cucumber', name = 'cucumber-bom', version = '7.3.4' }
 faker = { group = 'net.datafaker', name = 'datafaker', version = '1.3.0' }
 cdi-unit = { group = 'de.hilling.junit.cdi', name = 'cdi-test-core', version = '3.4.0' }
 
 [bundles]
 unit-test = ['wiremock', 'mockito']
 check = ['hamcrest', 'hamcrest-date', 'equalsverifier', 'jparams']
-cucumber = ['cucumber-jvm', 'cucumber-junit']
-rest-assured= ['rest-assured', 'rest-assured-xml']
+rest-assured = ['rest-assured', 'rest-assured-xml']
