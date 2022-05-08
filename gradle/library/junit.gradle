@@ -4,9 +4,8 @@ dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter-params'
     testImplementation tLibs.bundles.check
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
-    testImplementation 'org.junit.platform:junit-platform-launcher:1.8.2'
+    testRuntimeOnly tLibs.junit.launcher
     compileOnly tLibs.api.guardian
     testImplementation tLibs.bundles.unit.test
-    testImplementation tLibs.bundles.cucumber
     testImplementation tLibs.faker
 }

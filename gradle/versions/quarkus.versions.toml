@@ -6,7 +6,7 @@ jandex = "0.12.0"
 [libraries]
 quarkus-bom = { group = 'io.quarkus', name = 'quarkus-bom', version.ref = 'quarkus' }
 logback = { group = 'io.quarkiverse.logging.logback', name = 'quarkus-logging-logback', version = '0.11.0' }
-
+cucumber = { group = 'io.quarkiverse.cucumber', name = 'quarkus-cucumber', version = '0.5.0' }
 # Gradle plugins config
 [plugins]
 quarkus = { id = 'io.quarkus', version.ref = 'quarkus' }
