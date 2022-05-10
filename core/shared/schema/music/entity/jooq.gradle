@@ -41,7 +41,7 @@ jooq {
                     }
                     target {
                         packageName = "com.github.durex.api"
-                        directory = "$projectDir/src/gen/java"
+                        directory = "$projectDir/src/main/java"
                     }
                 }
             }
