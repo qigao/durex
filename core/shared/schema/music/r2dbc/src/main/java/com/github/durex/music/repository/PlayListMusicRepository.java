@@ -1,21 +1,22 @@
 package com.github.durex.music.repository;
 
-import static com.github.durex.api.tables.TMusic.MUSIC;
-import static com.github.durex.api.tables.TPlaylistMusic.PLAYLIST_MUSIC;
-
 import com.github.durex.api.tables.records.RMusic;
 import com.github.durex.music.api.Music;
 import com.github.durex.music.mapper.MusicMapper;
 import com.github.durex.music.mapper.PlayListMusicMapper;
-import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
-import javax.enterprise.context.RequestScoped;
-import javax.inject.Inject;
-import javax.validation.constraints.NotNull;
 import lombok.extern.slf4j.Slf4j;
 import org.jooq.Condition;
 import org.jooq.DSLContext;
+
+import javax.enterprise.context.RequestScoped;
+import javax.inject.Inject;
+import javax.validation.constraints.NotNull;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import static com.github.durex.api.tables.TMusic.MUSIC;
+import static com.github.durex.api.tables.TPlaylistMusic.PLAYLIST_MUSIC;
 
 @Slf4j
 @RequestScoped
@@ -26,8 +27,9 @@ public class PlayListMusicRepository {
   public List<Music> listMusicsByPlayListId(@NotNull String playlistId) {
     try (var seekStep =
         dsl.select(MUSIC.fields())
-            .from(PLAYLIST_MUSIC.leftJoin(MUSIC).on(PLAYLIST_MUSIC.MUSIC_ID.eq(MUSIC.ID)))) {
+           ) {
       return seekStep
+          .from(PLAYLIST_MUSIC.leftJoin(MUSIC).on(PLAYLIST_MUSIC.MUSIC_ID.eq(MUSIC.ID)))
           .where(PLAYLIST_MUSIC.PLAYLIST_ID.eq(playlistId).and(NOT_DELETED))
           .orderBy(PLAYLIST_MUSIC.MUSIC_ORDER)
           .fetchInto(RMusic.class)

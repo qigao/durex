@@ -26,8 +26,9 @@ public class PlayListMusicRepository {
   public List<Music> listMusicsByPlayListId(@NotNull String playlistId) {
     try (var seekStep =
         dsl.select(MUSIC.fields())
-            .from(PLAYLIST_MUSIC.leftJoin(MUSIC).on(PLAYLIST_MUSIC.MUSIC_ID.eq(MUSIC.ID)))) {
+           ) {
       return seekStep
+          .from(PLAYLIST_MUSIC.leftJoin(MUSIC).on(PLAYLIST_MUSIC.MUSIC_ID.eq(MUSIC.ID)))
           .where(PLAYLIST_MUSIC.PLAYLIST_ID.eq(playlistId).and(NOT_DELETED))
           .orderBy(PLAYLIST_MUSIC.MUSIC_ORDER)
           .fetchInto(RMusic.class)

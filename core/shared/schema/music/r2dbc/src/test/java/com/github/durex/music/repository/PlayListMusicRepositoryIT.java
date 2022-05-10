@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.github.durex.music.api.Music;
-import com.github.durex.music.support.DemoMusicData;
+import com.github.durex.music.mapper.support.DemoMusicData;
 import io.quarkus.test.junit.QuarkusTest;
 import java.util.stream.Collectors;
 import javax.inject.Inject;

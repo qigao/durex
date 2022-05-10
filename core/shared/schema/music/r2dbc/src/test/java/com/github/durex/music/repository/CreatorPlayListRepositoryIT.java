@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.github.durex.music.api.Music;
 import com.github.durex.music.api.PlayList;
-import com.github.durex.music.support.DemoMusicData;
+import com.github.durex.music.mapper.support.DemoMusicData;
 import com.github.durex.uuid.UniqID;
 import io.quarkus.test.junit.QuarkusTest;
 import java.util.List;

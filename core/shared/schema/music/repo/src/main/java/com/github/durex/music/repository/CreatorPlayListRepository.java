@@ -25,10 +25,14 @@ public class CreatorPlayListRepository {
   @Inject DSLContext dsl;
 
   public int savePlaylistToCreator(@NotNull String creatorId, @NotNull String playlistId) {
-    return dsl.insertInto(CREATOR_PLAYLIST)
-        .columns(CREATOR_PLAYLIST.CREATOR_ID, CREATOR_PLAYLIST.PLAYLIST_ID)
-        .values(creatorId, playlistId)
-        .execute();
+    try (var crud =
+        dsl.insertInto(CREATOR_PLAYLIST)
+            .columns(CREATOR_PLAYLIST.CREATOR_ID, CREATOR_PLAYLIST.PLAYLIST_ID)) {
+      return crud.values(creatorId, playlistId).execute();
+    } catch (Exception e) {
+      log.error("savePlaylistToCreator error", e);
+      return 0;
+    }
   }
 
   public int[] savePlaylistToCreator(@NotNull String creatorId, @NotNull List<String> playlistIds) {
@@ -69,13 +73,10 @@ public class CreatorPlayListRepository {
   }
 
   public List<PlayList> listPlaylistsByCreatorId(String creatorId) {
-    try (var seek =
-        dsl.select(PLAYLIST.fields())
-            .from(
-                CREATOR_PLAYLIST
-                    .leftJoin(PLAYLIST)
-                    .on(CREATOR_PLAYLIST.PLAYLIST_ID.eq(PLAYLIST.ID)))) {
+    try (var seek = dsl.select(PLAYLIST.fields())) {
       return seek
+          .from(
+              CREATOR_PLAYLIST.leftJoin(PLAYLIST).on(CREATOR_PLAYLIST.PLAYLIST_ID.eq(PLAYLIST.ID)))
           .where(CREATOR_PLAYLIST.CREATOR_ID.eq(creatorId).and(DELETED_FLAG))
           .orderBy(PLAYLIST.CREATE_TIME.desc())
           .fetchInto(RPlaylist.class)
