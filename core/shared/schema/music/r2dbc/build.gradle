@@ -4,6 +4,7 @@ plugins{
 }
 dependencies {
     implementation project(":core:shared:utils")
+
     implementation project(":core:shared:jooq")
     implementation project(":core:shared:schema:music:json")
     implementation project(":core:shared:schema:music:entity")
