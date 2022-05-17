@@ -5,9 +5,9 @@ import com.zaxxer.hikari.HikariDataSource;
 import io.r2dbc.spi.ConnectionFactories;
 import io.r2dbc.spi.ConnectionFactory;
 import io.r2dbc.spi.ConnectionFactoryOptions;
+import java.util.Optional;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Produces;
-import javax.inject.Singleton;
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.jooq.Configuration;
@@ -20,36 +20,35 @@ import org.jooq.impl.DSL;
 import org.jooq.impl.DefaultConfiguration;
 
 @Slf4j
-@Singleton
+@ApplicationScoped
 public final class DslContextProducer {
   @ConfigProperty(name = "datasource.r2dbc.url")
-  private String r2dbcUrl;
+  Optional<String> r2dbcUrl;
 
-  @ConfigProperty(name = "datasource.jdbc.url", defaultValue = "jdbc:h2:mem:test;DB_CLOSE_DELAY=-1")
-  private String jdbcUrl;
+  @ConfigProperty(name = "datasource.jdbc.url")
+  Optional<String> jdbcUrl;
 
-  @ConfigProperty(name = "datasource.username")
-  private String databaseUser;
+  @ConfigProperty(name = "datasource.username", defaultValue = "")
+  String databaseUser;
 
-  @ConfigProperty(name = "datasource.password")
-  private String databasePassword;
+  @ConfigProperty(name = "datasource.password", defaultValue = "")
+  String databasePassword;
 
-  @ConfigProperty(name = "datasource.jdbc.max-size", defaultValue = "5")
-  private int maxPoolSize;
+  @ConfigProperty(name = "datasource.jdbc.maxPoolsize", defaultValue = "5")
+  int maxPoolSize;
 
   @Produces
   @ApplicationScoped
   public DSLContext getDslContext() {
-    try {
-      if (r2dbcUrl != null) {
-        log.info("Using R2DBC connection {}", r2dbcUrl);
-        return DSL.using(getConnectionFactory(), SQLDialect.MYSQL, getSettings());
-      } else {
-        log.info("Using JDBC connection {}", jdbcUrl);
-        return DSL.using(getConfiguration());
-      }
-    } catch (Exception e) {
-      throw new RuntimeException(e);
+    if (r2dbcUrl.isPresent()) {
+      log.info("Using R2DBC connection {}", r2dbcUrl);
+      return DSL.using(getConnectionFactory(), SQLDialect.MYSQL, getSettings());
+    } else if (jdbcUrl.isPresent()) {
+      log.info("Using JDBC connection {}", jdbcUrl);
+      return DSL.using(getConfiguration());
+    } else {
+      log.error("No datasource configured, please check your configuration");
+      throw new IllegalStateException("No datasource configured");
     }
   }
 
@@ -57,8 +56,10 @@ public final class DslContextProducer {
     var hikariConfig = new HikariConfig();
     hikariConfig.setUsername(databaseUser);
     hikariConfig.setPassword(databasePassword);
-    hikariConfig.setJdbcUrl(jdbcUrl);
+    hikariConfig.setJdbcUrl(jdbcUrl.orElse(""));
     hikariConfig.setMaximumPoolSize(maxPoolSize);
+    hikariConfig.setConnectionTimeout(30000);
+
     return new HikariDataSource(hikariConfig);
   }
 
@@ -82,7 +83,7 @@ public final class DslContextProducer {
 
   private ConnectionFactory getConnectionFactory() {
     return ConnectionFactories.get(
-        ConnectionFactoryOptions.parse(r2dbcUrl)
+        ConnectionFactoryOptions.parse(r2dbcUrl.orElse(""))
             .mutate()
             .option(ConnectionFactoryOptions.USER, databaseUser)
             .option(ConnectionFactoryOptions.PASSWORD, databasePassword)

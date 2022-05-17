@@ -30,9 +30,9 @@ class CreatorPlayListRepositoryIT {
   @Order(100)
   @DisplayName("When save playlist to creator")
   void testSavePlayListToCreator() {
-    var musics = DemoMusicData.givenSomeMusics(20);
+    var musics = DemoMusicData.givenSomeMusics(5);
     var result = musicRepository.save(musics);
-    assertEquals(20, result.length);
+    assertEquals(5, result.length);
     var playList = DemoMusicData.givenAPlayList();
     var savedPlaylist = playListRepository.save(playList);
     assertEquals(1, savedPlaylist);
@@ -42,10 +42,10 @@ class CreatorPlayListRepositoryIT {
         "save musics to a playlist",
         () ->
             assertEquals(
-                20, playListMusicRepository.saveMusicsToPlayList(playlistId, musics).length),
+                5, playListMusicRepository.saveMusicsToPlayList(playlistId, musics).length),
         () ->
             assertThat(
-                playListMusicRepository.listMusicsByPlayListId(playlistId), Matchers.hasSize(20)));
+                playListMusicRepository.listMusicsByPlayListId(playlistId), Matchers.hasSize(5)));
     var creatorId = UniqID.getId();
     assertAll(
         "save playlist to creator",
@@ -55,7 +55,7 @@ class CreatorPlayListRepositoryIT {
         () ->
             assertEquals(
                 1, creatorPlayListRepository.deletePlaylistFromCreator(creatorId, playlistId)),
-        () -> assertEquals(20, playListMusicRepository.clearMusicsFromPlayList(playlistId)),
+        () -> assertEquals(5, playListMusicRepository.clearMusicsFromPlayList(playlistId)),
         () -> assertEquals(0, creatorPlayListRepository.listPlaylistsByCreatorId(creatorId).size()),
         () -> assertEquals(1, playListRepository.deleteById(playlistId)));
   }
@@ -64,21 +64,23 @@ class CreatorPlayListRepositoryIT {
   @Order(200)
   @DisplayName("When save multiple playlists to creator")
   void testSavePlayListToCreatorWithSamePlaylist() {
-    // given 20 musics
-    var musics = DemoMusicData.givenSomeMusics(20);
+    // given  musics
+    int num = 3;
+    var musics = DemoMusicData.givenSomeMusics(num);
     List<String> musicIds = musics.parallelStream().map(Music::getId).collect(Collectors.toList());
     var result = musicRepository.save(musics);
-    assertEquals(20, result.length);
+    assertEquals(num, result.length);
     // given playlist with 20 musics
-    var playlists = DemoMusicData.givenSomePlayList(20);
-    assertEquals(20, playListRepository.save(playlists).length);
+    int playlistNum = 2;
+    var playlists = DemoMusicData.givenSomePlayList(playlistNum);
+    assertEquals(playlistNum, playListRepository.save(playlists).length);
     // given playlistId 20 times
     var playlistIds = playlists.parallelStream().map(PlayList::getId).collect(Collectors.toList());
 
     // then save music to playlist
     playlistIds.forEach(
         id -> {
-          assertEquals(20, playListMusicRepository.saveMusicsToPlayList(id, musics).length);
+          assertEquals(num, playListMusicRepository.saveMusicsToPlayList(id, musics).length);
         });
 
     // then save playlist to creator
@@ -90,16 +92,17 @@ class CreatorPlayListRepositoryIT {
                 creatorPlayListRepository.savePlaylistToCreator(creatorId, playlistIds),
                 Matchers.not(0)),
         () ->
-            assertEquals(20, creatorPlayListRepository.listPlaylistsByCreatorId(creatorId).size()),
+            assertEquals(
+                playlistNum, creatorPlayListRepository.listPlaylistsByCreatorId(creatorId).size()),
         () ->
             // then delete playlist from creator
             assertEquals(
-                20,
+                playlistNum,
                 creatorPlayListRepository.deletePlaylistsFromCreator(creatorId, playlistIds)
                     .length),
         // then delete playlist
-        () -> assertEquals(20, playListRepository.deleteById(playlistIds)),
+        () -> assertEquals(playlistNum, playListRepository.deleteById(playlistIds)),
         // then delete music
-        () -> assertEquals(20, musicRepository.delete(musicIds)));
+        () -> assertEquals(num, musicRepository.delete(musicIds)));
   }
 }

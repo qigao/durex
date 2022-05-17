@@ -32,10 +32,8 @@ public class MusicRepository {
    */
   public List<Music> findByTitle(@NotNull String title) {
     try (var crud = dsl.selectFrom(MUSIC)) {
-      return crud.where(MUSIC.TITLE.eq(title))
-          .and(NOT_DELETED)
-          .fetch()
-          .map(MusicMapper::mapRecordToDto);
+      var eqTitle = MUSIC.TITLE.eq(title);
+      return crud.where(eqTitle).and(NOT_DELETED).fetch().map(MusicMapper::mapRecordToDto);
     } catch (Exception e) {
       log.error("Error fetching musics", e);
       return Collections.emptyList();
@@ -49,10 +47,8 @@ public class MusicRepository {
   public List<Music> findByTitle(@NotNull String title, WildCardType wildCardType) {
     var realTitle = SqlHelper.likeClauseBuilder(wildCardType, title);
     try (var crud = dsl.selectFrom(MUSIC)) {
-      return crud.where(MUSIC.TITLE.like(realTitle))
-          .and(NOT_DELETED)
-          .fetch()
-          .map(MusicMapper::mapRecordToDto);
+      var likeTitle = MUSIC.TITLE.like(realTitle);
+      return crud.where(likeTitle).and(NOT_DELETED).fetch().map(MusicMapper::mapRecordToDto);
     } catch (Exception e) {
       log.error("Error fetching musics", e);
       return Collections.emptyList();
@@ -73,9 +69,7 @@ public class MusicRepository {
     }
   }
 
-  /**
-   * @return list of musics
-   */
+  /** @return list of musics */
   public List<Music> findAll() {
     try (var crud = dsl.selectFrom(MUSIC)) {
       return crud.fetch().stream().map(MusicMapper::mapRecordToDto).collect(Collectors.toList());
@@ -174,6 +168,7 @@ public class MusicRepository {
                   m -> {
                     var rMusic = dsl.newRecord(MUSIC);
                     MusicMapper.mapDtoToRecord(m, rMusic);
+                    rMusic.setCreateTime(LocalDateTime.now());
                     return rMusic;
                   })
               .collect(Collectors.toList());
