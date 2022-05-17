@@ -1,7 +1,7 @@
 package com.github.durex.music.repository;
 
-import static com.github.durex.api.tables.TMusic.MUSIC;
-import static com.github.durex.api.tables.TPlaylistMusic.PLAYLIST_MUSIC;
+import static com.github.durex.api.tables.QMusic.MUSIC;
+import static com.github.durex.api.tables.QPlaylistMusic.PLAYLIST_MUSIC;
 
 import com.github.durex.api.tables.records.RMusic;
 import com.github.durex.music.api.Music;
@@ -26,8 +26,9 @@ public class PlayListMusicRepository {
   public List<Music> listMusicsByPlayListId(@NotNull String playlistId) {
     try (var seekStep =
         dsl.select(MUSIC.fields())
-            .from(PLAYLIST_MUSIC.leftJoin(MUSIC).on(PLAYLIST_MUSIC.MUSIC_ID.eq(MUSIC.ID)))) {
+           ) {
       return seekStep
+          .from(PLAYLIST_MUSIC.leftJoin(MUSIC).on(PLAYLIST_MUSIC.MUSIC_ID.eq(MUSIC.ID)))
           .where(PLAYLIST_MUSIC.PLAYLIST_ID.eq(playlistId).and(NOT_DELETED))
           .orderBy(PLAYLIST_MUSIC.MUSIC_ORDER)
           .fetchInto(RMusic.class)

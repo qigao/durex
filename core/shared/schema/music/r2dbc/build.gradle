@@ -7,8 +7,10 @@ dependencies {
     implementation project(":core:shared:jooq")
     implementation project(":core:shared:schema:music:json")
     implementation project(":core:shared:schema:music:entity")
+
+    implementation vLibs.reactor.core
 }
-apply from: "$rootDir/gradle/library/quarkus.gradle"
+apply from: "$rootDir/gradle/library/quarkus-reactive.gradle"
 apply from: "$rootDir/gradle/library/sqldb.gradle"
 
 task startMysql {

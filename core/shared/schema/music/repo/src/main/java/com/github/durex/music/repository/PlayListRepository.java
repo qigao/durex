@@ -1,12 +1,13 @@
 package com.github.durex.music.repository;
 
-import static com.github.durex.api.tables.TPlaylist.PLAYLIST;
+import static com.github.durex.api.tables.QPlaylist.PLAYLIST;
 
 import com.github.durex.music.api.PlayList;
 import com.github.durex.music.mapper.PlayListMapper;
 import com.github.durex.sqlbuilder.SqlHelper;
 import com.github.durex.sqlbuilder.enums.WildCardType;
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -26,29 +27,47 @@ public class PlayListRepository {
   @Inject DSLContext dsl;
 
   public List<PlayList> findByTitle(@NotNull String title) {
-    return dsl.selectFrom(PLAYLIST)
-        .where(PLAYLIST.TITLE.eq(title))
-        .and(NOT_DELETED)
-        .fetch()
-        .map(PlayListMapper::mapRecordToDto);
+    try (var crud = dsl.selectFrom(PLAYLIST)) {
+      return crud.where(PLAYLIST.TITLE.eq(title))
+          .and(NOT_DELETED)
+          .fetch()
+          .map(PlayListMapper::mapRecordToDto);
+    } catch (Exception e) {
+      log.error("Error finding playlists by title", e);
+      return Collections.emptyList();
+    }
   }
 
   public List<PlayList> findByTitle(@NotNull String title, WildCardType wildCardType) {
     var realTitle = SqlHelper.likeClauseBuilder(wildCardType, title);
-    return dsl.selectFrom(PLAYLIST)
-        .where(PLAYLIST.TITLE.like(realTitle))
-        .and(NOT_DELETED)
-        .fetch()
-        .map(PlayListMapper::mapRecordToDto);
+    try (var crud = dsl.selectFrom(PLAYLIST)) {
+      return crud.where(PLAYLIST.TITLE.like(realTitle))
+          .and(NOT_DELETED)
+          .fetch()
+          .map(PlayListMapper::mapRecordToDto);
+    } catch (Exception e) {
+      log.error("Error finding playlists by title", e);
+      return Collections.emptyList();
+    }
   }
 
   public List<PlayList> findAll() {
-    return dsl.selectFrom(PLAYLIST).fetch().map(PlayListMapper::mapRecordToDto);
+    try (var crud = dsl.selectFrom(PLAYLIST)) {
+      return crud.fetch().map(PlayListMapper::mapRecordToDto);
+    } catch (Exception e) {
+      log.error("Error finding all playlists", e);
+      return Collections.emptyList();
+    }
   }
 
   public Optional<PlayList> findById(@NotNull String id) {
-    var rPlayList = dsl.selectFrom(PLAYLIST).where(PLAYLIST.ID.eq(id)).and(NOT_DELETED).fetchOne();
-    return Optional.ofNullable(rPlayList).map(PlayListMapper::mapRecordToDto);
+    try (var crud = dsl.selectFrom(PLAYLIST)) {
+      var rPlayList = crud.where(PLAYLIST.ID.eq(id)).and(NOT_DELETED).fetchOne();
+      return Optional.ofNullable(rPlayList).map(PlayListMapper::mapRecordToDto);
+    } catch (Exception e) {
+      log.error("Error finding playlists by id", e);
+      return Optional.empty();
+    }
   }
 
   public int save(@NotNull PlayList playList) {

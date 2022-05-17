@@ -1,12 +1,13 @@
 package com.github.durex.music.repository;
 
-import static com.github.durex.api.tables.TMusic.MUSIC;
+import static com.github.durex.api.tables.QMusic.MUSIC;
 
 import com.github.durex.music.api.Music;
 import com.github.durex.music.mapper.MusicMapper;
 import com.github.durex.sqlbuilder.SqlHelper;
 import com.github.durex.sqlbuilder.enums.WildCardType;
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -26,32 +27,36 @@ public class MusicRepository {
   @Inject DSLContext dsl;
 
   /**
-   * TODO: reactive return type
-   *
    * @param title title of music
    * @return list of found rows
    */
   public List<Music> findByTitle(@NotNull String title) {
-    return dsl.selectFrom(MUSIC)
-        .where(MUSIC.TITLE.eq(title))
-        .and(NOT_DELETED)
-        .fetch()
-        .map(MusicMapper::mapRecordToDto);
+    try (var crud = dsl.selectFrom(MUSIC)) {
+      return crud.where(MUSIC.TITLE.eq(title))
+          .and(NOT_DELETED)
+          .fetch()
+          .map(MusicMapper::mapRecordToDto);
+    } catch (Exception e) {
+      log.error("Error fetching musics", e);
+      return Collections.emptyList();
+    }
   }
 
   /**
-   * TODO: reactive return type
-   *
    * @param title title of music
    * @return list of found rows
    */
   public List<Music> findByTitle(@NotNull String title, WildCardType wildCardType) {
     var realTitle = SqlHelper.likeClauseBuilder(wildCardType, title);
-    return dsl.selectFrom(MUSIC)
-        .where(MUSIC.TITLE.like(realTitle))
-        .and(NOT_DELETED)
-        .fetch()
-        .map(MusicMapper::mapRecordToDto);
+    try (var crud = dsl.selectFrom(MUSIC)) {
+      return crud.where(MUSIC.TITLE.like(realTitle))
+          .and(NOT_DELETED)
+          .fetch()
+          .map(MusicMapper::mapRecordToDto);
+    } catch (Exception e) {
+      log.error("Error fetching musics", e);
+      return Collections.emptyList();
+    }
   }
 
   /**
@@ -59,19 +64,25 @@ public class MusicRepository {
    * @return music
    */
   public Optional<Music> findById(@NotNull String id) {
-    var rMusic = dsl.selectFrom(MUSIC).where(MUSIC.ID.eq(id)).and(NOT_DELETED).fetchOne();
-    return Optional.ofNullable(rMusic).map(MusicMapper::mapRecordToDto);
+    try (var crud = dsl.selectFrom(MUSIC)) {
+      var rMusic = crud.where(MUSIC.ID.eq(id)).and(NOT_DELETED).fetchOne();
+      return Optional.ofNullable(rMusic).map(MusicMapper::mapRecordToDto);
+    } catch (Exception e) {
+      log.error("Error fetching music", e);
+      return Optional.empty();
+    }
   }
 
   /**
-   * TODO: reactive return type
-   *
    * @return list of musics
    */
   public List<Music> findAll() {
-    return dsl.selectFrom(MUSIC).fetch().stream()
-        .map(MusicMapper::mapRecordToDto)
-        .collect(Collectors.toList());
+    try (var crud = dsl.selectFrom(MUSIC)) {
+      return crud.fetch().stream().map(MusicMapper::mapRecordToDto).collect(Collectors.toList());
+    } catch (Exception e) {
+      log.error("Error fetching musics", e);
+      return Collections.emptyList();
+    }
   }
 
   /**

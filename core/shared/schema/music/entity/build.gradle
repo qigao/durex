@@ -1,0 +1,22 @@
+plugins{
+    alias qLibs.plugins.jandex
+}
+dependencies {
+    implementation project(":core:shared:utils")
+    implementation project(":core:shared:schema:music:json")
+    implementation project(":core:shared:jooq")
+}
+
+apply from: "$rootDir/gradle/library/sqldb.gradle"
+
+apply from: "./jooq.gradle"
+sourceSets {
+    main {
+        java {
+            srcDirs = [
+                'src/main/java',
+                'src/gen/java'
+            ]
+        }
+    }
+}

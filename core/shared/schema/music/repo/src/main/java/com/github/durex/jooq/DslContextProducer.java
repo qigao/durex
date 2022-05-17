@@ -16,18 +16,17 @@ import org.jooq.impl.DSL;
 import org.jooq.impl.DefaultConfiguration;
 
 @Slf4j
-@Singleton
 public final class DslContextProducer {
-  @ConfigProperty(name = "hikaricp.datasource.jdbc.url")
+  @ConfigProperty(name = "datasource.jdbc.url")
   private String databaseUrl;
 
-  @ConfigProperty(name = "hikaricp.datasource.username")
+  @ConfigProperty(name = "datasource.username")
   private String databaseUser;
 
-  @ConfigProperty(name = "hikaricp.datasource.password")
+  @ConfigProperty(name = "datasource.password")
   private String databasePassword;
 
-  @ConfigProperty(name = "hikaricp.datasource.jdbc.max-size", defaultValue = "5")
+  @ConfigProperty(name = "datasource.jdbc.max-size", defaultValue = "5")
   private int maxPoolSize;
 
   @Produces

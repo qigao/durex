@@ -31,6 +31,7 @@ tsid = { group = 'com.github.f4b6a3', name = 'tsid-creator', version = '4.1.1' }
 ksuid = { group = 'com.github.f4b6a3', name = 'ksuid-creator', version = '2.2.0' }
 
 lombok = { group = 'org.projectlombok', name = 'lombok', version = '1.18.22' }
+reactor-core = { group = 'io.projectreactor', name = 'reactor-core', version = '3.4.18' }
 
 [bundles]
 commons = ['commons-lang3', 'commons-io', 'commons-text','commons-config','commons-beanutils' ]

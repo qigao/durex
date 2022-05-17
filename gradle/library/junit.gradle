@@ -8,4 +8,5 @@ dependencies {
     compileOnly tLibs.api.guardian
     testImplementation tLibs.bundles.unit.test
     testImplementation tLibs.faker
+    testImplementation tLibs.reactor.test
 }
