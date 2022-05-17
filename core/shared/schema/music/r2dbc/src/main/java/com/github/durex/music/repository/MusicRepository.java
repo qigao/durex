@@ -15,7 +15,6 @@ import javax.validation.constraints.NotNull;
 import lombok.extern.slf4j.Slf4j;
 import org.jooq.Condition;
 import org.jooq.DSLContext;
-import org.jooq.LikeEscapeStep;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
