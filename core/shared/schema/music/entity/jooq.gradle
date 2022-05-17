@@ -1,7 +1,6 @@
 dependencies {
     jooqGenerator project(":core:shared:jooq")
 }
-apply from: "$rootDir/gradle/library/sqldb.gradle"
 
 jooq {
     version = dbLibs.versions.jooq

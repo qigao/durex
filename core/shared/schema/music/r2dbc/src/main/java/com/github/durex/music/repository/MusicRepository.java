@@ -15,6 +15,7 @@ import javax.validation.constraints.NotNull;
 import lombok.extern.slf4j.Slf4j;
 import org.jooq.Condition;
 import org.jooq.DSLContext;
+import org.jooq.LikeEscapeStep;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -97,11 +98,12 @@ public class MusicRepository {
    */
   public Mono<Integer> deleteByTitle(@NotNull String title, WildCardType wildCardType) {
     var realTitle = SqlHelper.likeClauseBuilder(wildCardType, title);
+    var likeTitle = MUSIC.TITLE.like(realTitle);
     return Mono.from(
             dsl.update(MUSIC)
                 .set(MUSIC.DELETED_FLAG, 1)
                 .set(MUSIC.DELETE_TIME, LocalDateTime.now())
-                .where(MUSIC.TITLE.like(realTitle)))
+                .where(likeTitle).and(NOT_DELETED))
         .doFinally(signalType -> log.info("deleteByTitle"));
   }
 

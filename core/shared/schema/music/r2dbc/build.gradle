@@ -7,9 +7,10 @@ dependencies {
     implementation project(":core:shared:jooq")
     implementation project(":core:shared:schema:music:json")
     implementation project(":core:shared:schema:music:entity")
-
+    implementation project(":core:shared:jakarta-db")
     implementation vLibs.reactor.core
 }
+apply from: "$rootDir/gradle/library/quarkus-core.gradle"
 apply from: "$rootDir/gradle/library/quarkus-reactive.gradle"
 apply from: "$rootDir/gradle/library/sqldb.gradle"
 

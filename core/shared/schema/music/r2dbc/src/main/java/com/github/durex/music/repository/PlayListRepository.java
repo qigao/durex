@@ -55,15 +55,16 @@ public class PlayListRepository {
 
   public Flux<Integer> save(List<PlayList> playLists) {
     return Flux.from(
-        dsl.batch(
-            playLists.stream()
-                .map(
-                    m -> {
-                      var rPlaylist = PlayListMapper.mapDtoToRecord(m);
-                      rPlaylist.setCreateTime(LocalDateTime.now());
-                      return dsl.insertInto(PLAYLIST).set(rPlaylist).onDuplicateKeyIgnore();
-                    })
-                .collect(Collectors.toUnmodifiableList())));
+            dsl.batch(
+                playLists.stream()
+                    .map(
+                        m -> {
+                          var rPlaylist = PlayListMapper.mapDtoToRecord(m);
+                          rPlaylist.setCreateTime(LocalDateTime.now());
+                          return dsl.insertInto(PLAYLIST).set(rPlaylist).onDuplicateKeyIgnore();
+                        })
+                    .collect(Collectors.toUnmodifiableList())))
+        .doOnError(e -> log.error(ERROR_DELETING_PLAY_LIST, e));
   }
 
   public Mono<Integer> update(PlayList playList) {

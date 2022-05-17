@@ -24,9 +24,7 @@ public class PlayListMusicRepository {
   @Inject DSLContext dsl;
 
   public List<Music> listMusicsByPlayListId(@NotNull String playlistId) {
-    try (var seekStep =
-        dsl.select(MUSIC.fields())
-           ) {
+    try (var seekStep = dsl.select(MUSIC.fields())) {
       return seekStep
           .from(PLAYLIST_MUSIC.leftJoin(MUSIC).on(PLAYLIST_MUSIC.MUSIC_ID.eq(MUSIC.ID)))
           .where(PLAYLIST_MUSIC.PLAYLIST_ID.eq(playlistId).and(NOT_DELETED))

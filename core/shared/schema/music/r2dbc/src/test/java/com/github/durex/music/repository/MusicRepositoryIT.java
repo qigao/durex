@@ -60,7 +60,8 @@ class MusicRepositoryIT {
   @DisplayName("When save and update music in batch")
   void testSaveMusicInBatchThenDelete() {
     var musicLists = DemoMusicData.givenSomeMusics(5);
-    musicLists.forEach(m -> m.setTitle(RANDOM_TITLE + m.getTitle()));
+    var newTitle = "new_title_for_batch_update";
+    musicLists.forEach(m -> m.setTitle(newTitle + m.getTitle()));
     assertAll(
         "save musics in batch then update their title",
         () ->
@@ -71,11 +72,11 @@ class MusicRepositoryIT {
                 .verifyComplete(),
         () ->
             repository
-                .findByTitle(RANDOM_TITLE, WildCardType.CONTAINS)
+                .findByTitle(newTitle, WildCardType.CONTAINS)
                 .as(StepVerifier::create)
                 .expectNextCount(5)
                 .verifyComplete(),
-        () -> musicLists.forEach(m -> m.setTitle(ANOTHER_TITLE)),
+        () -> musicLists.forEach(m -> m.setTitle(newTitle + ANOTHER_TITLE)),
         () ->
             repository
                 .update(musicLists)
@@ -84,13 +85,13 @@ class MusicRepositoryIT {
                 .verifyComplete(),
         () ->
             repository
-                .deleteByTitle(ANOTHER_TITLE, WildCardType.CONTAINS)
+                .deleteByTitle(newTitle, WildCardType.CONTAINS)
                 .as(StepVerifier::create)
                 .expectNext(5)
                 .verifyComplete(),
         () ->
             repository
-                .findByTitle(ANOTHER_TITLE, WildCardType.CONTAINS)
+                .findByTitle(newTitle, WildCardType.CONTAINS)
                 .as(StepVerifier::create)
                 .expectNextCount(0)
                 .verifyComplete());
