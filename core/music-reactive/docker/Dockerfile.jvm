@@ -1,0 +1,7 @@
+FROM adoptopenjdk/openjdk11:latest
+EXPOSE 8080
+RUN mkdir /opt/app
+COPY core/music/.env /opt/app/.env
+COPY scripts/setEnv.sh /opt/app/env.sh
+COPY core/music/build/*-runner.jar /opt/app/app.jar
+ENTRYPOINT ["/bin/bash" , "-c", "cd /opt/app/ &&source env.sh && java -jar /opt/app/app.jar"]

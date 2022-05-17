@@ -1,0 +1,35 @@
+plugins {
+    alias gLibs.plugins.sonarqube
+    alias qLibs.plugins.quarkus
+}
+
+jacocoTestReport {
+    afterEvaluate {
+        classDirectories.setFrom(files(classDirectories.files.collect {
+            fileTree(dir: it, exclude: [
+                '**/exceptions/**',
+                '**/entity/**',
+                '**/repository/**',
+            ]
+            )
+        }))
+    }
+}
+
+dependencies {
+    implementation project(":core:shared:utils")
+    implementation project(":core:shared:jooq-codegen")
+    implementation project(":core:shared:schema:music:json")
+    implementation project(":core:shared:schema:music:r2dbc")
+    implementation project(":core:shared:schema:music:entity")
+    implementation project(":core:shared:jakarta:cdi-utils")
+    implementation qLibs.logback
+}
+
+apply from: "$rootDir/gradle/library/quarkus-core.gradle"
+apply from: "$rootDir/gradle/library/quarkus-reactive.gradle"
+apply from: "$rootDir/gradle/library/sqldb.gradle"
+apply from: "$rootDir/gradle/extensions/intTest.gradle"
+
+
+

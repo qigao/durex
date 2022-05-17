@@ -1,0 +1,45 @@
+= Quarkus starter readme
+:icons: font
+
+TIP: Build/Run the app from root project dir
+
+== Build
+
+=== Build For Native Image
+
+==== Build Native
+
+[source,bash]
+--
+gradle core:music:quarkusBuild  -Dquarkus.package.type=native -Dquarkus.native.container-build=true
+--
+
+==== Build Docker
+
+[source,bash]
+--
+docker build -f core/music/docker/Dockerfile.native -t core/music .
+--
+
+== Build for Java Image
+
+=== Build UberJar
+
+[source,bash]
+--
+gradle core:music:quarkusBuild  -Dquarkus.package.type=uber-jar
+--
+
+=== Build Docker
+
+[source,bash]
+--
+docker build -f core/music/docker/Dockerfile.jvm -t core/music .
+--
+
+== Run Docker
+
+[source,bash]
+--
+ docker-compose  -f core/music/docker/docker-compose.yml up
+--
