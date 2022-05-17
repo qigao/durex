@@ -1,17 +1,5 @@
 plugins {
-    alias gLibs.plugins.sonarqube
     alias qLibs.plugins.quarkus
-}
-
-apply plugin: 'org.sonarqube'
-
-sonarqube {
-    properties {
-        property "sonar.host.url", "https://sonarcloud.io"
-        property "sonar.projectBaseDir", "$projectDir"
-        property "sonar.projectKey", "com.github.durex:$project.name"
-        property "sonar.projectName", "Quarkus Starter Project"
-    }
 }
 
 jacocoTestReport {
@@ -29,18 +17,14 @@ jacocoTestReport {
 
 dependencies {
     implementation project(":core:shared:utils")
-    implementation project(":core:shared:jooq")
     implementation project(":core:shared:schema:music:json")
-    implementation project(":core:shared:schema:music:repo")
     implementation project(":core:shared:schema:music:entity")
-    implementation project(":core:shared:jakarta-utils")
+    implementation project(":core:shared:schema:music:repo")
+    implementation project(":core:shared:jakarta:cdi-utils")
     implementation qLibs.logback
 }
 
 apply from: "$rootDir/gradle/library/quarkus-core.gradle"
 apply from: "$rootDir/gradle/library/quarkus-imperative.gradle"
-apply from: "$rootDir/gradle/library/sqldb.gradle"
-apply from: "$rootDir/gradle/extensions/intTest.gradle"
-
 
 

@@ -4,7 +4,6 @@ plugins{
 dependencies {
     implementation  vLibs.bundles.commons
     implementation project(":core:shared:utils")
-    implementation project(":core:shared:schema:music:json")
 }
 apply from: "$rootDir/gradle/library/sqldb.gradle"
 
