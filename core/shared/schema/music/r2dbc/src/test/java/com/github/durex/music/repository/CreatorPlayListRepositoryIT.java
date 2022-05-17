@@ -1,8 +1,6 @@
 package com.github.durex.music.repository;
 
-import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.github.durex.music.api.Music;
 import com.github.durex.music.api.PlayList;
@@ -13,7 +11,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 import javax.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
-import org.hamcrest.Matchers;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
@@ -36,32 +33,65 @@ class CreatorPlayListRepositoryIT {
   @DisplayName("When save playlist to creator")
   void testSavePlayListToCreator() {
     var musics = DemoMusicData.givenSomeMusics(20);
-    musicRepository.save(musics).doOnNext(m -> assertEquals(20, m.intValue())).subscribe();
+    musicRepository.save(musics).as(StepVerifier::create).expectNextCount(20).verifyComplete();
     var playList = DemoMusicData.givenAPlayList();
-    var savedPlaylist = playListRepository.save(playList);
-    assertEquals(1, savedPlaylist);
+    playListRepository.save(playList).as(StepVerifier::create).expectNextCount(1).verifyComplete();
+
     var playlistId = playList.getId();
 
     assertAll(
         "save musics to a playlist",
         () ->
-            assertEquals(
-                20, playListMusicRepository.saveMusicsToPlayList(playlistId, musics).length),
+            playListMusicRepository
+                .saveMusicsToPlayList(playlistId, musics)
+                .as(StepVerifier::create)
+                .expectNextCount(20)
+                .verifyComplete(),
         () ->
-            assertThat(
-                playListMusicRepository.listMusicsByPlayListId(playlistId), Matchers.hasSize(20)));
+            playListMusicRepository
+                .listMusicsByPlayListId(playlistId)
+                .as(StepVerifier::create)
+                .expectNextCount(20)
+                .verifyComplete());
     var creatorId = UniqID.getId();
     assertAll(
         "save playlist to creator",
         () ->
-            assertEquals(1, creatorPlayListRepository.savePlaylistToCreator(creatorId, playlistId)),
-        () -> assertEquals(1, creatorPlayListRepository.listPlaylistsByCreatorId(creatorId).size()),
+            creatorPlayListRepository
+                .savePlaylistToCreator(creatorId, playlistId)
+                .as(StepVerifier::create)
+                .expectNextCount(1)
+                .verifyComplete(),
         () ->
-            assertEquals(
-                1, creatorPlayListRepository.deletePlaylistFromCreator(creatorId, playlistId)),
-        () -> assertEquals(20, playListMusicRepository.clearMusicsFromPlayList(playlistId)),
-        () -> assertEquals(0, creatorPlayListRepository.listPlaylistsByCreatorId(creatorId).size()),
-        () -> assertEquals(1, playListRepository.deleteById(playlistId)));
+            creatorPlayListRepository
+                .listPlaylistsByCreatorId(creatorId)
+                .as(StepVerifier::create)
+                .expectNextCount(1)
+                .verifyComplete(),
+        () ->
+            creatorPlayListRepository
+                .deletePlaylistFromCreator(creatorId, playlistId)
+                .as(StepVerifier::create)
+                .expectNextCount(1)
+                .verifyComplete(),
+        () ->
+            playListMusicRepository
+                .clearMusicsFromPlayList(playlistId)
+                .as(StepVerifier::create)
+                .expectNext(20)
+                .verifyComplete(),
+        () ->
+            creatorPlayListRepository
+                .listPlaylistsByCreatorId(creatorId)
+                .as(StepVerifier::create)
+                .expectNextCount(0)
+                .verifyComplete(),
+        () ->
+            playListRepository
+                .deleteById(playlistId)
+                .as(StepVerifier::create)
+                .expectNextCount(1)
+                .verifyComplete());
   }
 
   @Test
@@ -71,11 +101,8 @@ class CreatorPlayListRepositoryIT {
     // given 20 musics
     var musics = DemoMusicData.givenSomeMusics(20);
     List<String> musicIds = musics.parallelStream().map(Music::getId).collect(Collectors.toList());
-    var result =
-        musicRepository
-            .save(musics)
-            .doOnNext(music -> assertEquals(20, music.intValue()))
-            .subscribe();
+
+    musicRepository.save(musics).as(StepVerifier::create).expectNextCount(20).verifyComplete();
     // given playlist with 20 musics
     var playlists = DemoMusicData.givenSomePlayList(20);
     playListRepository
@@ -88,29 +115,50 @@ class CreatorPlayListRepositoryIT {
 
     // then save music to playlist
     playlistIds.forEach(
-        id -> {
-          assertEquals(20, playListMusicRepository.saveMusicsToPlayList(id, musics).length);
-        });
+        id ->
+            playListMusicRepository
+                .saveMusicsToPlayList(id, musics)
+                .as(StepVerifier::create)
+                .expectNextCount(20)
+                .verifyComplete());
 
     // then save playlist to creator
     var creatorId = UniqID.getId();
     assertAll(
         "save playlist to creator",
         () ->
-            assertThat(
-                creatorPlayListRepository.savePlaylistToCreator(creatorId, playlistIds),
-                Matchers.not(0)),
+            creatorPlayListRepository
+                .savePlaylistToCreator(creatorId, playlistIds)
+                .as(StepVerifier::create)
+                .expectNextCount(20)
+                .verifyComplete(),
         () ->
-            assertEquals(20, creatorPlayListRepository.listPlaylistsByCreatorId(creatorId).size()),
+            creatorPlayListRepository
+                .listPlaylistsByCreatorId(creatorId)
+                .as(StepVerifier::create)
+                .expectNextCount(20)
+                .verifyComplete(),
         () ->
             // then delete playlist from creator
-            assertEquals(
-                20,
-                creatorPlayListRepository.deletePlaylistsFromCreator(creatorId, playlistIds)
-                    .length),
+
+            creatorPlayListRepository
+                .deletePlaylistsFromCreator(creatorId, playlistIds)
+                .as(StepVerifier::create)
+                .expectNext(20)
+                .verifyComplete(),
         // then delete playlist
-        () -> assertEquals(20, playListRepository.deleteById(playlistIds)),
+        () ->
+            playListRepository
+                .deleteById(playlistIds)
+                .as(StepVerifier::create)
+                .expectNext(20)
+                .verifyComplete(),
         // then delete music
-        () -> assertEquals(20, musicRepository.delete(musicIds)));
+        () ->
+            musicRepository
+                .delete(musicIds)
+                .as(StepVerifier::create)
+                .expectNext(20)
+                .verifyComplete());
   }
 }

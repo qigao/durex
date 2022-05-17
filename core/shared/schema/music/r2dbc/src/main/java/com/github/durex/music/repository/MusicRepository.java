@@ -171,7 +171,8 @@ public class MusicRepository {
                     m -> {
                       var rMusic = MusicMapper.mapDtoToRecord(m);
                       rMusic.setUpdateTime(LocalDateTime.now());
-                      return dsl.update(MUSIC).set(rMusic).where(MUSIC.ID.eq(m.getId()));
+                      var eqMusicID = MUSIC.ID.eq(m.getId());
+                      return dsl.update(MUSIC).set(rMusic).where(eqMusicID);
                     })
                 .collect(Collectors.toUnmodifiableList())));
   }

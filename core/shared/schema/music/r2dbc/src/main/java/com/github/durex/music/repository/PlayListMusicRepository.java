@@ -7,7 +7,6 @@ import com.github.durex.api.tables.records.RMusic;
 import com.github.durex.music.api.Music;
 import com.github.durex.music.mapper.MusicMapper;
 import com.github.durex.music.mapper.PlayListMusicMapper;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.enterprise.context.RequestScoped;
@@ -16,6 +15,8 @@ import javax.validation.constraints.NotNull;
 import lombok.extern.slf4j.Slf4j;
 import org.jooq.Condition;
 import org.jooq.DSLContext;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 @Slf4j
 @RequestScoped
@@ -23,55 +24,46 @@ public class PlayListMusicRepository {
   public static final Condition NOT_DELETED = MUSIC.DELETED_FLAG.eq(0);
   @Inject DSLContext dsl;
 
-  public List<Music> listMusicsByPlayListId(@NotNull String playlistId) {
-    try (var seekStep = dsl.select(MUSIC.fields())) {
-      return seekStep
-          .from(PLAYLIST_MUSIC.leftJoin(MUSIC).on(PLAYLIST_MUSIC.MUSIC_ID.eq(MUSIC.ID)))
-          .where(PLAYLIST_MUSIC.PLAYLIST_ID.eq(playlistId).and(NOT_DELETED))
-          .orderBy(PLAYLIST_MUSIC.MUSIC_ORDER)
-          .fetchInto(RMusic.class)
-          .stream()
-          .map(MusicMapper::mapRecordToDto)
-          .collect(Collectors.toList());
-    } catch (Exception e) {
-      log.error("listMusicsByPlayListId error", e);
-      return Collections.emptyList();
-    }
+  public Flux<Music> listMusicsByPlayListId(@NotNull String playlistId) {
+    var eqPlayListID = PLAYLIST_MUSIC.PLAYLIST_ID.eq(playlistId);
+    var eqMusicID = PLAYLIST_MUSIC.MUSIC_ID.eq(MUSIC.ID);
+    var joinTables = PLAYLIST_MUSIC.leftJoin(MUSIC);
+    return Flux.from(
+            dsl.select(MUSIC.fields())
+                .from(joinTables.on(eqMusicID))
+                .where(eqPlayListID.and(NOT_DELETED))
+                .orderBy(PLAYLIST_MUSIC.MUSIC_ORDER))
+        .map(r -> r.into(RMusic.class))
+        .map(MusicMapper::mapRecordToDto);
   }
 
-  public int[] saveMusicsToPlayList(@NotNull String playlistId, @NotNull List<Music> musics) {
+  public Flux<Integer> saveMusicsToPlayList(
+      @NotNull String playlistId, @NotNull List<Music> musics) {
     var records = PlayListMusicMapper.mapDtoToRecord(musics, playlistId);
-    return dsl.batchInsert(records).execute();
+    return Flux.from(
+        dsl.batch(
+            records.stream()
+                .map(m -> dsl.insertInto(PLAYLIST_MUSIC).set(m))
+                .collect(Collectors.toUnmodifiableList())));
   }
 
-  public int deleteMusicFromPlayList(@NotNull String playlistId, @NotNull String musicId) {
-    try (var crud = dsl.deleteFrom(PLAYLIST_MUSIC)) {
-      return crud.where(PLAYLIST_MUSIC.PLAYLIST_ID.eq(playlistId))
-          .and(PLAYLIST_MUSIC.MUSIC_ID.eq(musicId))
-          .execute();
-    } catch (Exception e) {
-      log.error("deleteMusicFromPlayLists error", e);
-      return 0;
-    }
+  public Mono<Integer> deleteMusicFromPlayList(
+      @NotNull String playlistId, @NotNull String musicId) {
+    return Mono.from(
+        dsl.deleteFrom(PLAYLIST_MUSIC)
+            .where(PLAYLIST_MUSIC.PLAYLIST_ID.eq(playlistId))
+            .and(PLAYLIST_MUSIC.MUSIC_ID.eq(musicId)));
   }
 
-  public int deleteMusicFromPlayList(@NotNull String playlistId, List<String> musicId) {
-    try (var crud = dsl.deleteFrom(PLAYLIST_MUSIC)) {
-      return crud.where(PLAYLIST_MUSIC.PLAYLIST_ID.eq(playlistId))
-          .and(PLAYLIST_MUSIC.MUSIC_ID.in(musicId))
-          .execute();
-    } catch (Exception e) {
-      log.error("deleteMusicFromPlayLists error", e);
-      return 0;
-    }
+  public Mono<Integer> deleteMusicFromPlayList(@NotNull String playlistId, List<String> musicId) {
+    return Mono.from(
+        dsl.deleteFrom(PLAYLIST_MUSIC)
+            .where(PLAYLIST_MUSIC.PLAYLIST_ID.eq(playlistId))
+            .and(PLAYLIST_MUSIC.MUSIC_ID.in(musicId)));
   }
 
-  public int clearMusicsFromPlayList(@NotNull String playlistId) {
-    try (var crud = dsl.deleteFrom(PLAYLIST_MUSIC)) {
-      return crud.where(PLAYLIST_MUSIC.PLAYLIST_ID.eq(playlistId)).execute();
-    } catch (Exception e) {
-      log.error("deleteAllMusicsFromPlayLists error", e);
-      return 0;
-    }
+  public Mono<Integer> clearMusicsFromPlayList(@NotNull String playlistId) {
+    return Mono.from(
+        dsl.deleteFrom(PLAYLIST_MUSIC).where(PLAYLIST_MUSIC.PLAYLIST_ID.eq(playlistId)));
   }
 }

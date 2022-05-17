@@ -1,7 +1,6 @@
 package com.github.durex.music.repository;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.github.durex.music.api.Music;
 import com.github.durex.music.support.DemoMusicData;
@@ -14,6 +13,7 @@ import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
+import reactor.test.StepVerifier;
 
 @Slf4j
 @QuarkusTest
@@ -28,25 +28,59 @@ class PlayListMusicRepositoryIT {
   @DisplayName("When save musics to playlist")
   void testSaveMusicsToPlayList() {
     var musics = DemoMusicData.givenSomeMusics(20);
-    var result =
-        musicRepository.save(musics).doOnNext(m -> assertEquals(20, m.intValue())).subscribe();
+    musicRepository.save(musics).as(StepVerifier::create).expectNextCount(20).verifyComplete();
     var playList = DemoMusicData.givenAPlayList();
-    var savedPlaylist = playListRepository.save(playList);
-    assertEquals(1, savedPlaylist);
+    playListRepository.save(playList).as(StepVerifier::create).expectNextCount(1).verifyComplete();
+
     var playlistId = playList.getId();
     assertAll(
         "save musics to playlist",
-        () -> assertEquals(20, repository.saveMusicsToPlayList(playlistId, musics).length),
-        () -> assertEquals(20, repository.listMusicsByPlayListId(playlistId).size()));
+        () ->
+            repository
+                .saveMusicsToPlayList(playlistId, musics)
+                .as(StepVerifier::create)
+                .expectNextCount(20)
+                .verifyComplete(),
+        () ->
+            repository
+                .listMusicsByPlayListId(playlistId)
+                .as(StepVerifier::create)
+                .expectNextCount(20)
+                .verifyComplete());
     var musicIds = musics.stream().map(Music::getId).collect(Collectors.toList());
     var id = musicIds.get(0);
     var someIds = musicIds.stream().skip(1).limit(3).collect(Collectors.toList());
     assertAll(
         "delete musics from playlist",
-        () -> assertEquals(1, repository.deleteMusicFromPlayList(playlistId, id)),
-        () -> assertEquals(3, repository.deleteMusicFromPlayList(playlistId, someIds)),
-        () -> assertEquals(16, repository.listMusicsByPlayListId(playlistId).size()),
-        () -> assertEquals(16, repository.clearMusicsFromPlayList(playlistId)),
-        () -> assertEquals(0, repository.listMusicsByPlayListId(playlistId).size()));
+        () ->
+            repository
+                .deleteMusicFromPlayList(playlistId, id)
+                .as(StepVerifier::create)
+                .expectNextCount(1)
+                .verifyComplete(),
+        () ->
+            repository
+                .deleteMusicFromPlayList(playlistId, someIds)
+                .as(StepVerifier::create)
+                .expectNext(3)
+                .verifyComplete(),
+        () ->
+            repository
+                .listMusicsByPlayListId(playlistId)
+                .as(StepVerifier::create)
+                .expectNextCount(16)
+                .verifyComplete(),
+        () ->
+            repository
+                .clearMusicsFromPlayList(playlistId)
+                .as(StepVerifier::create)
+                .expectNext(16)
+                .verifyComplete(),
+        () ->
+            repository
+                .listMusicsByPlayListId(playlistId)
+                .as(StepVerifier::create)
+                .expectNextCount(0)
+                .verifyComplete());
   }
 }

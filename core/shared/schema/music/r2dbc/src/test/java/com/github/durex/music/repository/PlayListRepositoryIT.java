@@ -1,6 +1,5 @@
 package com.github.durex.music.repository;
 
-import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 import com.github.durex.music.api.PlayList;
@@ -8,12 +7,10 @@ import com.github.durex.music.support.DemoMusicData;
 import com.github.durex.sqlbuilder.enums.WildCardType;
 import com.github.durex.uuid.UniqID;
 import io.quarkus.test.junit.QuarkusTest;
-import java.util.List;
 import java.util.stream.Collectors;
 import javax.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
-import org.hamcrest.Matchers;
 import org.junit.jupiter.api.*;
 import reactor.test.StepVerifier;
 
@@ -76,9 +73,7 @@ class PlayListRepositoryIT {
     assertAll(
         "update playlist",
         () ->
-
-          playlists.forEach(p -> p.setTitle(new_title+RandomStringUtils.randomAlphanumeric(5)))
-        ,
+            playlists.forEach(p -> p.setTitle(new_title + RandomStringUtils.randomAlphanumeric(5))),
         () ->
             repository
                 .update(playlists)
@@ -142,7 +137,7 @@ class PlayListRepositoryIT {
                 .expectNextCount(5)
                 .verifyComplete());
     var new_title = "new_title_query_batch";
-    playlists.forEach(p -> p.setTitle(new_title+RandomStringUtils.randomAlphanumeric(5)));
+    playlists.forEach(p -> p.setTitle(new_title + RandomStringUtils.randomAlphanumeric(5)));
     var playlistIds = playlists.stream().map(PlayList::getId).collect(Collectors.toList());
     assertAll(
         "update playlist",

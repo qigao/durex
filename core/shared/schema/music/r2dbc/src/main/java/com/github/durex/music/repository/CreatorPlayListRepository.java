@@ -3,20 +3,19 @@ package com.github.durex.music.repository;
 import static com.github.durex.api.tables.QCreatorPlaylist.CREATOR_PLAYLIST;
 import static com.github.durex.api.tables.QPlaylist.PLAYLIST;
 
-import com.github.durex.api.tables.records.RCreatorPlaylist;
 import com.github.durex.api.tables.records.RPlaylist;
 import com.github.durex.music.api.PlayList;
 import com.github.durex.music.mapper.PlayListMapper;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.validation.constraints.NotNull;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.ArrayUtils;
 import org.jooq.Condition;
 import org.jooq.DSLContext;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 @Slf4j
 @RequestScoped
@@ -24,68 +23,51 @@ public class CreatorPlayListRepository {
   public static final Condition DELETED_FLAG = PLAYLIST.DELETED_FLAG.eq(0);
   @Inject DSLContext dsl;
 
-  public int savePlaylistToCreator(@NotNull String creatorId, @NotNull String playlistId) {
-    try (var crud =
+  public Mono<Integer> savePlaylistToCreator(
+      @NotNull String creatorId, @NotNull String playlistId) {
+    return Mono.from(
         dsl.insertInto(CREATOR_PLAYLIST)
-            .columns(CREATOR_PLAYLIST.CREATOR_ID, CREATOR_PLAYLIST.PLAYLIST_ID)) {
-      return crud.values(creatorId, playlistId).execute();
-    } catch (Exception e) {
-      log.error("savePlaylistToCreator error", e);
-      return 0;
-    }
+            .columns(CREATOR_PLAYLIST.CREATOR_ID, CREATOR_PLAYLIST.PLAYLIST_ID)
+            .values(creatorId, playlistId));
   }
 
-  public int[] savePlaylistToCreator(@NotNull String creatorId, @NotNull List<String> playlistIds) {
-    var records =
-        playlistIds.stream()
-            .map(
-                playlistId ->
-                    dsl.newRecord(CREATOR_PLAYLIST)
-                        .setCreatorId(creatorId)
-                        .setPlaylistId(playlistId))
-            .collect(Collectors.toList());
-    return dsl.batchInsert(records).execute();
-  }
-
-  public int deletePlaylistFromCreator(@NotNull String creatorId, @NotNull String playlistId) {
-    try (var crud = dsl.deleteFrom(CREATOR_PLAYLIST)) {
-      return crud.where(CREATOR_PLAYLIST.CREATOR_ID.eq(creatorId))
-          .and(CREATOR_PLAYLIST.PLAYLIST_ID.eq(playlistId))
-          .execute();
-    } catch (Exception e) {
-      return 0;
-    }
-  }
-
-  public int[] deletePlaylistsFromCreator(
+  public Flux<Integer> savePlaylistToCreator(
       @NotNull String creatorId, @NotNull List<String> playlistIds) {
-    try {
-      var records =
-          playlistIds.stream()
-              .map(
-                  playlistId ->
-                      new RCreatorPlaylist().setCreatorId(creatorId).setPlaylistId(playlistId))
-              .collect(Collectors.toList());
-      return dsl.batchDelete(records).execute();
-    } catch (Exception e) {
-      return ArrayUtils.EMPTY_INT_ARRAY;
-    }
+    return Flux.from(
+        dsl.batch(
+            playlistIds.stream()
+                .map(
+                    m ->
+                        dsl.insertInto(CREATOR_PLAYLIST)
+                            .columns(CREATOR_PLAYLIST.CREATOR_ID, CREATOR_PLAYLIST.PLAYLIST_ID)
+                            .values(creatorId, m))
+                .collect(Collectors.toUnmodifiableList())));
   }
 
-  public List<PlayList> listPlaylistsByCreatorId(String creatorId) {
-    try (var seek = dsl.select(PLAYLIST.fields())) {
-      return seek
-          .from(
-              CREATOR_PLAYLIST.leftJoin(PLAYLIST).on(CREATOR_PLAYLIST.PLAYLIST_ID.eq(PLAYLIST.ID)))
-          .where(CREATOR_PLAYLIST.CREATOR_ID.eq(creatorId).and(DELETED_FLAG))
-          .orderBy(PLAYLIST.CREATE_TIME.desc())
-          .fetchInto(RPlaylist.class)
-          .stream()
-          .map(PlayListMapper::mapRecordToDto)
-          .collect(Collectors.toList());
-    } catch (Exception e) {
-      log.error("error", e);
-      return Collections.emptyList();
-    }
+  public Mono<Integer> deletePlaylistFromCreator(
+      @NotNull String creatorId, @NotNull String playlistId) {
+    var eqCreatorID = CREATOR_PLAYLIST.CREATOR_ID.eq(creatorId);
+    var eqPlayListID = CREATOR_PLAYLIST.PLAYLIST_ID.eq(playlistId);
+    return Mono.from(dsl.deleteFrom(CREATOR_PLAYLIST).where(eqCreatorID).and(eqPlayListID));
+  }
+
+  public Mono<Integer> deletePlaylistsFromCreator(
+      @NotNull String creatorId, @NotNull List<String> playlistIds) {
+    var eqCreateID = CREATOR_PLAYLIST.CREATOR_ID.eq(creatorId);
+    var allPlaylistIDs = CREATOR_PLAYLIST.PLAYLIST_ID.in(playlistIds);
+    return Mono.from(dsl.deleteFrom(CREATOR_PLAYLIST).where(eqCreateID.and(allPlaylistIDs)));
+  }
+
+  public Flux<PlayList> listPlaylistsByCreatorId(String creatorId) {
+    var eqCreatorID = CREATOR_PLAYLIST.CREATOR_ID.eq(creatorId);
+    var eqPlayListID = CREATOR_PLAYLIST.PLAYLIST_ID.eq(PLAYLIST.ID);
+    var leftJoin = CREATOR_PLAYLIST.leftJoin(PLAYLIST);
+    return Flux.from(
+            dsl.select(PLAYLIST.fields())
+                .from(leftJoin.on(eqPlayListID))
+                .where(eqCreatorID.and(DELETED_FLAG))
+                .orderBy(PLAYLIST.CREATE_TIME.desc()))
+        .map(r -> r.into(RPlaylist.class))
+        .map(PlayListMapper::mapRecordToDto);
   }
 }
