@@ -24,6 +24,22 @@ public class MusicMapper {
     rMusic.setMusicType(music.getMusicType());
   }
 
+  public RMusic mapDtoToRecord(Music music) {
+    return new RMusic()
+        .setId(music.getId())
+        .setTitle(music.getTitle())
+        .setDescription(music.getDescription())
+        .setArtistId(music.getArtistId())
+        .setPlayId(music.getPlayId())
+        .setLyricId(music.getLyricId())
+        .setCoverId(music.getCoverId())
+        .setSampleRate(String.valueOf(music.getSampleRate()))
+        .setChannels(music.getChannels())
+        .setBitRate(music.getBitRate())
+        .setDuration(music.getDuration())
+        .setMusicType(music.getMusicType());
+  }
+
   public Music mapRecordToDto(RMusic rMusic) {
     return new Music()
         .withId(rMusic.getId())

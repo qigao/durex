@@ -13,11 +13,19 @@ public class PlayListMapper {
     rPlaylist.setCoverId(playList.getCoverId());
   }
 
+  public RPlaylist mapDtoToRecord(PlayList playList) {
+    return new RPlaylist()
+      .setId(playList.getId())
+      .setDescription(playList.getDescription())
+      .setTitle(playList.getTitle())
+      .setCoverId(playList.getCoverId());
+  }
+
   public PlayList mapRecordToDto(RPlaylist rPlaylist) {
     return new PlayList()
-        .withId(rPlaylist.getId())
-        .withCoverId(rPlaylist.getCoverId())
-        .withDescription(rPlaylist.getDescription())
-        .withTitle(rPlaylist.getTitle());
+      .withId(rPlaylist.getId())
+      .withCoverId(rPlaylist.getCoverId())
+      .withDescription(rPlaylist.getDescription())
+      .withTitle(rPlaylist.getTitle());
   }
 }

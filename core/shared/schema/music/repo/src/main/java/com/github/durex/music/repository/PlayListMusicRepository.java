@@ -1,7 +1,7 @@
 package com.github.durex.music.repository;
 
-import static com.github.durex.api.tables.TMusic.MUSIC;
-import static com.github.durex.api.tables.TPlaylistMusic.PLAYLIST_MUSIC;
+import static com.github.durex.api.tables.QMusic.MUSIC;
+import static com.github.durex.api.tables.QPlaylistMusic.PLAYLIST_MUSIC;
 
 import com.github.durex.api.tables.records.RMusic;
 import com.github.durex.music.api.Music;

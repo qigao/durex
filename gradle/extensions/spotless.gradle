@@ -6,6 +6,7 @@ spotless {
             include '**/src/*/java/**/*.java'
             exclude '**/.gradle/**'
             exclude '**/generated/**'
+            exclude '**/gen/**'
             exclude '**/build/**'
         }
         removeUnusedImports()

@@ -1,23 +1,22 @@
 package com.github.durex.music.repository;
 
+import static com.github.durex.api.tables.QCreatorPlaylist.CREATOR_PLAYLIST;
+import static com.github.durex.api.tables.QPlaylist.PLAYLIST;
+
 import com.github.durex.api.tables.records.RCreatorPlaylist;
 import com.github.durex.api.tables.records.RPlaylist;
 import com.github.durex.music.api.PlayList;
 import com.github.durex.music.mapper.PlayListMapper;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
+import javax.enterprise.context.RequestScoped;
+import javax.inject.Inject;
+import javax.validation.constraints.NotNull;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ArrayUtils;
 import org.jooq.Condition;
 import org.jooq.DSLContext;
-
-import javax.enterprise.context.RequestScoped;
-import javax.inject.Inject;
-import javax.validation.constraints.NotNull;
-import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import static com.github.durex.api.tables.TCreatorPlaylist.CREATOR_PLAYLIST;
-import static com.github.durex.api.tables.TPlaylist.PLAYLIST;
 
 @Slf4j
 @RequestScoped

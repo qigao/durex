@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.github.durex.music.api.Music;
 import com.github.durex.music.api.PlayList;
-import com.github.durex.music.mapper.support.DemoMusicData;
+import com.github.durex.music.support.DemoMusicData;
 import com.github.durex.uuid.UniqID;
 import io.quarkus.test.junit.QuarkusTest;
 import java.util.List;
@@ -14,7 +14,12 @@ import java.util.stream.Collectors;
 import javax.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
 import org.hamcrest.Matchers;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
+import reactor.test.StepVerifier;
 
 @Slf4j
 @QuarkusTest
@@ -31,8 +36,7 @@ class CreatorPlayListRepositoryIT {
   @DisplayName("When save playlist to creator")
   void testSavePlayListToCreator() {
     var musics = DemoMusicData.givenSomeMusics(20);
-    var result = musicRepository.save(musics);
-    assertEquals(20, result.length);
+    musicRepository.save(musics).doOnNext(m -> assertEquals(20, m.intValue())).subscribe();
     var playList = DemoMusicData.givenAPlayList();
     var savedPlaylist = playListRepository.save(playList);
     assertEquals(1, savedPlaylist);
@@ -67,11 +71,18 @@ class CreatorPlayListRepositoryIT {
     // given 20 musics
     var musics = DemoMusicData.givenSomeMusics(20);
     List<String> musicIds = musics.parallelStream().map(Music::getId).collect(Collectors.toList());
-    var result = musicRepository.save(musics);
-    assertEquals(20, result.length);
+    var result =
+        musicRepository
+            .save(musics)
+            .doOnNext(music -> assertEquals(20, music.intValue()))
+            .subscribe();
     // given playlist with 20 musics
     var playlists = DemoMusicData.givenSomePlayList(20);
-    assertEquals(20, playListRepository.save(playlists).length);
+    playListRepository
+        .save(playlists)
+        .as(StepVerifier::create)
+        .expectNextCount(20)
+        .verifyComplete();
     // given playlistId 20 times
     var playlistIds = playlists.parallelStream().map(PlayList::getId).collect(Collectors.toList());
 

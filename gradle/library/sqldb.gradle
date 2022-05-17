@@ -2,4 +2,7 @@ dependencies {
     implementation dbLibs.bundles.jooq
     implementation dbLibs.postgre
     implementation dbLibs.mysql
+    implementation platform(dbLibs.r2dbc.bom.get())
+    implementation 'io.r2dbc:r2dbc-spi'
+    implementation 'dev.miku:r2dbc-mysql:0.8.2.RELEASE'
 }

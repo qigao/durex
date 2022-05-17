@@ -1,6 +1,6 @@
 package com.github.durex.music.repository;
 
-import static com.github.durex.api.tables.TMusic.MUSIC;
+import static com.github.durex.api.tables.QMusic.MUSIC;
 
 import com.github.durex.music.api.Music;
 import com.github.durex.music.mapper.MusicMapper;

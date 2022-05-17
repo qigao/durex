@@ -29,6 +29,8 @@ mysql = { group = 'mysql', name = 'mysql-connector-java', version = '8.0.28' }
 
 hikaricp = { group = 'com.zaxxer', name = 'HikariCP', version.ref = 'hikaricp' }
 
+r2dbc-bom = { group = 'io.r2dbc', name = 'r2dbc-bom', version = 'Borca-RELEASE' }
+
 [bundles]
 querydsl = ['querydsl-apt', 'querydsl-core', 'querydsl-jpa']
 jooq = ['jooq-core', 'jooq-meta', 'jooq-codegen', 'jooq-ext', 'hikaricp']

@@ -4,7 +4,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 import com.github.durex.music.api.PlayList;
-import com.github.durex.music.mapper.support.DemoMusicData;
+import com.github.durex.music.support.DemoMusicData;
 import com.github.durex.sqlbuilder.enums.WildCardType;
 import com.github.durex.uuid.UniqID;
 import io.quarkus.test.junit.QuarkusTest;
@@ -15,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.*;
+import reactor.test.StepVerifier;
 
 @Slf4j
 @QuarkusTest
@@ -32,9 +33,27 @@ class PlayListRepositoryIT {
     var playlistId = playlist.getId();
     assertAll(
         "save playlist",
-        () -> assertEquals(1, repository.save(playlist)),
-        () -> assertTrue(repository.findById(playlistId).isPresent()),
-        () -> assertEquals(1, repository.deleteById(playlistId)));
+        () ->
+            repository.save(playlist).as(StepVerifier::create).expectNextCount(1).verifyComplete(),
+        () ->
+            repository
+                .findById(playlistId)
+                .as(StepVerifier::create)
+                .expectNextCount(1)
+                .verifyComplete(),
+        () -> playlist.setTitle(ANOTHER_TITLE),
+        () ->
+            repository
+                .update(playlist)
+                .as(StepVerifier::create)
+                .expectNextCount(1)
+                .verifyComplete(),
+        () ->
+            repository
+                .deleteById(playlistId)
+                .as(StepVerifier::create)
+                .expectNextCount(1)
+                .verifyComplete());
   }
 
   @Test
@@ -43,15 +62,41 @@ class PlayListRepositoryIT {
   void testSavePlayListInBatchThenDelete() {
     var playlists = DemoMusicData.givenSomePlayList(5);
     playlists.forEach(p -> p.setTitle(RANDOM_TITLE + p.getTitle()));
-    var results = repository.save(playlists);
-    assertThat(results, Matchers.not(0));
-    assertThat(repository.findByTitle(RANDOM_TITLE, WildCardType.CONTAINS).size(), Matchers.is(5));
-    playlists.forEach(p -> p.setTitle(ANOTHER_TITLE));
+    assertAll(
+        "save playlist",
+        () ->
+            repository.save(playlists).as(StepVerifier::create).expectNextCount(5).verifyComplete(),
+        () ->
+            repository
+                .findByTitle(RANDOM_TITLE, WildCardType.CONTAINS)
+                .as(StepVerifier::create)
+                .expectNextCount(5)
+                .verifyComplete());
+    var new_title = "new_title_query_batch";
     assertAll(
         "update playlist",
-        () -> assertEquals(5, repository.update(playlists).length),
-        () -> assertThat(repository.findAll().size(), Matchers.greaterThanOrEqualTo(5)),
-        () -> assertEquals(5, repository.deleteByTitle(ANOTHER_TITLE, WildCardType.CONTAINS)));
+        () ->
+
+          playlists.forEach(p -> p.setTitle(new_title+RandomStringUtils.randomAlphanumeric(5)))
+        ,
+        () ->
+            repository
+                .update(playlists)
+                .as(StepVerifier::create)
+                .expectNextCount(5)
+                .verifyComplete(),
+        () ->
+            repository
+                .findByTitle(new_title, WildCardType.CONTAINS)
+                .as(StepVerifier::create)
+                .expectNextCount(5)
+                .verifyComplete(),
+        () ->
+            repository
+                .deleteByTitle(new_title, WildCardType.CONTAINS)
+                .as(StepVerifier::create)
+                .expectNext(5)
+                .verifyComplete());
   }
 
   @Test
@@ -60,29 +105,64 @@ class PlayListRepositoryIT {
   void testFindThenDeleteByTitle() {
     var playlistId = UniqID.getId();
     var playlist = DemoMusicData.givenAPlayList(playlistId);
-    playlist.setTitle(RANDOM_TITLE);
+    var new_title = "new_title_query_batch";
+    playlist.setTitle(new_title);
     assertAll(
         "save playlist then find by title",
-        () -> assertEquals(1, repository.save(playlist)),
-        () -> assertEquals(1, repository.findByTitle(RANDOM_TITLE).size()),
-        () -> assertEquals(1, repository.deleteByTitle(RANDOM_TITLE)));
+        () ->
+            repository.save(playlist).as(StepVerifier::create).expectNextCount(1).verifyComplete(),
+        () ->
+            repository
+                .findByTitle(new_title)
+                .as(StepVerifier::create)
+                .expectNextCount(1)
+                .verifyComplete(),
+        () ->
+            repository
+                .deleteByTitle(new_title)
+                .as(StepVerifier::create)
+                .expectNextCount(1)
+                .verifyComplete());
   }
 
   @Test
   @Order(400)
-  @DisplayName("When update playlist title")
-  void testUpdateThenDelete() {
-    var playlist = DemoMusicData.givenAPlayList();
+  @DisplayName("When find playlist by some ids")
+  void testFindPlayListInBatchThenDelete() {
+    var playlists = DemoMusicData.givenSomePlayList(5);
+    playlists.forEach(p -> p.setTitle(RANDOM_TITLE + p.getTitle()));
     assertAll(
-        "update playlist title",
-        () -> assertEquals(1, repository.save(playlist)),
-        () -> playlist.setTitle(RANDOM_TITLE),
-        () -> assertEquals(1, repository.update(playlist)));
-    List<PlayList> playLists = repository.findByTitle(RANDOM_TITLE);
-    List<String> playlistIds = playLists.stream().map(PlayList::getId).collect(Collectors.toList());
+        "save playlist",
+        () ->
+            repository.save(playlists).as(StepVerifier::create).expectNextCount(5).verifyComplete(),
+        () ->
+            repository
+                .findByTitle(RANDOM_TITLE, WildCardType.CONTAINS)
+                .as(StepVerifier::create)
+                .expectNextCount(5)
+                .verifyComplete());
+    var new_title = "new_title_query_batch";
+    playlists.forEach(p -> p.setTitle(new_title+RandomStringUtils.randomAlphanumeric(5)));
+    var playlistIds = playlists.stream().map(PlayList::getId).collect(Collectors.toList());
     assertAll(
-        "check playlist",
-        () -> assertEquals(1, playLists.size()),
-        () -> assertThat(repository.deleteById(playlistIds), Matchers.greaterThan(0)));
+        "update playlist",
+        () ->
+            repository
+                .update(playlists)
+                .as(StepVerifier::create)
+                .expectNextCount(5)
+                .verifyComplete(),
+        () ->
+            repository
+                .findByTitle(new_title, WildCardType.CONTAINS)
+                .as(StepVerifier::create)
+                .expectNextCount(5)
+                .verifyComplete(),
+        () ->
+            repository
+                .deleteById(playlistIds)
+                .as(StepVerifier::create)
+                .expectNext(5)
+                .verifyComplete());
   }
 }

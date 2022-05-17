@@ -14,8 +14,8 @@ sourceSets {
     main {
         java {
             srcDirs = [
-                    'src/main/java',
-                    'src/gen/java'
+                'src/main/java',
+                'src/gen/java'
             ]
         }
     }

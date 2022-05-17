@@ -1,24 +1,22 @@
 package com.github.durex.music.repository;
 
+import static com.github.durex.api.tables.QMusic.MUSIC;
+
 import com.github.durex.music.api.Music;
 import com.github.durex.music.mapper.MusicMapper;
 import com.github.durex.sqlbuilder.SqlHelper;
 import com.github.durex.sqlbuilder.enums.WildCardType;
-import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.ArrayUtils;
-import org.jooq.Condition;
-import org.jooq.DSLContext;
-
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.validation.constraints.NotNull;
-import java.time.LocalDateTime;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
-import static com.github.durex.api.tables.TMusic.MUSIC;
+import lombok.extern.slf4j.Slf4j;
+import org.jooq.Condition;
+import org.jooq.DSLContext;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 @Slf4j
 @RequestScoped
@@ -31,59 +29,38 @@ public class MusicRepository {
    * @param title title of music
    * @return list of found rows
    */
-  public List<Music> findByTitle(@NotNull String title) {
-    try (var crud = dsl.selectFrom(MUSIC)) {
-      return crud.where(MUSIC.TITLE.eq(title))
-          .and(NOT_DELETED)
-          .fetch()
-          .map(MusicMapper::mapRecordToDto);
-    } catch (Exception e) {
-      log.error("Error fetching musics", e);
-      return Collections.emptyList();
-    }
+  public Flux<Music> findByTitle(@NotNull String title) {
+    return Flux.from(dsl.selectFrom(MUSIC).where(MUSIC.TITLE.eq(title)).and(NOT_DELETED))
+        .map(MusicMapper::mapRecordToDto);
   }
 
   /**
    * @param title title of music
    * @return list of found rows
    */
-  public List<Music> findByTitle(@NotNull String title, WildCardType wildCardType) {
-    var realTitle = SqlHelper.likeClauseBuilder(wildCardType, title);
-    try (var crud = dsl.selectFrom(MUSIC)) {
-      return crud.where(MUSIC.TITLE.like(realTitle))
-          .and(NOT_DELETED)
-          .fetch()
-          .map(MusicMapper::mapRecordToDto);
-    } catch (Exception e) {
-      log.error("Error fetching musics", e);
-      return Collections.emptyList();
-    }
+  public Flux<Music> findByTitle(@NotNull String title, WildCardType wildCardType) {
+    String clauseBuilder = SqlHelper.likeClauseBuilder(wildCardType, title);
+    return Flux.from(dsl.selectFrom(MUSIC).where(MUSIC.TITLE.like(clauseBuilder)).and(NOT_DELETED))
+        .map(MusicMapper::mapRecordToDto);
   }
 
   /**
    * @param id id of music
    * @return music
    */
-  public Optional<Music> findById(@NotNull String id) {
-    try (var crud = dsl.selectFrom(MUSIC)) {
-      var rMusic = crud.where(MUSIC.ID.eq(id)).and(NOT_DELETED).fetchOne();
-      return Optional.ofNullable(rMusic).map(MusicMapper::mapRecordToDto);
-    } catch (Exception e) {
-      log.error("Error fetching music", e);
-      return Optional.empty();
-    }
+  public Mono<Music> findById(@NotNull String id) {
+    return Mono.from(dsl.selectFrom(MUSIC).where(MUSIC.ID.eq(id)).and(NOT_DELETED))
+        .map(MusicMapper::mapRecordToDto);
   }
 
-  /**
-   * @return list of musics
-   */
-  public List<Music> findAll() {
-    try (var crud = dsl.selectFrom(MUSIC)) {
-      return crud.fetch().stream().map(MusicMapper::mapRecordToDto).collect(Collectors.toList());
-    } catch (Exception e) {
-      log.error("Error fetching musics", e);
-      return Collections.emptyList();
-    }
+  /** @return list of musics which are not deleted */
+  public Flux<Music> findAllAvailable() {
+    return Flux.from(dsl.selectFrom(MUSIC).where(NOT_DELETED)).map(MusicMapper::mapRecordToDto);
+  }
+
+  public Flux<Music> findAllDeleted() {
+    return Flux.from(dsl.selectFrom(MUSIC).where(MUSIC.DELETED_FLAG.eq(1)))
+        .map(MusicMapper::mapRecordToDto);
   }
 
   /**
@@ -92,14 +69,12 @@ public class MusicRepository {
    * @param id id of music
    * @return number of updated rows
    */
-  public int deleteById(@NotNull String id) {
-    try (var crud =
-        dsl.update(MUSIC).set(MUSIC.DELETED_FLAG, 1).set(MUSIC.DELETE_TIME, LocalDateTime.now())) {
-      return crud.where(MUSIC.ID.eq(id)).execute();
-    } catch (Exception e) {
-      log.error(ERROR_DELETING_MUSIC, e);
-      return 0;
-    }
+  public Mono<Integer> deleteById(@NotNull String id) {
+    return Mono.from(
+        dsl.update(MUSIC)
+            .set(MUSIC.DELETED_FLAG, 1)
+            .set(MUSIC.DELETE_TIME, LocalDateTime.now())
+            .where(MUSIC.ID.eq(id)));
   }
 
   /**
@@ -108,39 +83,35 @@ public class MusicRepository {
    * @param title title of musi
    * @return number of updated rows
    */
-  public int deleteByTitle(@NotNull String title) {
-    try (var crud =
-        dsl.update(MUSIC).set(MUSIC.DELETED_FLAG, 1).set(MUSIC.DELETE_TIME, LocalDateTime.now())) {
-      return crud.where(MUSIC.TITLE.eq(title)).execute();
-    } catch (Exception e) {
-      log.error(ERROR_DELETING_MUSIC, e);
-      return 0;
-    }
+  public Mono<Integer> deleteByTitle(@NotNull String title) {
+    return Mono.from(
+        dsl.update(MUSIC)
+            .set(MUSIC.DELETED_FLAG, 1)
+            .set(MUSIC.DELETE_TIME, LocalDateTime.now())
+            .where(MUSIC.TITLE.eq(title)));
   }
 
   /**
    * @param title title of music
    * @return number of inserted rows
    */
-  public int deleteByTitle(@NotNull String title, WildCardType wildCardType) {
+  public Mono<Integer> deleteByTitle(@NotNull String title, WildCardType wildCardType) {
     var realTitle = SqlHelper.likeClauseBuilder(wildCardType, title);
-    try (var crud =
-        dsl.update(MUSIC).set(MUSIC.DELETED_FLAG, 1).set(MUSIC.DELETE_TIME, LocalDateTime.now())) {
-      return crud.where(MUSIC.TITLE.like(realTitle)).execute();
-    } catch (Exception e) {
-      log.error(ERROR_DELETING_MUSIC, e);
-      return 0;
-    }
+    return Mono.from(
+            dsl.update(MUSIC)
+                .set(MUSIC.DELETED_FLAG, 1)
+                .set(MUSIC.DELETE_TIME, LocalDateTime.now())
+                .where(MUSIC.TITLE.like(realTitle)))
+        .doFinally(signalType -> log.info("deleteByTitle"));
   }
 
-  public int delete(@NotNull List<String> musicIds) {
-    try (var crud =
-        dsl.update(MUSIC).set(MUSIC.DELETED_FLAG, 1).set(MUSIC.DELETE_TIME, LocalDateTime.now())) {
-      return crud.where(MUSIC.ID.in(musicIds)).execute();
-    } catch (Exception e) {
-      log.error(ERROR_DELETING_MUSIC, e);
-      return 0;
-    }
+  public Mono<Integer> delete(@NotNull List<String> musicIds) {
+    return Mono.from(
+            dsl.update(MUSIC)
+                .set(MUSIC.DELETED_FLAG, 1)
+                .set(MUSIC.DELETE_TIME, LocalDateTime.now())
+                .where(MUSIC.ID.in(musicIds)))
+        .doFinally(signalType -> log.info("delete music"));
   }
 
   /**
@@ -149,16 +120,10 @@ public class MusicRepository {
    * @param music music
    * @return insert result
    */
-  public int save(Music music) {
-    try {
-      var rMusic = dsl.newRecord(MUSIC);
-      rMusic.setCreateTime(LocalDateTime.now());
-      MusicMapper.mapDtoToRecord(music, rMusic);
-      return rMusic.insert();
-    } catch (Exception e) {
-      log.error("Error saving music", e);
-      return 0;
-    }
+  public Mono<Integer> save(Music music) {
+    var rMusic = MusicMapper.mapDtoToRecord(music);
+    rMusic.setCreateTime(LocalDateTime.now());
+    return Mono.from(dsl.insertInto(MUSIC).set(rMusic));
   }
 
   /**
@@ -167,22 +132,17 @@ public class MusicRepository {
    * @param musics music list
    * @return int[] updated result of musics
    */
-  public int[] save(List<Music> musics) {
-    try {
-      var rMusics =
-          musics.stream()
-              .map(
-                  m -> {
-                    var rMusic = dsl.newRecord(MUSIC);
-                    MusicMapper.mapDtoToRecord(m, rMusic);
-                    return rMusic;
-                  })
-              .collect(Collectors.toList());
-      return dsl.batchInsert(rMusics).execute();
-    } catch (Exception e) {
-      log.error("Error saving batch of music", e);
-      return ArrayUtils.EMPTY_INT_ARRAY;
-    }
+  public Flux<Integer> save(List<Music> musics) {
+    return Flux.from(
+        dsl.batch(
+            musics.stream()
+                .map(
+                    m -> {
+                      var rMusic = MusicMapper.mapDtoToRecord(m);
+                      rMusic.setCreateTime(LocalDateTime.now());
+                      return dsl.insertInto(MUSIC).set(rMusic).onDuplicateKeyIgnore();
+                    })
+                .collect(Collectors.toUnmodifiableList())));
   }
 
   /**
@@ -191,40 +151,28 @@ public class MusicRepository {
    * @param music musicDTO ToUpdate
    * @return number of updated records
    */
-  public int update(Music music) {
-    try {
-      var rMusic = dsl.newRecord(MUSIC);
-      MusicMapper.mapDtoToRecord(music, rMusic);
-      rMusic.setUpdateTime(LocalDateTime.now());
-      return rMusic.update();
-    } catch (Exception e) {
-      log.error("Error updating music", e);
-      return 0;
-    }
+  public Mono<Integer> update(Music music) {
+    var rMusic = MusicMapper.mapDtoToRecord(music);
+    rMusic.setUpdateTime(LocalDateTime.now());
+    return Mono.from(dsl.update(MUSIC).set(rMusic).where(MUSIC.ID.eq(music.getId())));
   }
 
   /**
-   * batch update
+   * update a record
    *
-   * @param musics musicDTOs ToUpdate
+   * @param musics musicDTO ToUpdate
    * @return number of updated records
    */
-  public int[] update(List<Music> musics) {
-    try {
-      var rMusics =
-          musics.stream()
-              .map(
-                  m -> {
-                    var rMusic = dsl.newRecord(MUSIC);
-                    rMusic.setUpdateTime(LocalDateTime.now());
-                    MusicMapper.mapDtoToRecord(m, rMusic);
-                    return rMusic;
-                  })
-              .collect(Collectors.toList());
-      return dsl.batchUpdate(rMusics).execute();
-    } catch (Exception e) {
-      log.error("Error updating batch of music", e);
-      return ArrayUtils.EMPTY_INT_ARRAY;
-    }
+  public Flux<Integer> update(List<Music> musics) {
+    return Flux.from(
+        dsl.batch(
+            musics.stream()
+                .map(
+                    m -> {
+                      var rMusic = MusicMapper.mapDtoToRecord(m);
+                      rMusic.setUpdateTime(LocalDateTime.now());
+                      return dsl.update(MUSIC).set(rMusic).where(MUSIC.ID.eq(m.getId()));
+                    })
+                .collect(Collectors.toUnmodifiableList())));
   }
 }

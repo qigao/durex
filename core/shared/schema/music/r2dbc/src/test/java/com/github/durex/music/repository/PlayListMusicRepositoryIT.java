@@ -4,12 +4,16 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.github.durex.music.api.Music;
-import com.github.durex.music.mapper.support.DemoMusicData;
+import com.github.durex.music.support.DemoMusicData;
 import io.quarkus.test.junit.QuarkusTest;
 import java.util.stream.Collectors;
 import javax.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 
 @Slf4j
 @QuarkusTest
@@ -24,8 +28,8 @@ class PlayListMusicRepositoryIT {
   @DisplayName("When save musics to playlist")
   void testSaveMusicsToPlayList() {
     var musics = DemoMusicData.givenSomeMusics(20);
-    var result = musicRepository.save(musics);
-    assertEquals(20, result.length);
+    var result =
+        musicRepository.save(musics).doOnNext(m -> assertEquals(20, m.intValue())).subscribe();
     var playList = DemoMusicData.givenAPlayList();
     var savedPlaylist = playListRepository.save(playList);
     assertEquals(1, savedPlaylist);
