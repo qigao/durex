@@ -6,4 +6,5 @@ public enum WildCardType {
   END_WITH,
 
   CONTAINS,
+  NONE
 }
