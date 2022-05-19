@@ -4,11 +4,11 @@ import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 
 import com.github.durex.music.api.Music;
 import com.github.durex.music.service.MusicService;
-import com.github.durex.shared.annotations.Logged;
 import com.github.durex.shared.annotations.Param;
 import com.github.durex.shared.api.RespData;
 import com.github.durex.shared.utils.Helper;
-import java.util.List;
+import io.smallrye.mutiny.Multi;
+import io.smallrye.mutiny.Uni;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
@@ -37,7 +37,7 @@ import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 @Tag(name = "Music")
 @Slf4j
 @Param
-@Logged
+// @Logged
 public class MusicController {
 
   @Inject MusicService musicService;
@@ -52,15 +52,16 @@ public class MusicController {
       description = "Success",
       content =
           @Content(mediaType = APPLICATION_JSON, schema = @Schema(implementation = RespData.class)))
-  public RespData getMusic(
+  public Multi<RespData> getMusic(
       @Parameter(description = "music title") @QueryParam("title") @Encoded String title,
       @Parameter(description = "music id,used when paging") @QueryParam("id") @Encoded
           String musicId,
       @Parameter(description = "page size") @QueryParam("offset") @Encoded @DefaultValue("10")
           int offset) {
     log.info("getMusic title:{},musicId:{},offset:{}", title, musicId, offset);
-    List<Music> musicList = musicService.getMusicsByTitle(title);
-    return RespData.builder().error(Helper.okResponse()).data(musicList).build();
+    return Multi.createFrom()
+        .publisher(musicService.getMusicsByTitle(title))
+        .map(p -> RespData.builder().error(Helper.okResponse()).data(p).build());
   }
 
   @GET
@@ -71,9 +72,11 @@ public class MusicController {
       description = "Success",
       content =
           @Content(mediaType = APPLICATION_JSON, schema = @Schema(implementation = RespData.class)))
-  public RespData getMusic(@Parameter(description = "music id ") @PathParam("id") String musicId) {
-    var musicResp = musicService.getMusicById(musicId);
-    return RespData.builder().error(Helper.okResponse()).data(List.of(musicResp)).build();
+  public Uni<RespData> getMusic(
+      @Parameter(description = "music id ") @PathParam("id") String musicId) {
+    return Uni.createFrom()
+        .publisher(musicService.getMusicById(musicId))
+        .map(p -> RespData.builder().error(Helper.okResponse()).data(p).build());
   }
 
   @DELETE
@@ -84,9 +87,11 @@ public class MusicController {
       description = "Success",
       content =
           @Content(mediaType = APPLICATION_JSON, schema = @Schema(implementation = RespData.class)))
-  public RespData deleteMusic(@Parameter(description = "music id ") @PathParam("id") String id) {
-    var result = musicService.deleteMusicById(id);
-    return RespData.builder().error(Helper.okResponse()).data(result).build();
+  public Uni<RespData> deleteMusic(
+      @Parameter(description = "music id ") @PathParam("id") String id) {
+    return Uni.createFrom()
+        .publisher(musicService.deleteMusicById(id))
+        .map(p -> RespData.builder().error(Helper.okResponse()).data(p).build());
   }
 
   @POST
@@ -97,9 +102,10 @@ public class MusicController {
       description = "Success",
       content =
           @Content(mediaType = APPLICATION_JSON, schema = @Schema(implementation = RespData.class)))
-  public RespData createMusic(Music musicReq) {
-    var result = musicService.createMusic(musicReq);
-    return RespData.builder().error(Helper.okResponse()).data(result).build();
+  public Uni<RespData> createMusic(Music musicReq) {
+    return Uni.createFrom()
+        .publisher(musicService.createMusic(musicReq))
+        .map(p -> RespData.builder().error(Helper.okResponse()).data(p).build());
   }
 
   @PUT
@@ -110,9 +116,10 @@ public class MusicController {
       description = "Success",
       content =
           @Content(mediaType = APPLICATION_JSON, schema = @Schema(implementation = RespData.class)))
-  public RespData updateMusic(Music musicReq) {
+  public Uni<RespData> updateMusic(Music musicReq) {
     log.info("update music: {}", musicReq);
-    var result = musicService.updateMusic(musicReq);
-    return RespData.builder().error(Helper.okResponse()).data(result).build();
+    return Uni.createFrom()
+        .publisher(musicService.updateMusic(musicReq))
+        .map(p -> RespData.builder().error(Helper.okResponse()).data(p).build());
   }
 }

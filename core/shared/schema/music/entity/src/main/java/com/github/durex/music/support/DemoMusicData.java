@@ -4,10 +4,11 @@ import com.github.durex.music.api.Music;
 import com.github.durex.music.api.PlayList;
 import com.github.durex.music.api.PlayListMusic;
 import com.github.durex.uuid.UniqID;
-import java.util.ArrayList;
-import java.util.List;
 import lombok.experimental.UtilityClass;
 import org.apache.commons.lang3.RandomStringUtils;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @UtilityClass
 public class DemoMusicData {
@@ -82,6 +83,7 @@ public class DemoMusicData {
         .withId(UniqID.getId())
         .withCoverId(UniqID.getId())
         .withTitle(title)
-        .withDescription(description);
+        .withDescription(description)
+        .withMusics(musics);
   }
 }

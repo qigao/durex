@@ -1,27 +1,27 @@
 package com.github.durex.music.repository;
 
-import static com.github.durex.api.tables.QMusic.MUSIC;
-
 import com.github.durex.music.api.Music;
 import com.github.durex.music.mapper.MusicMapper;
 import com.github.durex.sqlbuilder.SqlHelper;
 import com.github.durex.sqlbuilder.enums.WildCardType;
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.stream.Collectors;
-import javax.enterprise.context.RequestScoped;
-import javax.inject.Inject;
-import javax.validation.constraints.NotNull;
 import lombok.extern.slf4j.Slf4j;
 import org.jooq.Condition;
 import org.jooq.DSLContext;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import javax.enterprise.context.RequestScoped;
+import javax.inject.Inject;
+import javax.validation.constraints.NotNull;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import static com.github.durex.api.tables.QMusic.MUSIC;
+
 @Slf4j
 @RequestScoped
 public class MusicRepository {
-  public static final String ERROR_DELETING_MUSIC = "Error deleting music";
   public static final Condition NOT_DELETED = MUSIC.DELETED_FLAG.eq(0);
   @Inject DSLContext dsl;
 
@@ -40,7 +40,8 @@ public class MusicRepository {
    */
   public Flux<Music> findByTitle(@NotNull String title, WildCardType wildCardType) {
     String clauseBuilder = SqlHelper.likeClauseBuilder(wildCardType, title);
-    return Flux.from(dsl.selectFrom(MUSIC).where(MUSIC.TITLE.like(clauseBuilder)).and(NOT_DELETED))
+    var like = MUSIC.TITLE.like(clauseBuilder);
+    return Flux.from(dsl.selectFrom(MUSIC).where(like).and(NOT_DELETED))
         .map(MusicMapper::mapRecordToDto);
   }
 
@@ -53,7 +54,9 @@ public class MusicRepository {
         .map(MusicMapper::mapRecordToDto);
   }
 
-  /** @return list of musics which are not deleted */
+  /**
+   * @return list of musics which are not deleted
+   */
   public Flux<Music> findAllAvailable() {
     return Flux.from(dsl.selectFrom(MUSIC).where(NOT_DELETED)).map(MusicMapper::mapRecordToDto);
   }
@@ -102,7 +105,8 @@ public class MusicRepository {
             dsl.update(MUSIC)
                 .set(MUSIC.DELETED_FLAG, 1)
                 .set(MUSIC.DELETE_TIME, LocalDateTime.now())
-                .where(likeTitle).and(NOT_DELETED))
+                .where(likeTitle)
+                .and(NOT_DELETED))
         .doFinally(signalType -> log.info("deleteByTitle"));
   }
 

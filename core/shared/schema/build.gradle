@@ -1,6 +1,0 @@
-plugins {
-    alias gLibs.plugins.jooq
-}
-subprojects {
-    apply plugin: 'nu.studer.jooq'
-}

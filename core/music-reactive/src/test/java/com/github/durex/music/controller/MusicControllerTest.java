@@ -16,6 +16,8 @@ import io.quarkus.test.junit.mockito.InjectMock;
 import java.io.IOException;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 @QuarkusTest
 @TestHTTPEndpoint(MusicController.class)
@@ -25,21 +27,22 @@ class MusicControllerTest {
 
   @Test
   void testGetMusicByTitle() {
-    when(service.getMusicsByTitle(any())).thenReturn(DemoMusicData.givenSomeMusics(5));
+    var musics = DemoMusicData.givenSomeMusics(5);
+    when(service.getMusicsByTitle(any())).thenReturn(Flux.fromIterable(musics));
     given()
         .when()
         .queryParam("title", "demo")
         .get()
         .then()
-        .body("error.errorCode", Matchers.equalTo("NOTHING_FAILED"))
-        .body("error.message", Matchers.equalTo("OK"))
+        .body("error.errorCode", Matchers.hasItem("NOTHING_FAILED"))
+        .body("error.message", Matchers.hasItem("OK"))
         .body("data", Matchers.hasSize(5));
   }
 
   @Test
   void testGetMusicById() {
     var music = DemoMusicData.givenAMusic();
-    when(service.getMusicById(anyString())).thenReturn(music);
+    when(service.getMusicById(anyString())).thenReturn(Mono.just(music));
     given()
         .when()
         .pathParam("id", music.getId())
@@ -47,12 +50,12 @@ class MusicControllerTest {
         .then()
         .body("error.errorCode", Matchers.equalTo("NOTHING_FAILED"))
         .body("error.message", Matchers.equalTo("OK"))
-        .body("data", Matchers.hasSize(1));
+        .body("data.id", Matchers.notNullValue());
   }
 
   @Test
   void testDeleteMusic() {
-    when(service.deleteMusicById(anyString())).thenReturn(1);
+    when(service.deleteMusicById(anyString())).thenReturn(Mono.just(1));
     given()
         .when()
         .pathParam("id", UniqID.getId())
@@ -65,7 +68,7 @@ class MusicControllerTest {
 
   @Test
   void testCreateMusic() throws IOException {
-    when(service.createMusic(any(Music.class))).thenReturn(1);
+    when(service.createMusic(any(Music.class))).thenReturn(Mono.just(1));
     given()
         .when()
         .contentType(APPLICATION_JSON)
@@ -79,7 +82,7 @@ class MusicControllerTest {
 
   @Test
   void testUpdateMusic() throws IOException {
-    when(service.updateMusic(any(Music.class))).thenReturn(1);
+    when(service.updateMusic(any(Music.class))).thenReturn(Mono.just(1));
     given()
         .when()
         .contentType(APPLICATION_JSON)

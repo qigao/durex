@@ -7,7 +7,8 @@ import com.github.durex.music.api.PlayListMusic;
 import com.github.durex.music.service.PlaylistService;
 import com.github.durex.shared.api.RespData;
 import com.github.durex.shared.utils.Helper;
-import java.util.List;
+import io.smallrye.mutiny.Multi;
+import io.smallrye.mutiny.Uni;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
@@ -47,12 +48,13 @@ public class PlaylistController {
       description = "Success",
       content =
           @Content(mediaType = APPLICATION_JSON, schema = @Schema(implementation = RespData.class)))
-  public RespData getPlaylistByTitle(
+  public Multi<RespData> getPlaylistByTitle(
       @Parameter(description = "music title") @QueryParam("title") @Encoded String title,
       @DefaultValue("10") @Parameter(description = "query page size") @QueryParam("offset") @Encoded
           int offset) {
-    var playlist = playlistService.findPlayListByTitle(title);
-    return RespData.builder().error(Helper.okResponse()).data(playlist).build();
+    return Multi.createFrom()
+        .publisher(playlistService.findPlayListByTitle(title))
+        .map(p -> RespData.builder().error(Helper.okResponse()).data(p).build());
   }
 
   @GET
@@ -63,9 +65,10 @@ public class PlaylistController {
       description = "Success",
       content =
           @Content(mediaType = APPLICATION_JSON, schema = @Schema(implementation = RespData.class)))
-  public RespData getPlaylist(@PathParam("id") String id) {
-    var playlist = playlistService.findPlayListById(id);
-    return RespData.builder().error(Helper.okResponse()).data(List.of(playlist)).build();
+  public Uni<RespData> getPlaylist(@PathParam("id") String id) {
+    return Uni.createFrom()
+        .publisher(playlistService.findPlayListById(id))
+        .map(p -> RespData.builder().error(Helper.okResponse()).data(p).build());
   }
 
   @POST
@@ -76,10 +79,10 @@ public class PlaylistController {
       description = "Success",
       content =
           @Content(mediaType = APPLICATION_JSON, schema = @Schema(implementation = RespData.class)))
-  public RespData createPlaylistWithID(PlayListMusic playList) {
-    var id = playlistService.createPlaylist(playList);
-    log.info("created playlist ID: {}", id);
-    return RespData.builder().error(Helper.okResponse()).data(id).build();
+  public Multi<RespData> createPlaylist(PlayListMusic playListMusic) {
+    return Multi.createFrom()
+        .publisher(playlistService.createPlaylist(playListMusic))
+        .map(p -> RespData.builder().error(Helper.okResponse()).data(p).build());
   }
 
   @PUT
@@ -90,9 +93,10 @@ public class PlaylistController {
       description = "Success",
       content =
           @Content(mediaType = APPLICATION_JSON, schema = @Schema(implementation = RespData.class)))
-  public RespData updatePlaylist(PlayList playList) {
-    var result = playlistService.updatePlaylist(playList);
-    return RespData.builder().error(Helper.okResponse()).data(result).build();
+  public Uni<RespData> updatePlaylist(PlayList playList) {
+    return Uni.createFrom()
+        .publisher(playlistService.updatePlaylist(playList))
+        .map(p -> RespData.builder().error(Helper.okResponse()).data(p).build());
   }
 
   @DELETE
@@ -103,9 +107,9 @@ public class PlaylistController {
       description = "Success",
       content =
           @Content(mediaType = APPLICATION_JSON, schema = @Schema(implementation = RespData.class)))
-  public RespData deletePlaylist(@PathParam("id") String id) {
-    var affectedRows = playlistService.deletePlaylistById(id);
-    log.info("delete playlist affectedRows: {}", affectedRows);
-    return RespData.builder().error(Helper.okResponse()).data(affectedRows).build();
+  public Uni<RespData> deletePlaylist(@PathParam("id") String id) {
+    return Uni.createFrom()
+        .publisher(playlistService.deletePlaylistById(id))
+        .map(p -> RespData.builder().error(Helper.okResponse()).data(p).build());
   }
 }
