@@ -1,8 +1,5 @@
 package com.github.durex.music.service;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -16,11 +13,12 @@ import com.github.durex.uuid.UniqID;
 import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.mockito.InjectMock;
 import java.util.List;
-import java.util.Optional;
 import javax.inject.Inject;
-import org.apache.commons.lang3.ArrayUtils;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+import reactor.test.StepVerifier;
 
 @QuarkusTest
 class MusicServiceTest {
@@ -31,151 +29,206 @@ class MusicServiceTest {
   @Test
   void testGetMusicById() {
     Mockito.when(repository.findById(anyString()))
-        .thenReturn(Optional.of(DemoMusicData.givenAMusic()));
-    var result = service.getMusicById(UniqID.getId());
-    assertNotNull(result.getId());
+        .thenReturn(Mono.just(DemoMusicData.givenAMusic()));
+    service
+        .getMusicById(UniqID.getId())
+        .as(StepVerifier::create)
+        .expectNextCount(1)
+        .verifyComplete();
   }
 
   @Test
   void testGetMusicById_NotFound() {
-    Mockito.when(repository.findById(anyString())).thenReturn(Optional.empty());
+    Mockito.when(repository.findById(anyString()))
+        .thenReturn(Mono.error(new ApiException("error")));
     String music_id = UniqID.getId();
-    assertThrows(ApiException.class, () -> service.getMusicById(music_id));
+    service.getMusicById(music_id).as(StepVerifier::create).verifyError(ApiException.class);
   }
 
   @Test
   void testGetMusicsByTitle() {
-    Mockito.when(repository.findByTitle(anyString())).thenReturn(DemoMusicData.givenSomeMusics(5));
-    var result = service.getMusicsByTitle("title");
-    assertEquals(5, result.size());
+    var musics = DemoMusicData.givenSomeMusics(5);
+    Mockito.when(repository.findByTitle(anyString())).thenReturn(Flux.fromIterable(musics));
+    service.getMusicsByTitle("title").as(StepVerifier::create).expectNextCount(5).verifyComplete();
   }
 
   @Test
   void testGetMusicsByTitle_NotFound() {
-    Mockito.when(repository.findByTitle(anyString())).thenReturn(List.of());
-    assertThrows(ApiException.class, () -> service.getMusicsByTitle("title"));
+    Mockito.when(repository.findByTitle(anyString()))
+        .thenReturn(Flux.error(new ApiException("error")));
+    service
+        .getMusicsByTitle("title")
+        .as(StepVerifier::create)
+        .expectError(ApiException.class)
+        .verify();
   }
 
   @Test
   void testGetMusicsByTitleWithWildCard() {
+    var musics = DemoMusicData.givenSomeMusics(5);
     Mockito.when(repository.findByTitle(anyString(), any(WildCardType.class)))
-        .thenReturn(DemoMusicData.givenSomeMusics(5));
-    var result = service.getMusicsByTitle("title", WildCardType.CONTAINS);
-    assertEquals(5, result.size());
+        .thenReturn(Flux.fromIterable(musics));
+    service
+        .getMusicsByTitle("title", WildCardType.CONTAINS)
+        .as(StepVerifier::create)
+        .expectNextCount(5)
+        .verifyComplete();
   }
 
   @Test
   void testGetMusicsByTitleWithWildCard_NotFound() {
     Mockito.when(repository.findByTitle(anyString(), any(WildCardType.class)))
-        .thenReturn(List.of());
-    assertThrows(
-        ApiException.class, () -> service.getMusicsByTitle("title", WildCardType.CONTAINS));
+        .thenReturn(Flux.error(new ApiException("error")));
+    service
+        .getMusicsByTitle("title", WildCardType.CONTAINS)
+        .as(StepVerifier::create)
+        .expectError(ApiException.class)
+        .verify();
   }
 
   @Test
   void testCreateMusic() {
-    Mockito.when(repository.save(any(Music.class))).thenReturn(1);
-    assertEquals(1, service.createMusic(DemoMusicData.givenAMusic()));
+    Mockito.when(repository.save(any(Music.class))).thenReturn(Mono.just(1));
+    service
+        .createMusic(DemoMusicData.givenAMusic())
+        .as(StepVerifier::create)
+        .expectNextCount(1)
+        .verifyComplete();
   }
 
   @Test
   void testCreateMusicWithException() {
-    Mockito.when(repository.save(any(Music.class))).thenReturn(0);
+    Mockito.when(repository.save(any(Music.class)))
+        .thenReturn(Mono.error(new ApiException("error")));
     var music = DemoMusicData.givenAMusic();
-    assertThrows(ApiException.class, () -> service.createMusic(music));
+    service.createMusic(music).as(StepVerifier::create).expectError(ApiException.class).verify();
   }
 
   @Test
   void testCreateMusicInBatch() {
-    Mockito.when(repository.save(anyList())).thenReturn(new int[] {1, 2, 3});
-    assertEquals(3, service.createMusic(List.of(DemoMusicData.givenAMusic())).length);
+    Mockito.when(repository.save(anyList())).thenReturn(Flux.just(1, 1, 1));
+    var musics = DemoMusicData.givenSomeMusics(3);
+    service.createMusic(musics).as(StepVerifier::create).expectNextCount(3).verifyComplete();
   }
 
   @Test
   void testCreateMusicInBatchWithException() {
-    Mockito.when(repository.save(anyList())).thenReturn(ArrayUtils.EMPTY_INT_ARRAY);
-    var musics = List.of(DemoMusicData.givenAMusic());
-    assertThrows(ApiException.class, () -> service.createMusic(musics));
+    Mockito.when(repository.save(anyList())).thenReturn(Flux.error(new ApiException("error")));
+    var musics = DemoMusicData.givenSomeMusics(3);
+    service.createMusic(musics).as(StepVerifier::create).expectError(ApiException.class).verify();
   }
 
   @Test
   void testUpdateMusic() {
-    Mockito.when(repository.update(any(Music.class))).thenReturn(1);
-    assertEquals(1, service.updateMusic(DemoMusicData.givenAMusic()));
+    Mockito.when(repository.update(any(Music.class))).thenReturn(Mono.just(1));
+    service
+        .updateMusic(DemoMusicData.givenAMusic())
+        .as(StepVerifier::create)
+        .expectNextCount(1)
+        .verifyComplete();
   }
 
   @Test
   void testUpdateMusicWithException() {
-    Mockito.when(repository.update(any(Music.class))).thenReturn(0);
+    Mockito.when(repository.update(any(Music.class)))
+        .thenReturn(Mono.error(new ApiException("error")));
     var music = DemoMusicData.givenAMusic();
-    assertThrows(ApiException.class, () -> service.updateMusic(music));
+    service.updateMusic(music).as(StepVerifier::create).expectError(ApiException.class).verify();
   }
 
   @Test
   void testUpdateMusicInBatch() {
-    Mockito.when(repository.update(anyList())).thenReturn(new int[] {1, 2, 3});
-    assertEquals(3, service.updateMusic(List.of(DemoMusicData.givenAMusic())).length);
+    Mockito.when(repository.update(anyList())).thenReturn(Flux.just(1, 1, 1));
+    service
+        .updateMusic(List.of(DemoMusicData.givenAMusic()))
+        .as(StepVerifier::create)
+        .expectNextCount(3)
+        .verifyComplete();
   }
 
   @Test
   void testUpdateMusicInBatchWithException() {
-    Mockito.when(repository.update(anyList())).thenReturn(ArrayUtils.EMPTY_INT_ARRAY);
-    var musics = List.of(DemoMusicData.givenAMusic());
-    assertThrows(ApiException.class, () -> service.updateMusic(musics));
+    Mockito.when(repository.update(anyList())).thenReturn(Flux.error(new ApiException("error")));
+    var musics = DemoMusicData.givenSomeMusics(3);
+    service.updateMusic(musics).as(StepVerifier::create).expectError(ApiException.class).verify();
   }
 
   @Test
   void testDeleteMusicById() {
-    Mockito.when(repository.deleteById(anyString())).thenReturn(1);
-    assertEquals(1, service.deleteMusicById(UniqID.getId()));
+    Mockito.when(repository.deleteById(anyString())).thenReturn(Mono.just(1));
+    service
+        .deleteMusicById(UniqID.getId())
+        .as(StepVerifier::create)
+        .expectNextCount(1)
+        .verifyComplete();
   }
 
   @Test
   void testDeleteMusicByIdWithException() {
-    Mockito.when(repository.deleteById(anyString())).thenReturn(0);
+    Mockito.when(repository.deleteById(anyString()))
+        .thenReturn(Mono.error(new ApiException("error")));
     var id = UniqID.getId();
-    assertThrows(
-        ApiException.class,
-        () -> {
-          service.deleteMusicById(id);
-        });
+
+    service.deleteMusicById(id).as(StepVerifier::create).expectError(ApiException.class).verify();
   }
 
   @Test
   void testDeleteMusicInBatch() {
-    Mockito.when(repository.delete(anyList())).thenReturn(10);
-    assertEquals(10, service.delete(List.of(UniqID.getId())));
+    Mockito.when(repository.delete(anyList())).thenReturn(Mono.just(10));
+    service
+        .delete(List.of(UniqID.getId()))
+        .as(StepVerifier::create)
+        .expectNext(10)
+        .verifyComplete();
   }
 
   @Test
   void testDeleteMusicInBatchWithException() {
-    Mockito.when(repository.delete(anyList())).thenReturn(0);
+    Mockito.when(repository.delete(anyList())).thenReturn(Mono.error(new ApiException("error")));
     var ids = List.of(UniqID.getId());
-    assertThrows(ApiException.class, () -> service.delete(ids));
+    service.delete(ids).as(StepVerifier::create).expectError(ApiException.class).verify();
   }
 
   @Test
   void testDeleteMusicByTitle() {
-    Mockito.when(repository.deleteByTitle(anyString())).thenReturn(1);
-    assertEquals(1, service.deleteMusicByTitle("title"));
+    Mockito.when(repository.deleteByTitle(anyString())).thenReturn(Mono.just(1));
+    service
+        .deleteMusicByTitle("title")
+        .as(StepVerifier::create)
+        .expectNextCount(1)
+        .verifyComplete();
   }
 
   @Test
   void testDeleteMusicByTitleWithException() {
-    Mockito.when(repository.deleteByTitle(anyString())).thenReturn(0);
-    assertThrows(ApiException.class, () -> service.deleteMusicByTitle("title"));
+    Mockito.when(repository.deleteByTitle(anyString()))
+        .thenReturn(Mono.error(new ApiException("error")));
+    service
+        .deleteMusicByTitle("title")
+        .as(StepVerifier::create)
+        .expectError(ApiException.class)
+        .verify();
   }
 
   @Test
   void testDeleteMusicByTitleWithWildCard() {
-    Mockito.when(repository.deleteByTitle(anyString(), any(WildCardType.class))).thenReturn(1);
-    assertEquals(1, service.deleteMusicByTitle("title", WildCardType.CONTAINS));
+    Mockito.when(repository.deleteByTitle(anyString(), any(WildCardType.class)))
+        .thenReturn(Mono.just(1));
+    service
+        .deleteMusicByTitle("title", WildCardType.CONTAINS)
+        .as(StepVerifier::create)
+        .expectNextCount(1)
+        .verifyComplete();
   }
 
   @Test
   void testDeleteMusicByTitleWithWildCardWithException() {
-    Mockito.when(repository.deleteByTitle(anyString(), any(WildCardType.class))).thenReturn(0);
-    assertThrows(
-        ApiException.class, () -> service.deleteMusicByTitle("title", WildCardType.CONTAINS));
+    Mockito.when(repository.deleteByTitle(anyString(), any(WildCardType.class)))
+        .thenReturn(Mono.error(new ApiException("error")));
+    service
+        .deleteMusicByTitle("title", WildCardType.CONTAINS)
+        .as(StepVerifier::create)
+        .expectError(ApiException.class)
+        .verify();
   }
 }

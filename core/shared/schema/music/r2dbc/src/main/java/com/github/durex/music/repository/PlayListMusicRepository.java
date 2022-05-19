@@ -1,22 +1,25 @@
 package com.github.durex.music.repository;
 
-import static com.github.durex.api.tables.QMusic.MUSIC;
-import static com.github.durex.api.tables.QPlaylistMusic.PLAYLIST_MUSIC;
-
 import com.github.durex.api.tables.records.RMusic;
 import com.github.durex.music.api.Music;
 import com.github.durex.music.mapper.MusicMapper;
 import com.github.durex.music.mapper.PlayListMusicMapper;
-import java.util.List;
-import java.util.stream.Collectors;
-import javax.enterprise.context.RequestScoped;
-import javax.inject.Inject;
-import javax.validation.constraints.NotNull;
 import lombok.extern.slf4j.Slf4j;
 import org.jooq.Condition;
 import org.jooq.DSLContext;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+
+import javax.enterprise.context.RequestScoped;
+import javax.inject.Inject;
+import javax.validation.constraints.NotNull;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import static com.github.durex.api.tables.QMusic.MUSIC;
+import static com.github.durex.api.tables.QPlaylistMusic.PLAYLIST_MUSIC;
+import static java.util.stream.Collectors.toUnmodifiableList;
 
 @Slf4j
 @RequestScoped
@@ -28,13 +31,12 @@ public class PlayListMusicRepository {
     var eqPlayListID = PLAYLIST_MUSIC.PLAYLIST_ID.eq(playlistId);
     var eqMusicID = PLAYLIST_MUSIC.MUSIC_ID.eq(MUSIC.ID);
     var joinTables = PLAYLIST_MUSIC.leftJoin(MUSIC);
-    return Flux.from(
-            dsl.select(MUSIC.fields())
-                .from(joinTables.on(eqMusicID))
-                .where(eqPlayListID.and(NOT_DELETED))
-                .orderBy(PLAYLIST_MUSIC.MUSIC_ORDER))
-        .map(r -> r.into(RMusic.class))
-        .map(MusicMapper::mapRecordToDto);
+    var dslJoinSelect =
+        dsl.select(MUSIC.fields())
+            .from(joinTables.on(eqMusicID))
+            .where(eqPlayListID.and(NOT_DELETED))
+            .orderBy(PLAYLIST_MUSIC.MUSIC_ORDER);
+    return Flux.from(dslJoinSelect).map(r -> r.into(RMusic.class)).map(MusicMapper::mapRecordToDto);
   }
 
   public Flux<Integer> saveMusicsToPlayList(

@@ -7,6 +7,8 @@ import java.util.Optional;
 import java.util.UUID;
 import lombok.experimental.UtilityClass;
 
+import static com.github.durex.shared.exceptions.model.ErrorCode.NOTHING_FAILED;
+
 @UtilityClass
 public class Helper {
 
@@ -22,6 +24,6 @@ public class Helper {
         .withErrorId(UUID.randomUUID())
         .withMessage("OK")
         .withTimestamp(LocalDateTime.now())
-        .withErrorCode(ErrorCode.NOTHING_FAILED);
+        .withErrorCode(NOTHING_FAILED);
   }
 }

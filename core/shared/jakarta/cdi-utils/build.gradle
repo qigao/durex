@@ -1,4 +1,7 @@
+plugins {
+    alias qLibs.plugins.jandex
+}
 dependencies {
     implementation project(":core:shared:utils")
 }
-apply from: "$rootDir/gradle/library/quarkus-imperative.gradle"
+

@@ -1,5 +1,10 @@
 package com.github.durex.music.service;
 
+import static com.github.durex.music.support.EntityConstants.ID_IS_EMPTY;
+import static com.github.durex.music.support.EntityConstants.MUSIC_NOT_DELETED;
+import static com.github.durex.music.support.EntityConstants.MUSIC_NOT_UPDATED;
+import static com.github.durex.music.support.EntityConstants.TITLE_IS_EMPTY;
+
 import com.github.durex.music.api.Music;
 import com.github.durex.music.api.PlayList;
 import com.github.durex.music.api.PlayListMusic;
@@ -9,33 +14,28 @@ import com.github.durex.shared.exceptions.ApiException;
 import com.github.durex.shared.utils.Helper;
 import com.github.durex.sqlbuilder.SqlHelper;
 import com.github.durex.sqlbuilder.enums.WildCardType;
-import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.ArrayUtils;
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
-
+import java.util.List;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import javax.transaction.TransactionManager;
-import javax.transaction.Transactional;
+import lombok.extern.slf4j.Slf4j;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 @Slf4j
 @ApplicationScoped
 public class PlaylistService {
-  public static final String MUSIC_NOT_FOUND = "music not found";
-  public static final String ID_IS_EMPTY = "id is empty";
-  public static final String MUSIC_NOT_UPDATED = "music not updated";
-  public static final String MUSIC_NOT_DELETED = "music not deleted";
-  public static final String TITLE_IS_EMPTY = "title is empty";
   @Inject PlayListRepository repository;
   @Inject PlayListMusicRepository playListMusicRepository;
-  @Inject TransactionManager transactionManager;
 
   public Flux<PlayList> findPlayListByTitle(String title) {
     var realTitle = Helper.makeOptional(title).orElseThrow(() -> new ApiException(TITLE_IS_EMPTY));
     return repository
         .findByTitle(realTitle)
-        .doOnError(e -> log.error(e.getMessage(), e))
+        .doOnError(
+            e -> {
+              log.error(e.getMessage(), e);
+              throw new ApiException("Error find playlist");
+            })
         .doOnEach(playListSignal -> log.info("playlist {}", playListSignal.get()))
         .doOnComplete(() -> log.info("playlist complete"));
   }
@@ -44,7 +44,11 @@ public class PlaylistService {
     var realTitle = SqlHelper.likeClauseBuilder(wildcard, title);
     return repository
         .findByTitle(realTitle, wildcard)
-        .doOnError(e -> log.error(e.getMessage(), e))
+        .doOnError(
+            e -> {
+              log.error(e.getMessage(), e);
+              throw new ApiException("Error find playlist");
+            })
         .doOnEach(playListSignal -> log.info("playlist {}", playListSignal.get()))
         .doOnComplete(() -> log.info("playlist complete"));
   }
@@ -54,100 +58,140 @@ public class PlaylistService {
     return repository
         .findById(realId)
         .doOnSuccess(playList -> log.info("playlist {}", playList))
-        .doOnError(e -> log.error(e.getMessage(), e));
+        .doOnError(
+            e -> {
+              log.error(e.getMessage(), e);
+              throw new ApiException("Error find playlist");
+            });
   }
 
   public Flux<PlayList> findPlayList() {
-    return repository.findAll().doOnEach(playListSignal -> log.info("playlist {}", playListSignal.get())).doOnComplete(() -> log.info("playlist complete"))
-        .doOnError(e -> log.error(e.getMessage(), e))
-      .doOnComplete(() -> log.info("playlist complete"));
+    return repository
+        .findAll()
+        .doOnEach(playListSignal -> log.info("playlist {}", playListSignal.get()))
+        .doOnError(
+            e -> {
+              log.error(e.getMessage(), e);
+              throw new ApiException("Error find playlist");
+            })
+        .doOnComplete(() -> log.info("playlist complete"));
   }
 
-  @Transactional
-  public Flux<Integer> createPlaylist(PlayList playList, Flux<Music> musics) {
-    var created = repository.save(playList);
-    if (created == 0) {
-      throw new ApiException(MUSIC_NOT_FOUND);
-    } else {
-      var result = playListMusicRepository.saveMusicsToPlayList(playList.getId(), musics);
-      if (ArrayUtils.isEmpty(result)) {
-        throw new ApiException(MUSIC_NOT_FOUND);
-      } else return result;
-    }
+  public Flux<Integer> createPlaylist(PlayList playList, List<Music> musics) {
+    return repository
+        .save(playList)
+        .doOnError(
+            e -> {
+              log.error(e.getMessage(), e);
+              throw new ApiException("Error occurred when saving playlist");
+            })
+        .doOnSuccess(p1 -> log.info("playlist {}", p1))
+        .flatMapMany(
+            p ->
+                playListMusicRepository
+                    .saveMusicsToPlayList(playList.getId(), musics)
+                    .doOnError(e -> log.error(e.getMessage(), e))
+                    .doOnEach(musicSignal -> log.info("music {}", musicSignal.get()))
+                    .doOnComplete(() -> log.info("music complete")));
   }
 
-  @Transactional
-  public int[] createPlaylist(PlayListMusic playListMusic) {
-    var created = repository.save(playListMusic);
-    if (created == 0) {
-      throw new ApiException(MUSIC_NOT_FOUND);
-    } else {
-      var result =
-          playListMusicRepository.saveMusicsToPlayList(
-              playListMusic.getId(), playListMusic.getMusics());
-      if (ArrayUtils.isEmpty(result)) {
-        throw new ApiException(MUSIC_NOT_FOUND);
-      } else return result;
-    }
+  public Flux<Integer> createPlaylist(PlayListMusic playListMusic) {
+    return repository
+        .save(playListMusic)
+        .doOnError(
+            e1 -> {
+              log.error(e1.getMessage(), e1);
+              throw new ApiException("Error occurred when saving playlist");
+            })
+        .doOnSuccess(p1 -> log.info("playlist {}", p1))
+        .flatMapMany(
+            p ->
+                playListMusicRepository
+                    .saveMusicsToPlayList(playListMusic.getId(), playListMusic.getMusics())
+                    .doOnError(e -> log.error(e.getMessage(), e))
+                    .doOnEach(musicSignal -> log.info("music {}", musicSignal.get()))
+                    .doOnComplete(() -> log.info("music complete")));
   }
 
-  @Transactional
-  public int updatePlaylist(PlayList playList) {
-    var updated = repository.update(playList);
-    if (updated == 0) {
-      throw new ApiException(MUSIC_NOT_UPDATED);
-    } else return updated;
+  public Mono<Integer> updatePlaylist(PlayList playList) {
+    return repository
+        .update(playList)
+        .doOnError(
+            e -> {
+              log.error(e.getMessage(), e);
+              throw new ApiException(e.getMessage());
+            })
+        .doOnSuccess(p -> log.info("playlist {}", p));
   }
 
-  @Transactional
-  public int[] updatePlaylist(Flux<PlayList> playLists) {
-    var updated = repository.update(playLists);
-    if (ArrayUtils.isEmpty(updated)) {
-      throw new ApiException(MUSIC_NOT_UPDATED);
-    } else return updated;
+  public Flux<Integer> updatePlaylist(List<PlayList> playLists) {
+    return repository
+        .update(playLists)
+        .doOnError(
+            e -> {
+              log.error(e.getMessage(), e);
+              throw new ApiException(MUSIC_NOT_UPDATED);
+            })
+        .doOnComplete(() -> log.info("playlist complete"));
   }
 
-  @Transactional
-  public int deletePlaylistById(String id) {
+  public Mono<Integer> deletePlaylistById(String id) {
     var realId = Helper.makeOptional(id).orElseThrow(() -> new ApiException(ID_IS_EMPTY));
-    var deleted = repository.deleteById(realId);
-    if (deleted == 0) {
-      throw new ApiException(MUSIC_NOT_DELETED);
-    } else return deleted;
+    return repository
+        .deleteById(realId)
+        .doOnError(
+            e -> {
+              log.error(e.getMessage(), e);
+              throw new ApiException(MUSIC_NOT_DELETED);
+            })
+        .doOnSuccess(p -> log.info("playlist {}", p));
   }
 
-  @Transactional
-  public int deletePlayListByTitle(String title) {
+  public Mono<Integer> deletePlayListByTitle(String title) {
     var realTitle = Helper.makeOptional(title).orElseThrow(() -> new ApiException(TITLE_IS_EMPTY));
-    var deleted = repository.deleteByTitle(realTitle);
-    if (deleted == 0) {
-      throw new ApiException(MUSIC_NOT_DELETED);
-    } else return deleted;
+    return repository
+        .deleteByTitle(realTitle)
+        .doOnError(
+            e -> {
+              log.error(e.getMessage(), e);
+              throw new ApiException(MUSIC_NOT_DELETED);
+            })
+        .doOnSuccess(p -> log.info("playlist {}", p));
   }
 
-  @Transactional
-  public int deletePlayListByTitle(String title, WildCardType wildcard) {
+  public Mono<Integer> deletePlayListByTitle(String title, WildCardType wildcard) {
     var realTitle = SqlHelper.likeClauseBuilder(wildcard, title);
-    var deleted = repository.deleteByTitle(realTitle, wildcard);
-    if (deleted == 0) {
-      throw new ApiException(MUSIC_NOT_DELETED);
-    } else return deleted;
+    return repository
+        .deleteByTitle(realTitle, wildcard)
+        .doOnError(
+            e -> {
+              log.error(e.getMessage(), e);
+              throw new ApiException(MUSIC_NOT_DELETED);
+            })
+        .doOnSuccess(p -> log.info("playlist {}", p));
   }
 
-  @Transactional
-  public int deleteMusicFromPlayList(String id, Flux<String> musicIds) {
+  public Mono<Integer> deleteMusicFromPlayList(String id, List<String> musicIds) {
     var realId = Helper.makeOptional(id).orElseThrow(() -> new ApiException(ID_IS_EMPTY));
-    var deleted = playListMusicRepository.deleteMusicFromPlayList(realId, musicIds);
-    if (deleted == 0) {
-      throw new ApiException(MUSIC_NOT_DELETED);
-    } else return deleted;
+    return playListMusicRepository
+        .deleteMusicFromPlayList(realId, musicIds)
+        .doOnError(
+            e -> {
+              log.error(e.getMessage(), e);
+              throw new ApiException(MUSIC_NOT_DELETED);
+            })
+        .doOnSuccess(p -> log.info("playlist {}", p));
   }
 
-  @Transactional
-  public int clearMusicsFromPlayList(String playListId) {
+  public Mono<Integer> clearMusicsFromPlayList(String playListId) {
     var realId = Helper.makeOptional(playListId).orElseThrow(() -> new ApiException(ID_IS_EMPTY));
-    var deleted = playListMusicRepository.clearMusicsFromPlayList(realId);
-    if (deleted == 0) throw new ApiException(MUSIC_NOT_DELETED);
-    else return deleted;
+    return playListMusicRepository
+        .clearMusicsFromPlayList(realId)
+        .doOnError(
+            e -> {
+              log.error(e.getMessage(), e);
+              throw new ApiException(MUSIC_NOT_DELETED);
+            })
+        .doOnSuccess(p -> log.info("playlist {}", p));
   }
 }
