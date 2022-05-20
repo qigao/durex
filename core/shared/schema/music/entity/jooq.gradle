@@ -35,7 +35,6 @@ jooq {
                     }
                     generate {
                         records = true
-                        immutablePojos = true
                         fluentSetters = true
                     }
                     target {
