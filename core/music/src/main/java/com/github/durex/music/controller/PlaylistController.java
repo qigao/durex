@@ -52,12 +52,12 @@ public class PlaylistController {
       @DefaultValue("10") @Parameter(description = "query page size") @QueryParam("offset") @Encoded
           int offset) {
     var playlist = playlistService.findPlayListByTitle(title);
-    return RespData.builder().error(Helper.okResponse()).data(playlist).build();
+    return RespData.builder().error(Helper.okResponse()).result(playlist).build();
   }
 
   @GET
   @Path("/{id}")
-  @Operation(summary = "获取歌单信息", description = "获取歌单信息，data为歌单对象PlayListRequest")
+  @Operation(summary = "get playlist info by id", description = "")
   @APIResponse(
       responseCode = "200",
       description = "Success",
@@ -65,7 +65,7 @@ public class PlaylistController {
           @Content(mediaType = APPLICATION_JSON, schema = @Schema(implementation = RespData.class)))
   public RespData getPlaylist(@PathParam("id") String id) {
     var playlist = playlistService.findPlayListById(id);
-    return RespData.builder().error(Helper.okResponse()).data(List.of(playlist)).build();
+    return RespData.builder().error(Helper.okResponse()).result(List.of(playlist)).build();
   }
 
   @POST
@@ -79,7 +79,7 @@ public class PlaylistController {
   public RespData createPlaylistWithID(PlayListMusic playList) {
     var id = playlistService.createPlaylist(playList);
     log.info("created playlist ID: {}", id);
-    return RespData.builder().error(Helper.okResponse()).data(id).build();
+    return RespData.builder().error(Helper.okResponse()).result(id).build();
   }
 
   @PUT
@@ -92,7 +92,7 @@ public class PlaylistController {
           @Content(mediaType = APPLICATION_JSON, schema = @Schema(implementation = RespData.class)))
   public RespData updatePlaylist(PlayList playList) {
     var result = playlistService.updatePlaylist(playList);
-    return RespData.builder().error(Helper.okResponse()).data(result).build();
+    return RespData.builder().error(Helper.okResponse()).result(result).build();
   }
 
   @DELETE
@@ -106,6 +106,6 @@ public class PlaylistController {
   public RespData deletePlaylist(@PathParam("id") String id) {
     var affectedRows = playlistService.deletePlaylistById(id);
     log.info("delete playlist affectedRows: {}", affectedRows);
-    return RespData.builder().error(Helper.okResponse()).data(affectedRows).build();
+    return RespData.builder().error(Helper.okResponse()).result(affectedRows).build();
   }
 }

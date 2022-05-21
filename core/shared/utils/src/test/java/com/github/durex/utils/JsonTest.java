@@ -1,7 +1,7 @@
 package com.github.durex.utils;
 
 import static com.github.durex.model.WeekDay.MONDAY;
-import static com.github.durex.pojo.MockUtils.getMockDirectory;
+import static com.github.durex.support.MockUtils.getMockDirectory;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.containsString;

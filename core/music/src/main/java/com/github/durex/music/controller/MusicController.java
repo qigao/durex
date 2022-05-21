@@ -60,7 +60,7 @@ public class MusicController {
           int offset) {
     log.info("getMusic title:{},musicId:{},offset:{}", title, musicId, offset);
     List<Music> musicList = musicService.getMusicsByTitle(title);
-    return RespData.builder().error(Helper.okResponse()).data(musicList).build();
+    return RespData.builder().error(Helper.okResponse()).result(musicList).build();
   }
 
   @GET
@@ -73,7 +73,7 @@ public class MusicController {
           @Content(mediaType = APPLICATION_JSON, schema = @Schema(implementation = RespData.class)))
   public RespData getMusic(@Parameter(description = "music id ") @PathParam("id") String musicId) {
     var musicResp = musicService.getMusicById(musicId);
-    return RespData.builder().error(Helper.okResponse()).data(List.of(musicResp)).build();
+    return RespData.builder().error(Helper.okResponse()).result(List.of(musicResp)).build();
   }
 
   @DELETE
@@ -86,7 +86,7 @@ public class MusicController {
           @Content(mediaType = APPLICATION_JSON, schema = @Schema(implementation = RespData.class)))
   public RespData deleteMusic(@Parameter(description = "music id ") @PathParam("id") String id) {
     var result = musicService.deleteMusicById(id);
-    return RespData.builder().error(Helper.okResponse()).data(result).build();
+    return RespData.builder().error(Helper.okResponse()).result(result).build();
   }
 
   @POST
@@ -99,7 +99,7 @@ public class MusicController {
           @Content(mediaType = APPLICATION_JSON, schema = @Schema(implementation = RespData.class)))
   public RespData createMusic(Music musicReq) {
     var result = musicService.createMusic(musicReq);
-    return RespData.builder().error(Helper.okResponse()).data(result).build();
+    return RespData.builder().error(Helper.okResponse()).result(result).build();
   }
 
   @PUT
@@ -113,6 +113,6 @@ public class MusicController {
   public RespData updateMusic(Music musicReq) {
     log.info("update music: {}", musicReq);
     var result = musicService.updateMusic(musicReq);
-    return RespData.builder().error(Helper.okResponse()).data(result).build();
+    return RespData.builder().error(Helper.okResponse()).result(result).build();
   }
 }

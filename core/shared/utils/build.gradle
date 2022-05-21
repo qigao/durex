@@ -2,7 +2,7 @@ plugins {
     alias gLibs.plugins.sonarqube
 }
 dependencies {
-    testImplementation project(":core:shared:mock")
+    testImplementation project(":core:shared:junit-helper")
 }
 apply plugin: 'org.sonarqube'
 

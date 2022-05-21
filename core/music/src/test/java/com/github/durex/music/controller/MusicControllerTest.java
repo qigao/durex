@@ -1,5 +1,8 @@
 package com.github.durex.music.controller;
 
+import static com.github.durex.support.RespConstant.APPLICATION_JSON;
+import static com.github.durex.support.RespConstant.NOTHING_FAILED;
+import static com.github.durex.support.RespConstant.OK;
 import static io.restassured.RestAssured.given;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -20,7 +23,6 @@ import org.junit.jupiter.api.Test;
 @QuarkusTest
 @TestHTTPEndpoint(MusicController.class)
 class MusicControllerTest {
-  public static final String APPLICATION_JSON = "application/json";
   @InjectMock MusicService service;
 
   @Test
@@ -31,9 +33,9 @@ class MusicControllerTest {
         .queryParam("title", "demo")
         .get()
         .then()
-        .body("error.errorCode", Matchers.equalTo("NOTHING_FAILED"))
-        .body("error.message", Matchers.equalTo("OK"))
-        .body("data", Matchers.hasSize(5));
+        .body("error.errorCode", Matchers.equalTo(NOTHING_FAILED))
+        .body("error.message", Matchers.equalTo(OK))
+        .body("result", Matchers.hasSize(5));
   }
 
   @Test
@@ -45,9 +47,9 @@ class MusicControllerTest {
         .pathParam("id", music.getId())
         .get("/{id}")
         .then()
-        .body("error.errorCode", Matchers.equalTo("NOTHING_FAILED"))
-        .body("error.message", Matchers.equalTo("OK"))
-        .body("data", Matchers.hasSize(1));
+        .body("error.errorCode", Matchers.equalTo(NOTHING_FAILED))
+        .body("error.message", Matchers.equalTo(OK))
+        .body("result", Matchers.hasSize(1));
   }
 
   @Test
@@ -58,9 +60,9 @@ class MusicControllerTest {
         .pathParam("id", UniqID.getId())
         .delete("/{id}")
         .then()
-        .body("error.errorCode", Matchers.equalTo("NOTHING_FAILED"))
-        .body("error.message", Matchers.equalTo("OK"))
-        .body("data", Matchers.equalTo(1));
+        .body("error.errorCode", Matchers.equalTo(NOTHING_FAILED))
+        .body("error.message", Matchers.equalTo(OK))
+        .body("result", Matchers.equalTo(1));
   }
 
   @Test
@@ -72,9 +74,9 @@ class MusicControllerTest {
         .body(Json.toString(DemoMusicData.givenAMusic()))
         .post()
         .then()
-        .body("error.errorCode", Matchers.equalTo("NOTHING_FAILED"))
-        .body("error.message", Matchers.equalTo("OK"))
-        .body("data", Matchers.equalTo(1));
+        .body("error.errorCode", Matchers.equalTo(NOTHING_FAILED))
+        .body("error.message", Matchers.equalTo(OK))
+        .body("result", Matchers.equalTo(1));
   }
 
   @Test
@@ -86,8 +88,8 @@ class MusicControllerTest {
         .body(Json.toString(DemoMusicData.givenAMusic()))
         .put()
         .then()
-        .body("error.errorCode", Matchers.equalTo("NOTHING_FAILED"))
-        .body("error.message", Matchers.equalTo("OK"))
-        .body("data", Matchers.equalTo(1));
+        .body("error.errorCode", Matchers.equalTo(NOTHING_FAILED))
+        .body("error.message", Matchers.equalTo(OK))
+        .body("result", Matchers.equalTo(1));
   }
 }

@@ -1,5 +1,5 @@
 dependencies {
-    implementation enforcedPlatform(qLibs.quarkus.bom.get())
+    implementation platform(qLibs.quarkus.bom.get())
     implementation 'io.quarkus:quarkus-hibernate-validator'
     implementation 'io.quarkus:quarkus-security-jpa'
     implementation 'io.quarkus:quarkus-arc'

@@ -13,6 +13,6 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class RespData {
-  private Object data;
+  private Object result;
   private ErrorResponse error;
 }
