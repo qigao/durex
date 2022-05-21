@@ -4,11 +4,10 @@ import com.github.durex.music.api.Music;
 import com.github.durex.music.api.PlayList;
 import com.github.durex.music.api.PlayListMusic;
 import com.github.durex.uuid.UniqID;
-import lombok.experimental.UtilityClass;
-import org.apache.commons.lang3.RandomStringUtils;
-
 import java.util.ArrayList;
 import java.util.List;
+import lombok.experimental.UtilityClass;
+import org.apache.commons.lang3.RandomStringUtils;
 
 @UtilityClass
 public class DemoMusicData {

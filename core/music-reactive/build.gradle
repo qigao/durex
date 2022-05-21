@@ -16,6 +16,7 @@ jacocoTestReport {
 
 dependencies {
     implementation project(":core:shared:utils")
+    implementation project(":core:shared:junit-helper")
     implementation project(":core:shared:jooq-codegen")
     implementation project(":core:shared:schema:music:json")
     implementation project(":core:shared:schema:music:r2dbc")

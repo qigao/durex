@@ -1,6 +1,12 @@
 package com.github.durex.music.controller;
 
+import static com.github.durex.support.RespConstant.APPLICATION_JSON;
+import static com.github.durex.support.RespConstant.NOTHING_FAILED;
+import static com.github.durex.support.RespConstant.OK;
 import static io.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
@@ -14,7 +20,6 @@ import io.quarkus.test.common.http.TestHTTPEndpoint;
 import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.mockito.InjectMock;
 import java.io.IOException;
-import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -22,7 +27,7 @@ import reactor.core.publisher.Mono;
 @QuarkusTest
 @TestHTTPEndpoint(MusicController.class)
 class MusicControllerTest {
-  public static final String APPLICATION_JSON = "application/json";
+
   @InjectMock MusicService service;
 
   @Test
@@ -34,9 +39,9 @@ class MusicControllerTest {
         .queryParam("title", "demo")
         .get()
         .then()
-        .body("error.errorCode", Matchers.hasItem("NOTHING_FAILED"))
-        .body("error.message", Matchers.hasItem("OK"))
-        .body("data", Matchers.hasSize(5));
+        .body("error.errorCode", equalTo(NOTHING_FAILED))
+        .body("error.message", equalTo(OK))
+        .body("result", hasSize(5));
   }
 
   @Test
@@ -48,9 +53,9 @@ class MusicControllerTest {
         .pathParam("id", music.getId())
         .get("/{id}")
         .then()
-        .body("error.errorCode", Matchers.equalTo("NOTHING_FAILED"))
-        .body("error.message", Matchers.equalTo("OK"))
-        .body("data.id", Matchers.notNullValue());
+        .body("error.errorCode", equalTo(NOTHING_FAILED))
+        .body("error.message", equalTo(OK))
+        .body("result.id", notNullValue());
   }
 
   @Test
@@ -61,9 +66,9 @@ class MusicControllerTest {
         .pathParam("id", UniqID.getId())
         .delete("/{id}")
         .then()
-        .body("error.errorCode", Matchers.equalTo("NOTHING_FAILED"))
-        .body("error.message", Matchers.equalTo("OK"))
-        .body("data", Matchers.equalTo(1));
+        .body("error.errorCode", equalTo(NOTHING_FAILED))
+        .body("error.message", equalTo(OK))
+        .body("result", equalTo(1));
   }
 
   @Test
@@ -75,9 +80,9 @@ class MusicControllerTest {
         .body(Json.toString(DemoMusicData.givenAMusic()))
         .post()
         .then()
-        .body("error.errorCode", Matchers.equalTo("NOTHING_FAILED"))
-        .body("error.message", Matchers.equalTo("OK"))
-        .body("data", Matchers.equalTo(1));
+        .body("error.errorCode", equalTo(NOTHING_FAILED))
+        .body("error.message", equalTo(OK))
+        .body("result", equalTo(1));
   }
 
   @Test
@@ -89,8 +94,8 @@ class MusicControllerTest {
         .body(Json.toString(DemoMusicData.givenAMusic()))
         .put()
         .then()
-        .body("error.errorCode", Matchers.equalTo("NOTHING_FAILED"))
-        .body("error.message", Matchers.equalTo("OK"))
-        .body("data", Matchers.equalTo(1));
+        .body("error.errorCode", equalTo(NOTHING_FAILED))
+        .body("error.message", equalTo(OK))
+        .body("result", equalTo(1));
   }
 }

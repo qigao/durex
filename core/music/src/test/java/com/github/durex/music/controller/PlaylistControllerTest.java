@@ -1,5 +1,7 @@
 package com.github.durex.music.controller;
 
+import static com.github.durex.support.RespConstant.NOTHING_FAILED;
+import static com.github.durex.support.RespConstant.OK;
 import static io.restassured.RestAssured.given;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -19,7 +21,6 @@ import org.junit.jupiter.api.Test;
 @QuarkusTest
 @TestHTTPEndpoint(PlaylistController.class)
 class PlaylistControllerTest {
-
   @InjectMock PlaylistService playlistService;
 
   @Test
@@ -31,9 +32,9 @@ class PlaylistControllerTest {
         .queryParam("title", "test")
         .get("/")
         .then()
-        .body("error.errorCode", Matchers.equalTo("NOTHING_FAILED"))
-        .body("error.message", Matchers.equalTo("OK"))
-        .body("data", Matchers.hasSize(5));
+        .body("error.errorCode", Matchers.equalTo(NOTHING_FAILED))
+        .body("error.message", Matchers.equalTo(OK))
+        .body("result", Matchers.hasSize(5));
   }
 
   @Test
@@ -47,9 +48,9 @@ class PlaylistControllerTest {
         .then()
         .log()
         .all()
-        .body("error.errorCode", Matchers.equalTo("NOTHING_FAILED"))
-        .body("error.message", Matchers.equalTo("OK"))
-        .body("data", Matchers.hasSize(1));
+        .body("error.errorCode", Matchers.equalTo(NOTHING_FAILED))
+        .body("error.message", Matchers.equalTo(OK))
+        .body("result", Matchers.hasSize(1));
   }
 
   @Test
@@ -62,9 +63,9 @@ class PlaylistControllerTest {
         .body(Json.toString(playlistResp))
         .post()
         .then()
-        .body("error.errorCode", Matchers.equalTo("NOTHING_FAILED"))
-        .body("error.message", Matchers.equalTo("OK"))
-        .body("data", Matchers.hasSize(3));
+        .body("error.errorCode", Matchers.equalTo(NOTHING_FAILED))
+        .body("error.message", Matchers.equalTo(OK))
+        .body("result", Matchers.hasSize(3));
   }
 
   @Test
@@ -78,9 +79,9 @@ class PlaylistControllerTest {
         .body(Json.toString(playlist))
         .put("/{id}")
         .then()
-        .body("error.errorCode", Matchers.equalTo("NOTHING_FAILED"))
-        .body("error.message", Matchers.equalTo("OK"))
-        .body("data", Matchers.equalTo(1));
+        .body("error.errorCode", Matchers.equalTo(NOTHING_FAILED))
+        .body("error.message", Matchers.equalTo(OK))
+        .body("result", Matchers.equalTo(1));
   }
 
   @Test
@@ -91,8 +92,8 @@ class PlaylistControllerTest {
         .pathParam("id", "test")
         .delete("/{id}")
         .then()
-        .body("error.errorCode", Matchers.equalTo("NOTHING_FAILED"))
-        .body("error.message", Matchers.equalTo("OK"))
-        .body("data", Matchers.equalTo(1));
+        .body("error.errorCode", Matchers.equalTo(NOTHING_FAILED))
+        .body("error.message", Matchers.equalTo(OK))
+        .body("result", Matchers.equalTo(1));
   }
 }

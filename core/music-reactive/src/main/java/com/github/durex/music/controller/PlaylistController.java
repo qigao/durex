@@ -48,18 +48,22 @@ public class PlaylistController {
       description = "Success",
       content =
           @Content(mediaType = APPLICATION_JSON, schema = @Schema(implementation = RespData.class)))
-  public Multi<RespData> getPlaylistByTitle(
+  public Uni<RespData> getPlaylistByTitle(
       @Parameter(description = "music title") @QueryParam("title") @Encoded String title,
       @DefaultValue("10") @Parameter(description = "query page size") @QueryParam("offset") @Encoded
           int offset) {
-    return Multi.createFrom()
-        .publisher(playlistService.findPlayListByTitle(title))
-        .map(p -> RespData.builder().error(Helper.okResponse()).data(p).build());
+    var errResp = Uni.createFrom().item(Helper.respOk());
+    var playListByTitle = playlistService.findPlayListByTitle(title);
+    var dataResp = Multi.createFrom().publisher(playListByTitle).collect().asList();
+    return Uni.combine()
+        .all()
+        .unis(errResp, dataResp)
+        .combinedWith((err, data) -> Helper.respData(err.getError(), data));
   }
 
   @GET
   @Path("/{id}")
-  @Operation(summary = "获取歌单信息", description = "获取歌单信息，data为歌单对象PlayListRequest")
+  @Operation(summary = "get a playlist by id", description = "")
   @APIResponse(
       responseCode = "200",
       description = "Success",
@@ -68,7 +72,7 @@ public class PlaylistController {
   public Uni<RespData> getPlaylist(@PathParam("id") String id) {
     return Uni.createFrom()
         .publisher(playlistService.findPlayListById(id))
-        .map(p -> RespData.builder().error(Helper.okResponse()).data(p).build());
+        .map(p -> RespData.builder().error(Helper.okResponse()).result(p).build());
   }
 
   @POST
@@ -79,10 +83,14 @@ public class PlaylistController {
       description = "Success",
       content =
           @Content(mediaType = APPLICATION_JSON, schema = @Schema(implementation = RespData.class)))
-  public Multi<RespData> createPlaylist(PlayListMusic playListMusic) {
-    return Multi.createFrom()
-        .publisher(playlistService.createPlaylist(playListMusic))
-        .map(p -> RespData.builder().error(Helper.okResponse()).data(p).build());
+  public Uni<RespData> createPlaylist(PlayListMusic playListMusic) {
+    var errResp = Uni.createFrom().item(Helper.respOk());
+    var playlistSaveResult = playlistService.createPlaylist(playListMusic);
+    var dataResp = Multi.createFrom().publisher(playlistSaveResult).collect().asList();
+    return Uni.combine()
+        .all()
+        .unis(errResp, dataResp)
+        .combinedWith((err, data) -> Helper.respData(err.getError(), data));
   }
 
   @PUT
@@ -96,7 +104,7 @@ public class PlaylistController {
   public Uni<RespData> updatePlaylist(PlayList playList) {
     return Uni.createFrom()
         .publisher(playlistService.updatePlaylist(playList))
-        .map(p -> RespData.builder().error(Helper.okResponse()).data(p).build());
+        .map(p -> RespData.builder().error(Helper.okResponse()).result(p).build());
   }
 
   @DELETE
@@ -110,6 +118,6 @@ public class PlaylistController {
   public Uni<RespData> deletePlaylist(@PathParam("id") String id) {
     return Uni.createFrom()
         .publisher(playlistService.deletePlaylistById(id))
-        .map(p -> RespData.builder().error(Helper.okResponse()).data(p).build());
+        .map(p -> RespData.builder().error(Helper.okResponse()).result(p).build());
   }
 }

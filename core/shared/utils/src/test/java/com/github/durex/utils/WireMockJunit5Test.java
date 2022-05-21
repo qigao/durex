@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.github.durex.model.User;
-import com.github.durex.pojo.MockUtils;
+import com.github.durex.support.MockUtils;
 import com.github.tomakehurst.wiremock.WireMockServer;
 import java.io.IOException;
 import java.util.List;

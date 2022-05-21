@@ -52,16 +52,20 @@ public class MusicController {
       description = "Success",
       content =
           @Content(mediaType = APPLICATION_JSON, schema = @Schema(implementation = RespData.class)))
-  public Multi<RespData> getMusic(
+  public Uni<RespData> getMusic(
       @Parameter(description = "music title") @QueryParam("title") @Encoded String title,
       @Parameter(description = "music id,used when paging") @QueryParam("id") @Encoded
           String musicId,
       @Parameter(description = "page size") @QueryParam("offset") @Encoded @DefaultValue("10")
           int offset) {
     log.info("getMusic title:{},musicId:{},offset:{}", title, musicId, offset);
-    return Multi.createFrom()
-        .publisher(musicService.getMusicsByTitle(title))
-        .map(p -> RespData.builder().error(Helper.okResponse()).data(p).build());
+    var publisher = musicService.getMusicsByTitle(title);
+    var errResp = Uni.createFrom().item(Helper.respOk());
+    var dataResp = Multi.createFrom().publisher(publisher).collect().asList();
+    return Uni.combine()
+        .all()
+        .unis(errResp, dataResp)
+        .combinedWith((err, data) -> Helper.respData(err.getError(), data));
   }
 
   @GET
@@ -76,7 +80,7 @@ public class MusicController {
       @Parameter(description = "music id ") @PathParam("id") String musicId) {
     return Uni.createFrom()
         .publisher(musicService.getMusicById(musicId))
-        .map(p -> RespData.builder().error(Helper.okResponse()).data(p).build());
+        .map(p -> RespData.builder().error(Helper.okResponse()).result(p).build());
   }
 
   @DELETE
@@ -91,7 +95,7 @@ public class MusicController {
       @Parameter(description = "music id ") @PathParam("id") String id) {
     return Uni.createFrom()
         .publisher(musicService.deleteMusicById(id))
-        .map(p -> RespData.builder().error(Helper.okResponse()).data(p).build());
+        .map(p -> RespData.builder().error(Helper.okResponse()).result(p).build());
   }
 
   @POST
@@ -105,7 +109,7 @@ public class MusicController {
   public Uni<RespData> createMusic(Music musicReq) {
     return Uni.createFrom()
         .publisher(musicService.createMusic(musicReq))
-        .map(p -> RespData.builder().error(Helper.okResponse()).data(p).build());
+        .map(p -> RespData.builder().error(Helper.okResponse()).result(p).build());
   }
 
   @PUT
@@ -120,6 +124,6 @@ public class MusicController {
     log.info("update music: {}", musicReq);
     return Uni.createFrom()
         .publisher(musicService.updateMusic(musicReq))
-        .map(p -> RespData.builder().error(Helper.okResponse()).data(p).build());
+        .map(p -> RespData.builder().error(Helper.okResponse()).result(p).build());
   }
 }

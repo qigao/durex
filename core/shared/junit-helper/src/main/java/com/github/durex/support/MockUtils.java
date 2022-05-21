@@ -1,4 +1,4 @@
-package com.github.durex.pojo;
+package com.github.durex.support;
 
 import java.io.IOException;
 import java.net.URL;
