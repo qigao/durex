@@ -1,22 +1,20 @@
 package com.github.durex.music.repository;
 
-import static com.github.durex.api.tables.QPlaylist.PLAYLIST;
+import static com.github.durex.api.tables.QPlaylist.*;
 
-import com.github.durex.music.api.PlayList;
-import com.github.durex.music.mapper.PlayListMapper;
-import com.github.durex.sqlbuilder.SqlHelper;
-import com.github.durex.sqlbuilder.enums.WildCardType;
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.stream.Collectors;
-import javax.enterprise.context.RequestScoped;
-import javax.inject.Inject;
-import javax.validation.constraints.NotNull;
-import lombok.extern.slf4j.Slf4j;
-import org.jooq.Condition;
-import org.jooq.DSLContext;
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
+import com.github.durex.music.api.*;
+import com.github.durex.music.mapper.*;
+import com.github.durex.sqlbuilder.*;
+import com.github.durex.sqlbuilder.enums.*;
+import java.time.*;
+import java.util.*;
+import java.util.stream.*;
+import javax.enterprise.context.*;
+import javax.inject.*;
+import javax.validation.constraints.*;
+import lombok.extern.slf4j.*;
+import org.jooq.*;
+import reactor.core.publisher.*;
 
 @Slf4j
 @RequestScoped
@@ -26,7 +24,10 @@ public class PlayListRepository {
   @Inject DSLContext dsl;
 
   public Flux<PlayList> findByTitle(@NotNull String title) {
-    return Flux.from(dsl.selectFrom(PLAYLIST).where(PLAYLIST.TITLE.eq(title)).and(NOT_DELETED))
+    var eqTitle = PLAYLIST.TITLE.eq(title);
+    return Flux.from(dsl.selectFrom(PLAYLIST).where(eqTitle).and(NOT_DELETED))
+        .publish()
+        .autoConnect()
         .map(PlayListMapper::mapRecordToDto);
   }
 

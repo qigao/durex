@@ -1,6 +1,6 @@
 plugins{
     alias qLibs.plugins.jandex
-    alias gLibs.plugins.jooq
+    alias gLibs.plugins.jooq.gen
 }
 dependencies {
     implementation project(":core:shared:utils")
