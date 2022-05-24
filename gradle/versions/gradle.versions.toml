@@ -11,6 +11,6 @@ json-schema = '4.2.0'
 editorconfig = { id = "org.ec4j.editorconfig", version.ref = "editorconfig" }
 sonarqube = { id = "org.sonarqube", version.ref = "sonar" }
 spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
-jooq = { id = "nu.studer.jooq", version.ref = "jooq" }
+jooq-gen = { id = "nu.studer.jooq", version.ref = "jooq" }
 flyway = { id = 'org.flywaydb.flyway', version.ref = 'flyway' }
 json-schema = { id = 'org.jsonschema2dataclass', version.ref = 'json-schema' }

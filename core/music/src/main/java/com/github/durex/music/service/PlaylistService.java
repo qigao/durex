@@ -6,13 +6,12 @@ import com.github.durex.music.api.PlayListMusic;
 import com.github.durex.music.repository.PlayListMusicRepository;
 import com.github.durex.music.repository.PlayListRepository;
 import com.github.durex.shared.exceptions.ApiException;
-import com.github.durex.shared.utils.Helper;
 import com.github.durex.sqlbuilder.SqlHelper;
 import com.github.durex.sqlbuilder.enums.WildCardType;
+import io.smallrye.common.constraint.NotNull;
 import java.util.List;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import javax.transaction.TransactionManager;
 import javax.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ArrayUtils;
@@ -22,19 +21,15 @@ import org.apache.commons.lang3.ArrayUtils;
 public class PlaylistService {
   @Inject PlayListRepository repository;
   @Inject PlayListMusicRepository playListMusicRepository;
-  @Inject TransactionManager transactionManager;
   public static final String MUSIC_NOT_FOUND = "music not found";
-  public static final String ID_IS_EMPTY = "id is empty";
   public static final String MUSIC_NOT_UPDATED = "music not updated";
   public static final String MUSIC_NOT_DELETED = "music not deleted";
-  public static final String TITLE_IS_EMPTY = "title is empty";
 
-  public List<PlayList> findPlayListByTitle(String title) {
-    var realTitle = Helper.makeOptional(title).orElseThrow(() -> new ApiException(TITLE_IS_EMPTY));
-    return repository.findByTitle(realTitle);
+  public List<PlayList> findPlayListByTitle(@NotNull String title) {
+    return repository.findByTitle(title);
   }
 
-  public List<PlayList> findPlayListByTitle(String title, WildCardType wildcard) {
+  public List<PlayList> findPlayListByTitle(@NotNull String title, WildCardType wildcard) {
     var realTitle = SqlHelper.likeClauseBuilder(wildcard, title);
     var result = repository.findByTitle(realTitle, wildcard);
     if (result.isEmpty()) {
@@ -42,9 +37,8 @@ public class PlaylistService {
     } else return result;
   }
 
-  public PlayList findPlayListById(String id) {
-    var realId = Helper.makeOptional(id).orElseThrow(() -> new ApiException(ID_IS_EMPTY));
-    return repository.findById(realId).orElseThrow(() -> new ApiException("PlayList not found"));
+  public PlayList findPlayListById(@NotNull String id) {
+    return repository.findById(id).orElseThrow(() -> new ApiException("PlayList not found"));
   }
 
   public List<PlayList> findPlayList() {
@@ -96,25 +90,23 @@ public class PlaylistService {
   }
 
   @Transactional
-  public int deletePlaylistById(String id) {
-    var realId = Helper.makeOptional(id).orElseThrow(() -> new ApiException(ID_IS_EMPTY));
-    var deleted = repository.deleteById(realId);
+  public int deletePlaylistById(@NotNull String id) {
+    var deleted = repository.deleteById(id);
     if (deleted == 0) {
       throw new ApiException(MUSIC_NOT_DELETED);
     } else return deleted;
   }
 
   @Transactional
-  public int deletePlayListByTitle(String title) {
-    var realTitle = Helper.makeOptional(title).orElseThrow(() -> new ApiException(TITLE_IS_EMPTY));
-    var deleted = repository.deleteByTitle(realTitle);
+  public int deletePlayListByTitle(@NotNull String title) {
+    var deleted = repository.deleteByTitle(title);
     if (deleted == 0) {
       throw new ApiException(MUSIC_NOT_DELETED);
     } else return deleted;
   }
 
   @Transactional
-  public int deletePlayListByTitle(String title, WildCardType wildcard) {
+  public int deletePlayListByTitle(@NotNull String title, WildCardType wildcard) {
     var realTitle = SqlHelper.likeClauseBuilder(wildcard, title);
     var deleted = repository.deleteByTitle(realTitle, wildcard);
     if (deleted == 0) {
@@ -123,18 +115,16 @@ public class PlaylistService {
   }
 
   @Transactional
-  public int deleteMusicFromPlayList(String id, List<String> musicIds) {
-    var realId = Helper.makeOptional(id).orElseThrow(() -> new ApiException(ID_IS_EMPTY));
-    var deleted = playListMusicRepository.deleteMusicFromPlayList(realId, musicIds);
+  public int deleteMusicFromPlayList(@NotNull String id, List<String> musicIds) {
+    var deleted = playListMusicRepository.deleteMusicFromPlayList(id, musicIds);
     if (deleted == 0) {
       throw new ApiException(MUSIC_NOT_DELETED);
     } else return deleted;
   }
 
   @Transactional
-  public int clearMusicsFromPlayList(String playListId) {
-    var realId = Helper.makeOptional(playListId).orElseThrow(() -> new ApiException(ID_IS_EMPTY));
-    var deleted = playListMusicRepository.clearMusicsFromPlayList(realId);
+  public int clearMusicsFromPlayList(@NotNull String playListId) {
+    var deleted = playListMusicRepository.clearMusicsFromPlayList(playListId);
     if (deleted == 0) throw new ApiException(MUSIC_NOT_DELETED);
     else return deleted;
   }

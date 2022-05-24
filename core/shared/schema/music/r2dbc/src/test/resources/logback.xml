@@ -11,8 +11,10 @@
     </encoder>
   </appender>
 
-  <root level="INFO">
+  <root level="info">
     <appender-ref ref="console" />
   </root>
-  <logger name="com.github.durex" level="debug" />
+  <logger name="com.github.durex" level="info" additivity="true">
+    <appender-ref ref="console" />
+  </logger>
 </configuration>

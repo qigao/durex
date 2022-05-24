@@ -1,15 +1,11 @@
 package com.github.durex.music.service;
 
-import static com.github.durex.music.support.EntityConstants.ID_IS_EMPTY;
-import static com.github.durex.music.support.EntityConstants.MUSIC_NOT_CREATED;
 import static com.github.durex.music.support.EntityConstants.MUSIC_NOT_DELETED;
-import static com.github.durex.music.support.EntityConstants.MUSIC_NOT_FOUND;
-import static com.github.durex.music.support.EntityConstants.MUSIC_NOT_UPDATED;
 import static com.github.durex.music.support.EntityConstants.TITLE_IS_EMPTY;
 import static com.github.durex.shared.exceptions.model.ErrorCode.DELETE_ERROR;
 import static com.github.durex.shared.exceptions.model.ErrorCode.EMPTY_PARAM;
 import static com.github.durex.shared.exceptions.model.ErrorCode.ENTITY_NOT_FOUND;
-import static com.github.durex.shared.exceptions.model.ErrorCode.INSERT_ERROR;
+import static com.github.durex.shared.exceptions.model.ErrorCode.SAVE_ERROR;
 import static com.github.durex.shared.exceptions.model.ErrorCode.UPDATE_ERROR;
 
 import com.github.durex.music.api.Music;
@@ -17,6 +13,7 @@ import com.github.durex.music.repository.MusicRepository;
 import com.github.durex.shared.exceptions.ApiException;
 import com.github.durex.shared.utils.Helper;
 import com.github.durex.sqlbuilder.enums.WildCardType;
+import io.smallrye.common.constraint.NotNull;
 import java.util.List;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -30,34 +27,27 @@ public class MusicService {
 
   @Inject MusicRepository repository;
 
-  public Mono<Music> getMusicById(String id) {
-    var realId =
-        Helper.makeOptional(id).orElseThrow(() -> new ApiException(ID_IS_EMPTY, EMPTY_PARAM));
+  public Mono<Music> getMusicById(@NotNull String id) {
     return repository
-        .findById(realId)
+        .findById(id)
         .doOnError(
             e -> {
               log.error(e.getMessage(), e);
-              throw new ApiException(MUSIC_NOT_FOUND, ENTITY_NOT_FOUND);
-            })
-        .doOnSuccess(music -> log.info("music found: {}", music));
+              throw new ApiException("Error finding music by id: " + id, ENTITY_NOT_FOUND);
+            });
   }
 
-  public Flux<Music> getMusicsByTitle(String title) {
-    var realTitle =
-        Helper.makeOptional(title).orElseThrow(() -> new ApiException(TITLE_IS_EMPTY, EMPTY_PARAM));
+  public Flux<Music> getMusicsByTitle(@NotNull String title) {
     return repository
-        .findByTitle(realTitle)
+        .findByTitle(title)
         .doOnError(
             e -> {
               log.error(e.getMessage(), e);
-              throw new ApiException(MUSIC_NOT_FOUND, ENTITY_NOT_FOUND);
-            })
-        .doOnEach(musicSignal -> log.info("music found: {}", musicSignal.get()))
-        .doOnComplete(() -> log.info("music found: {}", "complete"));
+              throw new ApiException("Error finding music by title: " + title, ENTITY_NOT_FOUND);
+            });
   }
 
-  public Flux<Music> getMusicsByTitle(String title, WildCardType wildCardEnum) {
+  public Flux<Music> getMusicsByTitle(@NotNull String title, WildCardType wildCardEnum) {
     var realTitle =
         Helper.makeOptional(title).orElseThrow(() -> new ApiException(TITLE_IS_EMPTY, EMPTY_PARAM));
     return repository
@@ -65,10 +55,8 @@ public class MusicService {
         .doOnError(
             e -> {
               log.error(e.getMessage(), e);
-              throw new ApiException(MUSIC_NOT_FOUND, ENTITY_NOT_FOUND);
-            })
-        .doOnEach(musicSignal -> log.info("music found: {}", musicSignal.get()))
-        .doOnComplete(() -> log.info("music found: {}", "complete"));
+              throw new ApiException("Error finding music by title: " + title, ENTITY_NOT_FOUND);
+            });
   }
 
   public Mono<Integer> createMusic(Music music) {
@@ -77,9 +65,8 @@ public class MusicService {
         .doOnError(
             e -> {
               log.error(e.getMessage(), e);
-              throw new ApiException(MUSIC_NOT_CREATED, INSERT_ERROR);
-            })
-        .doOnSuccess(m -> log.info("music saved: {}", m));
+              throw new ApiException("Error saving music: " + music, SAVE_ERROR);
+            });
   }
 
   public Flux<Integer> createMusic(List<Music> musics) {
@@ -88,10 +75,8 @@ public class MusicService {
         .doOnError(
             e -> {
               log.error(e.getMessage(), e);
-              throw new ApiException(MUSIC_NOT_CREATED, INSERT_ERROR);
-            })
-        .doOnEach(m -> log.info("music saved: {}", m))
-        .doOnComplete(() -> log.info("music saved: {}", "complete"));
+              throw new ApiException("Error saving music: " + musics, SAVE_ERROR);
+            });
   }
 
   public Mono<Integer> updateMusic(Music music) {
@@ -100,9 +85,8 @@ public class MusicService {
         .doOnError(
             e -> {
               log.error(e.getMessage(), e);
-              throw new ApiException(MUSIC_NOT_UPDATED, UPDATE_ERROR);
-            })
-        .doOnSuccess(m -> log.info("music updated: {}", m));
+              throw new ApiException("Error updating music: " + music, UPDATE_ERROR);
+            });
   }
 
   public Flux<Integer> updateMusic(List<Music> musics) {
@@ -111,54 +95,47 @@ public class MusicService {
         .doOnError(
             e -> {
               log.error(e.getMessage(), e);
-              throw new ApiException(MUSIC_NOT_UPDATED, UPDATE_ERROR);
-            })
-        .doOnEach(m -> log.info("music updated: {}", m))
-        .doOnComplete(() -> log.info("music updated: {}", "complete"));
+              throw new ApiException("Error updating music: " + musics, UPDATE_ERROR);
+            });
   }
 
-  public Mono<Integer> deleteMusicById(String id) {
-    var realId = Helper.makeOptional(id).orElseThrow(() -> new ApiException(ID_IS_EMPTY));
+  public Mono<Integer> deleteMusicById(@NotNull String id) {
     return repository
-        .deleteById(realId)
+        .deleteById(id)
         .doOnError(
             e -> {
               log.error(e.getMessage(), e);
               throw new ApiException(MUSIC_NOT_DELETED, DELETE_ERROR);
-            })
-        .doOnSuccess(m -> log.info("music deleted: {}", m));
+            });
   }
 
-  public Mono<Integer> deleteMusicByTitle(String title) {
-    var realTitle =
-        Helper.makeOptional(title).orElseThrow(() -> new ApiException(TITLE_IS_EMPTY, EMPTY_PARAM));
+  public Mono<Integer> deleteMusicByTitle(@NotNull String title) {
     return repository
-        .deleteByTitle(realTitle)
+        .deleteByTitle(title)
         .doOnError(
             e -> {
               log.error(e.getMessage(), e);
               throw new ApiException(MUSIC_NOT_DELETED, DELETE_ERROR);
-            })
-        .doOnSuccess(m -> log.info("music deleted: {}", m));
+            });
   }
 
-  public Mono<Integer> deleteMusicByTitle(String title, WildCardType wildCardEnum) {
-    var realTitle =
-        Helper.makeOptional(title).orElseThrow(() -> new ApiException(TITLE_IS_EMPTY, EMPTY_PARAM));
+  public Mono<Integer> deleteMusicByTitle(@NotNull String title, WildCardType wildCardEnum) {
     return repository
-        .deleteByTitle(realTitle, wildCardEnum)
+        .deleteByTitle(title, wildCardEnum)
         .doOnError(
             e -> {
               log.error(e.getMessage(), e);
               throw new ApiException(MUSIC_NOT_DELETED, DELETE_ERROR);
-            })
-        .doOnSuccess(m -> log.info("music deleted: {}", m));
+            });
   }
 
   public Mono<Integer> delete(List<String> musicIds) {
     return repository
         .delete(musicIds)
-        .doOnError(e -> log.error(e.getMessage(), e))
-        .doOnSuccess(m -> log.info("music deleted: {}", m));
+        .doOnError(
+            e -> {
+              log.error(e.getMessage(), e);
+              throw new ApiException(MUSIC_NOT_DELETED, DELETE_ERROR);
+            });
   }
 }
