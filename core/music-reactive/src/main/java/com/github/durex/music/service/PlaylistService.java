@@ -37,7 +37,10 @@ public class PlaylistService {
               log.error(e.getMessage(), e);
               throw new ApiException("Error find playlist by title : " + title, ENTITY_NOT_FOUND);
             })
-        .doOnNext(playList -> log.info("find playlist by title with id: {}", playList.getId()));
+        .doOnNext(playList -> log.info("find playlist by title with id: {}", playList.getId()))
+        .switchIfEmpty(
+            Flux.error(
+                new ApiException("Error find playlist by title: " + title, ENTITY_NOT_FOUND)));
   }
 
   public Flux<PlayList> findPlayListByTitle(@NotNull String title, WildCardType wildcard) {
@@ -51,7 +54,10 @@ public class PlaylistService {
                   String.format("Error find playlist by title %s, wildcard: %s", title, wildcard);
               throw new ApiException(message, ENTITY_NOT_FOUND);
             })
-        .doOnNext(playList -> log.info("find playlist by title with id: {}", playList.getId()));
+        .doOnNext(playList -> log.info("find playlist by title with id: {}", playList.getId()))
+        .switchIfEmpty(
+            Flux.error(
+                new ApiException("Error find playlist by title: " + title, ENTITY_NOT_FOUND)));
   }
 
   public Mono<PlayList> findPlayListById(@NotNull String id) {
@@ -62,7 +68,9 @@ public class PlaylistService {
             e -> {
               log.error(e.getMessage(), e);
               throw new ApiException("Error find playlist by id: " + id, ENTITY_NOT_FOUND);
-            });
+            })
+        .switchIfEmpty(
+            Mono.error(new ApiException("Error find playlist by id: " + id, ENTITY_NOT_FOUND)));
   }
 
   public Flux<PlayList> findPlayList() {
@@ -73,7 +81,8 @@ public class PlaylistService {
               log.error(e.getMessage(), e);
               throw new ApiException("Error find all playlist");
             })
-        .doOnComplete(() -> log.info("find all playlist"));
+        .doOnComplete(() -> log.info("find all playlist"))
+        .switchIfEmpty(Flux.error(new ApiException("Error find all playlist", ENTITY_NOT_FOUND)));
   }
 
   public Flux<Integer> createPlaylist(PlayList playList, List<Music> musics) {

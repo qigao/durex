@@ -14,6 +14,7 @@ import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.mockito.InjectMock;
 import java.util.List;
 import javax.inject.Inject;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import reactor.core.publisher.Flux;
@@ -27,6 +28,7 @@ class MusicServiceTest {
   @Inject MusicService service;
 
   @Test
+  @DisplayName("When find music by id, then return music")
   void testGetMusicById() {
     Mockito.when(repository.findById(anyString()))
         .thenReturn(Mono.just(DemoMusicData.givenAMusic()));
@@ -38,7 +40,8 @@ class MusicServiceTest {
   }
 
   @Test
-  void testGetMusicById_NotFound() {
+  @DisplayName("When find music by id, then return exception")
+  void testGetMusicByIdReturnException() {
     Mockito.when(repository.findById(anyString()))
         .thenReturn(Mono.error(new ApiException("error")));
     String music_id = UniqID.getId();
@@ -46,6 +49,15 @@ class MusicServiceTest {
   }
 
   @Test
+  @DisplayName("When find music by id, then return empty")
+  void testGetMusicById_NotFound() {
+    Mockito.when(repository.findById(anyString())).thenReturn(Mono.empty());
+    String music_id = UniqID.getId();
+    service.getMusicById(music_id).as(StepVerifier::create).verifyError(ApiException.class);
+  }
+
+  @Test
+  @DisplayName("When find music by title")
   void testGetMusicsByTitle() {
     var musics = DemoMusicData.givenSomeMusics(5);
     Mockito.when(repository.findByTitle(anyString())).thenReturn(Flux.fromIterable(musics));
@@ -53,7 +65,8 @@ class MusicServiceTest {
   }
 
   @Test
-  void testGetMusicsByTitle_NotFound() {
+  @DisplayName("When find music by title,return exception")
+  void testGetMusicsByTitleReturnException() {
     Mockito.when(repository.findByTitle(anyString()))
         .thenReturn(Flux.error(new ApiException("error")));
     service
@@ -64,6 +77,18 @@ class MusicServiceTest {
   }
 
   @Test
+  @DisplayName("When find music by title,return not found")
+  void testGetMusicsByTitle_NotFound() {
+    Mockito.when(repository.findByTitle(anyString())).thenReturn(Flux.empty());
+    service
+        .getMusicsByTitle("title")
+        .as(StepVerifier::create)
+        .expectError(ApiException.class)
+        .verify();
+  }
+
+  @Test
+  @DisplayName("When find music by title")
   void testGetMusicsByTitleWithWildCard() {
     var musics = DemoMusicData.givenSomeMusics(5);
     Mockito.when(repository.findByTitle(anyString(), any(WildCardType.class)))
@@ -76,9 +101,22 @@ class MusicServiceTest {
   }
 
   @Test
+  @DisplayName("When find music by title,return exception")
   void testGetMusicsByTitleWithWildCard_NotFound() {
     Mockito.when(repository.findByTitle(anyString(), any(WildCardType.class)))
         .thenReturn(Flux.error(new ApiException("error")));
+    service
+        .getMusicsByTitle("title", WildCardType.CONTAINS)
+        .as(StepVerifier::create)
+        .expectError(ApiException.class)
+        .verify();
+  }
+
+  @Test
+  @DisplayName("When find music by title,return empty")
+  void testGetMusicsByTitleWithWildCardReturnEmpty() {
+    Mockito.when(repository.findByTitle(anyString(), any(WildCardType.class)))
+        .thenReturn(Flux.empty());
     service
         .getMusicsByTitle("title", WildCardType.CONTAINS)
         .as(StepVerifier::create)
