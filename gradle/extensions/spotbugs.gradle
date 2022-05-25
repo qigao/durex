@@ -1,0 +1,16 @@
+dependencies {
+    spotbugsPlugins    'com.h3xstream.findsecbugs:findsecbugs-plugin:1.12.0'
+}
+spotbugs {
+    ignoreFailures = false
+    showStackTraces = true
+    showProgress = true
+    effort = 'default'
+    reportLevel = 'default'
+    visitors = [ 'FindSqlInjection', 'SwitchFallthrough' ]
+    omitVisitors = [ 'FindNonShortCircuit' ]
+    reportsDir = file("$buildDir/spotbugs")
+    maxHeapSize = '1g'
+    extraArgs = [ '-nested:false' ]
+}
+

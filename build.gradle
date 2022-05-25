@@ -1,6 +1,7 @@
 plugins {
     alias vLibs.plugins.lombok
     alias gLibs.plugins.spotless
+    alias gLibs.plugins.spotbugs
     alias gLibs.plugins.editorconfig
 }
 
@@ -24,6 +25,8 @@ allprojects {
 subprojects {
     apply plugin: 'java'
     apply plugin: 'org.ec4j.editorconfig'
+    apply plugin:  'com.github.spotbugs'
     apply from: "$rootDir/gradle/extensions/repos.gradle"
     apply from: "$rootDir/gradle/extensions/test.gradle"
+    apply from: "$rootDir/gradle/extensions/spotbugs.gradle"
 }

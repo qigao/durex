@@ -5,8 +5,8 @@ plugins{
 dependencies {
     implementation project(":core:shared:utils")
     implementation project(":core:shared:jakarta:jooq-config")
-    implementation project(":core:shared:schema:music:json")
-    implementation project(":core:shared:schema:music:entity")
+    implementation project(":core:schema:music:json")
+    implementation project(":core:schema:music:entity")
 }
 apply from: "$rootDir/gradle/library/quarkus-core.gradle"
 apply from: "$rootDir/gradle/library/sqldb.gradle"
