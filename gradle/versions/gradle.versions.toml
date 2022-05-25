@@ -3,9 +3,13 @@
 editorconfig = "0.0.3"
 sonar = "3.3"
 spotless = "5.15.0"
+spotbugs = '5.0.7'
 jooq = "7.1.1"
 flyway = "8.5.9"
 json-schema = '4.2.0'
+
+[libraries]
+
 # Gradle plugins config
 [plugins]
 editorconfig = { id = "org.ec4j.editorconfig", version.ref = "editorconfig" }
@@ -14,3 +18,4 @@ spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
 jooq-gen = { id = "nu.studer.jooq", version.ref = "jooq" }
 flyway = { id = 'org.flywaydb.flyway', version.ref = 'flyway' }
 json-schema = { id = 'org.jsonschema2dataclass', version.ref = 'json-schema' }
+spotbugs = { id = 'com.github.spotbugs', version.ref = 'spotbugs' }

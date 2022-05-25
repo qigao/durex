@@ -28,7 +28,7 @@ jobs:
       - name: Setup Java Project
         uses: ./.github/workflows/templates/config-action
       - name: generate schema
-        run: ./gradlew core:shared:schema:music:entity:generateJooq
+        run: ./gradlew core:schema:music:entity:generateJooq
       - name: run gradle assemble
         run: ./gradlew core:music:assemble -DDATABASE_USERNAME="$DATABASE_USERNAME" -DDATABASE_PASSWORD="$DATABASE_PASSWORD" -DDATABASE_PORT="$DATABASE_PORT" -DDATABASE_NAME="$DATABASE_NAME" -DDATABASE_HOST="$DATABASE_HOST"
       - name: Execute Related Check tasks

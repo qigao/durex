@@ -11,5 +11,7 @@ jsonSchema2Pojo {
     generateBuilders = true
     includeAdditionalProperties = false
     includeDynamicBuilders = true
+    //TOOD: not support yet
+    //    useJakartaValidation = true
 }
 jar.enabled = true
