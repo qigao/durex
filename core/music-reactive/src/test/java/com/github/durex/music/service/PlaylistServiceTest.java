@@ -37,8 +37,20 @@ class PlaylistServiceTest {
   }
 
   @Test
-  @DisplayName("When find playlist by title and not found")
-  void testFindPlayListByTitleWithException() {
+  @DisplayName("When find playlist by title return empty")
+  void testFindPlayListByTitleReturnEmpty() {
+    var playLists = DemoMusicData.givenSomePlayList(5);
+    Mockito.when(repository.findByTitle("test")).thenReturn(Flux.empty());
+    service
+        .findPlayListByTitle("test")
+        .as(StepVerifier::create)
+        .expectError(ApiException.class)
+        .verify();
+  }
+
+  @Test
+  @DisplayName("When find playlist by title return exception")
+  void testFindPlayListByTitleReturnException() {
     Mockito.when(repository.findByTitle("test"))
         .thenReturn(Flux.error(new ApiException("not found")));
     service
@@ -73,6 +85,17 @@ class PlaylistServiceTest {
   }
 
   @Test
+  @DisplayName("When find playlist by titile with wildcard return empty")
+  void testFindPlayListByTitleWithWildCardReturnEmpty() {
+    Mockito.when(repository.findByTitle(any(), any())).thenReturn(Flux.empty());
+    service
+        .findPlayListByTitle("test", WildCardType.CONTAINS)
+        .as(StepVerifier::create)
+        .expectError(ApiException.class)
+        .verify();
+  }
+
+  @Test
   @DisplayName("When find playlist by id")
   void testFindPlayListById() {
     Mockito.when(repository.findById(any())).thenReturn(Mono.just(DemoMusicData.givenAPlayList()));
@@ -84,9 +107,20 @@ class PlaylistServiceTest {
   }
 
   @Test
-  @DisplayName("When find playlist by id and not found")
+  @DisplayName("When find playlist by id return exception")
   void testFindPlayListByIdWithException() {
     Mockito.when(repository.findById(any())).thenReturn(Mono.error(new ApiException("not found")));
+    service
+        .findPlayListById(UniqID.getId())
+        .as(StepVerifier::create)
+        .expectError(ApiException.class)
+        .verify();
+  }
+
+  @Test
+  @DisplayName("When find playlist by id return empty")
+  void testFindPlayListByIdReturnEmpty() {
+    Mockito.when(repository.findById(any())).thenReturn(Mono.empty());
     service
         .findPlayListById(UniqID.getId())
         .as(StepVerifier::create)
@@ -103,9 +137,16 @@ class PlaylistServiceTest {
   }
 
   @Test
+  @DisplayName("When find all playlist return exception")
+  void testFindAllPlayListReturnException() {
+    Mockito.when(repository.findAll()).thenReturn(Flux.error(new ApiException("not found")));
+    service.findPlayList().as(StepVerifier::create).expectError(ApiException.class).verify();
+  }
+
+  @Test
   @DisplayName("When find all playlist and not found")
   void testFindAllPlayListWithException() {
-    Mockito.when(repository.findAll()).thenReturn(Flux.error(new ApiException("not found")));
+    Mockito.when(repository.findAll()).thenReturn(Flux.empty());
     service.findPlayList().as(StepVerifier::create).expectError(ApiException.class).verify();
   }
 

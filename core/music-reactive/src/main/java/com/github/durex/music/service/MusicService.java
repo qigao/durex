@@ -34,7 +34,9 @@ public class MusicService {
             e -> {
               log.error(e.getMessage(), e);
               throw new ApiException("Error finding music by id: " + id, ENTITY_NOT_FOUND);
-            });
+            })
+        .switchIfEmpty(
+            Mono.error(new ApiException("Music not found by id:" + id, ENTITY_NOT_FOUND)));
   }
 
   public Flux<Music> getMusicsByTitle(@NotNull String title) {
@@ -44,7 +46,9 @@ public class MusicService {
             e -> {
               log.error(e.getMessage(), e);
               throw new ApiException("Error finding music by title: " + title, ENTITY_NOT_FOUND);
-            });
+            })
+        .switchIfEmpty(
+            Flux.error(new ApiException("Music not found by title:" + title, ENTITY_NOT_FOUND)));
   }
 
   public Flux<Music> getMusicsByTitle(@NotNull String title, WildCardType wildCardEnum) {
@@ -56,7 +60,9 @@ public class MusicService {
             e -> {
               log.error(e.getMessage(), e);
               throw new ApiException("Error finding music by title: " + title, ENTITY_NOT_FOUND);
-            });
+            })
+        .switchIfEmpty(
+            Flux.error(new ApiException("Music not found by title:" + title, ENTITY_NOT_FOUND)));
   }
 
   public Mono<Integer> createMusic(Music music) {
