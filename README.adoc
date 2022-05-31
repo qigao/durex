@@ -1,25 +1,12 @@
 = Durex
+:icons: font
 
 a multi-module java template project for high code quality development
 
-== Environment Variables
+TIP: Features:
 
-a typical .env files looks like
-
-[source,ini]
---
-# starting line comment out supported
-FOO=foo
-BAR=bar
-BAZ=~/projects/sonar
---
-
-'#' is allowed at the beginning of a line
-
-=== SetEnv
-
-copy .env.templates to .env at the module dir, update to whatever you need
-
-[source,bash]
->  export $(cat .env | xargs)
---
+* DDD, TDD/BDD
+* Restful API w/ Json Schema
+* Microservice w/ Native Deployment docker
+* Imperative/Reactive
+* Quarkus/Spring Boot

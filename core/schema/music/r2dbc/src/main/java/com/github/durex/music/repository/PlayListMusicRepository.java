@@ -33,7 +33,11 @@ public class PlayListMusicRepository {
             .from(joinTables.on(eqMusicID))
             .where(eqPlayListID.and(NOT_DELETED))
             .orderBy(PLAYLIST_MUSIC.MUSIC_ORDER);
-    return Flux.from(dslJoinSelect).map(r -> r.into(RMusic.class)).map(MusicMapper::mapRecordToDto);
+    return Flux.from(dslJoinSelect)
+        .switchIfEmpty(
+            Flux.error(new IllegalArgumentException("playlist not exist with id: " + playlistId)))
+        .map(r -> r.into(RMusic.class))
+        .map(MusicMapper::mapRecordToDto);
   }
 
   public Flux<Integer> saveMusicsToPlayList(

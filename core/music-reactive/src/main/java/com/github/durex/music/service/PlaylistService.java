@@ -1,9 +1,7 @@
 package com.github.durex.music.service;
 
-import static com.github.durex.music.support.EntityConstants.ID_IS_EMPTY;
 import static com.github.durex.music.support.EntityConstants.MUSIC_NOT_DELETED;
 import static com.github.durex.music.support.EntityConstants.MUSIC_NOT_UPDATED;
-import static com.github.durex.music.support.EntityConstants.TITLE_IS_EMPTY;
 import static com.github.durex.shared.exceptions.model.ErrorCode.ENTITY_NOT_FOUND;
 import static com.github.durex.shared.exceptions.model.ErrorCode.SAVE_ERROR;
 
@@ -13,13 +11,13 @@ import com.github.durex.music.api.PlayListMusic;
 import com.github.durex.music.repository.PlayListMusicRepository;
 import com.github.durex.music.repository.PlayListRepository;
 import com.github.durex.shared.exceptions.ApiException;
-import com.github.durex.shared.utils.Helper;
 import com.github.durex.sqlbuilder.SqlHelper;
 import com.github.durex.sqlbuilder.enums.WildCardType;
 import io.smallrye.common.constraint.NotNull;
 import java.util.List;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -149,10 +147,9 @@ public class PlaylistService {
             });
   }
 
-  public Mono<Integer> deletePlaylistById(String id) {
-    var realId = Helper.makeOptional(id).orElseThrow(() -> new ApiException(ID_IS_EMPTY));
+  public Mono<Integer> deletePlaylistById(@NonNull String id) {
     return repository
-        .deleteById(realId)
+        .deleteById(id)
         .doOnError(
             e -> {
               log.error(e.getMessage(), e);
@@ -160,10 +157,9 @@ public class PlaylistService {
             });
   }
 
-  public Mono<Integer> deletePlayListByTitle(String title) {
-    var realTitle = Helper.makeOptional(title).orElseThrow(() -> new ApiException(TITLE_IS_EMPTY));
+  public Mono<Integer> deletePlayListByTitle(@NonNull String title) {
     return repository
-        .deleteByTitle(realTitle)
+        .deleteByTitle(title)
         .doOnError(
             e -> {
               log.error(e.getMessage(), e);
@@ -171,7 +167,7 @@ public class PlaylistService {
             });
   }
 
-  public Mono<Integer> deletePlayListByTitle(String title, WildCardType wildcard) {
+  public Mono<Integer> deletePlayListByTitle(@NonNull String title, WildCardType wildcard) {
     var realTitle = SqlHelper.likeClauseBuilder(wildcard, title);
     return repository
         .deleteByTitle(realTitle, wildcard)
@@ -182,10 +178,9 @@ public class PlaylistService {
             });
   }
 
-  public Mono<Integer> deleteMusicFromPlayList(String id, List<String> musicIds) {
-    var realId = Helper.makeOptional(id).orElseThrow(() -> new ApiException(ID_IS_EMPTY));
+  public Mono<Integer> deleteMusicFromPlayList(@NonNull String id, List<String> musicIds) {
     return playListMusicRepository
-        .deleteMusicFromPlayList(realId, musicIds)
+        .deleteMusicFromPlayList(id, musicIds)
         .doOnError(
             e -> {
               log.error(e.getMessage(), e);
@@ -193,10 +188,9 @@ public class PlaylistService {
             });
   }
 
-  public Mono<Integer> clearMusicsFromPlayList(String playListId) {
-    var realId = Helper.makeOptional(playListId).orElseThrow(() -> new ApiException(ID_IS_EMPTY));
+  public Mono<Integer> clearMusicsFromPlayList(@NonNull String playListId) {
     return playListMusicRepository
-        .clearMusicsFromPlayList(realId)
+        .clearMusicsFromPlayList(playListId)
         .doOnError(
             e -> {
               log.error(e.getMessage(), e);

@@ -52,15 +52,14 @@ public class MusicController {
       description = "Success",
       content =
           @Content(mediaType = APPLICATION_JSON, schema = @Schema(implementation = RespData.class)))
-  public RespData getMusic(
+  public RespData<List<Music>> getMusic(
       @Parameter(description = "music title") @QueryParam("title") @Encoded String title,
       @Parameter(description = "music id,used when paging") @QueryParam("id") @Encoded
           String musicId,
       @Parameter(description = "page size") @QueryParam("offset") @Encoded @DefaultValue("10")
           int offset) {
     log.info("getMusic title:{},musicId:{},offset:{}", title, musicId, offset);
-    List<Music> musicList = musicService.getMusicsByTitle(title);
-    return RespData.builder().error(Helper.okResponse()).result(musicList).build();
+    return RespData.of(musicService.getMusicsByTitle(title), Helper.okResponse());
   }
 
   @GET
@@ -71,9 +70,9 @@ public class MusicController {
       description = "Success",
       content =
           @Content(mediaType = APPLICATION_JSON, schema = @Schema(implementation = RespData.class)))
-  public RespData getMusic(@Parameter(description = "music id ") @PathParam("id") String musicId) {
-    var musicResp = musicService.getMusicById(musicId);
-    return RespData.builder().error(Helper.okResponse()).result(List.of(musicResp)).build();
+  public RespData<Music> getMusic(
+      @Parameter(description = "music id ") @PathParam("id") String musicId) {
+    return RespData.of(musicService.getMusicById(musicId), Helper.okResponse());
   }
 
   @DELETE
@@ -84,9 +83,9 @@ public class MusicController {
       description = "Success",
       content =
           @Content(mediaType = APPLICATION_JSON, schema = @Schema(implementation = RespData.class)))
-  public RespData deleteMusic(@Parameter(description = "music id ") @PathParam("id") String id) {
-    var result = musicService.deleteMusicById(id);
-    return RespData.builder().error(Helper.okResponse()).result(result).build();
+  public RespData<Integer> deleteMusic(
+      @Parameter(description = "music id ") @PathParam("id") String id) {
+    return RespData.of(musicService.deleteMusicById(id), Helper.okResponse());
   }
 
   @POST
@@ -97,9 +96,8 @@ public class MusicController {
       description = "Success",
       content =
           @Content(mediaType = APPLICATION_JSON, schema = @Schema(implementation = RespData.class)))
-  public RespData createMusic(Music musicReq) {
-    var result = musicService.createMusic(musicReq);
-    return RespData.builder().error(Helper.okResponse()).result(result).build();
+  public RespData<Integer> createMusic(Music musicReq) {
+    return RespData.of(musicService.createMusic(musicReq), Helper.okResponse());
   }
 
   @PUT
@@ -110,9 +108,8 @@ public class MusicController {
       description = "Success",
       content =
           @Content(mediaType = APPLICATION_JSON, schema = @Schema(implementation = RespData.class)))
-  public RespData updateMusic(Music musicReq) {
+  public RespData<Integer> updateMusic(Music musicReq) {
     log.info("update music: {}", musicReq);
-    var result = musicService.updateMusic(musicReq);
-    return RespData.builder().error(Helper.okResponse()).result(result).build();
+    return RespData.of(musicService.updateMusic(musicReq), Helper.okResponse());
   }
 }

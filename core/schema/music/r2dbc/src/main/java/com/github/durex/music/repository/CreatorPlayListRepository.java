@@ -68,6 +68,11 @@ public class CreatorPlayListRepository {
                 .where(eqCreatorID.and(DELETED_FLAG))
                 .orderBy(PLAYLIST.CREATE_TIME.desc()))
         .map(r -> r.into(RPlaylist.class))
-        .map(PlayListMapper::mapRecordToDto);
+        .switchIfEmpty(
+            Flux.error(
+                new IllegalArgumentException("playlist not found with createrId: " + creatorId)))
+        .map(PlayListMapper::mapRecordToDto)
+        .publish()
+        .autoConnect();
   }
 }

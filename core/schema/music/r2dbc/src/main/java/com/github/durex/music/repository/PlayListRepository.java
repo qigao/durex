@@ -26,25 +26,38 @@ public class PlayListRepository {
   public Flux<PlayList> findByTitle(@NotNull String title) {
     var eqTitle = PLAYLIST.TITLE.eq(title);
     return Flux.from(dsl.selectFrom(PLAYLIST).where(eqTitle).and(NOT_DELETED))
+        .switchIfEmpty(
+            Flux.error(new IllegalArgumentException("PlayList not found with title: " + title)))
+        .map(PlayListMapper::mapRecordToDto)
         .publish()
-        .autoConnect()
-        .map(PlayListMapper::mapRecordToDto);
+        .autoConnect();
   }
 
   public Flux<PlayList> findByTitle(@NotNull String title, WildCardType wildCardType) {
     var realTitle = SqlHelper.likeClauseBuilder(wildCardType, title);
     var titleCondition = PLAYLIST.TITLE.like(realTitle);
     return Flux.from(dsl.selectFrom(PLAYLIST).where(titleCondition).and(NOT_DELETED))
-        .map(PlayListMapper::mapRecordToDto);
+        .switchIfEmpty(
+            Flux.error(new IllegalArgumentException("PlayList not found with title: " + title)))
+        .map(PlayListMapper::mapRecordToDto)
+        .publish()
+        .autoConnect();
   }
 
   public Flux<PlayList> findAll() {
-    return Flux.from(dsl.selectFrom(PLAYLIST)).map(PlayListMapper::mapRecordToDto);
+    return Flux.from(dsl.selectFrom(PLAYLIST))
+        .switchIfEmpty(Flux.error(new IllegalArgumentException("PlayList not found")))
+        .map(PlayListMapper::mapRecordToDto)
+        .publish()
+        .autoConnect();
   }
 
   public Mono<PlayList> findById(@NotNull String id) {
     var condition = PLAYLIST.ID.eq(id).and(NOT_DELETED);
-    return Mono.from(dsl.selectFrom(PLAYLIST).where(condition)).map(PlayListMapper::mapRecordToDto);
+    return Mono.from(dsl.selectFrom(PLAYLIST).where(condition))
+        .switchIfEmpty(
+            Mono.error(new IllegalArgumentException("PlayList not found with id: " + id)))
+        .map(PlayListMapper::mapRecordToDto);
   }
 
   public Mono<Integer> save(@NotNull PlayList playList) {

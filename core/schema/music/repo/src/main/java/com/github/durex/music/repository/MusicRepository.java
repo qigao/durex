@@ -1,6 +1,7 @@
 package com.github.durex.music.repository;
 
 import static com.github.durex.api.tables.QMusic.MUSIC;
+import static org.apache.commons.collections4.CollectionUtils.isEmpty;
 
 import com.github.durex.music.api.Music;
 import com.github.durex.music.mapper.MusicMapper;
@@ -13,7 +14,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
-import javax.validation.constraints.NotNull;
+import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ArrayUtils;
 import org.jooq.Condition;
@@ -27,10 +28,13 @@ public class MusicRepository {
   @Inject DSLContext dsl;
 
   /**
+   * find musics by titles, title must not be null, empty or blank,if titles is empty, return empty
+   * list.
+   *
    * @param title title of music
    * @return list of found rows
    */
-  public List<Music> findByTitle(@NotNull String title) {
+  public List<Music> findByTitle(@NonNull String title) {
     try (var crud = dsl.selectFrom(MUSIC)) {
       var eqTitle = MUSIC.TITLE.eq(title);
       return crud.where(eqTitle).and(NOT_DELETED).fetch().map(MusicMapper::mapRecordToDto);
@@ -41,25 +45,30 @@ public class MusicRepository {
   }
 
   /**
-   * @param title title of music
+   * find musics by title.
+   *
+   * @param title title of music ,must not be null, empty or blank
+   * @param wildCardType wild card type {@link WildCardType}
    * @return list of found rows
    */
-  public List<Music> findByTitle(@NotNull String title, WildCardType wildCardType) {
+  public List<Music> findByTitle(@NonNull String title, WildCardType wildCardType) {
     var realTitle = SqlHelper.likeClauseBuilder(wildCardType, title);
-    try (var crud = dsl.selectFrom(MUSIC)) {
-      var likeTitle = MUSIC.TITLE.like(realTitle);
-      return crud.where(likeTitle).and(NOT_DELETED).fetch().map(MusicMapper::mapRecordToDto);
-    } catch (Exception e) {
-      log.error("Error fetching musics", e);
+    var crud = dsl.selectFrom(MUSIC);
+    var likeTitle = MUSIC.TITLE.like(realTitle);
+    var result = crud.where(likeTitle).and(NOT_DELETED).fetch();
+    if (isEmpty(result)) {
       return Collections.emptyList();
     }
+    return result.map(MusicMapper::mapRecordToDto);
   }
 
   /**
+   * find music by id.
+   *
    * @param id id of music
    * @return music
    */
-  public Optional<Music> findById(@NotNull String id) {
+  public Optional<Music> findById(@NonNull String id) {
     try (var crud = dsl.selectFrom(MUSIC)) {
       var rMusic = crud.where(MUSIC.ID.eq(id)).and(NOT_DELETED).fetchOne();
       return Optional.ofNullable(rMusic).map(MusicMapper::mapRecordToDto);
@@ -85,7 +94,7 @@ public class MusicRepository {
    * @param id id of music
    * @return number of updated rows
    */
-  public int deleteById(@NotNull String id) {
+  public int deleteById(@NonNull String id) {
     try (var crud =
         dsl.update(MUSIC).set(MUSIC.DELETED_FLAG, 1).set(MUSIC.DELETE_TIME, LocalDateTime.now())) {
       return crud.where(MUSIC.ID.eq(id)).execute();
@@ -96,12 +105,12 @@ public class MusicRepository {
   }
 
   /**
-   * set delete flag to 1
+   * This method will not delete a music physically, but set delete flag to 1
    *
    * @param title title of musi
    * @return number of updated rows
    */
-  public int deleteByTitle(@NotNull String title) {
+  public int deleteByTitle(@NonNull String title) {
     try (var crud =
         dsl.update(MUSIC).set(MUSIC.DELETED_FLAG, 1).set(MUSIC.DELETE_TIME, LocalDateTime.now())) {
       return crud.where(MUSIC.TITLE.eq(title)).execute();
@@ -115,7 +124,7 @@ public class MusicRepository {
    * @param title title of music
    * @return number of inserted rows
    */
-  public int deleteByTitle(@NotNull String title, WildCardType wildCardType) {
+  public int deleteByTitle(@NonNull String title, WildCardType wildCardType) {
     var realTitle = SqlHelper.likeClauseBuilder(wildCardType, title);
     try (var crud =
         dsl.update(MUSIC).set(MUSIC.DELETED_FLAG, 1).set(MUSIC.DELETE_TIME, LocalDateTime.now())) {
@@ -126,7 +135,7 @@ public class MusicRepository {
     }
   }
 
-  public int delete(@NotNull List<String> musicIds) {
+  public int delete(@NonNull List<String> musicIds) {
     try (var crud =
         dsl.update(MUSIC).set(MUSIC.DELETED_FLAG, 1).set(MUSIC.DELETE_TIME, LocalDateTime.now())) {
       return crud.where(MUSIC.ID.in(musicIds)).execute();

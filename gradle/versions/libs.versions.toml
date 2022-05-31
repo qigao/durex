@@ -13,8 +13,7 @@ commons-io = { group = 'commons-io', name = 'commons-io', version = '2.11.0' }
 commons-http = { group = 'org.apache.httpcomponents', name = 'httpclient', version = { strictly = '[4.5, 5.0[', prefer = '4.5.2' } }
 commons-httpclient = { group = 'org.apache.httpcomponents', name = 'httpclient', version = { strictly = '[4.5, 5.0[', prefer = '4.5.2' } }
 commons-text = { group = 'org.apache.commons', name = 'commons-text', version = '1.9' }
-commons-config = { group = 'org.apache.commons', name = 'commons-configuration2', version = '2.7' }
-commons-beanutils = { group = 'commons-beanutils', name = 'commons-beanutils', version = '1.9.4' }
+commons-collections4 = { group = 'org.apache.commons', name = 'commons-collections4', version = { strictly = '[4.4, 5.0[' } }
 ok-http = { group = 'com.squareup.okhttp', name = 'okhttp', version = '2.7.5' }
 # exceptions
 unchecked = { group = 'com.pivovarit', name = 'throwing-function', version = '1.5.1' }
@@ -38,8 +37,9 @@ reactor-core = { group = 'io.projectreactor', name = 'reactor-core', version = '
 
 jakarta-bom = { group = 'jakarta.platform', name = 'jakarta.jakartaee-bom', version.ref = 'jakarta' }
 
+guava = { group = 'com.google.guava', name = 'guava', version = '31.1-jre' }
 [bundles]
-commons = ['commons-lang3', 'commons-io', 'commons-text','commons-config','commons-beanutils' ]
+commons = ['commons-lang3', 'commons-io', 'commons-text','commons-collections4']
 idCreator = ['uuid', 'ulid', 'tsid', 'ksuid']
 
 # Gradle plugins config

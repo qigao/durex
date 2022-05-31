@@ -20,7 +20,7 @@ dependencyResolutionManagement {
             from(files("$rootDir/gradle/versions/gradle.versions.toml"))
         }
         dbLibs {
-            from(files("$rootDir/gradle/versions/sql.versions.toml"))
+            from(files("$rootDir/gradle/versions/database.versions.toml"))
         }
     }
 }
