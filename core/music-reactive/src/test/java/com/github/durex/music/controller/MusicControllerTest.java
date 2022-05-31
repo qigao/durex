@@ -6,7 +6,6 @@ import static com.github.durex.support.RespConstant.OK;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.notNullValue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
@@ -49,13 +48,14 @@ class MusicControllerTest {
     var music = DemoMusicData.givenAMusic();
     when(service.getMusicById(anyString())).thenReturn(Mono.just(music));
     given()
-        .when()
         .pathParam("id", music.getId())
+        .when()
         .get("/{id}")
         .then()
+        .statusCode(200)
         .body("error.errorCode", equalTo(NOTHING_FAILED))
         .body("error.message", equalTo(OK))
-        .body("result.id", notNullValue());
+        .body("result.id", equalTo(music.getId()));
   }
 
   @Test

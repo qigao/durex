@@ -1,9 +1,7 @@
 package com.github.durex.music.service;
 
 import static com.github.durex.music.support.EntityConstants.MUSIC_NOT_DELETED;
-import static com.github.durex.music.support.EntityConstants.TITLE_IS_EMPTY;
 import static com.github.durex.shared.exceptions.model.ErrorCode.DELETE_ERROR;
-import static com.github.durex.shared.exceptions.model.ErrorCode.EMPTY_PARAM;
 import static com.github.durex.shared.exceptions.model.ErrorCode.ENTITY_NOT_FOUND;
 import static com.github.durex.shared.exceptions.model.ErrorCode.SAVE_ERROR;
 import static com.github.durex.shared.exceptions.model.ErrorCode.UPDATE_ERROR;
@@ -11,7 +9,6 @@ import static com.github.durex.shared.exceptions.model.ErrorCode.UPDATE_ERROR;
 import com.github.durex.music.api.Music;
 import com.github.durex.music.repository.MusicRepository;
 import com.github.durex.shared.exceptions.ApiException;
-import com.github.durex.shared.utils.Helper;
 import com.github.durex.sqlbuilder.enums.WildCardType;
 import io.smallrye.common.constraint.NotNull;
 import java.util.List;
@@ -52,10 +49,8 @@ public class MusicService {
   }
 
   public Flux<Music> getMusicsByTitle(@NotNull String title, WildCardType wildCardEnum) {
-    var realTitle =
-        Helper.makeOptional(title).orElseThrow(() -> new ApiException(TITLE_IS_EMPTY, EMPTY_PARAM));
     return repository
-        .findByTitle(realTitle, wildCardEnum)
+        .findByTitle(title, wildCardEnum)
         .doOnError(
             e -> {
               log.error(e.getMessage(), e);

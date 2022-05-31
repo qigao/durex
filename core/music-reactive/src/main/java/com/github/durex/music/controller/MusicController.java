@@ -9,6 +9,7 @@ import com.github.durex.shared.api.RespData;
 import com.github.durex.shared.utils.Helper;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
+import java.util.List;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
@@ -52,35 +53,33 @@ public class MusicController {
       description = "Success",
       content =
           @Content(mediaType = APPLICATION_JSON, schema = @Schema(implementation = RespData.class)))
-  public Uni<RespData> getMusic(
+  public Uni<RespData<List<Music>>> getMusic(
       @Parameter(description = "music title") @QueryParam("title") @Encoded String title,
       @Parameter(description = "music id,used when paging") @QueryParam("id") @Encoded
           String musicId,
       @Parameter(description = "page size") @QueryParam("offset") @Encoded @DefaultValue("10")
           int offset) {
     log.info("getMusic title:{},musicId:{},offset:{}", title, musicId, offset);
-    var publisher = musicService.getMusicsByTitle(title);
-    var errResp = Uni.createFrom().item(Helper.respOk());
-    var dataResp = Multi.createFrom().publisher(publisher).collect().asList();
-    return Uni.combine()
-        .all()
-        .unis(errResp, dataResp)
-        .combinedWith((err, data) -> Helper.respData(err.getError(), data));
+    return Multi.createFrom()
+        .publisher(musicService.getMusicsByTitle(title))
+        .collect()
+        .asList()
+        .map(data -> RespData.of(data, Helper.okResponse()));
   }
 
   @GET
   @Path("/{id}")
-  @Operation(summary = "get music info", description = "")
+  @Operation(summary = "get music info", description = " ")
   @APIResponse(
       responseCode = "200",
       description = "Success",
       content =
           @Content(mediaType = APPLICATION_JSON, schema = @Schema(implementation = RespData.class)))
-  public Uni<RespData> getMusic(
+  public Uni<RespData<Music>> getMusic(
       @Parameter(description = "music id ") @PathParam("id") String musicId) {
     return Uni.createFrom()
         .publisher(musicService.getMusicById(musicId))
-        .map(p -> RespData.builder().error(Helper.okResponse()).result(p).build());
+        .map(music -> RespData.of(music, Helper.okResponse()));
   }
 
   @DELETE
@@ -91,11 +90,11 @@ public class MusicController {
       description = "Success",
       content =
           @Content(mediaType = APPLICATION_JSON, schema = @Schema(implementation = RespData.class)))
-  public Uni<RespData> deleteMusic(
+  public Uni<RespData<Integer>> deleteMusic(
       @Parameter(description = "music id ") @PathParam("id") String id) {
     return Uni.createFrom()
         .publisher(musicService.deleteMusicById(id))
-        .map(p -> RespData.builder().error(Helper.okResponse()).result(p).build());
+        .map(p -> RespData.of(p, Helper.okResponse()));
   }
 
   @POST
@@ -106,10 +105,10 @@ public class MusicController {
       description = "Success",
       content =
           @Content(mediaType = APPLICATION_JSON, schema = @Schema(implementation = RespData.class)))
-  public Uni<RespData> createMusic(Music musicReq) {
+  public Uni<RespData<Integer>> createMusic(Music musicReq) {
     return Uni.createFrom()
         .publisher(musicService.createMusic(musicReq))
-        .map(p -> RespData.builder().error(Helper.okResponse()).result(p).build());
+        .map(p -> RespData.of(p, Helper.okResponse()));
   }
 
   @PUT
@@ -120,10 +119,10 @@ public class MusicController {
       description = "Success",
       content =
           @Content(mediaType = APPLICATION_JSON, schema = @Schema(implementation = RespData.class)))
-  public Uni<RespData> updateMusic(Music musicReq) {
+  public Uni<RespData<Integer>> updateMusic(Music musicReq) {
     log.info("update music: {}", musicReq);
     return Uni.createFrom()
         .publisher(musicService.updateMusic(musicReq))
-        .map(p -> RespData.builder().error(Helper.okResponse()).result(p).build());
+        .map(p -> RespData.of(p, Helper.okResponse()));
   }
 }

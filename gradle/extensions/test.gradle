@@ -2,11 +2,11 @@ test {
     useJUnitPlatform {
         excludeEngines 'junit-vintage'
     }
+    environment = env.allVariables
     maxParallelForks Runtime.runtime.availableProcessors()
     testLogging {
         events "passed", "skipped", "failed"
         exceptionFormat 'full'
     }
     maxHeapSize = '1G'
-    maxParallelForks = Runtime.runtime.availableProcessors().intdiv(2) ?: 1
 }

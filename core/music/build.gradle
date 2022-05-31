@@ -21,7 +21,7 @@ dependencies {
     implementation project(":core:schema:music:json")
     implementation project(":core:schema:music:entity")
     implementation project(":core:schema:music:repo")
-    implementation project(":core:shared:jakarta:cdi-utils")
+    implementation project(":core:shared:jakarta:common")
     implementation qLibs.logback
 }
 

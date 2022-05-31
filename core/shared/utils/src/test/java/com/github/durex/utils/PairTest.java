@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 class PairTest {
   @Test
   void testPair() {
-    Pair<String, Integer> pair = Pair.of("a", 1);
+    var pair = Pair.of("a", 1);
     assertEquals("a", pair.getFirst());
     assertEquals(1, pair.getSecond());
   }

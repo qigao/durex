@@ -3,11 +3,11 @@ package com.github.durex.uuid;
 import java.util.EnumMap;
 import java.util.Map;
 import java.util.function.Supplier;
-import lombok.NoArgsConstructor;
+import lombok.experimental.UtilityClass;
 
-@NoArgsConstructor(access = lombok.AccessLevel.PRIVATE)
+@UtilityClass
 public class UniqID {
-  static final Map<IDType, Supplier<Creator>> map = new EnumMap<>(IDType.class);
+  private final Map<IDType, Supplier<Creator>> map = new EnumMap<>(IDType.class);
 
   static {
     map.put(IDType.UUID, UUIDCreator::new);
@@ -16,11 +16,11 @@ public class UniqID {
     map.put(IDType.ULID, ULIDCreator::new);
   }
 
-  public static String getId(IDType type) {
+  public String getId(IDType type) {
     return map.get(type).get().generate();
   }
 
-  public static String getId() {
+  public String getId() {
     return map.get(IDType.ULID).get().generate();
   }
 }

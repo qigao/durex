@@ -5,11 +5,10 @@ equals-verifier = "3.7.2"
 wiremock = "2.33.2"
 rest-assured = "5.0.1"
 to-string-verifier = "1.4.8"
-h2 = "1.4.200"
 
 # Libs config
 [libraries]
-h2db = { group = "com.h2database", name = "h2", version.ref = "h2" }
+h2db = { group = "com.h2database", name = "h2", version = '2.1.212'}
 
 # Test
 junit5-bom = { group = 'org.junit', name = 'junit-bom', version.ref = 'junit' }

@@ -30,41 +30,67 @@ public class MusicRepository {
    */
   public Flux<Music> findByTitle(@NotNull String title) {
     return Flux.from(dsl.selectFrom(MUSIC).where(MUSIC.TITLE.eq(title)).and(NOT_DELETED))
-        .map(MusicMapper::mapRecordToDto);
+        .switchIfEmpty(
+            Flux.error(new IllegalArgumentException("no musics found with title: " + title)))
+        .map(MusicMapper::mapRecordToDto)
+        .publish()
+        .autoConnect();
   }
 
   /**
-   * @param title title of music
+   * find musics by title, must be not null, and not empty or blank.
+   *
+   * @param title title of music must be not null, and not empty or blank. wildcard is %title,
+   *     %title%, title%
+   * @param wildCardType wildcard type
    * @return list of found rows
    */
   public Flux<Music> findByTitle(@NotNull String title, WildCardType wildCardType) {
     String clauseBuilder = SqlHelper.likeClauseBuilder(wildCardType, title);
     var like = MUSIC.TITLE.like(clauseBuilder);
     return Flux.from(dsl.selectFrom(MUSIC).where(like).and(NOT_DELETED))
-        .map(MusicMapper::mapRecordToDto);
+        .switchIfEmpty(
+            Flux.error(new IllegalArgumentException("no musics found with title: " + title)))
+        .map(MusicMapper::mapRecordToDto)
+        .publish()
+        .autoConnect();
   }
 
   /**
+   * find music by id.
+   *
    * @param id id of music
    * @return music
    */
   public Mono<Music> findById(@NotNull String id) {
     return Mono.from(dsl.selectFrom(MUSIC).where(MUSIC.ID.eq(id)).and(NOT_DELETED))
-        .map(MusicMapper::mapRecordToDto);
-  }
-
-  /** @return list of musics which are not deleted */
-  public Flux<Music> findAllAvailable() {
-    return Flux.from(dsl.selectFrom(MUSIC).where(NOT_DELETED)).map(MusicMapper::mapRecordToDto);
-  }
-
-  public Flux<Music> findAllDeleted() {
-    return Flux.from(dsl.selectFrom(MUSIC).where(MUSIC.DELETED_FLAG.eq(1)))
+        .switchIfEmpty(Mono.error(new IllegalArgumentException("no music found with id: " + id)))
         .map(MusicMapper::mapRecordToDto);
   }
 
   /**
-   * set delete flag to 1
+   * list of musics which are not deleted.
+   *
+   * @return List<{@link Music}>
+   */
+  public Flux<Music> findAllAvailable() {
+    return Flux.from(dsl.selectFrom(MUSIC).where(NOT_DELETED))
+        .switchIfEmpty(Flux.error(new IllegalArgumentException("no musics found")))
+        .map(MusicMapper::mapRecordToDto)
+        .publish()
+        .autoConnect();
+  }
+
+  public Flux<Music> findAllDeleted() {
+    return Flux.from(dsl.selectFrom(MUSIC).where(MUSIC.DELETED_FLAG.eq(1)))
+        .switchIfEmpty(Flux.error(new IllegalArgumentException("no musics found")))
+        .map(MusicMapper::mapRecordToDto)
+        .publish()
+        .autoConnect();
+  }
+
+  /**
+   * set delete flag to 1.
    *
    * @param id id of music
    * @return number of updated rows
@@ -78,9 +104,9 @@ public class MusicRepository {
   }
 
   /**
-   * set delete flag to 1
+   * set delete flag to 1.
    *
-   * @param title title of musi
+   * @param title title of music
    * @return number of updated rows
    */
   public Mono<Integer> deleteByTitle(@NotNull String title) {
@@ -117,7 +143,7 @@ public class MusicRepository {
   }
 
   /**
-   * save record by insert
+   * save record by insert.
    *
    * @param music music
    * @return insert result
@@ -129,7 +155,7 @@ public class MusicRepository {
   }
 
   /**
-   * update record by update
+   * update record by update.
    *
    * @param musics music list
    * @return int[] updated result of musics
@@ -148,7 +174,7 @@ public class MusicRepository {
   }
 
   /**
-   * update a record
+   * update a record.
    *
    * @param music musicDTO ToUpdate
    * @return number of updated records

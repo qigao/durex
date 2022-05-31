@@ -1,9 +1,4 @@
-plugins{
-    alias qLibs.plugins.quarkus
-}
 dependencies {
-    implementation  vLibs.bundles.commons
     implementation project(":core:shared:utils")
 }
 apply from: "$rootDir/gradle/library/sqldb.gradle"
-

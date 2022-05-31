@@ -1,6 +1,0 @@
-//org.testcontainers
-dependencies {
-    testImplementation platform(tLibs.test.containers.bom.get())
-    testImplementation 'org.testcontainers:mysql'
-    testImplementation 'org.testcontainers:junit-jupiter'
-}

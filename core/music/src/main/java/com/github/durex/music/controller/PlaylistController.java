@@ -7,7 +7,9 @@ import com.github.durex.music.api.PlayListMusic;
 import com.github.durex.music.service.PlaylistService;
 import com.github.durex.shared.api.RespData;
 import com.github.durex.shared.utils.Helper;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
@@ -47,25 +49,23 @@ public class PlaylistController {
       description = "Success",
       content =
           @Content(mediaType = APPLICATION_JSON, schema = @Schema(implementation = RespData.class)))
-  public RespData getPlaylistByTitle(
+  public RespData<List<PlayList>> getPlaylistByTitle(
       @Parameter(description = "music title") @QueryParam("title") @Encoded String title,
       @DefaultValue("10") @Parameter(description = "query page size") @QueryParam("offset") @Encoded
           int offset) {
-    var playlist = playlistService.findPlayListByTitle(title);
-    return RespData.builder().error(Helper.okResponse()).result(playlist).build();
+    return RespData.of(playlistService.findPlayListByTitle(title), Helper.okResponse());
   }
 
   @GET
   @Path("/{id}")
-  @Operation(summary = "get playlist info by id", description = "")
+  @Operation(summary = "get playlist info by id", description = " ")
   @APIResponse(
       responseCode = "200",
       description = "Success",
       content =
           @Content(mediaType = APPLICATION_JSON, schema = @Schema(implementation = RespData.class)))
-  public RespData getPlaylist(@PathParam("id") String id) {
-    var playlist = playlistService.findPlayListById(id);
-    return RespData.builder().error(Helper.okResponse()).result(List.of(playlist)).build();
+  public RespData<PlayList> getPlaylist(@PathParam("id") String id) {
+    return RespData.of(playlistService.findPlayListById(id), Helper.okResponse());
   }
 
   @POST
@@ -76,23 +76,24 @@ public class PlaylistController {
       description = "Success",
       content =
           @Content(mediaType = APPLICATION_JSON, schema = @Schema(implementation = RespData.class)))
-  public RespData createPlaylistWithID(PlayListMusic playList) {
-    var id = playlistService.createPlaylist(playList);
-    log.info("created playlist ID: {}", id);
-    return RespData.builder().error(Helper.okResponse()).result(id).build();
+  public RespData<List<Integer>> createPlaylistWithID(PlayListMusic playList) {
+    return RespData.of(
+        Arrays.stream(playlistService.createPlaylist(playList))
+            .boxed()
+            .collect(Collectors.toList()),
+        Helper.okResponse());
   }
 
   @PUT
-  @Path("/{id}")
+  @Path("/")
   @Operation(summary = "update a playlist", description = " ")
   @APIResponse(
       responseCode = "200",
       description = "Success",
       content =
           @Content(mediaType = APPLICATION_JSON, schema = @Schema(implementation = RespData.class)))
-  public RespData updatePlaylist(PlayList playList) {
-    var result = playlistService.updatePlaylist(playList);
-    return RespData.builder().error(Helper.okResponse()).result(result).build();
+  public RespData<Integer> updatePlaylist(PlayList playList) {
+    return RespData.of(playlistService.updatePlaylist(playList), Helper.okResponse());
   }
 
   @DELETE
@@ -103,9 +104,7 @@ public class PlaylistController {
       description = "Success",
       content =
           @Content(mediaType = APPLICATION_JSON, schema = @Schema(implementation = RespData.class)))
-  public RespData deletePlaylist(@PathParam("id") String id) {
-    var affectedRows = playlistService.deletePlaylistById(id);
-    log.info("delete playlist affectedRows: {}", affectedRows);
-    return RespData.builder().error(Helper.okResponse()).result(affectedRows).build();
+  public RespData<Integer> deletePlaylist(@PathParam("id") String id) {
+    return RespData.of(playlistService.deletePlaylistById(id), Helper.okResponse());
   }
 }

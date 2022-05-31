@@ -19,3 +19,4 @@ jooq-gen = { id = "nu.studer.jooq", version.ref = "jooq" }
 flyway = { id = 'org.flywaydb.flyway', version.ref = 'flyway' }
 json-schema = { id = 'org.jsonschema2dataclass', version.ref = 'json-schema' }
 spotbugs = { id = 'com.github.spotbugs', version.ref = 'spotbugs' }
+dotenv = { id = 'co.uzzu.dotenv.gradle', version = '2.0.0' }

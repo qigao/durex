@@ -1,0 +1,23 @@
+== Readme
+
+== Description
+
+common jakarta cdi beans like annotation, filter/interceptor, cache, decorator, etc.
+
+
+=== redis client config
+
+dotEnv must have the following variables:
+
+[source,dotenv]
+--
+REDIS_HOST=redis://localhost:6379
+REDIS_PASSWORD=null
+--
+
+pls update necessary configs from resources folder
+
+
+=== Known issues
+
+* interceptor Param is not working in reactive mode
