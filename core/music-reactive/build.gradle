@@ -22,6 +22,7 @@ dependencies {
     implementation project(":core:schema:music:r2dbc")
     implementation project(":core:schema:music:entity")
     implementation project(":core:shared:jakarta:common")
+    implementation project(":core:shared:jakarta:config")
     implementation qLibs.logback
     implementation vLibs.reactor.core
     testImplementation tLibs.reactor.test

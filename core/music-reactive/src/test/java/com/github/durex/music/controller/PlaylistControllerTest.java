@@ -48,8 +48,9 @@ class PlaylistControllerTest {
     var playlistResp = DemoMusicData.givenAPlayList();
     when(playlistService.findPlayListById(anyString())).thenReturn(Mono.just(playlistResp));
     given()
-        .when()
+        .contentType(APPLICATION_JSON)
         .pathParam("id", "test")
+        .when()
         .get("/{id}")
         .then()
         .body("error.errorCode", equalTo(NOTHING_FAILED))
@@ -77,10 +78,10 @@ class PlaylistControllerTest {
     var playlist = DemoMusicData.givenAPlayList();
     when(playlistService.updatePlaylist(any(PlayList.class))).thenReturn(Mono.just(1));
     given()
-        .when()
         .pathParam("id", "test")
         .contentType(APPLICATION_JSON)
         .body(Json.toString(playlist))
+        .when()
         .put("/{id}")
         .then()
         .body("error.errorCode", equalTo(NOTHING_FAILED))

@@ -49,6 +49,7 @@ class MusicControllerTest {
     when(service.getMusicById(anyString())).thenReturn(Mono.just(music));
     given()
         .pathParam("id", music.getId())
+        .contentType(APPLICATION_JSON)
         .when()
         .get("/{id}")
         .then()
@@ -89,9 +90,9 @@ class MusicControllerTest {
   void testUpdateMusic() throws IOException {
     when(service.updateMusic(any(Music.class))).thenReturn(Mono.just(1));
     given()
-        .when()
         .contentType(APPLICATION_JSON)
         .body(Json.toString(DemoMusicData.givenAMusic()))
+        .when()
         .put()
         .then()
         .body("error.errorCode", equalTo(NOTHING_FAILED))
