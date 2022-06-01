@@ -11,14 +11,14 @@ TIP: Build/Run the app from root project dir
 
 [source,bash]
 --
-gradle core:music:quarkusBuild  -Dquarkus.package.type=native -Dquarkus.native.container-build=true
+gradle core:music-reactive:quarkusBuild  -Dquarkus.package.type=native -Dquarkus.native.container-build=true
 --
 
 ==== Build Docker
 
 [source,bash]
 --
-docker build -f core/music/docker/Dockerfile.native -t core/music .
+docker build -f core/music-reactive/docker/Dockerfile.native -t core/music .
 --
 
 == Build for Java Image
@@ -27,19 +27,19 @@ docker build -f core/music/docker/Dockerfile.native -t core/music .
 
 [source,bash]
 --
-gradle core:music:quarkusBuild  -Dquarkus.package.type=uber-jar
+gradle core:music-reactive:quarkusBuild  -Dquarkus.package.type=uber-jar
 --
 
 === Build Docker
 
 [source,bash]
 --
-docker build -f core/music/docker/Dockerfile.jvm -t core/music .
+docker build -f core/music-reactive/docker/Dockerfile.jvm -t core/music .
 --
 
 == Run Docker
 
 [source,bash]
 --
- docker-compose  -f core/music/docker/docker-compose.yml up
+ docker-compose  -f core/music-reactive/docker/docker-compose.yml up
 --
