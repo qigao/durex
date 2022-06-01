@@ -3,7 +3,6 @@ plugins {
     alias gLibs.plugins.spotless
     alias gLibs.plugins.spotbugs
     alias gLibs.plugins.editorconfig
-    alias gLibs.plugins.dotenv
 }
 
 allprojects {
