@@ -4,7 +4,7 @@ plugins {
 apply from: "$rootDir/gradle/library/jackson.gradle"
 
 jsonSchema2Pojo {
-    targetPackage = 'com.github.durex.music.api'
+    targetPackage = 'com.github.durex.music.model'
     source.setFrom files("$projectDir/json")
     propertyWordDelimiters = '_'
     includeJsr303Annotations = true

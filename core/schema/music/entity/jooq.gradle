@@ -38,7 +38,7 @@ jooq {
                         fluentSetters = true
                     }
                     target {
-                        packageName = "com.github.durex.api"
+                        packageName = "com.github.durex.model"
                         directory = "$projectDir/src/gen/java"
                     }
                 }

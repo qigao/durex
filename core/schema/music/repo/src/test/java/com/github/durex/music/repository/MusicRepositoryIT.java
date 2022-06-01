@@ -3,7 +3,7 @@ package com.github.durex.music.repository;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
-import com.github.durex.music.api.Music;
+import com.github.durex.music.model.Music;
 import com.github.durex.music.support.DemoMusicData;
 import com.github.durex.sqlbuilder.enums.WildCardType;
 import com.github.durex.uuid.UniqID;

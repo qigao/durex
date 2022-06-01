@@ -1,4 +1,4 @@
-package com.github.durex.shared.api;
+package com.github.durex.shared.model;
 
 import com.github.durex.shared.exceptions.model.ErrorResponse;
 import lombok.AllArgsConstructor;

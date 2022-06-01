@@ -10,7 +10,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
-import com.github.durex.music.api.PlayList;
+import com.github.durex.music.model.PlayList;
 import com.github.durex.music.service.PlaylistService;
 import com.github.durex.music.support.DemoMusicData;
 import com.github.durex.utils.Json;

@@ -1,8 +1,8 @@
 package com.github.durex.music.mapper;
 
-import com.github.durex.api.tables.records.RPlaylistMusic;
-import com.github.durex.music.api.Music;
-import com.github.durex.music.api.PlayListMusic;
+import com.github.durex.model.tables.records.RPlaylistMusic;
+import com.github.durex.music.model.Music;
+import com.github.durex.music.model.PlayListMusic;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;

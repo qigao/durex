@@ -2,10 +2,10 @@ package com.github.durex.music.controller;
 
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 
-import com.github.durex.music.api.PlayList;
-import com.github.durex.music.api.PlayListMusic;
+import com.github.durex.music.model.PlayList;
+import com.github.durex.music.model.PlayListMusic;
 import com.github.durex.music.service.PlaylistService;
-import com.github.durex.shared.api.RespData;
+import com.github.durex.shared.model.RespData;
 import com.github.durex.shared.utils.Helper;
 import java.util.Arrays;
 import java.util.List;

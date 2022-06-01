@@ -2,10 +2,10 @@ package com.github.durex.music.controller;
 
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 
-import com.github.durex.music.api.Music;
+import com.github.durex.music.model.Music;
 import com.github.durex.music.service.MusicService;
 import com.github.durex.shared.annotations.Param;
-import com.github.durex.shared.api.RespData;
+import com.github.durex.shared.model.RespData;
 import com.github.durex.shared.utils.Helper;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;

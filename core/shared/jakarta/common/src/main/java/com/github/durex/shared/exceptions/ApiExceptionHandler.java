@@ -1,6 +1,6 @@
 package com.github.durex.shared.exceptions;
 
-import com.github.durex.shared.api.RespData;
+import com.github.durex.shared.model.RespData;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;

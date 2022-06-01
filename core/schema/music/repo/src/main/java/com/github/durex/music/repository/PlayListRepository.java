@@ -1,8 +1,8 @@
 package com.github.durex.music.repository;
 
-import static com.github.durex.api.tables.QPlaylist.PLAYLIST;
+import static com.github.durex.model.tables.QPlaylist.PLAYLIST;
 
-import com.github.durex.music.api.PlayList;
+import com.github.durex.music.model.PlayList;
 import com.github.durex.music.mapper.PlayListMapper;
 import com.github.durex.sqlbuilder.SqlHelper;
 import com.github.durex.sqlbuilder.enums.WildCardType;
