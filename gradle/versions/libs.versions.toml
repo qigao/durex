@@ -1,7 +1,7 @@
 # versions for libraries
 [versions]
 lombok = '6.3.0'
-jackson="2.13.3"
+jackson = "2.13.3"
 jakarta = "9.1.0"
 
 # Libs config
@@ -32,14 +32,14 @@ ulid = { group = 'com.github.f4b6a3', name = 'ulid-creator', version = '4.1.2' }
 tsid = { group = 'com.github.f4b6a3', name = 'tsid-creator', version = '4.1.1' }
 ksuid = { group = 'com.github.f4b6a3', name = 'ksuid-creator', version = '2.2.0' }
 
-lombok = { group = 'org.projectlombok', name = 'lombok', version = '1.18.22' }
 reactor-core = { group = 'io.projectreactor', name = 'reactor-core', version = '3.4.18' }
 
 jakarta-bom = { group = 'jakarta.platform', name = 'jakarta.jakartaee-bom', version.ref = 'jakarta' }
 
+# Google
 guava = { group = 'com.google.guava', name = 'guava', version = '31.1-jre' }
 [bundles]
-commons = ['commons-lang3', 'commons-io', 'commons-text','commons-collections4']
+commons = ['commons-lang3', 'commons-io', 'commons-text', 'commons-collections4']
 idCreator = ['uuid', 'ulid', 'tsid', 'ksuid']
 
 # Gradle plugins config

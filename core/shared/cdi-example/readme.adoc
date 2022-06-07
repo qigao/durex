@@ -1,0 +1,8 @@
+== Examples of CDI injection
+
+:icons: font
+
+credits to
+https://github.com/Nithanim/quarkus-cdi-interceptor-test.git[Nithanim]
+
+TIP:  annotations  will not work with `@Produces`  whether used in the class or in the interface.

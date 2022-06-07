@@ -1,4 +1,4 @@
-package com.github.durex.shared.interceptors;
+package com.github.durex.shared.annotations.impl;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 

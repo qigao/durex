@@ -1,0 +1,13 @@
+package com.github.durex.service.api.impl;
+
+import com.github.durex.service.api.ServiceE;
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
+public class ServiceEImpl implements ServiceE {
+  @Override
+  public void doWork() {
+    log.info(
+        "Interface and impl. Included via @Produces as interface. Interceptor annotation on interface.");
+  }
+}

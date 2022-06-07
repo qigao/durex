@@ -1,4 +1,4 @@
-package com.github.durex.shared.filter;
+package com.github.durex.shared.annotations.impl;
 
 import com.github.durex.shared.annotations.AuthKey;
 import javax.annotation.Priority;

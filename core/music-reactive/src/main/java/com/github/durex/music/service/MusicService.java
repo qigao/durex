@@ -6,15 +6,19 @@ import static com.github.durex.shared.exceptions.model.ErrorCode.ENTITY_NOT_FOUN
 import static com.github.durex.shared.exceptions.model.ErrorCode.SAVE_ERROR;
 import static com.github.durex.shared.exceptions.model.ErrorCode.UPDATE_ERROR;
 
+import java.time.Duration;
+import java.util.List;
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
+
 import com.github.durex.music.model.Music;
 import com.github.durex.music.repository.MusicRepository;
 import com.github.durex.shared.exceptions.ApiException;
 import com.github.durex.sqlbuilder.enums.WildCardType;
 import io.smallrye.common.constraint.NotNull;
-import java.util.List;
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
+import org.redisson.api.RMapReactive;
+import org.redisson.api.RedissonClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -26,14 +30,15 @@ public class MusicService {
 
   public Mono<Music> getMusicById(@NotNull String id) {
     return repository
-        .findById(id)
-        .doOnError(
-            e -> {
-              log.error(e.getMessage(), e);
-              throw new ApiException("Error finding music by id: " + id, ENTITY_NOT_FOUND);
-            })
-        .switchIfEmpty(
-            Mono.error(new ApiException("Music not found by id:" + id, ENTITY_NOT_FOUND)));
+       .findById(id)
+       .doOnError(
+           e -> {
+             log.error(e.getMessage(), e);
+             throw new ApiException("Error finding music by id: " + id, ENTITY_NOT_FOUND);
+           })
+       .switchIfEmpty(
+           Mono.error(new ApiException("Music not found by id:" + id, ENTITY_NOT_FOUND)))
+        .cache(Duration.ofMinutes(5)) ;
   }
 
   public Flux<Music> getMusicsByTitle(@NotNull String title) {
