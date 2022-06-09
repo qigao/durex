@@ -8,6 +8,6 @@ public class ServiceEImpl implements ServiceE {
   @Override
   public void doWork() {
     log.info(
-        "Interface and impl. Included via @Produces as interface. Interceptor annotation on interface.");
+        "Interface and impl. Included via @Produces as interface. Interceptor annotations on interface.");
   }
 }

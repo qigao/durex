@@ -1,7 +1,13 @@
 package com.github.durex.service.api;
 
+import java.util.List;
+
+import reactor.core.publisher.Mono;
+
 public interface ServiceC {
   void doWork();
 
-  void test(String name);
+  List<String> test(String name);
+
+  Mono<String> reactiveTest(String name);
 }

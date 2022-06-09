@@ -23,6 +23,7 @@ dependencies {
     implementation project(":core:schema:music:entity")
     implementation project(":core:shared:jakarta:common")
     implementation project(":core:shared:jakarta:config")
+    implementation project(":core:shared:jakarta:reactive")
     implementation dbLibs.redisson
     implementation vLibs.reactor.core
     testImplementation tLibs.reactor.test
@@ -33,26 +34,3 @@ apply from: "$rootDir/gradle/library/quarkus-reactive.gradle"
 apply from: "$rootDir/gradle/library/sqldb.gradle"
 
 
-task startDocker {
-    description = 'Database related tasks.'
-    group = 'Database'
-    doFirst {
-        File workingDir = new File("$projectDir/docker")
-        String command = "docker-compose up -d"
-        def proc = command.execute(null, workingDir)
-        proc.waitFor()
-    }
-    doLast {
-        exec {
-            commandLine("$rootDir/scripts/waitFor.sh")
-            args = [
-                    "-h",
-                    "localhost",
-                    "-p",
-                    "6379"
-            ]
-        }
-    }
-}
-
-tasks.test.dependsOn(startDocker)

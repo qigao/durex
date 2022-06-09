@@ -1,6 +1,6 @@
 # versions for libraries
 [versions]
-quarkus = "2.8.1.Final"
+quarkus = "2.9.1.Final"
 jandex = "0.12.0"
 # Libs config
 [libraries]

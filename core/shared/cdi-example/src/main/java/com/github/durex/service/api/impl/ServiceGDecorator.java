@@ -1,6 +1,6 @@
 package com.github.durex.service.api.impl;
 
-import com.github.durex.annotation.MyInterceptorAnnotation;
+import com.github.durex.annotations.MyInterceptorAnnotation;
 import com.github.durex.service.api.ServiceG;
 import javax.annotation.Priority;
 import javax.enterprise.context.ApplicationScoped;

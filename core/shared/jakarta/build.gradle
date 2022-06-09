@@ -1,3 +1,6 @@
+plugins {
+    alias qLibs.plugins.quarkus
+}
 subprojects {
     apply from: "$rootDir/gradle/library/sqldb.gradle"
     apply from: "$rootDir/gradle/library/quarkus-core.gradle"

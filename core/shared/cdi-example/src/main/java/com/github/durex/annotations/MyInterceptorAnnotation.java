@@ -1,4 +1,8 @@
-package com.github.durex.annotation;
+package com.github.durex.annotations;
+
+import static java.lang.annotation.ElementType.METHOD;
+import static java.lang.annotation.ElementType.TYPE;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Inherited;
@@ -10,8 +14,8 @@ import javax.interceptor.InterceptorBinding;
 
 @InterceptorBinding
 @Inherited
-@Target({ElementType.TYPE, ElementType.METHOD})
-@Retention(RetentionPolicy.RUNTIME)
+@Target({TYPE, METHOD})
+@Retention(RUNTIME)
 public @interface MyInterceptorAnnotation {
   @Nonbinding
   String topic() default "";

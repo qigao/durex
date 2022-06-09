@@ -53,6 +53,7 @@ class MusicControllerTest {
         .when()
         .get("/{id}")
         .then()
+      .log().all()
         .statusCode(200)
         .body("error.errorCode", equalTo(NOTHING_FAILED))
         .body("error.message", equalTo(OK))

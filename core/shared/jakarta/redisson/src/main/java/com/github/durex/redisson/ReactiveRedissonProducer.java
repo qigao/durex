@@ -1,4 +1,4 @@
-package com.github.durex.redisson.producers;
+package com.github.durex.redisson;
 
 
 

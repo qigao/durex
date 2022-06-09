@@ -3,5 +3,6 @@ plugins {
 }
 dependencies {
     implementation project(":core:shared:utils")
-}
+    implementation vLibs.jboss.spec.jaxrs
+ }
 

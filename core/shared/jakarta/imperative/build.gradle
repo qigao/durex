@@ -1,0 +1,4 @@
+plugins {
+    alias qLibs.plugins.jandex
+}
+apply from:  "$rootDir/gradle/library/quarkus-imperative.gradle"

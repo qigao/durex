@@ -33,6 +33,7 @@ public class HelloWorldMain implements QuarkusApplication {
     serviceF.doWork();
     serviceG.doWork();
     serviceC.test("test");
+    serviceC.reactiveTest("test").subscribe();
     return 0;
   }
 }

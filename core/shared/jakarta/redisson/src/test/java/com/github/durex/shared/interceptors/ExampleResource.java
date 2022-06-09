@@ -3,7 +3,7 @@ package com.github.durex.shared.interceptors;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 
-import com.github.durex.shared.annotations.Cached;
+import com.github.durex.annotations.Cached;
 
 @Path("/")
 public class ExampleResource {

@@ -35,7 +35,7 @@ ksuid = { group = 'com.github.f4b6a3', name = 'ksuid-creator', version = '2.2.0'
 reactor-core = { group = 'io.projectreactor', name = 'reactor-core', version = '3.4.18' }
 
 jakarta-bom = { group = 'jakarta.platform', name = 'jakarta.jakartaee-bom', version.ref = 'jakarta' }
-
+jboss-spec-jaxrs = { group = 'org.jboss.spec.javax.ws.rs', name = 'jboss-jaxrs-api_2.1_spec', version = '2.0.2.Final' }
 # Google
 guava = { group = 'com.google.guava', name = 'guava', version = '31.1-jre' }
 [bundles]

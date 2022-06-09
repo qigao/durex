@@ -1,4 +1,4 @@
-package com.github.durex.shared.annotations;
+package com.github.durex.annotations;
 
 import static java.lang.annotation.ElementType.METHOD;
 import static java.lang.annotation.ElementType.TYPE;
@@ -16,8 +16,20 @@ import javax.interceptor.InterceptorBinding;
 @Documented
 public @interface Cached {
   @Nonbinding
+  Class<?> clazz() default Object.class;
+
+  @Nonbinding
+  String topic() default "";
+
+  @Nonbinding
+  String message() default "";
+
+  @Nonbinding
+  String subscription() default "";
+
+  @Nonbinding
   String key() default "";
 
   @Nonbinding
-  Class<?> clazz() default Object.class;
+  String value() default "";
 }

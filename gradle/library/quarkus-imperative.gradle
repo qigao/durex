@@ -2,5 +2,6 @@ dependencies {
     implementation enforcedPlatform(qLibs.quarkus.bom.get())
     implementation 'io.quarkus:quarkus-resteasy-jackson'
     implementation 'io.quarkus:quarkus-resteasy'
+    implementation 'io.quarkus:quarkus-rest-client-jackson'
 }
 
