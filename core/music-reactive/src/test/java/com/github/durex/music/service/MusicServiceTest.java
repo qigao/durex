@@ -17,8 +17,6 @@ import javax.inject.Inject;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import org.redisson.api.RBucket;
-import org.redisson.api.RedissonClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
@@ -32,9 +30,8 @@ class MusicServiceTest {
   @Test
   @DisplayName("When find music by id, then return music")
   void testGetMusicById() {
-    var music =DemoMusicData.givenAMusic();
-    Mockito.when(repository.findById(anyString()))
-        .thenReturn(Mono.just(music));
+    var music = DemoMusicData.givenAMusic();
+    Mockito.when(repository.findById(anyString())).thenReturn(Mono.just(music));
     service
         .getMusicById(UniqID.getId())
         .as(StepVerifier::create)

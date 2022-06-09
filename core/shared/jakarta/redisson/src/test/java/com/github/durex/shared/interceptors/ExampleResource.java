@@ -1,9 +1,8 @@
 package com.github.durex.shared.interceptors;
 
+import com.github.durex.annotations.Cached;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
-
-import com.github.durex.annotations.Cached;
 
 @Path("/")
 public class ExampleResource {

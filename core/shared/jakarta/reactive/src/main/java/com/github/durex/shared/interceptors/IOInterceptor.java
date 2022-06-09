@@ -14,7 +14,6 @@ import javax.ws.rs.ext.ReaderInterceptor;
 import javax.ws.rs.ext.ReaderInterceptorContext;
 import javax.ws.rs.ext.WriterInterceptor;
 import javax.ws.rs.ext.WriterInterceptorContext;
-
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -25,11 +24,12 @@ public class IOInterceptor implements ReaderInterceptor, WriterInterceptor {
   public Object aroundReadFrom(ReaderInterceptorContext context)
       throws IOException, WebApplicationException {
     InputStream is = context.getInputStream();
-    String body = new BufferedReader(new InputStreamReader(is)).lines()
-      .collect(Collectors.joining("\n"));
-    log.info("body: {}",body);
-    context.setInputStream(new ByteArrayInputStream(
-      (body + " message added in server reader interceptor").getBytes()));
+    String body =
+        new BufferedReader(new InputStreamReader(is)).lines().collect(Collectors.joining("\n"));
+    log.info("body: {}", body);
+    context.setInputStream(
+        new ByteArrayInputStream(
+            (body + " message added in server reader interceptor").getBytes()));
 
     var payload = context.proceed();
     log.info("after reading: {}", payload);

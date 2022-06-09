@@ -5,8 +5,8 @@ import static com.github.durex.model.tables.QPlaylist.PLAYLIST;
 
 import com.github.durex.model.tables.records.RCreatorPlaylist;
 import com.github.durex.model.tables.records.RPlaylist;
-import com.github.durex.music.model.PlayList;
 import com.github.durex.music.mapper.PlayListMapper;
+import com.github.durex.music.model.PlayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.enterprise.context.RequestScoped;

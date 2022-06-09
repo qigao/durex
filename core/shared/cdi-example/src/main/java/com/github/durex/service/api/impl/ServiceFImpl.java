@@ -1,6 +1,5 @@
 package com.github.durex.service.api.impl;
 
-import com.github.durex.annotations.MyInterceptorAnnotation;
 import com.github.durex.service.api.ServiceF;
 import lombok.extern.slf4j.Slf4j;
 

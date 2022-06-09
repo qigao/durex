@@ -1,13 +1,12 @@
 package com.github.durex.annotations.impl;
 
-import static java.util.Arrays.stream;
-
+import com.github.durex.annotations.MyInterceptorAnnotation;
 import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.Optional;
 import javax.interceptor.AroundInvoke;
 import javax.interceptor.Interceptor;
 import javax.interceptor.InvocationContext;
-
-import com.github.durex.annotations.MyInterceptorAnnotation;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -23,10 +22,17 @@ public class MyInterceptor {
     final var method = context.getMethod();
     log.info("Invoking method: {}", method);
     getAnnotationInfo(method);
-    var result= context.proceed();
+    var result = context.proceed();
     log.info("Invoked method result: {}", result);
-    final var params = context.getParameters();
-    stream(params).forEach(p -> log.info("Invoked method param: {}", p));
+    Optional.of(Arrays.stream(context.getParameters()))
+        .ifPresent(
+            stream ->
+                stream.forEach(
+                    object ->
+                        log.info(
+                            "Invoked method param type: [{}], value: [{}]",
+                            object.getClass().getSimpleName(),
+                            object)));
     return result;
   }
 
@@ -44,7 +50,6 @@ public class MyInterceptor {
     var types = annotation.types();
     log.info("INTERCEPTOR types:{}", types);
     var returnType = method.getGenericReturnType().getTypeName();
-    log.info("INTERCEPTOR return: {}",returnType);
-
+    log.info("INTERCEPTOR return: {}", returnType);
   }
 }

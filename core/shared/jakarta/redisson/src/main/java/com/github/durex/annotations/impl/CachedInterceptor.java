@@ -1,13 +1,12 @@
 package com.github.durex.annotations.impl;
 
+import com.github.durex.annotations.Cached;
 import java.lang.reflect.Method;
 import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.interceptor.AroundInvoke;
 import javax.interceptor.Interceptor;
 import javax.interceptor.InvocationContext;
-
-import com.github.durex.annotations.Cached;
 import lombok.extern.slf4j.Slf4j;
 import org.redisson.api.RedissonClient;
 

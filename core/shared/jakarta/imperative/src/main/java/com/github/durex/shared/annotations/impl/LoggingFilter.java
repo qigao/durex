@@ -2,6 +2,7 @@ package com.github.durex.shared.annotations.impl;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
+import com.github.durex.shared.annotations.Logged;
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -12,14 +13,12 @@ import javax.ws.rs.container.ContainerRequestFilter;
 import javax.ws.rs.container.ContainerResponseContext;
 import javax.ws.rs.container.ContainerResponseFilter;
 import javax.ws.rs.ext.Provider;
-
-import com.github.durex.shared.annotations.Logged;
 import lombok.extern.slf4j.Slf4j;
 
 @Logged
 @Provider
 @Slf4j
-@Priority(Interceptor.Priority.APPLICATION+2)
+@Priority(Interceptor.Priority.APPLICATION + 2)
 public class LoggingFilter implements ContainerRequestFilter, ContainerResponseFilter {
   @Override
   public void filter(ContainerRequestContext requestContext) throws IOException {
