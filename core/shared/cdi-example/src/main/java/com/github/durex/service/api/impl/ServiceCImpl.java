@@ -6,10 +6,10 @@ import com.github.durex.service.api.ServiceC;
 import java.util.List;
 import javax.enterprise.context.ApplicationScoped;
 import lombok.extern.slf4j.Slf4j;
-import reactor.core.publisher.Mono;
+import reactor.core.publisher.Flux;
 
-@ApplicationScoped
 @Slf4j
+@ApplicationScoped
 public class ServiceCImpl implements ServiceC {
   @MyInterceptorAnnotation(key = "ServiceC", value = "ServiceCImpl-for-demo")
   @Override
@@ -27,8 +27,9 @@ public class ServiceCImpl implements ServiceC {
       key = "ServiceC",
       value = "ServiceCImpl-for-reactive-test",
       types = MapData.class)
-  public Mono<String> reactiveTest(String name) {
+  public Flux<String> reactiveTest(String name) {
     log.info("reactive test: " + name);
-    return Mono.just(name);
+    var result = List.of("John", "David", "Tom");
+    return Flux.fromIterable(result);
   }
 }

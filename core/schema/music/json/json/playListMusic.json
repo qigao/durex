@@ -6,12 +6,22 @@
 	"extends": {
 		"$ref": "playList.json"
 	},
+	"swagger-schema": {
+		"name": "PlayList and Music description",
+		"description": "schema for PlayList with Music description,extends from playList.json"
+	},
 	"properties": {
 		"musics": {
 			"description": "music description info",
 			"type": "array",
 			"items": {
 				"$ref": "music.json"
+			},
+			"schema": {
+				"type": "List",
+				"description": "List of the music",
+				"maxLength": 40,
+				"example": "List.of(music1,music2,music3)"
 			}
 		}
 	}

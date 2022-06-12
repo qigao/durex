@@ -19,7 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Provider
 @ConstrainedTo(RuntimeType.SERVER)
-public class IOInterceptor implements ReaderInterceptor, WriterInterceptor {
+public class IoInterceptor implements ReaderInterceptor, WriterInterceptor {
   @Override
   public Object aroundReadFrom(ReaderInterceptorContext context)
       throws IOException, WebApplicationException {

@@ -8,10 +8,11 @@ import javax.enterprise.inject.Alternative;
 import javax.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
 
+/** use @Alternative to replace @Decorator as @Produces will make annotation effectiveness */
+@Slf4j
+@Priority(1)
 @Alternative
 @ApplicationScoped
-@Priority(1)
-@Slf4j
 public class ServiceGDecorator implements ServiceG {
   /** Must specifically request impl, otherwise would recursively inject itself. */
   @Inject ServiceGImpl delegate;

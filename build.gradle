@@ -1,5 +1,5 @@
 plugins {
-    alias vLibs.plugins.lombok
+    alias gLibs.plugins.lombok
     alias gLibs.plugins.spotless
     alias gLibs.plugins.spotbugs
     alias gLibs.plugins.editorconfig

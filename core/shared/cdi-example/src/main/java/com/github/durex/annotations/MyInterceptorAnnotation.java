@@ -10,8 +10,8 @@ import java.lang.annotation.Target;
 import javax.enterprise.util.Nonbinding;
 import javax.interceptor.InterceptorBinding;
 
-@InterceptorBinding
 @Inherited
+@InterceptorBinding
 @Target({TYPE, METHOD})
 @Retention(RUNTIME)
 public @interface MyInterceptorAnnotation {

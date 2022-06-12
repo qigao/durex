@@ -10,10 +10,10 @@ import javax.interceptor.InvocationContext;
 import lombok.extern.slf4j.Slf4j;
 import org.redisson.api.RedissonClient;
 
+@Slf4j
+@Cached
 @Interceptor
 @Priority(1000)
-@Cached
-@Slf4j
 public class CachedInterceptor {
   public static final Class<Cached> ANNOTATION_CLASS = Cached.class;
   @Inject RedissonClient redissonClient;

@@ -1,5 +1,4 @@
 dependencies {
-    implementation vLibs.logback
     implementation vLibs.slf4j
-    implementation vLibs.logstash
+    implementation vLibs.bundles.logback
 }

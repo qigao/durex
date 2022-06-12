@@ -3,16 +3,35 @@
 	"title": "CreatorPlayList",
 	"description": "A Creator's PlayList",
 	"type": "object",
+	"swagger-schema": {
+		"name": "A creator and his/her playlists",
+		"description": "schema for a user's playlists"
+	},
 	"properties": {
 		"id": {
 			"type": "string",
-			"required": true
+			"required": true,
+			"minLength": 64,
+			"maxLength": 128,
+			"schema": {
+				"type": "String",
+				"description": "id of the user",
+				"minLength": 64,
+				"maxLength": 128,
+				"example": "12345678901234567890123456789012"
+			}
 		},
 		"playlists": {
-			"description": "music description info",
+			"description": "playlist description info",
 			"type": "array",
 			"items": {
 				"$ref": "playListMusic.json"
+			},
+			"schema": {
+				"type": "List",
+				"description": "List of the music",
+				"maxLength": 40,
+				"example": "List.of(music1,music2,music3)"
 			}
 		}
 	}

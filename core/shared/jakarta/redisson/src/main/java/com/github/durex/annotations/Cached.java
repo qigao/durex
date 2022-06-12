@@ -10,10 +10,10 @@ import java.lang.annotation.Target;
 import javax.enterprise.util.Nonbinding;
 import javax.interceptor.InterceptorBinding;
 
-@InterceptorBinding
+@Documented
 @Retention(RUNTIME)
 @Target({TYPE, METHOD})
-@Documented
+@InterceptorBinding
 public @interface Cached {
   @Nonbinding
   Class<?> clazz() default Object.class;
