@@ -1,0 +1,3 @@
+== Redisson Remote Service API ==
+
+all the Redisson Remote Service API is available in the `redisson-service-api` module.

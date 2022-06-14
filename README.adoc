@@ -3,7 +3,7 @@
 
 a multi-module java template project for high code quality development
 
-TIP: Features:
+Features:
 
 * DDD, TDD/BDD
 * Restful API w/ Json Schema
