@@ -7,8 +7,8 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.ArgumentMatchers.anyString;
 
-import com.github.durex.music.api.Music;
-import com.github.durex.music.api.PlayList;
+import com.github.durex.music.model.Music;
+import com.github.durex.music.model.PlayList;
 import com.github.durex.music.repository.PlayListMusicRepository;
 import com.github.durex.music.repository.PlayListRepository;
 import com.github.durex.music.support.DemoMusicData;

@@ -1,7 +1,7 @@
 package com.github.durex.music.mapper;
 
-import com.github.durex.api.tables.records.RMusic;
-import com.github.durex.music.api.Music;
+import com.github.durex.model.tables.records.RMusic;
+import com.github.durex.music.model.Music;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass

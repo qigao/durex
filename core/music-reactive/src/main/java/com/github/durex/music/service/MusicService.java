@@ -6,11 +6,12 @@ import static com.github.durex.shared.exceptions.model.ErrorCode.ENTITY_NOT_FOUN
 import static com.github.durex.shared.exceptions.model.ErrorCode.SAVE_ERROR;
 import static com.github.durex.shared.exceptions.model.ErrorCode.UPDATE_ERROR;
 
-import com.github.durex.music.api.Music;
+import com.github.durex.music.model.Music;
 import com.github.durex.music.repository.MusicRepository;
 import com.github.durex.shared.exceptions.ApiException;
 import com.github.durex.sqlbuilder.enums.WildCardType;
 import io.smallrye.common.constraint.NotNull;
+import java.time.Duration;
 import java.util.List;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -33,7 +34,8 @@ public class MusicService {
               throw new ApiException("Error finding music by id: " + id, ENTITY_NOT_FOUND);
             })
         .switchIfEmpty(
-            Mono.error(new ApiException("Music not found by id:" + id, ENTITY_NOT_FOUND)));
+            Mono.error(new ApiException("Music not found by id:" + id, ENTITY_NOT_FOUND)))
+        .cache(Duration.ofMinutes(5));
   }
 
   public Flux<Music> getMusicsByTitle(@NotNull String title) {

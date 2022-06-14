@@ -1,12 +1,12 @@
 package com.github.durex.music.repository;
 
-import static com.github.durex.api.tables.QMusic.MUSIC;
-import static com.github.durex.api.tables.QPlaylistMusic.PLAYLIST_MUSIC;
+import static com.github.durex.model.tables.QMusic.MUSIC;
+import static com.github.durex.model.tables.QPlaylistMusic.PLAYLIST_MUSIC;
 
-import com.github.durex.api.tables.records.RMusic;
-import com.github.durex.music.api.Music;
+import com.github.durex.model.tables.records.RMusic;
 import com.github.durex.music.mapper.MusicMapper;
 import com.github.durex.music.mapper.PlayListMusicMapper;
+import com.github.durex.music.model.Music;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.enterprise.context.RequestScoped;

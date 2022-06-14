@@ -3,11 +3,12 @@ package com.github.durex.music.controller;
 import static com.github.durex.support.RespConstant.NOTHING_FAILED;
 import static com.github.durex.support.RespConstant.OK;
 import static io.restassured.RestAssured.given;
+import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
-import com.github.durex.music.api.PlayList;
+import com.github.durex.music.model.PlayList;
 import com.github.durex.music.service.PlaylistService;
 import com.github.durex.music.support.DemoMusicData;
 import com.github.durex.utils.Json;
@@ -28,8 +29,9 @@ class PlaylistControllerTest {
     var playlistResp = DemoMusicData.givenSomePlayList(5);
     when(playlistService.findPlayListByTitle(anyString())).thenReturn(playlistResp);
     given()
-        .when()
+        .contentType(APPLICATION_JSON)
         .queryParam("title", "test")
+        .when()
         .get("/")
         .then()
         .body("error.errorCode", Matchers.equalTo(NOTHING_FAILED))
@@ -42,15 +44,14 @@ class PlaylistControllerTest {
     var playlistResp = DemoMusicData.givenAPlayList();
     when(playlistService.findPlayListById(anyString())).thenReturn(playlistResp);
     given()
-        .when()
+        .contentType(APPLICATION_JSON)
         .pathParam("id", "test")
+        .when()
         .get("/{id}")
         .then()
-        .log()
-        .all()
         .body("error.errorCode", Matchers.equalTo(NOTHING_FAILED))
         .body("error.message", Matchers.equalTo(OK))
-        .body("result", Matchers.hasSize(1));
+        .body("result.id", Matchers.equalTo(playlistResp.getId()));
   }
 
   @Test
@@ -58,9 +59,9 @@ class PlaylistControllerTest {
     var playlistResp = DemoMusicData.givenAPlayListMusic();
     when(playlistService.createPlaylist(any())).thenReturn(new int[] {1, 2, 3});
     given()
-        .when()
-        .contentType("application/json")
+        .contentType(APPLICATION_JSON)
         .body(Json.toString(playlistResp))
+        .when()
         .post()
         .then()
         .body("error.errorCode", Matchers.equalTo(NOTHING_FAILED))
@@ -73,11 +74,10 @@ class PlaylistControllerTest {
     var playlist = DemoMusicData.givenAPlayList();
     when(playlistService.updatePlaylist(any(PlayList.class))).thenReturn(1);
     given()
-        .when()
-        .pathParam("id", "test")
-        .contentType("application/json")
+        .contentType(APPLICATION_JSON)
         .body(Json.toString(playlist))
-        .put("/{id}")
+        .when()
+        .put()
         .then()
         .body("error.errorCode", Matchers.equalTo(NOTHING_FAILED))
         .body("error.message", Matchers.equalTo(OK))

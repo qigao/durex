@@ -8,6 +8,7 @@ dependencies {
     implementation project(":core:schema:music:entity")
     implementation project(":core:shared:jakarta:jooq-config")
     implementation vLibs.reactor.core
+    implementation project(":core:shared:jakarta:config")
 }
 apply from: "$rootDir/gradle/library/quarkus-core.gradle"
 apply from: "$rootDir/gradle/library/quarkus-reactive.gradle"

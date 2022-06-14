@@ -22,7 +22,9 @@ dependencies {
     implementation project(":core:schema:music:r2dbc")
     implementation project(":core:schema:music:entity")
     implementation project(":core:shared:jakarta:common")
-    implementation qLibs.logback
+    implementation project(":core:shared:jakarta:config")
+    implementation project(":core:shared:jakarta:reactive")
+    implementation dbLibs.redisson
     implementation vLibs.reactor.core
     testImplementation tLibs.reactor.test
 }
@@ -30,6 +32,5 @@ dependencies {
 apply from: "$rootDir/gradle/library/quarkus-core.gradle"
 apply from: "$rootDir/gradle/library/quarkus-reactive.gradle"
 apply from: "$rootDir/gradle/library/sqldb.gradle"
-
 
 

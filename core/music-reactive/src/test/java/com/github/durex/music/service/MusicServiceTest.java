@@ -4,7 +4,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.ArgumentMatchers.anyString;
 
-import com.github.durex.music.api.Music;
+import com.github.durex.music.model.Music;
 import com.github.durex.music.repository.MusicRepository;
 import com.github.durex.music.support.DemoMusicData;
 import com.github.durex.shared.exceptions.ApiException;
@@ -30,8 +30,8 @@ class MusicServiceTest {
   @Test
   @DisplayName("When find music by id, then return music")
   void testGetMusicById() {
-    Mockito.when(repository.findById(anyString()))
-        .thenReturn(Mono.just(DemoMusicData.givenAMusic()));
+    var music = DemoMusicData.givenAMusic();
+    Mockito.when(repository.findById(anyString())).thenReturn(Mono.just(music));
     service
         .getMusicById(UniqID.getId())
         .as(StepVerifier::create)

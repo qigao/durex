@@ -4,9 +4,9 @@ import static com.github.durex.music.support.EntityConstants.MUSIC_NOT_DELETED;
 import static com.github.durex.music.support.EntityConstants.MUSIC_NOT_FOUND;
 import static com.github.durex.music.support.EntityConstants.MUSIC_NOT_UPDATED;
 
-import com.github.durex.music.api.Music;
-import com.github.durex.music.api.PlayList;
-import com.github.durex.music.api.PlayListMusic;
+import com.github.durex.music.model.Music;
+import com.github.durex.music.model.PlayList;
+import com.github.durex.music.model.PlayListMusic;
 import com.github.durex.music.repository.PlayListMusicRepository;
 import com.github.durex.music.repository.PlayListRepository;
 import com.github.durex.shared.exceptions.ApiException;

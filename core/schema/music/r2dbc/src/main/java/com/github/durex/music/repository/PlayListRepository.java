@@ -1,9 +1,9 @@
 package com.github.durex.music.repository;
 
-import static com.github.durex.api.tables.QPlaylist.*;
+import static com.github.durex.model.tables.QPlaylist.*;
 
-import com.github.durex.music.api.*;
 import com.github.durex.music.mapper.*;
+import com.github.durex.music.model.*;
 import com.github.durex.sqlbuilder.*;
 import com.github.durex.sqlbuilder.enums.*;
 import java.time.*;

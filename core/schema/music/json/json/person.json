@@ -1,0 +1,19 @@
+{
+	"title": "Person",
+	"type": "object",
+	"swagger-schema": {
+		"name": "Person examples",
+		"description": "schema for Person examples"
+	},
+	"properties": {
+		"name": {
+			"type": "string",
+			"schema": {
+				"type": "String",
+				"description": "The schema of the person",
+				"example": "John Doe",
+				"required": true
+			}
+		}
+	}
+}

@@ -1,0 +1,197 @@
+== Add additional annotations like swagger to the jsonschema ==
+
+TIP: includeAdditionalProperties will be used as class annotation.
+
+== Supported annotations ==
+
+swagger annotations:
+[source,swagger.config]
+
+----
+@Schema
+----
+
+lombok annotations:
+[source,lombok.config]
+
+----
+@Data
+@With
+@Getter
+@Setter
+@ToString
+@Builder
+@SuperBuilder
+@EqualsAndHashCode
+@NoArgsConstructor
+@AllArgsConstructor
+----
+
+[source,json]
+----
+{
+  "type": "object",
+  "lombok": {
+    "Data": true,
+    "With": true,
+    "Getter": true,
+    "Setter": true,
+    "ToString": true,
+    "Builder": true,
+    "SuperBuilder": true,
+    "EqualsAndHashCode": true,
+    "NoArgsConstructor": true,
+    "AllArgsConstructor": true
+  },
+  "properties": {
+    "id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "name": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "updatedAt": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "id",
+    "name",
+    "description",
+    "createdAt",
+    "updatedAt"
+  ]
+}
+----
+
+TIP: to use the lombok annotations, you need to disable jsonschema in build.gradle like this:
+
+[source,groovy]
+----
+    includeGetters = true
+    includeSetters = true
+    includeToString = true
+    includeHashcodeAndEquals = true
+    generateBuilders = true
+----
+
+=== Example of annotations ===
+
+source schema file
+
+[source,json]
+----
+{
+  "title": "Person",
+  "type": "object",
+  "swagger-schema": {
+    "name": "Person examples",
+    "description": "schema for Person examples"
+  },
+  "properties": {
+    "name": {
+      "type": "string",
+      "schema": {
+        "type": "String",
+        "description": "The schema of the person",
+        "example": "John Doe",
+        "required": true
+      }
+    }
+  }
+}
+----
+
+generated java file
+
+[source,java]
+----
+package com.github.durex.music.model;
+
+import javax.annotation.processing.Generated;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import io.swagger.v3.oas.annotations.media.Schema;
+
+
+/**
+ * Person
+ * <p>
+ *
+ *
+ */
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@Schema(name = "Person examples", description = "schema for Person examples")
+@JsonPropertyOrder({
+    "name"
+})
+@Generated("jsonschema2pojo")
+public class Person {
+
+    @JsonProperty("name")
+    @Schema(type = "String", description = "The schema of the person", example = "John Doe", required = true)
+    private String name;
+
+    @JsonProperty("name")
+    public String getName() {
+        return name;
+    }
+
+    @JsonProperty("name")
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Person withName(String name) {
+        this.name = name;
+        return this;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(Person.class.getName()).append('@').append(Integer.toHexString(System.identityHashCode(this))).append('[');
+        sb.append("name");
+        sb.append('=');
+        sb.append(((this.name == null)?"<null>":this.name));
+        sb.append(',');
+        if (sb.charAt((sb.length()- 1)) == ',') {
+            sb.setCharAt((sb.length()- 1), ']');
+        } else {
+            sb.append(']');
+        }
+        return sb.toString();
+    }
+
+    @Override
+    public int hashCode() {
+        int result = 1;
+        result = ((result* 31)+((this.name == null)? 0 :this.name.hashCode()));
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        if (other == this) {
+            return true;
+        }
+        if ((other instanceof Person) == false) {
+            return false;
+        }
+        Person rhs = ((Person) other);
+        return ((this.name == rhs.name)||((this.name!= null)&&this.name.equals(rhs.name)));
+    }
+
+}
+
+----

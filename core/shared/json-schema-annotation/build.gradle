@@ -1,0 +1,5 @@
+dependencies {
+    implementation vLibs.json.schema.pojo
+    implementation vLibs.swagger.annotations
+}
+

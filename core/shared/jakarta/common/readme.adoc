@@ -20,4 +20,4 @@ pls update necessary configs from resources folder
 
 === Known issues
 
-* interceptor Param is not working in reactive mode
+* interceptor have both imperative and reactive style

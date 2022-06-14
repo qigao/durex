@@ -7,6 +7,7 @@ dependencies {
     implementation project(":core:shared:jakarta:jooq-config")
     implementation project(":core:schema:music:json")
     implementation project(":core:schema:music:entity")
+    implementation project(":core:shared:jakarta:config")
 }
 apply from: "$rootDir/gradle/library/quarkus-core.gradle"
 apply from: "$rootDir/gradle/library/sqldb.gradle"

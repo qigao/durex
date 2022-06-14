@@ -3,7 +3,7 @@ package com.github.durex.music.repository;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import com.github.durex.music.api.Music;
+import com.github.durex.music.model.Music;
 import com.github.durex.music.support.DemoMusicData;
 import io.quarkus.test.junit.QuarkusTest;
 import java.util.stream.Collectors;

@@ -2,8 +2,8 @@ package com.github.durex.music.repository;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-import com.github.durex.music.api.Music;
-import com.github.durex.music.api.PlayList;
+import com.github.durex.music.model.Music;
+import com.github.durex.music.model.PlayList;
 import com.github.durex.music.support.DemoMusicData;
 import com.github.durex.uuid.UniqID;
 import io.quarkus.test.junit.QuarkusTest;

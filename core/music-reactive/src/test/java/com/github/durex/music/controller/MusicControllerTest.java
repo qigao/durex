@@ -10,7 +10,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
-import com.github.durex.music.api.Music;
+import com.github.durex.music.model.Music;
 import com.github.durex.music.service.MusicService;
 import com.github.durex.music.support.DemoMusicData;
 import com.github.durex.utils.Json;
@@ -49,9 +49,12 @@ class MusicControllerTest {
     when(service.getMusicById(anyString())).thenReturn(Mono.just(music));
     given()
         .pathParam("id", music.getId())
+        .contentType(APPLICATION_JSON)
         .when()
         .get("/{id}")
         .then()
+        .log()
+        .all()
         .statusCode(200)
         .body("error.errorCode", equalTo(NOTHING_FAILED))
         .body("error.message", equalTo(OK))
@@ -89,9 +92,9 @@ class MusicControllerTest {
   void testUpdateMusic() throws IOException {
     when(service.updateMusic(any(Music.class))).thenReturn(Mono.just(1));
     given()
-        .when()
         .contentType(APPLICATION_JSON)
         .body(Json.toString(DemoMusicData.givenAMusic()))
+        .when()
         .put()
         .then()
         .body("error.errorCode", equalTo(NOTHING_FAILED))

@@ -2,4 +2,8 @@ dependencies {
     implementation enforcedPlatform(qLibs.quarkus.bom.get())
     implementation 'io.quarkus:quarkus-resteasy-reactive-jackson'
     implementation 'io.quarkus:quarkus-resteasy-reactive'
+    implementation 'io.quarkus:quarkus-rest-client-reactive-jackson'
+    implementation 'io.quarkus:quarkus-reactive-routes'
+    implementation 'io.quarkus:quarkus-vertx'
+    implementation 'io.smallrye.reactive:smallrye-mutiny-vertx-web'
 }

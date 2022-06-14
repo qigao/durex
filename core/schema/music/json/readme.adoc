@@ -1,0 +1,1 @@
+TIP: always xref:../../../shared/json-schema-annotation/readme.adoc[read] run project/shared/json-schema-annotation first

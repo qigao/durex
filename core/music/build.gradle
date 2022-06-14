@@ -22,7 +22,8 @@ dependencies {
     implementation project(":core:schema:music:entity")
     implementation project(":core:schema:music:repo")
     implementation project(":core:shared:jakarta:common")
-    implementation qLibs.logback
+    implementation project(":core:shared:jakarta:config")
+    implementation project(":core:shared:jakarta:imperative")
 }
 
 apply from: "$rootDir/gradle/library/quarkus-core.gradle"

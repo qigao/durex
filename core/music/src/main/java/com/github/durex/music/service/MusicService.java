@@ -9,7 +9,7 @@ import static com.github.durex.shared.exceptions.model.ErrorCode.SAVE_ERROR;
 import static com.github.durex.shared.exceptions.model.ErrorCode.UPDATE_ERROR;
 import static org.apache.commons.collections4.CollectionUtils.isEmpty;
 
-import com.github.durex.music.api.Music;
+import com.github.durex.music.model.Music;
 import com.github.durex.music.repository.MusicRepository;
 import com.github.durex.shared.exceptions.ApiException;
 import com.github.durex.sqlbuilder.enums.WildCardType;

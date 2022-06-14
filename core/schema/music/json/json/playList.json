@@ -3,20 +3,56 @@
 	"title": "PlayList",
 	"description": "An PlayList description",
 	"type": "object",
+	"swagger-schema": {
+		"name": "PlayList description",
+		"description": "schema for PlayList description"
+	},
 	"properties": {
 		"id": {
 			"type": "string",
-			"required": true
+			"required": true,
+			"minLength": 64,
+			"maxLength": 128,
+			"schema": {
+				"type": "String",
+				"description": "id of the playlist",
+				"minLength": 64,
+				"maxLength": 128,
+				"example": "12345678901234567890123456789012"
+			}
 		},
 		"title": {
 			"type": "string",
-			"required": true
+			"required": true,
+			"maxLength": 128,
+			"schema": {
+				"type": "String",
+				"description": "title of the playlist",
+				"maxLength": 128,
+				"example": "the best playlist"
+			}
 		},
 		"description": {
-			"type": "string"
+			"type": "string",
+			"maxLength": 128,
+			"schema": {
+				"type": "String",
+				"description": "description of the playlist",
+				"maxLength": 128,
+				"example": "the best playlist including most famous songs of 90s"
+			}
 		},
 		"cover_id": {
-			"type": "string"
+			"type": "string",
+			"minLength": 64,
+			"maxLength": 128,
+			"schema": {
+				"type": "String",
+				"description": "cover id of the music",
+				"minLength": 64,
+				"maxLength": 128,
+				"example": "12345678901234567890123456789012"
+			}
 		}
 	}
 }

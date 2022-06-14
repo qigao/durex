@@ -1,0 +1,3 @@
+plugins{
+    alias gLibs.plugins.protobuf
+}

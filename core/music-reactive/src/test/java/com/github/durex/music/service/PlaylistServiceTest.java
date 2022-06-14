@@ -2,7 +2,7 @@ package com.github.durex.music.service;
 
 import static org.mockito.ArgumentMatchers.*;
 
-import com.github.durex.music.api.*;
+import com.github.durex.music.model.*;
 import com.github.durex.music.repository.*;
 import com.github.durex.music.support.*;
 import com.github.durex.shared.exceptions.*;

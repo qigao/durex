@@ -1,50 +1,129 @@
 {
 	"$schema": "https://json-schema.org/draft/2020-12/schema",
 	"title": "Music",
-	"description": "An Music description",
+	"description": "An Music Object description",
 	"type": "object",
+	"additionalProperties": {
+		
+	},
+	"swagger-schema": {
+		"name": "Music description",
+		"description": "schema for Music description"
+	},
 	"properties": {
 		"id": {
 			"type": "string",
 			"required": true,
 			"description": "The id of the music",
 			"minLength": 64,
-			"maxLength": 128
+			"maxLength": 128,
+			"schema": {
+				"type": "String",
+				"description": "id of the music",
+				"minLength": 64,
+				"maxLength": 128,
+				"example": "12345678901234567890123456789012"
+			}
 		},
 		"title": {
 			"type": "string",
-			"required": true
+			"required": true,
+			"schema": {
+				"type": "String",
+				"description": "title of the music",
+				"maxLength": 128,
+				"example": "When you believe"
+			}
 		},
 		"description": {
-			"type": "string"
+			"type": "string",
+			"schema": {
+				"type": "String",
+				"description": "description of the music",
+				"maxLength": 512,
+				"example": "a song from the 1998 DreamWorks musical animated feature The Prince of Egypt. It was written and composed by Stephen Schwartz."
+			}
 		},
 		"play_id": {
 			"type": "string",
-			"required": true
+			"required": true,
+			"schema": {
+				"type": "String",
+				"description": "id for where to play the music",
+				"minLength": 64,
+				"maxLength": 128,
+				"example": "12345678901234567890123456789012"
+			}
 		},
 		"cover_id": {
-			"type": "string"
+			"type": "string",
+			"schema": {
+				"type": "String",
+				"description": "cover id of the music",
+				"minLength": 64,
+				"maxLength": 128,
+				"example": "12345678901234567890123456789012"
+			}
 		},
 		"artist_id": {
-			"type": "string"
+			"type": "string",
+			"schema": {
+				"type": "String",
+				"description": "artist id of the music",
+				"minLength": 64,
+				"maxLength": 128,
+				"example": "12345678901234567890123456789012"
+			}
 		},
 		"lyric_id": {
-			"type": "string"
+			"type": "string",
+			"schema": {
+				"type": "String",
+				"description": "lyric id of the music",
+				"minLength": 64,
+				"maxLength": 128,
+				"example": "12345678901234567890123456789012"
+			}
 		},
 		"duration": {
-			"type": "integer"
+			"type": "integer",
+			"schema": {
+				"type": "Integer",
+				"description": "duration of the music,unit: second",
+				"example": "200"
+			}
 		},
 		"sample_rate": {
-			"type": "integer"
+			"type": "integer",
+			"schema": {
+				"type": "Integer",
+				"description": "sample rate of the music,unit: Hz",
+				"example": "44100"
+			}
 		},
 		"bit_rate": {
-			"type": "integer"
+			"type": "integer",
+			"schema": {
+				"type": "Integer",
+				"description": "bit rate of the music,unit: bit/s",
+				"example": "128"
+			}
 		},
 		"channels": {
-			"type": "integer"
+			"type": "integer",
+			"schema": {
+				"type": "String",
+				"description": "Channel of the music,unit: channel",
+				"example": "2"
+			}
 		},
 		"music_type": {
-			"type": "integer"
+			"type": "integer",
+			"schema": {
+				"type": "Integer",
+				"description": "types of the music",
+				"example": "2"
+			}
 		}
 	}
 }
