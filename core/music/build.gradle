@@ -24,9 +24,12 @@ dependencies {
     implementation project(":core:shared:jakarta:common")
     implementation project(":core:shared:jakarta:config")
     implementation project(":core:shared:jakarta:imperative")
+    implementation 'io.quarkus:quarkus-smallrye-openapi'
+    implementation 'io.quarkus:quarkus-smallrye-health'
 }
 
 apply from: "$rootDir/gradle/library/quarkus-core.gradle"
+apply from: "$rootDir/gradle/library/quarkus-test.gradle"
 apply from: "$rootDir/gradle/library/quarkus-imperative.gradle"
 
 

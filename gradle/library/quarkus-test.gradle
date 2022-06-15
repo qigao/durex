@@ -1,0 +1,8 @@
+dependencies {
+    implementation platform(qLibs.quarkus.bom.get())
+    testImplementation 'io.rest-assured:rest-assured'
+    testImplementation 'io.quarkus:quarkus-junit5'
+    testImplementation 'io.quarkus:quarkus-junit5-mockito'
+    testImplementation 'io.quarkus:quarkus-junit5-properties'
+    testImplementation qLibs.cucumber
+}

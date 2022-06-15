@@ -22,5 +22,8 @@ dependencyResolutionManagement {
         dbLibs {
             from(files("$rootDir/gradle/versions/database.versions.toml"))
         }
+        uLibs {
+            from(files("$rootDir/gradle/versions/utils.versions.toml"))
+        }
     }
 }

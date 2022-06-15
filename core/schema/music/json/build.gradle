@@ -1,6 +1,6 @@
 buildscript {
     dependencies {
-        classpath(vLibs.swagger.annotations.get())
+        classpath(uLibs.swagger.annotations.get())
         classpath files(project(":core:shared:json-schema-annotation").jar.outputs.files.getFiles())
     }
 }
@@ -8,7 +8,8 @@ plugins {
     alias gLibs.plugins.json.schema
 }
 dependencies {
-    implementation vLibs.swagger.annotations
+    implementation uLibs.swagger.annotations
+    implementation project(":core:shared:json-schema-annotation")
 }
 apply from: "$rootDir/gradle/library/jackson.gradle"
 jsonSchema2Pojo {

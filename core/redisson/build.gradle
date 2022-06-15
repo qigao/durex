@@ -4,7 +4,7 @@ plugins {
 dependencies {
     implementation dbLibs.redisson
     implementation project(":core:shared:jakarta:config")
-    implementation project(":core:schema:redisson-service-api")
+    implementation project(":core:redisson-service:redisson-service-api")
 }
 apply from: "$rootDir/gradle/library/quarkus-core.gradle"
 apply from: "$rootDir/gradle/library/quarkus-reactive.gradle"
