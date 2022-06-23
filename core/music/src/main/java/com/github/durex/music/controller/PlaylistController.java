@@ -78,9 +78,7 @@ public class PlaylistController {
           @Content(mediaType = APPLICATION_JSON, schema = @Schema(implementation = RespData.class)))
   public RespData<List<Integer>> createPlaylistWithID(PlayListMusic playList) {
     return RespData.of(
-        Arrays.stream(playlistService.createPlaylist(playList))
-            .boxed()
-            .collect(Collectors.toList()),
+        playlistService.createPlaylist(playList),
         Helper.okResponse());
   }
 

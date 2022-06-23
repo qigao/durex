@@ -10,6 +10,7 @@ dependencies {
     implementation project(":core:shared:jakarta:config")
 }
 apply from: "$rootDir/gradle/library/quarkus-core.gradle"
+apply from: "$rootDir/gradle/library/quarkus-test.gradle"
 apply from: "$rootDir/gradle/library/sqldb.gradle"
 apply from: "$rootDir/gradle/library/common.gradle"
 

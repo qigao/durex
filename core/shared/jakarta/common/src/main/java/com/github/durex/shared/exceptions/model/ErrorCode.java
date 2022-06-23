@@ -7,8 +7,8 @@ public enum ErrorCode {
   DELETE_ERROR("delete.error"),
   NOTHING_FAILED("nothing.failed"),
   UNKNOWN_ERROR("unknown.error"),
-  EMPTY_PARAM("empty.param");
-
+  EMPTY_PARAM("empty.param"),
+  OPERATION_FAILED("operation.failed");
   private final String code;
 
   ErrorCode(String code) {

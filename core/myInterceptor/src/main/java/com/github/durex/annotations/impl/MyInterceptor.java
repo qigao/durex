@@ -51,7 +51,7 @@ public class MyInterceptor {
     log.info("INTERCEPTOR methodName:{}", methodName);
     var params = method.getParameterTypes();
     log.info("INTERCEPTOR params:{}", (Object[]) params);
-    final MyInterceptorAnnotation annotation = method.getAnnotation(ANNOTATION_CLASS);
+    var annotation = method.getAnnotation(ANNOTATION_CLASS);
     var key = annotation.key();
     log.info("INTERCEPTOR annotation key:{}", key);
     var value = annotation.value();

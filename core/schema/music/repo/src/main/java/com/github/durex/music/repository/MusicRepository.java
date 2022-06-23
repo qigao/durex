@@ -7,6 +7,7 @@ import com.github.durex.music.model.Music;
 import com.github.durex.sqlbuilder.SqlHelper;
 import com.github.durex.sqlbuilder.enums.WildCardType;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -78,7 +79,7 @@ public class MusicRepository {
    * @param id id of music
    * @return number of updated rows
    */
-  public int deleteById(@NonNull String id) {
+  public Integer deleteById(@NonNull String id) {
     return dsl.update(MUSIC)
         .set(MUSIC.DELETED_FLAG, 1)
         .set(MUSIC.DELETE_TIME, LocalDateTime.now())
@@ -92,7 +93,7 @@ public class MusicRepository {
    * @param title title of musi
    * @return number of updated rows
    */
-  public int deleteByTitle(@NonNull String title) {
+  public Integer deleteByTitle(@NonNull String title) {
     return dsl.update(MUSIC)
         .set(MUSIC.DELETED_FLAG, 1)
         .set(MUSIC.DELETE_TIME, LocalDateTime.now())
@@ -104,7 +105,7 @@ public class MusicRepository {
    * @param title title of music
    * @return number of inserted rows
    */
-  public int deleteByTitle(@NonNull String title, WildCardType wildCardType) {
+  public Integer deleteByTitle(@NonNull String title, WildCardType wildCardType) {
     var realTitle = SqlHelper.likeClauseBuilder(wildCardType, title);
     return dsl.update(MUSIC)
         .set(MUSIC.DELETED_FLAG, 1)
@@ -113,7 +114,7 @@ public class MusicRepository {
         .execute();
   }
 
-  public int delete(@NonNull List<String> musicIds) {
+  public Integer delete(@NonNull List<String> musicIds) {
     return dsl.update(MUSIC)
         .set(MUSIC.DELETED_FLAG, 1)
         .set(MUSIC.DELETE_TIME, LocalDateTime.now())
@@ -127,7 +128,7 @@ public class MusicRepository {
    * @param music music
    * @return insert result
    */
-  public int save(Music music) {
+  public Integer save(Music music) {
     var rMusic = dsl.newRecord(MUSIC);
     rMusic.setCreateTime(LocalDateTime.now());
     MusicMapper.mapDtoToRecord(music, rMusic);
@@ -140,7 +141,7 @@ public class MusicRepository {
    * @param musics music list
    * @return int[] updated result of musics
    */
-  public int[] save(List<Music> musics) {
+  public List<Integer> save(List<Music> musics) {
     var rMusics =
         musics.stream()
             .map(
@@ -151,7 +152,8 @@ public class MusicRepository {
                   return rMusic;
                 })
             .collect(Collectors.toList());
-    return dsl.batchInsert(rMusics).execute();
+    var result= dsl.batchInsert(rMusics).execute();
+    return Arrays.stream(result).boxed().collect(Collectors.toUnmodifiableList());
   }
 
   /**
@@ -160,7 +162,7 @@ public class MusicRepository {
    * @param music musicDTO ToUpdate
    * @return number of updated records
    */
-  public int update(Music music) {
+  public Integer update(Music music) {
     var rMusic = dsl.newRecord(MUSIC);
     MusicMapper.mapDtoToRecord(music, rMusic);
     rMusic.setUpdateTime(LocalDateTime.now());
@@ -173,7 +175,7 @@ public class MusicRepository {
    * @param musics musicDTOs ToUpdate
    * @return number of updated records
    */
-  public int[] update(List<Music> musics) {
+  public List<Integer> update(List<Music> musics) {
     var rMusics =
         musics.stream()
             .map(
@@ -184,6 +186,7 @@ public class MusicRepository {
                   return rMusic;
                 })
             .collect(Collectors.toList());
-    return dsl.batchUpdate(rMusics).execute();
+    var result= dsl.batchUpdate(rMusics).execute();
+    return Arrays.stream(result).boxed().collect(Collectors.toUnmodifiableList());
   }
 }
