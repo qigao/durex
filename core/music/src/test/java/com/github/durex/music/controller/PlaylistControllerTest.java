@@ -16,6 +16,7 @@ import io.quarkus.test.common.http.TestHTTPEndpoint;
 import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.mockito.InjectMock;
 import java.io.IOException;
+import java.util.List;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 
@@ -57,7 +58,7 @@ class PlaylistControllerTest {
   @Test
   void testSavePlayList() throws IOException {
     var playlistResp = DemoMusicData.givenAPlayListMusic();
-    when(playlistService.createPlaylist(any())).thenReturn(new int[] {1, 2, 3});
+    when(playlistService.createPlaylist(any())).thenReturn(List.of(1, 2, 3));
     given()
         .contentType(APPLICATION_JSON)
         .body(Json.toString(playlistResp))

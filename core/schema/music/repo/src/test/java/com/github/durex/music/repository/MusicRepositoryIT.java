@@ -47,7 +47,7 @@ class MusicRepositoryIT {
         () -> assertThat(repository.save(musicLists), Matchers.not(0)),
         () -> assertEquals(5, repository.findByTitle(RANDOM_TITLE, WildCardType.CONTAINS).size()),
         () -> musicLists.forEach(m -> m.setTitle(ANOTHER_TITLE)),
-        () -> assertEquals(5, repository.update(musicLists).length),
+        () -> assertEquals(5, repository.update(musicLists).size()),
         () -> assertEquals(5, repository.deleteByTitle(ANOTHER_TITLE, WildCardType.CONTAINS)),
         () -> assertEquals(0, repository.findByTitle(ANOTHER_TITLE, WildCardType.CONTAINS).size()));
   }

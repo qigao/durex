@@ -7,6 +7,7 @@ import com.github.durex.model.tables.records.RCreatorPlaylist;
 import com.github.durex.model.tables.records.RPlaylist;
 import com.github.durex.music.mapper.PlayListMapper;
 import com.github.durex.music.model.PlayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.enterprise.context.RequestScoped;
@@ -22,14 +23,15 @@ public class CreatorPlayListRepository {
   public static final Condition DELETED_FLAG = PLAYLIST.DELETED_FLAG.eq(0);
   @Inject DSLContext dsl;
 
-  public int savePlaylistToCreator(@NotNull String creatorId, @NotNull String playlistId) {
+  public Integer savePlaylistToCreator(@NotNull String creatorId, @NotNull String playlistId) {
     return dsl.insertInto(CREATOR_PLAYLIST)
         .columns(CREATOR_PLAYLIST.CREATOR_ID, CREATOR_PLAYLIST.PLAYLIST_ID)
         .values(creatorId, playlistId)
         .execute();
   }
 
-  public int[] savePlaylistToCreator(@NotNull String creatorId, @NotNull List<String> playlistIds) {
+  public List<Integer> savePlaylistToCreator(
+      @NotNull String creatorId, @NotNull List<String> playlistIds) {
     var records =
         playlistIds.stream()
             .map(
@@ -38,17 +40,18 @@ public class CreatorPlayListRepository {
                         .setCreatorId(creatorId)
                         .setPlaylistId(playlistId))
             .collect(Collectors.toList());
-    return dsl.batchInsert(records).execute();
+    var result = dsl.batchInsert(records).execute();
+    return Arrays.stream(result).boxed().collect(Collectors.toUnmodifiableList());
   }
 
-  public int deletePlaylistFromCreator(@NotNull String creatorId, @NotNull String playlistId) {
+  public Integer deletePlaylistFromCreator(@NotNull String creatorId, @NotNull String playlistId) {
     return dsl.deleteFrom(CREATOR_PLAYLIST)
         .where(CREATOR_PLAYLIST.CREATOR_ID.eq(creatorId))
         .and(CREATOR_PLAYLIST.PLAYLIST_ID.eq(playlistId))
         .execute();
   }
 
-  public int[] deletePlaylistsFromCreator(
+  public List<Integer> deletePlaylistsFromCreator(
       @NotNull String creatorId, @NotNull List<String> playlistIds) {
     var records =
         playlistIds.stream()
@@ -56,7 +59,8 @@ public class CreatorPlayListRepository {
                 playlistId ->
                     new RCreatorPlaylist().setCreatorId(creatorId).setPlaylistId(playlistId))
             .collect(Collectors.toList());
-    return dsl.batchDelete(records).execute();
+    var result = dsl.batchDelete(records).execute();
+    return Arrays.stream(result).boxed().collect(Collectors.toUnmodifiableList());
   }
 
   public List<PlayList> listPlaylistsByCreatorId(String creatorId) {
