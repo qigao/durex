@@ -16,7 +16,6 @@ import java.util.List;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
-
 import lombok.extern.slf4j.Slf4j;
 
 @ApplicationScoped
@@ -24,17 +23,20 @@ import lombok.extern.slf4j.Slf4j;
 public class PlaylistService {
   @Inject PlayListRepository repository;
   @Inject PlayListMusicRepository playListMusicRepository;
+
   @NullValueChecker
-  public List<PlayList> findPlayListByTitle( String title) {
+  public List<PlayList> findPlayListByTitle(String title) {
     return repository.findByTitle(title);
   }
+
   @NullValueChecker
-  public List<PlayList> findPlayListByTitle( String title, WildCardType wildcard) {
+  public List<PlayList> findPlayListByTitle(String title, WildCardType wildcard) {
     var realTitle = SqlHelper.likeClauseBuilder(wildcard, title);
     return repository.findByTitle(realTitle, wildcard);
   }
+
   @NullValueChecker
-  public PlayList findPlayListById( String id) {
+  public PlayList findPlayListById(String id) {
     return repository.findById(id).orElseThrow(() -> new ApiException("PlayList not found"));
   }
 
@@ -82,32 +84,32 @@ public class PlaylistService {
 
   @Transactional
   @NullValueChecker
-  public Integer deletePlaylistById( String id) {
+  public Integer deletePlaylistById(String id) {
     return repository.deleteById(id);
   }
 
   @Transactional
   @NullValueChecker
-  public Integer deletePlayListByTitle( String title) {
+  public Integer deletePlayListByTitle(String title) {
     return repository.deleteByTitle(title);
   }
 
   @Transactional
   @NullValueChecker
-  public Integer deletePlayListByTitle( String title, WildCardType wildcard) {
+  public Integer deletePlayListByTitle(String title, WildCardType wildcard) {
     var realTitle = SqlHelper.likeClauseBuilder(wildcard, title);
     return repository.deleteByTitle(realTitle, wildcard);
   }
 
   @Transactional
-   @NullValueChecker
-  public Integer deleteMusicFromPlayList( String id, List<String> musicIds) {
+  @NullValueChecker
+  public Integer deleteMusicFromPlayList(String id, List<String> musicIds) {
     return playListMusicRepository.deleteMusicFromPlayList(id, musicIds);
   }
 
   @Transactional
   @NullValueChecker
-  public Integer clearMusicsFromPlayList( String playListId) {
+  public Integer clearMusicsFromPlayList(String playListId) {
     return playListMusicRepository.clearMusicsFromPlayList(playListId);
   }
 }

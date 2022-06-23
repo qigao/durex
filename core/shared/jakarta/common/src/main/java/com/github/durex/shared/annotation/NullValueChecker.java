@@ -13,5 +13,4 @@ import javax.interceptor.InterceptorBinding;
 @Target({TYPE, METHOD})
 @Retention(RUNTIME)
 @InterceptorBinding
-public @interface NullValueChecker {
-}
+public @interface NullValueChecker {}

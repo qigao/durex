@@ -7,7 +7,6 @@ import com.github.durex.model.tables.records.RCreatorPlaylist;
 import com.github.durex.model.tables.records.RPlaylist;
 import com.github.durex.music.mapper.PlayListMapper;
 import com.github.durex.music.model.PlayList;
-
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -31,7 +30,8 @@ public class CreatorPlayListRepository {
         .execute();
   }
 
-  public List<Integer> savePlaylistToCreator(@NotNull String creatorId, @NotNull List<String> playlistIds) {
+  public List<Integer> savePlaylistToCreator(
+      @NotNull String creatorId, @NotNull List<String> playlistIds) {
     var records =
         playlistIds.stream()
             .map(
@@ -40,7 +40,7 @@ public class CreatorPlayListRepository {
                         .setCreatorId(creatorId)
                         .setPlaylistId(playlistId))
             .collect(Collectors.toList());
-    var result= dsl.batchInsert(records).execute();
+    var result = dsl.batchInsert(records).execute();
     return Arrays.stream(result).boxed().collect(Collectors.toUnmodifiableList());
   }
 
@@ -59,7 +59,7 @@ public class CreatorPlayListRepository {
                 playlistId ->
                     new RCreatorPlaylist().setCreatorId(creatorId).setPlaylistId(playlistId))
             .collect(Collectors.toList());
-    var result= dsl.batchDelete(records).execute();
+    var result = dsl.batchDelete(records).execute();
     return Arrays.stream(result).boxed().collect(Collectors.toUnmodifiableList());
   }
 

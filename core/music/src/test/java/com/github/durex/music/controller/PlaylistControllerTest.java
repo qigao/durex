@@ -17,7 +17,6 @@ import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.mockito.InjectMock;
 import java.io.IOException;
 import java.util.List;
-
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 

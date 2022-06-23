@@ -7,9 +7,7 @@ import com.github.durex.music.model.PlayListMusic;
 import com.github.durex.music.service.PlaylistService;
 import com.github.durex.shared.model.RespData;
 import com.github.durex.shared.utils.Helper;
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
@@ -77,9 +75,7 @@ public class PlaylistController {
       content =
           @Content(mediaType = APPLICATION_JSON, schema = @Schema(implementation = RespData.class)))
   public RespData<List<Integer>> createPlaylistWithID(PlayListMusic playList) {
-    return RespData.of(
-        playlistService.createPlaylist(playList),
-        Helper.okResponse());
+    return RespData.of(playlistService.createPlaylist(playList), Helper.okResponse());
   }
 
   @PUT

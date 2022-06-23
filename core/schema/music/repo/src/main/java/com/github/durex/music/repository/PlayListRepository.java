@@ -68,8 +68,8 @@ public class PlayListRepository {
                   return rPlaylist;
                 })
             .collect(Collectors.toList());
-    var result= dsl.batchInsert(rPlaylists).execute();
-    return  Arrays.stream(result).boxed().collect(Collectors.toUnmodifiableList());
+    var result = dsl.batchInsert(rPlaylists).execute();
+    return Arrays.stream(result).boxed().collect(Collectors.toUnmodifiableList());
   }
 
   public Integer update(PlayList playList) {
@@ -90,7 +90,7 @@ public class PlayListRepository {
                   return rPlaylist;
                 })
             .collect(Collectors.toList());
-    var result= dsl.batchUpdate(rPlaylists).execute();
+    var result = dsl.batchUpdate(rPlaylists).execute();
     return Arrays.stream(result).boxed().collect(Collectors.toUnmodifiableList());
   }
 

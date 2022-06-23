@@ -11,7 +11,6 @@ import com.github.durex.sqlbuilder.enums.WildCardType;
 import java.util.List;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-
 import lombok.extern.slf4j.Slf4j;
 
 @ApplicationScoped
@@ -25,7 +24,7 @@ public class MusicService {
    * @param id id of the music, must not be null, empty or blank, if not found, throw ApiException
    * @return {@link Music}
    */
-  public Music getMusicById( String id) {
+  public Music getMusicById(String id) {
     return repository
         .findById(id)
         .orElseThrow(() -> new ApiException(MUSIC_NOT_FOUND, ENTITY_NOT_FOUND));
@@ -39,7 +38,7 @@ public class MusicService {
    * @return musics, List<{@link Music}>
    */
   @NullValueChecker
-  public List<Music> getMusicsByTitle( String title) {
+  public List<Music> getMusicsByTitle(String title) {
     return repository.findByTitle(title);
   }
 
@@ -52,7 +51,7 @@ public class MusicService {
    * @return musics, List<{@link Music}>
    */
   @NullValueChecker
-  public List<Music> getMusicsByTitle( String title, WildCardType wildCardEnum) {
+  public List<Music> getMusicsByTitle(String title, WildCardType wildCardEnum) {
     return repository.findByTitle(title, wildCardEnum);
   }
 
@@ -65,26 +64,32 @@ public class MusicService {
   public List<Integer> createMusic(List<Music> musics) {
     return repository.save(musics);
   }
+
   @NullValueChecker
   public Integer updateMusic(Music music) {
     return repository.update(music);
   }
+
   @NullValueChecker
   public List<Integer> updateMusic(List<Music> musics) {
     return repository.update(musics);
   }
+
   @NullValueChecker
-  public Integer deleteMusicById( String id) {
+  public Integer deleteMusicById(String id) {
     return repository.deleteById(id);
   }
+
   @NullValueChecker
-  public Integer deleteMusicByTitle( String title) {
+  public Integer deleteMusicByTitle(String title) {
     return repository.deleteByTitle(title);
   }
+
   @NullValueChecker
-  public Integer deleteMusicByTitle( String title, WildCardType wildCardEnum) {
+  public Integer deleteMusicByTitle(String title, WildCardType wildCardEnum) {
     return repository.deleteByTitle(title, wildCardEnum);
   }
+
   @NullValueChecker
   public Integer delete(List<String> musicIds) {
     return repository.delete(musicIds);

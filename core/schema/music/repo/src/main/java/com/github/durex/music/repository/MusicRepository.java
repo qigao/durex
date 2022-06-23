@@ -152,7 +152,7 @@ public class MusicRepository {
                   return rMusic;
                 })
             .collect(Collectors.toList());
-    var result= dsl.batchInsert(rMusics).execute();
+    var result = dsl.batchInsert(rMusics).execute();
     return Arrays.stream(result).boxed().collect(Collectors.toUnmodifiableList());
   }
 
@@ -186,7 +186,7 @@ public class MusicRepository {
                   return rMusic;
                 })
             .collect(Collectors.toList());
-    var result= dsl.batchUpdate(rMusics).execute();
+    var result = dsl.batchUpdate(rMusics).execute();
     return Arrays.stream(result).boxed().collect(Collectors.toUnmodifiableList());
   }
 }

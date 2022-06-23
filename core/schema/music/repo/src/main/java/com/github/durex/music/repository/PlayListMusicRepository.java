@@ -7,7 +7,6 @@ import com.github.durex.model.tables.records.RMusic;
 import com.github.durex.music.mapper.MusicMapper;
 import com.github.durex.music.mapper.PlayListMusicMapper;
 import com.github.durex.music.model.Music;
-
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -36,10 +35,11 @@ public class PlayListMusicRepository {
         .collect(Collectors.toList());
   }
 
-  public List<Integer> saveMusicsToPlayList(@NotNull String playlistId, @NotNull List<Music> musics) {
+  public List<Integer> saveMusicsToPlayList(
+      @NotNull String playlistId, @NotNull List<Music> musics) {
     var records = PlayListMusicMapper.mapDtoToRecord(musics, playlistId);
-    var result= dsl.batchInsert(records).execute();
-    return  Arrays.stream(result).boxed().collect(Collectors.toUnmodifiableList());
+    var result = dsl.batchInsert(records).execute();
+    return Arrays.stream(result).boxed().collect(Collectors.toUnmodifiableList());
   }
 
   public Integer deleteMusicFromPlayList(@NotNull String playlistId, @NotNull String musicId) {
