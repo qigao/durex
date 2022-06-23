@@ -1,0 +1,21 @@
+== Messaging Annotations for Redis
+
+=== Annotations
+
+* [x] Topic
+* [x] InComing
+* [x] OutGoing
+* [ ] RCache
+* [ ] Streaming
+
+=== Usages
+[source,java]
+----
+@Topic(value="test",codec=JSON)
+@InComing(value=DemoEventTopic.class)
+@OutGoing(value=TestEventTopic.class)
+----
+
+=== Examples
+
+ see messaging-api-redis-example

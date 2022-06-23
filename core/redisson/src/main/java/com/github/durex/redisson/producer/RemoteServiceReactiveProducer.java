@@ -1,6 +1,6 @@
 package com.github.durex.redisson.producer;
 
-import com.github.durex.redisson.service.api.RemoteServiceReactiveApi;
+import com.github.durex.redisson.service.RemoteServiceReactiveApi;
 import io.quarkus.runtime.Startup;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Produces;

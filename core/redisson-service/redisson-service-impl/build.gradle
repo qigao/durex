@@ -1,0 +1,10 @@
+plugins {
+    alias qLibs.plugins.quarkus
+}
+dependencies {
+    implementation platform(qLibs.quarkus.bom.get())
+    implementation 'io.quarkus:quarkus-arc'
+    implementation vLibs.reactor.core
+    implementation dbLibs.redisson
+    implementation project(":core:redisson-service:redisson-service-api")
+}

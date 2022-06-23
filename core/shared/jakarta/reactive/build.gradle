@@ -4,4 +4,4 @@ plugins {
 dependencies {
     implementation project(":core:shared:jakarta:config")
 }
-apply from:  "$rootDir/gradle/library/quarkus-reactive.gradle"
+apply from: "$rootDir/gradle/library/quarkus-reactive.gradle"

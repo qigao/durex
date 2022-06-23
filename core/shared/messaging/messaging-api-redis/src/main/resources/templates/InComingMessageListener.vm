@@ -1,0 +1,19 @@
+#set($serviceName = ${methodName.substring(0,1).toUpperCase()} + ${methodName.substring(1)})
+package ${packageName};
+
+import javax.inject.Inject;
+
+import org.redisson.api.listener.MessageListener;
+import ${className};
+import ${paramType};
+
+public class  ${serviceName}Listener  implements MessageListener<${simpleParamType}> {
+     ${simpleClassName} redisEventService;
+    public ${serviceName}Listener(${simpleClassName} service){
+           this.redisEventService = service;
+    }
+    @Override
+    public void onMessage(CharSequence channel, ${simpleParamType} msg) {
+    redisEventService.${methodName}(msg);
+    }
+}

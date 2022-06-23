@@ -2,13 +2,5 @@ dependencies {
     implementation platform(qLibs.quarkus.bom.get())
     implementation 'io.quarkus:quarkus-arc'
     implementation 'io.quarkus:quarkus-jackson'
-    implementation 'io.quarkus:quarkus-smallrye-openapi'
-    implementation 'io.quarkus:quarkus-smallrye-health'
     implementation qLibs.logback
-
-    testImplementation 'io.rest-assured:rest-assured'
-    testImplementation 'io.quarkus:quarkus-junit5'
-    testImplementation 'io.quarkus:quarkus-junit5-mockito'
-    testImplementation 'io.quarkus:quarkus-junit5-properties'
-    testImplementation qLibs.cucumber
 }

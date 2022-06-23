@@ -1,0 +1,32 @@
+# versions for utils libraries
+[versions]
+jakarta = "9.1.0"
+logback = '1.2.11'
+# Libs config
+[libraries]
+json-schema-pojo = { group = 'org.jsonschema2pojo', name = 'jsonschema2pojo-core', version = '1.1.2' }
+lombok = { group = 'org.projectlombok', name = 'lombok', version = '1.18.24' }
+swagger-annotations = { group = 'io.swagger.core.v3', name = 'swagger-annotations', version = '2.2.0' }
+
+validation = { group = 'javax.validation', name = 'validation-api', version = '2.0.1.Final' }
+
+# logs
+slf4j = { group = 'org.slf4j', name = 'slf4j-api', version = '1.7.36' }
+logback-classic = { group = 'ch.qos.logback', name = 'logback-classic', version.ref = 'logback' }
+logback-logstash = { group = 'net.logstash.logback', name = 'logstash-logback-encoder', version = '7.2' }
+logback-access = { group = 'ch.qos.logback', name = 'logback-access', version.ref = 'logback' }
+
+reactor-core = { group = 'io.projectreactor', name = 'reactor-core', version = '3.4.18' }
+
+jakarta-bom = { group = 'jakarta.platform', name = 'jakarta.jakartaee-bom', version.ref = 'jakarta' }
+jboss-spec-jaxrs = { group = 'org.jboss.spec.javax.ws.rs', name = 'jboss-jaxrs-api_2.1_spec', version = '2.0.2.Final' }
+
+jooq-joor = { group = 'org.jooq', name = 'joor-java-8', version = '0.9.14' }
+classgraph = { group = 'io.github.classgraph', name = 'classgraph', version = '4.8.147' }
+velocity = { group = 'org.apache.velocity', name = 'velocity-engine-core', version = '2.3' }
+
+[bundles]
+logback = ['logback-classic', 'logback-logstash', 'logback-access']
+# Gradle plugins config
+[plugins]
+

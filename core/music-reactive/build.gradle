@@ -24,12 +24,15 @@ dependencies {
     implementation project(":core:shared:jakarta:common")
     implementation project(":core:shared:jakarta:config")
     implementation project(":core:shared:jakarta:reactive")
+    implementation 'io.quarkus:quarkus-smallrye-openapi'
+    implementation 'io.quarkus:quarkus-smallrye-health'
     implementation dbLibs.redisson
     implementation vLibs.reactor.core
     testImplementation tLibs.reactor.test
 }
 
 apply from: "$rootDir/gradle/library/quarkus-core.gradle"
+apply from: "$rootDir/gradle/library/quarkus-test.gradle"
 apply from: "$rootDir/gradle/library/quarkus-reactive.gradle"
 apply from: "$rootDir/gradle/library/sqldb.gradle"
 

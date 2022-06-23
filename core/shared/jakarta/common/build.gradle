@@ -3,6 +3,6 @@ plugins {
 }
 dependencies {
     implementation project(":core:shared:utils")
-    implementation vLibs.jboss.spec.jaxrs
+    implementation uLibs.jboss.spec.jaxrs
 }
-
+apply from: "$rootDir/gradle/library/quarkus-core.gradle"
