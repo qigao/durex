@@ -27,6 +27,8 @@ jobs:
           fetch-depth: 0
       - name: Setup Java Project
         uses: ./.github/workflows/templates/config-action
+      - name: compile annotation
+        uses: ./gradlew core:shared:json-schema-annotation:build
       - name: generate schema
         run: ./gradlew core:schema:music:entity:build
       - name: run gradle assemble
