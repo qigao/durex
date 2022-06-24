@@ -19,6 +19,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import javax.inject.Inject;
+import org.apache.commons.lang3.ArrayUtils;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
@@ -52,7 +53,7 @@ class MusicServiceTest {
 
   @Test
   void testGetMusicsByTitle_NotFound() {
-    Mockito.when(repository.findByTitle(anyString())).thenReturn(List.of());
+    Mockito.when(repository.findByTitle(anyString())).thenReturn(Collections.emptyList());
     assertThrows(ApiException.class, () -> service.getMusicsByTitle("title"));
   }
 
@@ -80,20 +81,20 @@ class MusicServiceTest {
 
   @Test
   void testCreateMusicWithException() {
-    Mockito.when(repository.save(any(Music.class))).thenReturn(null);
+    Mockito.when(repository.save(any(Music.class))).thenReturn(0);
     var music = DemoMusicData.givenAMusic();
     assertThrows(ApiException.class, () -> service.createMusic(music));
   }
 
   @Test
   void testCreateMusicInBatch() {
-    Mockito.when(repository.save(anyList())).thenReturn(List.of(1, 2, 3));
+    Mockito.when(repository.save(anyList())).thenReturn(new int[] {1, 2, 3});
     assertEquals(3, service.createMusic(List.of(DemoMusicData.givenAMusic())).size());
   }
 
   @Test
   void testCreateMusicInBatchWithException() {
-    Mockito.when(repository.save(anyList())).thenReturn(Collections.emptyList());
+    Mockito.when(repository.save(anyList())).thenReturn(ArrayUtils.EMPTY_INT_ARRAY);
     var musics = List.of(DemoMusicData.givenAMusic());
     assertThrows(ApiException.class, () -> service.createMusic(musics));
   }
@@ -106,20 +107,20 @@ class MusicServiceTest {
 
   @Test
   void testUpdateMusicWithException() {
-    Mockito.when(repository.update(any(Music.class))).thenReturn(null);
+    Mockito.when(repository.update(any(Music.class))).thenReturn(0);
     var music = DemoMusicData.givenAMusic();
     assertThrows(ApiException.class, () -> service.updateMusic(music));
   }
 
   @Test
   void testUpdateMusicInBatch() {
-    Mockito.when(repository.update(anyList())).thenReturn(List.of(1, 2, 3));
+    Mockito.when(repository.update(anyList())).thenReturn(new int[] {1, 2, 3});
     assertEquals(3, service.updateMusic(List.of(DemoMusicData.givenAMusic())).size());
   }
 
   @Test
   void testUpdateMusicInBatchWithException() {
-    Mockito.when(repository.update(anyList())).thenReturn(List.of());
+    Mockito.when(repository.update(anyList())).thenReturn(ArrayUtils.EMPTY_INT_ARRAY);
     var musics = List.of(DemoMusicData.givenAMusic());
     assertThrows(ApiException.class, () -> service.updateMusic(musics));
   }
@@ -132,7 +133,7 @@ class MusicServiceTest {
 
   @Test
   void testDeleteMusicByIdWithException() {
-    Mockito.when(repository.deleteById(anyString())).thenReturn(null);
+    Mockito.when(repository.deleteById(anyString())).thenReturn(0);
     var id = UniqID.getId();
     assertThrows(
         ApiException.class,
@@ -149,7 +150,7 @@ class MusicServiceTest {
 
   @Test
   void testDeleteMusicInBatchWithException() {
-    Mockito.when(repository.delete(anyList())).thenReturn(null);
+    Mockito.when(repository.delete(anyList())).thenReturn(0);
     var ids = List.of(UniqID.getId());
     assertThrows(ApiException.class, () -> service.delete(ids));
   }
@@ -162,7 +163,7 @@ class MusicServiceTest {
 
   @Test
   void testDeleteMusicByTitleWithException() {
-    Mockito.when(repository.deleteByTitle(anyString())).thenReturn(null);
+    Mockito.when(repository.deleteByTitle(anyString())).thenReturn(0);
     assertThrows(ApiException.class, () -> service.deleteMusicByTitle("title"));
   }
 
@@ -174,7 +175,7 @@ class MusicServiceTest {
 
   @Test
   void testDeleteMusicByTitleWithWildCardWithException() {
-    Mockito.when(repository.deleteByTitle(anyString(), any(WildCardType.class))).thenReturn(null);
+    Mockito.when(repository.deleteByTitle(anyString(), any(WildCardType.class))).thenReturn(0);
     assertThrows(
         ApiException.class, () -> service.deleteMusicByTitle("title", WildCardType.CONTAINS));
   }

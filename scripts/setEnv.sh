@@ -1,2 +1,2 @@
 #!/bin/bash
-set -a; source .env; set +a
+[ ! -f .env ] || export $(grep -v '^#' .env | xargs)

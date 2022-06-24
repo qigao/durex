@@ -17,7 +17,7 @@ import reactor.core.publisher.Flux;
 @Priority(Interceptor.Priority.APPLICATION + 1)
 public class MyInterceptor {
 
-  public static final Class<MyInterceptorAnnotation> ANNOTATION_CLASS =
+  private static final Class<MyInterceptorAnnotation> ANNOTATION_CLASS =
       MyInterceptorAnnotation.class;
 
   @AroundInvoke

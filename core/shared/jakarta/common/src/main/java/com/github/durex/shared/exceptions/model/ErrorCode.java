@@ -8,6 +8,7 @@ public enum ErrorCode {
   NOTHING_FAILED("nothing.failed"),
   UNKNOWN_ERROR("unknown.error"),
   EMPTY_PARAM("empty.param"),
+  VALUE_ERROR("value.error"),
   OPERATION_FAILED("operation.failed");
   private final String code;
 

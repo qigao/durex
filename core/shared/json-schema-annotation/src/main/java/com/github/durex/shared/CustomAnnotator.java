@@ -5,6 +5,7 @@ import com.sun.codemodel.JAnnotationUse;
 import com.sun.codemodel.JDefinedClass;
 import com.sun.codemodel.JFieldVar;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.Objects;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -56,8 +57,7 @@ public class CustomAnnotator extends AbstractAnnotator {
           .forEachRemaining(
               property -> {
                 var annotation = processClassAnnotation(property);
-                assert annotation != null;
-                if (!annotation.equals(IllegalArgumentException.class)) {
+                if (!Objects.equals(annotation, IllegalArgumentException.class)) {
                   clazz.annotate(annotation);
                 }
               });

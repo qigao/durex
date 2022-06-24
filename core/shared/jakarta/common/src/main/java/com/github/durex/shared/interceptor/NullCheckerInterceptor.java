@@ -1,6 +1,6 @@
 package com.github.durex.shared.interceptor;
 
-import com.github.durex.shared.annotation.NullValueChecker;
+import com.github.durex.shared.annotation.NullChecker;
 import com.github.durex.shared.exceptions.ApiException;
 import com.github.durex.shared.exceptions.model.ErrorCode;
 import java.util.Collection;
@@ -14,18 +14,18 @@ import org.apache.commons.lang3.ObjectUtils;
 
 @Slf4j
 @Interceptor
-@NullValueChecker
+@NullChecker
 @Priority(Interceptor.Priority.LIBRARY_BEFORE + 1)
-public class NullValueCheckerInterceptor {
+public class NullCheckerInterceptor {
 
   @AroundInvoke
-  Object nullCheckerInvoke(InvocationContext context) throws Exception {
+  Object nullChecker(InvocationContext context) throws Exception {
     var oResult = context.proceed();
     if (oResult instanceof Collection<?> && CollectionUtils.isEmpty((Collection<?>) oResult)) {
-      throw new ApiException("Result Not Found", ErrorCode.OPERATION_FAILED);
+      throw new ApiException("No Data Returned", ErrorCode.OPERATION_FAILED);
     }
     if (ObjectUtils.isEmpty(oResult)) {
-      throw new ApiException("Result Not Found", ErrorCode.OPERATION_FAILED);
+      throw new ApiException("No Data Returned", ErrorCode.OPERATION_FAILED);
     }
     return oResult;
   }

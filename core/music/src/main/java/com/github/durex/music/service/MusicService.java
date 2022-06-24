@@ -5,10 +5,13 @@ import static com.github.durex.shared.exceptions.model.ErrorCode.ENTITY_NOT_FOUN
 
 import com.github.durex.music.model.Music;
 import com.github.durex.music.repository.MusicRepository;
-import com.github.durex.shared.annotation.NullValueChecker;
+import com.github.durex.shared.annotation.NullChecker;
+import com.github.durex.shared.annotation.ValueChecker;
 import com.github.durex.shared.exceptions.ApiException;
 import com.github.durex.sqlbuilder.enums.WildCardType;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
@@ -37,7 +40,7 @@ public class MusicService {
    *     ApiException
    * @return musics, List<{@link Music}>
    */
-  @NullValueChecker
+  @NullChecker
   public List<Music> getMusicsByTitle(String title) {
     return repository.findByTitle(title);
   }
@@ -50,47 +53,49 @@ public class MusicService {
    * @param wildCardEnum {@link WildCardType}
    * @return musics, List<{@link Music}>
    */
-  @NullValueChecker
+  @NullChecker
   public List<Music> getMusicsByTitle(String title, WildCardType wildCardEnum) {
     return repository.findByTitle(title, wildCardEnum);
   }
 
-  @NullValueChecker
+  @ValueChecker(value = "0", type = Integer.class)
   public Integer createMusic(Music music) {
     return repository.save(music);
   }
 
-  @NullValueChecker
+  @NullChecker
   public List<Integer> createMusic(List<Music> musics) {
-    return repository.save(musics);
+    return Arrays.stream(repository.save(musics)).boxed().collect(Collectors.toUnmodifiableList());
   }
 
-  @NullValueChecker
+  @ValueChecker(value = "0", type = Integer.class)
   public Integer updateMusic(Music music) {
     return repository.update(music);
   }
 
-  @NullValueChecker
+  @NullChecker
   public List<Integer> updateMusic(List<Music> musics) {
-    return repository.update(musics);
+    return Arrays.stream(repository.update(musics))
+        .boxed()
+        .collect(Collectors.toUnmodifiableList());
   }
 
-  @NullValueChecker
+  @ValueChecker(value = "0", type = Integer.class)
   public Integer deleteMusicById(String id) {
     return repository.deleteById(id);
   }
 
-  @NullValueChecker
+  @ValueChecker(value = "0", type = Integer.class)
   public Integer deleteMusicByTitle(String title) {
     return repository.deleteByTitle(title);
   }
 
-  @NullValueChecker
+  @ValueChecker(value = "0", type = Integer.class)
   public Integer deleteMusicByTitle(String title, WildCardType wildCardEnum) {
     return repository.deleteByTitle(title, wildCardEnum);
   }
 
-  @NullValueChecker
+  @ValueChecker(value = "0", type = Integer.class)
   public Integer delete(List<String> musicIds) {
     return repository.delete(musicIds);
   }

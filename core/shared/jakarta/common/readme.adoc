@@ -5,18 +5,43 @@
 common jakarta cdi beans like annotation, filter/interceptor, cache, decorator, etc.
 
 
-=== redis client config
+=== Some Usages
 
-dotEnv must have the following variables:
+* Enum Checker
 
-[source,dotenv]
---
-REDIS_HOST=redis://localhost:6379
-REDIS_PASSWORD=null
---
+String value matches an Enum value
 
-pls update necessary configs from resources folder
+[source,java]
+----
+@EnumClass(enumClass = CustomerType.class)
+private String customerTypeString;
+----
 
+* Enum Pattern Checker
+
+only accept some of Enum values
+
+[source,java]
+----
+@EnumPattern(regexp = "NEW|DEFAULT")
+private CustomerType customerTypeMatchesPattern;
+----
+
+* Enum with selected value
+
+[source,java]
+----
+@AcceptedEnum(anyOf = {CustomerType.NEW, CustomerType.OLD})
+private CustomerType customerTypeOfSubset;
+----
+
+* NullValueChecker
+check the return value is not empty or null
+[source,java]
+----
+@NullValueChecker
+List<Customer> findAllCustomerByDepartment(String depId)
+----
 
 === Known issues
 

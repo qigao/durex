@@ -13,10 +13,10 @@ class ExampleResourceTest {
   void testHelloEndpoint() {
     given()
         .when()
-        .get("/")
+        .get("/hello")
         .then()
         .statusCode(200)
         // expect the value of the interceptor
-        .body(is("intercept"));
+        .body(is("Hello"));
   }
 }

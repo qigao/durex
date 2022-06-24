@@ -5,30 +5,38 @@ equals-verifier = "3.7.2"
 wiremock = "2.33.2"
 rest-assured = "5.0.1"
 to-string-verifier = "1.4.8"
-
+mockito = "4.6.1"
 # Libs config
 [libraries]
-h2db = { group = "com.h2database", name = "h2", version = '2.1.212'}
+
+h2db = { group = "com.h2database", name = "h2", version = '2.1.212' }
 
 # Test
 junit5-bom = { group = 'org.junit', name = 'junit-bom', version.ref = 'junit' }
 junit-launcher = { group = 'org.junit.platform', name = 'junit-platform-launcher', version = '1.8.2' }
 equals-verifier = { module = 'nl.jqno.equalsverifier:equalsverifier', version.ref = 'equals-verifier' }
 wiremock = { group = 'com.github.tomakehurst', name = 'wiremock-jre8', version.ref = 'wiremock' }
+
 rest-assured = { group = 'io.rest-assured', name = 'rest-assured', version.ref = 'rest-assured' }
 rest-assured-xml = { group = 'io.rest-assured', name = 'xml-path', version.ref = 'rest-assured' }
 rest-assured-json = { group = 'io.rest-assured', name = 'json-path', version.ref = 'rest-assured' }
+
 jparams = { group = 'com.jparams', name = 'to-string-verifier', version.ref = 'to-string-verifier' }
 hamcrest = { group = 'org.hamcrest', name = 'hamcrest', version = '2.2' }
 hamcrest-date = { group = 'org.exparity', name = 'hamcrest-date', version = '2.0.7' }
 api-guardian = { group = 'org.apiguardian', name = 'apiguardian-api', version = '1.1.2' }
-mockito = { group = 'org.mockito', name = 'mockito-core', version = '4.5.1' }
+
+mockito = { group = 'org.mockito', name = 'mockito-core', version.ref = 'mockito' }
+mockito-junit5 = { group = 'org.mockito', name = 'mockito-junit-jupiter', version.ref = 'mockito' }
+
 cucumber-bom = { group = 'io.cucumber', name = 'cucumber-bom', version = '7.3.4' }
 faker = { group = 'net.datafaker', name = 'datafaker', version = '1.3.0' }
 cdi-unit = { group = 'de.hilling.junit.cdi', name = 'cdi-test-core', version = '3.4.0' }
 reactor-test = { group = 'io.projectreactor', name = 'reactor-test', version = '3.4.18' }
+assertJ = { group = 'org.assertj', name = 'assertj-core', version = '3.23.1' }
+awaitility = { group = 'org.awaitility', name = 'awaitility', version = '4.2.0' }
 
 [bundles]
-unit-test = ['wiremock', 'mockito']
+unit-test = ['wiremock', 'mockito', 'mockito-junit5']
 check = ['hamcrest', 'hamcrest-date', 'equals-verifier', 'jparams']
-rest-assured = ['rest-assured', 'rest-assured-xml','rest-assured-json']
+rest-assured = ['rest-assured', 'rest-assured-xml', 'rest-assured-json']

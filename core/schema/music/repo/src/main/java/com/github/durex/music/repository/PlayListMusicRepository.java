@@ -7,7 +7,6 @@ import com.github.durex.model.tables.records.RMusic;
 import com.github.durex.music.mapper.MusicMapper;
 import com.github.durex.music.mapper.PlayListMusicMapper;
 import com.github.durex.music.model.Music;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.enterprise.context.RequestScoped;
@@ -35,28 +34,26 @@ public class PlayListMusicRepository {
         .collect(Collectors.toList());
   }
 
-  public List<Integer> saveMusicsToPlayList(
-      @NotNull String playlistId, @NotNull List<Music> musics) {
+  public int[] saveMusicsToPlayList(@NotNull String playlistId, @NotNull List<Music> musics) {
     var records = PlayListMusicMapper.mapDtoToRecord(musics, playlistId);
-    var result = dsl.batchInsert(records).execute();
-    return Arrays.stream(result).boxed().collect(Collectors.toUnmodifiableList());
+    return dsl.batchInsert(records).execute();
   }
 
-  public Integer deleteMusicFromPlayList(@NotNull String playlistId, @NotNull String musicId) {
+  public int deleteMusicFromPlayList(@NotNull String playlistId, @NotNull String musicId) {
     return dsl.deleteFrom(PLAYLIST_MUSIC)
         .where(PLAYLIST_MUSIC.PLAYLIST_ID.eq(playlistId))
         .and(PLAYLIST_MUSIC.MUSIC_ID.eq(musicId))
         .execute();
   }
 
-  public Integer deleteMusicFromPlayList(@NotNull String playlistId, List<String> musicId) {
+  public int deleteMusicFromPlayList(@NotNull String playlistId, List<String> musicId) {
     var crud = dsl.deleteFrom(PLAYLIST_MUSIC);
     return crud.where(PLAYLIST_MUSIC.PLAYLIST_ID.eq(playlistId))
         .and(PLAYLIST_MUSIC.MUSIC_ID.in(musicId))
         .execute();
   }
 
-  public Integer clearMusicsFromPlayList(@NotNull String playlistId) {
+  public int clearMusicsFromPlayList(@NotNull String playlistId) {
     return dsl.deleteFrom(PLAYLIST_MUSIC)
         .where(PLAYLIST_MUSIC.PLAYLIST_ID.eq(playlistId))
         .execute();

@@ -3,13 +3,12 @@ package com.github.durex.messaging.processor;
 import com.github.durex.messaging.api.annotation.InComing;
 import com.github.durex.messaging.api.annotation.Topic;
 import com.github.durex.messaging.generator.RedisCodeGenerator;
-import com.github.durex.messaging.generator.model.Annotations;
-import com.github.durex.messaging.generator.model.PlainAnnotations;
+import com.github.durex.messaging.generator.model.CodeNameInfo;
+import com.github.durex.messaging.generator.model.TopicInfo;
 import java.io.Writer;
 import java.util.Set;
 import javax.annotation.processing.AbstractProcessor;
 import javax.annotation.processing.Filer;
-import javax.annotation.processing.Messager;
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.RoundEnvironment;
 import javax.annotation.processing.SupportedAnnotationTypes;
@@ -26,14 +25,12 @@ import lombok.SneakyThrows;
 @SupportedAnnotationTypes("com.github.durex.messaging.api.annotation.InComing")
 public class InComingProcessor extends AbstractProcessor {
 
-  private Messager messager;
   private Filer javaFile;
   private Types typeUtils;
 
   @Override
   public synchronized void init(ProcessingEnvironment processingEnv) {
     super.init(processingEnv);
-    messager = processingEnv.getMessager();
     javaFile = processingEnv.getFiler();
     typeUtils = processingEnv.getTypeUtils();
   }
@@ -54,36 +51,37 @@ public class InComingProcessor extends AbstractProcessor {
             element -> {
               var classInfo = Helper.getClassInfo(element);
               var executableElement = (ExecutableElement) element;
-              var inComing = executableElement.getAnnotation(InComing.class);
-              var inComingTopic = getTopic(inComing);
-              var topic = typeUtils.asElement(inComingTopic).getAnnotation(Topic.class);
               var methodInfo = Helper.getMethodInfo(executableElement);
-              var templateFields = Helper.getTemplateFields(classInfo, methodInfo);
-              Helper.printMessage(classInfo, inComingTopic.toString(), methodInfo, messager);
-              var methodName = templateFields.getMethodName();
-              var methodNameUpperCase =
-                  methodName.substring(0, 1).toUpperCase() + methodName.substring(1);
-              var listenerClassName =
-                  templateFields.getClassName() + "." + methodNameUpperCase + "Listener";
-              listenerCodeGenerate(listenerClassName, javaFile, templateFields);
-              var subscriber = topic.subscriber();
-              var plainAnnotations =
-                  PlainAnnotations.builder()
-                      .value(topic.value())
-                      .codec(topic.codec())
-                      .subscriber(subscriber.isBlank() ? "NotAssigned" : subscriber)
-                      .simpleClassName(templateFields.getSimpleClassName())
-                      .simpleParamType(templateFields.getSimpleParamType())
-                      .className(templateFields.getClassName())
-                      .paramType(templateFields.getParamType())
-                      .packageName(templateFields.getPackageName())
-                      .methodName(templateFields.getMethodName())
-                      .build();
-              var lifecycleClassName =
-                  templateFields.getClassName() + "." + methodNameUpperCase + "Config";
-              lifecycleCodeGenerator(lifecycleClassName, javaFile, plainAnnotations);
+              var codeNameInfo = Helper.getTemplateFields(classInfo, methodInfo);
+              var simpleClassName = getSimpleClassName(codeNameInfo);
+              var tmpClassName = codeNameInfo.getClassName() + "." + simpleClassName;
+              var listenerClassName = tmpClassName + "Listener";
+              listenerCodeGenerator(listenerClassName, javaFile, codeNameInfo);
+              var topicInfo = getTopicAnnotations(executableElement, codeNameInfo);
+              var lifecycleClassName = tmpClassName + "Config";
+              lifecycleCodeGenerator(lifecycleClassName, javaFile, topicInfo);
             });
     return true;
+  }
+
+  private TopicInfo getTopicAnnotations(
+      ExecutableElement executableElement, CodeNameInfo templateFields) {
+    var inComingTopic = getInComingTopic(executableElement.getAnnotation(InComing.class));
+    var topic = typeUtils.asElement(inComingTopic).getAnnotation(Topic.class);
+    var subscriber = topic.subscriber();
+    var group = topic.group();
+    return TopicInfo.builder()
+        .value(topic.value())
+        .codec(topic.codec())
+        .group(group.isEmpty() ? "NoGroup" : group)
+        .subscriber(subscriber.isBlank() ? "NotAssigned" : subscriber)
+        .codeNameInfo(templateFields)
+        .build();
+  }
+
+  private String getSimpleClassName(CodeNameInfo templateFields) {
+    var methodName = templateFields.getMethodName();
+    return methodName.substring(0, 1).toUpperCase() + methodName.substring(1);
   }
 
   /**
@@ -92,7 +90,7 @@ public class InComingProcessor extends AbstractProcessor {
    * @param inComing annotation class
    * @return Topic name
    */
-  private TypeMirror getTopic(InComing inComing) {
+  private TypeMirror getInComingTopic(InComing inComing) {
     try {
       var ignored = inComing.topic();
       throw new IllegalStateException("Expected a MirroredTypeException" + ignored);
@@ -109,11 +107,11 @@ public class InComingProcessor extends AbstractProcessor {
    * @param filer filer to write the generated java file
    */
   @SneakyThrows
-  private void listenerCodeGenerate(
-      String listenerClassName, Filer filer, Annotations annotations) {
+  private void listenerCodeGenerator(
+      String listenerClassName, Filer filer, CodeNameInfo codeNameInfo) {
     final Writer writer = filer.createSourceFile(listenerClassName).openWriter();
     RedisCodeGenerator redisCodeGenerator = new RedisCodeGenerator();
-    redisCodeGenerator.listenerCodeGenerate(annotations, writer);
+    redisCodeGenerator.listenerCodeGenerate(codeNameInfo, writer);
     writer.close();
   }
 
@@ -126,7 +124,7 @@ public class InComingProcessor extends AbstractProcessor {
    */
   @SneakyThrows
   private void lifecycleCodeGenerator(
-      String lifecycleClassName, Filer filer, PlainAnnotations annotationsMap) {
+      String lifecycleClassName, Filer filer, TopicInfo annotationsMap) {
     final Writer writer = filer.createSourceFile(lifecycleClassName).openWriter();
     RedisCodeGenerator redisCodeGenerator = new RedisCodeGenerator();
     redisCodeGenerator.lifecycleCodeGenerator(annotationsMap, writer);

@@ -5,7 +5,6 @@ dependencies {
     implementation project(':core:shared:messaging:messaging-api-redis')
     annotationProcessor project(':core:shared:messaging:messaging-api-redis')
 }
-apply from: "$rootDir/gradle/library/quarkus-core.gradle"
 apply from: "$rootDir/gradle/library/quarkus-test.gradle"
 task startRedis {
     description = 'Redis related tasks.'
