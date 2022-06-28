@@ -1,0 +1,18 @@
+
+== Redisson Remote Service
+
+=== redisson-service-api
+
+**definition of Remote Service api:**
+[source,text]
+RemoteServiceApi
+RemoteServiceReactiveApi
+
+=== redisson-service-impl
+
+impl of RemoteServiceApi
+
+=== redisson-service-client
+
+* A AsyncTask
+* Calling RemoteServiceImpl by RemoteServiceReactiveApi

@@ -7,7 +7,6 @@ import com.github.durex.music.model.PlayList;
 import com.github.durex.sqlbuilder.SqlHelper;
 import com.github.durex.sqlbuilder.enums.WildCardType;
 import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -50,14 +49,14 @@ public class PlayListRepository {
     return Optional.ofNullable(rPlayList).map(PlayListMapper::mapRecordToDto);
   }
 
-  public Integer save(@NotNull PlayList playList) {
+  public int save(@NotNull PlayList playList) {
     var r = dsl.newRecord(PLAYLIST);
     r.setCreateTime(LocalDateTime.now());
     PlayListMapper.mapDtoToRecord(playList, r);
     return r.insert();
   }
 
-  public List<Integer> save(List<PlayList> playLists) {
+  public int[] save(List<PlayList> playLists) {
     var rPlaylists =
         playLists.stream()
             .map(
@@ -68,18 +67,17 @@ public class PlayListRepository {
                   return rPlaylist;
                 })
             .collect(Collectors.toList());
-    var result = dsl.batchInsert(rPlaylists).execute();
-    return Arrays.stream(result).boxed().collect(Collectors.toUnmodifiableList());
+    return dsl.batchInsert(rPlaylists).execute();
   }
 
-  public Integer update(PlayList playList) {
+  public int update(PlayList playList) {
     var rPlaylist = dsl.newRecord(PLAYLIST);
     PlayListMapper.mapDtoToRecord(playList, rPlaylist);
     rPlaylist.setUpdateTime(LocalDateTime.now());
     return rPlaylist.update();
   }
 
-  public List<Integer> update(List<PlayList> playLists) {
+  public int[] update(List<PlayList> playLists) {
     var rPlaylists =
         playLists.stream()
             .map(
@@ -90,11 +88,10 @@ public class PlayListRepository {
                   return rPlaylist;
                 })
             .collect(Collectors.toList());
-    var result = dsl.batchUpdate(rPlaylists).execute();
-    return Arrays.stream(result).boxed().collect(Collectors.toUnmodifiableList());
+    return dsl.batchUpdate(rPlaylists).execute();
   }
 
-  public Integer deleteById(@NotNull String id) {
+  public int deleteById(@NotNull String id) {
     return dsl.update(PLAYLIST)
         .set(PLAYLIST.DELETE_TIME, LocalDateTime.now())
         .set(PLAYLIST.DELETED_FLAG, 1)
@@ -102,7 +99,7 @@ public class PlayListRepository {
         .execute();
   }
 
-  public Integer deleteById(@NotNull List<String> playlistIds) {
+  public int deleteById(@NotNull List<String> playlistIds) {
     return dsl.update(PLAYLIST)
         .set(PLAYLIST.DELETE_TIME, LocalDateTime.now())
         .set(PLAYLIST.DELETED_FLAG, 1)
@@ -110,7 +107,7 @@ public class PlayListRepository {
         .execute();
   }
 
-  public Integer deleteByTitle(@NotNull String title) {
+  public int deleteByTitle(@NotNull String title) {
     return dsl.update(PLAYLIST)
         .set(PLAYLIST.DELETE_TIME, LocalDateTime.now())
         .set(PLAYLIST.DELETED_FLAG, 1)
@@ -118,7 +115,7 @@ public class PlayListRepository {
         .execute();
   }
 
-  public Integer deleteByTitle(@NotNull String title, WildCardType wildCardType) {
+  public int deleteByTitle(@NotNull String title, WildCardType wildCardType) {
     var realTitle = SqlHelper.likeClauseBuilder(wildCardType, title);
     return dsl.update(PLAYLIST)
         .set(PLAYLIST.DELETE_TIME, LocalDateTime.now())

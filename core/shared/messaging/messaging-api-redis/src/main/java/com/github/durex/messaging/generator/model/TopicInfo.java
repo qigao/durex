@@ -2,20 +2,22 @@ package com.github.durex.messaging.generator.model;
 
 import com.github.durex.messaging.api.model.CodecEnum;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import lombok.experimental.SuperBuilder;
 
 @Getter
 @Setter
 @ToString
-@SuperBuilder
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class PlainAnnotations extends Annotations {
+public class TopicInfo {
   private CodecEnum codec;
   private String value;
+  private String group;
   private String subscriber;
+  private CodeNameInfo codeNameInfo;
 }

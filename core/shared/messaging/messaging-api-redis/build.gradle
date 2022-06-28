@@ -1,9 +1,7 @@
 plugins {
-    alias qLibs.plugins.quarkus
     alias qLibs.plugins.jandex
 }
 dependencies {
     implementation uLibs.velocity
 }
-apply from: "$rootDir/gradle/library/quarkus-core.gradle"
 

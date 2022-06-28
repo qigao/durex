@@ -1,8 +1,3 @@
 plugins {
     alias qLibs.plugins.jandex
 }
-dependencies {
-    implementation dbLibs.redisson
-    implementation vLibs.reactor.core
-    testImplementation tLibs.reactor.test
-}

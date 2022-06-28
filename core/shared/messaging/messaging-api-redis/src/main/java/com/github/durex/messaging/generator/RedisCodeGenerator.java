@@ -1,7 +1,7 @@
 package com.github.durex.messaging.generator;
 
-import com.github.durex.messaging.generator.model.Annotations;
-import com.github.durex.messaging.generator.model.PlainAnnotations;
+import com.github.durex.messaging.generator.model.CodeNameInfo;
+import com.github.durex.messaging.generator.model.TopicInfo;
 import java.io.Writer;
 import java.util.Properties;
 import org.apache.velocity.VelocityContext;
@@ -20,39 +20,39 @@ public class RedisCodeGenerator {
     velocityEngine.init(p);
   }
 
-  public void listenerCodeGenerate(Annotations templateField, Writer writer) {
+  public void listenerCodeGenerate(CodeNameInfo templateField, Writer writer) {
     var template = velocityEngine.getTemplate("templates/InComingMessageListener.vm");
     var context = buildVelocityContext(templateField);
     template.merge(context, writer);
   }
 
-  private VelocityContext buildVelocityContext(Annotations templateField) {
+  private VelocityContext buildVelocityContext(CodeNameInfo templateField) {
     VelocityContext context = new VelocityContext();
     fillContext(templateField, context);
     return context;
   }
 
-  private static void fillContext(Annotations templateField, VelocityContext context) {
-    context.put("packageName", templateField.getPackageName());
-    context.put("className", templateField.getClassName());
-    context.put("methodName", templateField.getMethodName());
-    context.put("paramType", templateField.getParamType());
-    context.put("simpleClassName", templateField.getSimpleClassName());
-    context.put("simpleParamType", templateField.getSimpleParamType());
+  private static void fillContext(CodeNameInfo codeNameInfo, VelocityContext context) {
+    context.put("packageName", codeNameInfo.getPackageName());
+    context.put("className", codeNameInfo.getClassName());
+    context.put("methodName", codeNameInfo.getMethodName());
+    context.put("paramType", codeNameInfo.getParamType());
+    context.put("simpleClassName", codeNameInfo.getSimpleClassName());
+    context.put("simpleParamType", codeNameInfo.getSimpleParamType());
   }
 
-  public void lifecycleCodeGenerator(PlainAnnotations annotations, Writer writer) {
+  public void lifecycleCodeGenerator(TopicInfo annotations, Writer writer) {
     var template = velocityEngine.getTemplate("templates/RegisterMessageListener.vm");
     var context = buildLifeCycleContext(annotations);
     template.merge(context, writer);
   }
 
-  private VelocityContext buildLifeCycleContext(PlainAnnotations annotations) {
+  private VelocityContext buildLifeCycleContext(TopicInfo topicInfo) {
     VelocityContext context = new VelocityContext();
-    fillContext(annotations, context);
-    context.put("topicName", annotations.getValue());
-    context.put("codec", annotations.getCodec());
-    context.put("subscriber", annotations.getSubscriber());
+    fillContext(topicInfo.getCodeNameInfo(), context);
+    context.put("topicName", topicInfo.getValue());
+    context.put("codec", topicInfo.getCodec());
+    context.put("subscriber", topicInfo.getSubscriber());
     return context;
   }
 }

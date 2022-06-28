@@ -1,4 +1,0 @@
-
-== Redisson Remote Service Impl ==
-
-all the Redisson Remote Service Impl is available in the `redisson-service` module.

@@ -1,6 +1,6 @@
 package com.github.durex.messaging.processor;
 
-import com.github.durex.messaging.generator.model.Annotations;
+import com.github.durex.messaging.generator.model.CodeNameInfo;
 import com.github.durex.utils.Pair;
 import javax.annotation.processing.Messager;
 import javax.lang.model.element.Element;
@@ -23,9 +23,9 @@ public class Helper {
     return Pair.of(methodName, paramType);
   }
 
-  public Annotations getTemplateFields(
+  public CodeNameInfo getTemplateFields(
       Pair<String, String> classInfo, Pair<String, String> methodInfo) {
-    return Annotations.builder()
+    return CodeNameInfo.builder()
         .packageName(classInfo.getFirst())
         .className(classInfo.getSecond())
         .methodName(methodInfo.getFirst())

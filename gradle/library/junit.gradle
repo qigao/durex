@@ -9,4 +9,6 @@ dependencies {
     testImplementation tLibs.bundles.unit.test
     testImplementation tLibs.faker
     testImplementation tLibs.reactor.test
+    testImplementation tLibs.assertJ
+    testImplementation tLibs.awaitility
 }

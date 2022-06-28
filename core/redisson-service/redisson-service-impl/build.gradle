@@ -2,9 +2,28 @@ plugins {
     alias qLibs.plugins.quarkus
 }
 dependencies {
-    implementation platform(qLibs.quarkus.bom.get())
-    implementation 'io.quarkus:quarkus-arc'
-    implementation vLibs.reactor.core
-    implementation dbLibs.redisson
     implementation project(":core:redisson-service:redisson-service-api")
 }
+task startRedis {
+    description = 'Redis related tasks.'
+    group = 'Database'
+    doFirst {
+        File workingDir = new File("$projectDir/docker")
+        String command = "docker-compose up -d"
+        def proc = command.execute(null, workingDir)
+        proc.waitFor()
+    }
+    doLast {
+        exec {
+            commandLine("$rootDir/scripts/waitFor.sh")
+            args = [
+                "-h",
+                "localhost",
+                "-p",
+                "6379"
+            ]
+        }
+    }
+}
+
+tasks.test.dependsOn(startRedis)

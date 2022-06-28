@@ -1,0 +1,12 @@
+plugins {
+    alias qLibs.plugins.quarkus
+}
+
+subprojects {
+    dependencies {
+        implementation dbLibs.redisson
+        implementation vLibs.reactor.core
+    }
+    apply from: "$rootDir/gradle/library/quarkus-core.gradle"
+    apply from: "$rootDir/gradle/library/quarkus-test.gradle"
+}

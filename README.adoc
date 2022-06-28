@@ -1,7 +1,7 @@
 = Durex
 :icons: font
 
-a multi-module java template project for high code quality development
+a multi-module java template project for high quality code development
 
 Features:
 
@@ -10,3 +10,4 @@ Features:
 * Microservice w/ Native Deployment docker
 * Imperative/Reactive
 * Quarkus/Spring Boot
+* Annotations for fast development

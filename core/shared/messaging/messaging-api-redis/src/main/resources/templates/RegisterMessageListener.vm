@@ -23,15 +23,13 @@ public class ${serviceName}Config {
     private static final Logger log = LoggerFactory.getLogger(${serviceName}Config.class);
 
     @Inject
-    RedissonClient redissonClient;
+    RedissonClient redisson;
     @Inject
     ${simpleClassName} service;
     void onStart(@Observes StartupEvent event) {
         log.info("starting redisson remote service...");
-        var ${methodName}handler= new RedisEventTopicHandler<$simpleParamType>();
-        ${methodName}handler.setTopicName("${topicName}");
-        ${methodName}handler.setPayloadCodec($codec);
-        ${methodName}handler.listen(${simpleParamType}.class, new ${serviceName}Listener(service),redissonClient).subscribe(
+        var ${methodName}handler= new RedisEventTopicHandler<$simpleParamType>(redisson,"${topicName}",${codec});
+        ${methodName}handler.listen(${simpleParamType}.class, new ${serviceName}Listener(service)).subscribe(
             o -> log.info("Redisson Event Listener ID: {}, subscriber: {}", o,"${subscriber}")
             );
      }

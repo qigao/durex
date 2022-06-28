@@ -1,19 +1,24 @@
 #set($serviceName = ${methodName.substring(0,1).toUpperCase()} + ${methodName.substring(1)})
 package ${packageName};
 
+import static lombok.AccessLevel.PRIVATE;
+
 import javax.inject.Inject;
 
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import org.redisson.api.listener.MessageListener;
 import ${className};
 import ${paramType};
 
+@AllArgsConstructor
+@NoArgsConstructor(access=PRIVATE)
 public class  ${serviceName}Listener  implements MessageListener<${simpleParamType}> {
-     ${simpleClassName} redisEventService;
-    public ${serviceName}Listener(${simpleClassName} service){
-           this.redisEventService = service;
-    }
+
+    ${simpleClassName} service;
+
     @Override
     public void onMessage(CharSequence channel, ${simpleParamType} msg) {
-    redisEventService.${methodName}(msg);
+    service.${methodName}(msg);
     }
 }

@@ -6,3 +6,4 @@ dependencies {
     implementation uLibs.jboss.spec.jaxrs
 }
 apply from: "$rootDir/gradle/library/quarkus-core.gradle"
+apply from:  "$rootDir/gradle/library/quarkus-test.gradle"
