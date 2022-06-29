@@ -1,0 +1,36 @@
+#set($serviceName = ${methodName.substring(0,1).toUpperCase()} + ${methodName.substring(1)})
+
+package ${packageName};
+
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.redisson.api.RStream;
+import org.redisson.api.stream.StreamReadGroupArgs;
+import ${className};
+import ${paramType};
+
+@Slf4j
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public class ${serviceName}Handler {
+  private RStream<String, ${simpleParamType}> stream;
+  private ${simpleClassName} service;
+
+  public ${serviceName}Handler(RStream<String, ${simpleParamType}> stream, ${simpleClassName} service) {
+    this.stream = stream;
+    this.service = service;
+  }
+
+  public void readGroup(String groupName, String subscriber) {
+    var messages = stream.readGroup(groupName, subscriber, StreamReadGroupArgs.neverDelivered());
+    messages
+        .forEach(
+            (key,msg) -> {
+              msg.values().forEach(v -> {
+                log.info("rcvd entry: {}", v);
+                service.executeTest(v);
+                stream.ack(groupName,key);
+              });
+            });
+  }
+}

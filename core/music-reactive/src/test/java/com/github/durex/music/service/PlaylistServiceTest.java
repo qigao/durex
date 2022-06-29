@@ -7,6 +7,7 @@ import com.github.durex.music.repository.*;
 import com.github.durex.music.support.*;
 import com.github.durex.shared.exceptions.*;
 import com.github.durex.sqlbuilder.enums.*;
+import com.github.durex.uniqid.uuid.UniqID;
 import com.github.durex.uuid.*;
 import io.quarkus.test.junit.*;
 import io.quarkus.test.junit.mockito.*;

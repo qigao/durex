@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import com.github.durex.music.model.PlayList;
 import com.github.durex.music.support.DemoMusicData;
 import com.github.durex.sqlbuilder.enums.WildCardType;
-import com.github.durex.uuid.UniqID;
+import com.github.durex.uniqid.uuid.UniqID;
 import io.quarkus.test.junit.QuarkusTest;
 import java.util.List;
 import java.util.stream.Collectors;

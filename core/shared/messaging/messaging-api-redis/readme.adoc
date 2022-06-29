@@ -6,14 +6,22 @@
 * [x] InComing
 * [x] OutGoing
 * [ ] RCache
-* [ ] Streaming
+* [x] Streaming
 
 === Usages
+
 [source,java]
 ----
 @Topic(value="test",codec=JSON)
 @InComing(value=DemoEventTopic.class)
 @OutGoing(value=TestEventTopic.class)
+----
+
+for Streaming, more properties should be added
+
+[source,java]
+----
+@Topic(value="test",codec=JSON,group="test-group",subscriber="consumer1")
 ----
 
 === Examples

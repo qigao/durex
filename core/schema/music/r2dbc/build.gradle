@@ -1,14 +1,14 @@
 plugins{
-    alias qLibs.plugins.quarkus
-    alias qLibs.plugins.jandex
+  alias qLibs.plugins.quarkus
+  alias qLibs.plugins.jandex
 }
 dependencies {
-    implementation project(":core:shared:utils")
-    implementation project(":core:schema:music:json")
-    implementation project(":core:schema:music:entity")
-    implementation project(":core:shared:jakarta:jooq-config")
-    implementation vLibs.reactor.core
-    implementation project(":core:shared:jakarta:config")
+  implementation project(':core:shared:utils')
+  implementation project(':core:schema:music:json')
+  implementation project(':core:schema:music:entity')
+  implementation project(':core:shared:jakarta:jooq-config')
+  implementation vLibs.reactor.core
+  implementation project(':core:shared:jakarta:config')
 }
 apply from: "$rootDir/gradle/library/quarkus-core.gradle"
 apply from: "$rootDir/gradle/library/quarkus-test.gradle"
@@ -16,25 +16,25 @@ apply from: "$rootDir/gradle/library/quarkus-reactive.gradle"
 apply from: "$rootDir/gradle/library/sqldb.gradle"
 
 task startMysql {
-    description = 'Database related tasks.'
-    group = 'Database'
-    doFirst {
-        File workingDir = new File("$projectDir/database")
-        String command = "docker-compose up -d"
-        def proc = command.execute(null, workingDir)
-        proc.waitFor()
+  description = 'Database related tasks.'
+  group = 'Database'
+  doFirst {
+    File workingDir = new File("$projectDir/database")
+    String command = "docker-compose up -d"
+    def proc = command.execute(null, workingDir)
+    proc.waitFor()
+  }
+  doLast {
+    exec {
+      commandLine("$rootDir/scripts/waitFor.sh")
+      args = [
+        "-h",
+        "localhost",
+        "-p",
+        "3306"
+      ]
     }
-    doLast {
-        exec {
-            commandLine("$rootDir/scripts/waitFor.sh")
-            args = [
-                "-h",
-                "localhost",
-                "-p",
-                "3306"
-            ]
-        }
-    }
+  }
 }
 
 tasks.test.dependsOn(startMysql)

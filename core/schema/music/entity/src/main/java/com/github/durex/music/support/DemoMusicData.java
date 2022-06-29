@@ -3,7 +3,7 @@ package com.github.durex.music.support;
 import com.github.durex.music.model.Music;
 import com.github.durex.music.model.PlayList;
 import com.github.durex.music.model.PlayListMusic;
-import com.github.durex.uuid.UniqID;
+import com.github.durex.uniqid.UniqID;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.experimental.UtilityClass;

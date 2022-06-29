@@ -8,17 +8,15 @@ import org.redisson.api.listener.MessageListener;
 import org.redisson.client.codec.Codec;
 import reactor.core.publisher.Mono;
 
-
-public class RedisEventTopicHandler<T>{
+public class RedisEventTopicHandler<T> {
   private final RTopicReactive topicReactive;
 
-  public RedisEventTopicHandler(RedissonClient client,String topic,CodecEnum codecEnum){
+  public RedisEventTopicHandler(RedissonClient client, String topic, CodecEnum codecEnum) {
     Codec redisCodec = RedisCodec.getCodec(codecEnum);
     topicReactive = client.reactive().getTopic(topic, redisCodec);
   }
-  public Mono<Integer> listen(
-      Class<T> tClass, MessageListener<T> messageListener) {
-    return topicReactive
-        .addListener(tClass, messageListener);
+
+  public Mono<Integer> listen(Class<T> tClass, MessageListener<T> messageListener) {
+    return topicReactive.addListener(tClass, messageListener);
   }
 }

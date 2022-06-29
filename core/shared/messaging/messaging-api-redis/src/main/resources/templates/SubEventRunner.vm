@@ -4,6 +4,7 @@ package ${packageName};
 import io.quarkus.runtime.ShutdownEvent;
 import io.quarkus.runtime.StartupEvent;
 import org.slf4j.Logger;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.LoggerFactory;
 import org.redisson.api.RedissonClient;
 import org.redisson.api.listener.MessageListener;
@@ -17,10 +18,9 @@ import static com.github.durex.messaging.api.model.CodecEnum.${codec};
 import $paramType;
 import ${packageName}.${serviceName}Listener;
 
+@Slf4j
 @ApplicationScoped
 public class ${serviceName}Config {
-
-    private static final Logger log = LoggerFactory.getLogger(${serviceName}Config.class);
 
     @Inject
     RedissonClient redisson;
@@ -36,6 +36,6 @@ public class ${serviceName}Config {
 
     void onStop(@Observes ShutdownEvent ev) {
         log.info("The application is stopping...");
-        redissonClient.shutdown();
+        redisson.shutdown();
     }
 }

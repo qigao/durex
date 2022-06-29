@@ -20,7 +20,7 @@ public class ExampleService {
 
   @InComing(topic = TestEventTopic.class)
   public void executeTest(TestEvent testEvent) {
-    log.info("Executing test event handler");
+    log.info("Executing test event handler: {}", testEvent);
   }
 
   @OutGoing(topic = TestEventTopic.class)

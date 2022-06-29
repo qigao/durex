@@ -1,4 +1,4 @@
 dependencies {
-    testImplementation tLibs.wiremock
-    runtimeOnly 'com.h2database:h2'
+  testImplementation tLibs.wiremock
+  runtimeOnly('com.h2database:h2')
 }

@@ -1,28 +1,28 @@
 buildscript {
-    dependencies {
-        classpath(uLibs.swagger.annotations.get())
-        classpath files(project(":core:shared:json-schema-annotation").jar.outputs.files.getFiles())
-    }
+  dependencies {
+    classpath(uLibs.swagger.annotations.get())
+    classpath files(project(':core:shared:json-schema-annotation').jar.outputs.files.getFiles())
+  }
 }
 plugins {
-    alias gLibs.plugins.json.schema
+  alias gLibs.plugins.json.schema
 }
 dependencies {
-    implementation uLibs.swagger.annotations
-    implementation project(":core:shared:json-schema-annotation")
+  implementation uLibs.swagger.annotations
+  implementation project(':core:shared:json-schema-annotation')
 }
 apply from: "$rootDir/gradle/library/jackson.gradle"
 jsonSchema2Pojo {
-    targetPackage = 'com.github.durex.music.model'
-    source.setFrom files("$projectDir/json")
-    propertyWordDelimiters = '_'
-    includeJsr303Annotations = true
-    includeGetters = true
-    includeSetters = true
-    includeToString = true
-    includeHashcodeAndEquals = true
-    generateBuilders = true
+  targetPackage = 'com.github.durex.music.model'
+  source.setFrom files("$projectDir/json")
+  propertyWordDelimiters = '_'
+  includeJsr303Annotations = true
+  includeGetters = true
+  includeSetters = true
+  includeToString = true
+  includeHashcodeAndEquals = true
+  generateBuilders = true
 
-    customAnnotator = 'com.github.durex.shared.CustomAnnotator'
+  customAnnotator = 'com.github.durex.shared.CustomAnnotator'
 }
 jar.enabled = true

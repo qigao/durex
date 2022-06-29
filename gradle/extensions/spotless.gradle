@@ -12,6 +12,45 @@ spotless {
         removeUnusedImports()
         importOrder()
         googleJavaFormat()
+
+        custom 'Remove commented-out import statements', {
+            it.replaceAll(/\n\/\/ import .*?;.*/, '')
+        }
+        custom 'Refuse wildcard imports', {
+            // Wildcard imports can't be resolved by spotless itself.
+            // This will require the developer themselves to adhere to best practices.
+            if (it =~ /\nimport .*\*;/) {
+                throw new AssertionError("Do not use wildcard imports.  'spotlessApply' cannot resolve this issue.")
+            }
+        }
+        // Enforce style modifier order
+        custom 'Modifier ordering', {
+            def modifierRanking = [
+                    "public"      : 1,
+                    "protected"   : 2,
+                    "private"     : 3,
+                    "abstract"    : 4,
+                    "default"     : 5,
+                    "static"      : 6,
+                    "final"       : 7,
+                    "transient"   : 8,
+                    "volatile"    : 9,
+                    "synchronized": 10,
+                    "native"      : 11,
+                    "strictfp"    : 12]
+            // Find any instance of multiple modifiers. Lead with a non-word character to avoid
+            // accidental matching against for instance, "an alternative default value"
+            it.replaceAll(/\W(?:public |protected |private |abstract |default |static |final |transient |volatile |synchronized |native |strictfp ){2,}/, {
+                // Do not replace the leading non-word character.  Identify the modifiers
+                it.replaceAll(/(?:public |protected |private |abstract |default |static |final |transient |volatile |synchronized |native |strictfp ){2,}/, {
+                    // Sort the modifiers according to the ranking above
+                    it.split().sort({ modifierRanking[it] }).join(' ') + ' '
+                }
+                )
+            }
+            )
+        }
+
         indentWithSpaces(2)
         endWithNewline()
     }
@@ -21,7 +60,23 @@ spotless {
             exclude '**/build/**', '**/build-*/**'
         }
         greclipse()
-        indentWithSpaces()
+        // As the method name suggests, bump this number if any of the below "custom" rules change.
+        // Spotless will not run on unchanged files unless this number changes.
+        bumpThisNumberIfACustomStepChanges(0)
+        custom 'Use single-quote in project directives.', {
+            it.replaceAll(/project\(":([^"]*)"\)/, 'project(\':$1\')')
+        }
+        custom 'Use parenthesis in single-line gradle dependency declarations.', {
+            it.replaceAll(/\n(\s*\S*(?:[cC]ompile|[rR]untime)(?:Only)?) (?!\()([^{\n]*)\n/, { original, declaration, dep ->
+                "\n${declaration}(${dep})\n"
+            })
+        }
+        custom 'Do not pad spaces before parenthesis in gradle dependency declaration.', {
+            it.replaceAll(/\n(\s*\S*(?:[cC]ompile|[rR]untime)(?:Only)?) +\(/, '\n$1(')
+        }
+
+        indentWithSpaces(2)
+        trimTrailingWhitespace()
     }
     json {
         target fileTree('.') {
@@ -66,5 +121,10 @@ spotless {
         indentWithSpaces(2)
         trimTrailingWhitespace()
         endWithNewline()
+    }
+    // If we add more languages to Spotless, add them to 'compileXYZ' trigger below
+    afterEvaluate {
+        project.tasks['compileJava'].mustRunAfter(spotlessCheck)
+        project.tasks['compileJava'].mustRunAfter(spotlessApply)
     }
 }

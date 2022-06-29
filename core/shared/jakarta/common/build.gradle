@@ -1,9 +1,9 @@
 plugins {
-    alias qLibs.plugins.jandex
+  alias qLibs.plugins.jandex
 }
 dependencies {
-    implementation project(":core:shared:utils")
-    implementation uLibs.jboss.spec.jaxrs
+  implementation project(':core:shared:utils')
+  implementation uLibs.jboss.spec.jaxrs
 }
 apply from: "$rootDir/gradle/library/quarkus-core.gradle"
 apply from:  "$rootDir/gradle/library/quarkus-test.gradle"

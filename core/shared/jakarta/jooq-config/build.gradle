@@ -1,4 +1,4 @@
 plugins {
-    alias qLibs.plugins.jandex
+  alias qLibs.plugins.jandex
 }
 apply from: "$rootDir/gradle/library/sqldb.gradle"

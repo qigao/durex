@@ -15,7 +15,7 @@ import com.github.durex.music.repository.PlayListRepository;
 import com.github.durex.music.support.DemoMusicData;
 import com.github.durex.shared.exceptions.ApiException;
 import com.github.durex.sqlbuilder.enums.WildCardType;
-import com.github.durex.uuid.UniqID;
+import com.github.durex.uniqid.uuid.UniqID;
 import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.mockito.InjectMock;
 import java.util.List;
