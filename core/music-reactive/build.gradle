@@ -1,34 +1,34 @@
 plugins {
-    alias qLibs.plugins.quarkus
+  alias qLibs.plugins.quarkus
 }
 
 jacocoTestReport {
-    afterEvaluate {
-        classDirectories.setFrom(files(classDirectories.files.collect {
-            fileTree(dir: it, exclude: [
-                '**/exceptions/**',
-                '**/entity/**',
-            ]
-            )
-        }))
-    }
+  afterEvaluate {
+    classDirectories.setFrom(files(classDirectories.files.collect {
+      fileTree(dir: it, exclude: [
+        '**/exceptions/**',
+        '**/entity/**',
+      ]
+      )
+    }))
+  }
 }
 
 dependencies {
-    implementation project(":core:shared:utils")
-    implementation project(":core:shared:junit-helper")
-    implementation project(":core:shared:jooq-codegen")
-    implementation project(":core:schema:music:json")
-    implementation project(":core:schema:music:r2dbc")
-    implementation project(":core:schema:music:entity")
-    implementation project(":core:shared:jakarta:common")
-    implementation project(":core:shared:jakarta:config")
-    implementation project(":core:shared:jakarta:reactive")
-    implementation 'io.quarkus:quarkus-smallrye-openapi'
-    implementation 'io.quarkus:quarkus-smallrye-health'
-    implementation dbLibs.redisson
-    implementation vLibs.reactor.core
-    testImplementation tLibs.reactor.test
+  implementation project(':core:shared:utils')
+  implementation project(':core:shared:junit-helper')
+  implementation project(':core:shared:jooq-codegen')
+  implementation project(':core:schema:music:json')
+  implementation project(':core:schema:music:r2dbc')
+  implementation project(':core:schema:music:entity')
+  implementation project(':core:shared:jakarta:common')
+  implementation project(':core:shared:jakarta:config')
+  implementation project(':core:shared:jakarta:reactive')
+  implementation 'io.quarkus:quarkus-smallrye-openapi'
+  implementation 'io.quarkus:quarkus-smallrye-health'
+  implementation dbLibs.redisson
+  implementation vLibs.reactor.core
+  testImplementation tLibs.reactor.test
 }
 
 apply from: "$rootDir/gradle/library/quarkus-core.gradle"

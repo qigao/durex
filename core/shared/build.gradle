@@ -1,5 +1,5 @@
 subprojects {
-    apply from: "$rootDir/gradle/library/junit.gradle"
-    apply from: "$rootDir/gradle/library/jackson.gradle"
-    apply from: "$rootDir/gradle/library/logs.gradle"
+  apply from: "$rootDir/gradle/library/junit.gradle"
+  apply from: "$rootDir/gradle/library/jackson.gradle"
+  apply from: "$rootDir/gradle/library/logs.gradle"
 }

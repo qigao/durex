@@ -15,5 +15,5 @@ import lombok.ToString;
 @AllArgsConstructor
 public class TestEvent {
   private String name;
-  private String age;
+  private int age;
 }

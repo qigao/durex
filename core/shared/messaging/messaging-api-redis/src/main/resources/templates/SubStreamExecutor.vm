@@ -1,0 +1,66 @@
+#set($serviceName = ${methodName.substring(0,1).toUpperCase()} + ${methodName.substring(1)})
+
+package  ${packageName};
+
+import static com.github.durex.messaging.api.model.CodecEnum.JSON;
+
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.event.Observes;
+import javax.inject.Inject;
+
+import com.github.durex.messaging.redis.RedisCodec;
+import io.quarkus.runtime.ShutdownEvent;
+import io.quarkus.runtime.StartupEvent;
+import lombok.extern.slf4j.Slf4j;
+import org.redisson.api.RStream;
+import org.redisson.api.RedissonClient;
+import org.redisson.client.RedisException;
+import org.redisson.client.codec.Codec;
+import ${paramType};
+import ${className};
+import ${packageName}.${serviceName}Task;
+
+@Slf4j
+@ApplicationScoped
+public class ${serviceName}Executor {
+
+  @Inject RedissonClient redisson;
+  @Inject ${simpleClassName} service;
+  private ScheduledExecutorService executorService;
+
+  void onStart(@Observes StartupEvent event) {
+    var subscriber = "${subscriber}";
+    var group = "${groupName}";
+    var topic = "${topicName}";
+    Codec redisCodec = RedisCodec.getCodec(JSON);
+    RStream<String, ${simpleParamType}> stream = redisson.getStream(topic, redisCodec);
+    try {
+        stream.createGroup(group);
+    } catch (RedisException e) {
+        log.info("Redis group {} already exists.", group);
+    }
+
+    executorService = Executors.newSingleThreadScheduledExecutor();
+    executorService.scheduleWithFixedDelay(
+        new ${serviceName}Task(stream, service, group, subscriber), 10, 10, TimeUnit.MILLISECONDS);
+  }
+
+  void onStop(@Observes ShutdownEvent ev) {
+    executorService.shutdown();
+    try {
+      log.info("going to shutdown");
+      if (!executorService.awaitTermination(800, TimeUnit.MILLISECONDS)) {
+        log.info("wait to shutdown");
+        executorService.shutdownNow();
+      }
+    } catch (InterruptedException e) {
+    log.info("got an exception when shutdown: {}",e);
+      executorService.shutdownNow();
+    }
+    log.info("redisson to shutdown");
+    redisson.shutdown();
+  }
+}

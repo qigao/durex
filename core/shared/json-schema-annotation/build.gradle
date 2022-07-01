@@ -1,5 +1,5 @@
 dependencies {
-    implementation uLibs.json.schema.pojo
-    implementation uLibs.swagger.annotations
+  implementation uLibs.json.schema.pojo
+  implementation uLibs.swagger.annotations
 }
 

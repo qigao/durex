@@ -1,9 +1,9 @@
 plugins {
-    alias qLibs.plugins.quarkus
+  alias qLibs.plugins.quarkus
 }
 dependencies {
-    implementation platform(qLibs.quarkus.bom.get())
-    implementation 'io.quarkus:quarkus-arc'
-    implementation vLibs.reactor.core
+  implementation platform(qLibs.quarkus.bom.get())
+  implementation 'io.quarkus:quarkus-arc'
+  implementation vLibs.reactor.core
 }
 

@@ -1,4 +1,4 @@
 dependencies {
-    implementation project(":core:shared:utils")
+  implementation project(':core:shared:utils')
 }
 apply from: "$rootDir/gradle/library/sqldb.gradle"

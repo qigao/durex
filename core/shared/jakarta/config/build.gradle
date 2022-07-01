@@ -1,7 +1,7 @@
 plugins {
-    alias qLibs.plugins.jandex
+  alias qLibs.plugins.jandex
 }
 dependencies {
-    implementation project(":core:shared:utils")
+  implementation project(':core:shared:utils')
 }
 

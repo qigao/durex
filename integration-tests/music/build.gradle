@@ -1,4 +1,5 @@
 plugins {
-    alias qLibs.plugins.quarkus
+  alias qLibs.plugins.quarkus
 }
 apply from: "$rootDir/gradle/library/quarkus-core.gradle"
+apply from: "$rootDir/gradle/library/quarkus-test.gradle"

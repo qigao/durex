@@ -9,17 +9,16 @@ import org.redisson.api.RedissonClient;
 import org.redisson.client.codec.Codec;
 import reactor.core.publisher.Mono;
 
-
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class RedisEventTopicPublisher<T> {
   private RTopicReactive topicReactive;
 
-public RedisEventTopicPublisher(RedissonClient client,String topic,CodecEnum codecEnum){
-  Codec redisCodec = RedisCodec.getCodec(codecEnum);
-  topicReactive = client.reactive().getTopic(topic, redisCodec);
-}
+  public RedisEventTopicPublisher(RedissonClient client, String topic, CodecEnum codecEnum) {
+    Codec redisCodec = RedisCodec.getCodec(codecEnum);
+    topicReactive = client.reactive().getTopic(topic, redisCodec);
+  }
+
   public Mono<Long> publish(T payload) {
-    return topicReactive
-        .publish(payload);
+    return topicReactive.publish(payload);
   }
 }

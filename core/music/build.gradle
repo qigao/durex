@@ -1,31 +1,31 @@
 plugins {
-    alias qLibs.plugins.quarkus
+  alias qLibs.plugins.quarkus
 }
 
 jacocoTestReport {
-    afterEvaluate {
-        classDirectories.setFrom(files(classDirectories.files.collect {
-            fileTree(dir: it, exclude: [
-                '**/exceptions/**',
-                '**/entity/**',
-                '**/repository/**',
-            ]
-            )
-        }))
-    }
+  afterEvaluate {
+    classDirectories.setFrom(files(classDirectories.files.collect {
+      fileTree(dir: it, exclude: [
+        '**/exceptions/**',
+        '**/entity/**',
+        '**/repository/**',
+      ]
+      )
+    }))
+  }
 }
 
 dependencies {
-    implementation project(":core:shared:utils")
-    implementation project(":core:shared:junit-helper")
-    implementation project(":core:schema:music:json")
-    implementation project(":core:schema:music:entity")
-    implementation project(":core:schema:music:repo")
-    implementation project(":core:shared:jakarta:common")
-    implementation project(":core:shared:jakarta:config")
-    implementation project(":core:shared:jakarta:imperative")
-    implementation 'io.quarkus:quarkus-smallrye-openapi'
-    implementation 'io.quarkus:quarkus-smallrye-health'
+  implementation project(':core:shared:utils')
+  implementation project(':core:shared:junit-helper')
+  implementation project(':core:schema:music:json')
+  implementation project(':core:schema:music:entity')
+  implementation project(':core:schema:music:repo')
+  implementation project(':core:shared:jakarta:common')
+  implementation project(':core:shared:jakarta:config')
+  implementation project(':core:shared:jakarta:imperative')
+  implementation 'io.quarkus:quarkus-smallrye-openapi'
+  implementation 'io.quarkus:quarkus-smallrye-health'
 }
 
 apply from: "$rootDir/gradle/library/quarkus-core.gradle"

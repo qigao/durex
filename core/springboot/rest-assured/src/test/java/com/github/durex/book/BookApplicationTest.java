@@ -1,6 +1,6 @@
 package com.github.durex.book;
 
-import static org.springframework.boot.test.context.SpringBootTest.*;
+import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 
 import io.restassured.RestAssured;
 import io.restassured.filter.log.RequestLoggingFilter;

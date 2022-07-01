@@ -1,31 +1,31 @@
 plugins {
-    alias qLibs.plugins.quarkus
+  alias qLibs.plugins.quarkus
 }
 dependencies {
-    implementation project(":core:redisson-service:redisson-service-api")
+  implementation project(':core:redisson-service:redisson-service-api')
 }
 
 apply from: "$rootDir/gradle/library/quarkus-reactive.gradle"
 task startRedis {
-    description = 'Redis related tasks.'
-    group = 'Database'
-    doFirst {
-        File workingDir = new File("$projectDir/docker")
-        String command = "docker-compose up -d"
-        def proc = command.execute(null, workingDir)
-        proc.waitFor()
+  description = 'Redis related tasks.'
+  group = 'Database'
+  doFirst {
+    File workingDir = new File("$projectDir/docker")
+    String command = "docker-compose up -d"
+    def proc = command.execute(null, workingDir)
+    proc.waitFor()
+  }
+  doLast {
+    exec {
+      commandLine("$rootDir/scripts/waitFor.sh")
+      args = [
+        "-h",
+        "localhost",
+        "-p",
+        "6379"
+      ]
     }
-    doLast {
-        exec {
-            commandLine("$rootDir/scripts/waitFor.sh")
-            args = [
-                "-h",
-                "localhost",
-                "-p",
-                "6379"
-            ]
-        }
-    }
+  }
 }
 
 tasks.test.dependsOn(startRedis)

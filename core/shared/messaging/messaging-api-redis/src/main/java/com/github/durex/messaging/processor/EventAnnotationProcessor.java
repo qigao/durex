@@ -23,16 +23,18 @@ import lombok.SneakyThrows;
 
 @SupportedSourceVersion(SourceVersion.RELEASE_11)
 @SupportedAnnotationTypes("com.github.durex.messaging.api.annotation.InComing")
-public class InComingProcessor extends AbstractProcessor {
+public class EventAnnotationProcessor extends AbstractProcessor {
 
   private Filer javaFile;
   private Types typeUtils;
+  private RedisCodeGenerator redisCodeGenerator;
 
   @Override
   public synchronized void init(ProcessingEnvironment processingEnv) {
     super.init(processingEnv);
     javaFile = processingEnv.getFiler();
     typeUtils = processingEnv.getTypeUtils();
+    redisCodeGenerator = new RedisCodeGenerator();
   }
 
   /**
@@ -55,17 +57,26 @@ public class InComingProcessor extends AbstractProcessor {
               var codeNameInfo = Helper.getTemplateFields(classInfo, methodInfo);
               var simpleClassName = getSimpleClassName(codeNameInfo);
               var tmpClassName = codeNameInfo.getClassName() + "." + simpleClassName;
-              var listenerClassName = tmpClassName + "Listener";
-              listenerCodeGenerator(listenerClassName, javaFile, codeNameInfo);
               var topicInfo = getTopicAnnotations(executableElement, codeNameInfo);
-              var lifecycleClassName = tmpClassName + "Config";
-              lifecycleCodeGenerator(lifecycleClassName, javaFile, topicInfo);
+              if ("NoGroup".equals(topicInfo.getGroup())) {
+                var listenerClassName = tmpClassName + "Listener";
+                listenerCodeGenerator(listenerClassName, javaFile, codeNameInfo);
+                var lifecycleClassName = tmpClassName + "Config";
+                lifecycleCodeGenerator(lifecycleClassName, javaFile, topicInfo);
+              } else {
+                var handlerClassName = tmpClassName + "Handler";
+                handlerCodeGenerate(handlerClassName, javaFile, topicInfo);
+                var taskClassName = tmpClassName + "Task";
+                taskCodeGenerate(taskClassName, javaFile, topicInfo);
+                var executorClassName = tmpClassName + "Executor";
+                executorCodeGenerate(executorClassName, javaFile, topicInfo);
+              }
             });
     return true;
   }
 
   private TopicInfo getTopicAnnotations(
-      ExecutableElement executableElement, CodeNameInfo templateFields) {
+      ExecutableElement executableElement, CodeNameInfo codeNameInfo) {
     var inComingTopic = getInComingTopic(executableElement.getAnnotation(InComing.class));
     var topic = typeUtils.asElement(inComingTopic).getAnnotation(Topic.class);
     var subscriber = topic.subscriber();
@@ -75,12 +86,12 @@ public class InComingProcessor extends AbstractProcessor {
         .codec(topic.codec())
         .group(group.isEmpty() ? "NoGroup" : group)
         .subscriber(subscriber.isBlank() ? "NotAssigned" : subscriber)
-        .codeNameInfo(templateFields)
+        .codeNameInfo(codeNameInfo)
         .build();
   }
 
-  private String getSimpleClassName(CodeNameInfo templateFields) {
-    var methodName = templateFields.getMethodName();
+  private String getSimpleClassName(CodeNameInfo codeNameInfo) {
+    var methodName = codeNameInfo.getMethodName();
     return methodName.substring(0, 1).toUpperCase() + methodName.substring(1);
   }
 
@@ -88,7 +99,7 @@ public class InComingProcessor extends AbstractProcessor {
    * Get the topic from the annotation. this will get the result from exception.
    *
    * @param inComing annotation class
-   * @return Topic name
+   * @return The type of the topic that is used in the incoming class
    */
   private TypeMirror getInComingTopic(InComing inComing) {
     try {
@@ -110,7 +121,6 @@ public class InComingProcessor extends AbstractProcessor {
   private void listenerCodeGenerator(
       String listenerClassName, Filer filer, CodeNameInfo codeNameInfo) {
     final Writer writer = filer.createSourceFile(listenerClassName).openWriter();
-    RedisCodeGenerator redisCodeGenerator = new RedisCodeGenerator();
     redisCodeGenerator.listenerCodeGenerate(codeNameInfo, writer);
     writer.close();
   }
@@ -123,11 +133,52 @@ public class InComingProcessor extends AbstractProcessor {
    * @param filer filer to write the generated java file
    */
   @SneakyThrows
-  private void lifecycleCodeGenerator(
-      String lifecycleClassName, Filer filer, TopicInfo annotationsMap) {
+  private void lifecycleCodeGenerator(String lifecycleClassName, Filer filer, TopicInfo topicInfo) {
     final Writer writer = filer.createSourceFile(lifecycleClassName).openWriter();
-    RedisCodeGenerator redisCodeGenerator = new RedisCodeGenerator();
-    redisCodeGenerator.lifecycleCodeGenerator(annotationsMap, writer);
+    redisCodeGenerator.lifecycleCodeGenerator(topicInfo, writer);
+    writer.close();
+  }
+
+  /**
+   * Generate a java file with the given package name and class name. {@link
+   * RedisCodeGenerator#executorCodeGenerator}, a class with Executor postfix will be generated
+   *
+   * @param executorClassName class name of the ExecutorClass
+   * @param filer filer to write the generated java file
+   * @param topicInfo info from EventTopic
+   */
+  @SneakyThrows
+  private void executorCodeGenerate(String executorClassName, Filer filer, TopicInfo topicInfo) {
+    final Writer writer = filer.createSourceFile(executorClassName).openWriter();
+    redisCodeGenerator.executorCodeGenerator(topicInfo, writer);
+    writer.close();
+  }
+  /**
+   * Generate a java file with the given package name and class name. {@link
+   * RedisCodeGenerator#taskCodeGenerator}, a class with Task postfix will be generated
+   *
+   * @param taskClassName class name of the TaskClass
+   * @param filer filer to write the generated java file
+   * @param topicInfo info from EventTopic
+   */
+  @SneakyThrows
+  private void taskCodeGenerate(String taskClassName, Filer filer, TopicInfo topicInfo) {
+    final Writer writer = filer.createSourceFile(taskClassName).openWriter();
+    redisCodeGenerator.taskCodeGenerator(topicInfo, writer);
+    writer.close();
+  }
+  /**
+   * Generate a java file with the given package name and class name. {@link
+   * RedisCodeGenerator#handlerCodeGenerator}, a class with Handler postfix will be generated
+   *
+   * @param handlerClassName class name of the Handler Class
+   * @param filer filer to write the generated java file
+   * @param topicInfo info from EventTopic
+   */
+  @SneakyThrows
+  private void handlerCodeGenerate(String handlerClassName, Filer filer, TopicInfo topicInfo) {
+    final Writer writer = filer.createSourceFile(handlerClassName).openWriter();
+    redisCodeGenerator.handlerCodeGenerator(topicInfo, writer);
     writer.close();
   }
 }

@@ -1,0 +1,30 @@
+#set($serviceName = ${methodName.substring(0,1).toUpperCase()} + ${methodName.substring(1)})
+
+package ${packageName};
+
+import lombok.extern.slf4j.Slf4j;
+import org.redisson.api.RStream;
+import ${paramType};
+import ${className};
+import ${packageName}.${serviceName}Handler;
+
+@Slf4j
+public class ${serviceName}Task implements Runnable {
+  private final ${serviceName}Handler handler;
+
+  private final String subscriber;
+  private final String groupName;
+
+  public ${serviceName}Task(
+      RStream<String, ${simpleParamType}> stream, ${simpleClassName} service,
+      String groupName, String subscriber) {
+    this.handler = new ${serviceName}Handler(stream, service);
+    this.subscriber = subscriber;
+    this.groupName = groupName;
+  }
+
+  @Override
+  public void run() {
+    handler.readGroup(groupName, subscriber);
+  }
+}

@@ -1,22 +1,22 @@
 plugins{
-    alias qLibs.plugins.jandex
-    alias gLibs.plugins.jooq.gen
+  alias qLibs.plugins.jandex
+  alias gLibs.plugins.jooq.gen
 }
 dependencies {
-    implementation project(":core:shared:utils")
-    implementation project(":core:schema:music:json")
+  implementation project(':core:shared:utils')
+  implementation project(':core:schema:music:json')
 }
 
 apply from: "$rootDir/gradle/library/sqldb.gradle"
 apply plugin: 'nu.studer.jooq'
 apply from: "./jooq.gradle"
 sourceSets {
-    main {
-        java {
-            srcDirs = [
-                'src/main/java',
-                'src/gen/java'
-            ]
-        }
+  main {
+    java {
+      srcDirs = [
+        'src/main/java',
+        'src/gen/java'
+      ]
     }
+  }
 }

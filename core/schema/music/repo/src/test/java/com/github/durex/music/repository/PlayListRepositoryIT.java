@@ -1,12 +1,14 @@
 package com.github.durex.music.repository;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.github.durex.music.model.PlayList;
 import com.github.durex.music.support.DemoMusicData;
 import com.github.durex.sqlbuilder.enums.WildCardType;
-import com.github.durex.uuid.UniqID;
+import com.github.durex.uniqid.UniqID;
 import io.quarkus.test.junit.QuarkusTest;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -14,7 +16,11 @@ import javax.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.hamcrest.Matchers;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 
 @Slf4j
 @QuarkusTest

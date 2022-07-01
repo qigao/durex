@@ -13,8 +13,8 @@ import static org.mockito.Mockito.when;
 import com.github.durex.music.model.Music;
 import com.github.durex.music.service.MusicService;
 import com.github.durex.music.support.DemoMusicData;
+import com.github.durex.uniqid.UniqID;
 import com.github.durex.utils.Json;
-import com.github.durex.uuid.UniqID;
 import io.quarkus.test.common.http.TestHTTPEndpoint;
 import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.mockito.InjectMock;
@@ -53,8 +53,6 @@ class MusicControllerTest {
         .when()
         .get("/{id}")
         .then()
-        .log()
-        .all()
         .statusCode(200)
         .body("error.errorCode", equalTo(NOTHING_FAILED))
         .body("error.message", equalTo(OK))

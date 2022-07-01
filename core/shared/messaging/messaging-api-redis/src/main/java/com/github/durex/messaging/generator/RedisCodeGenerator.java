@@ -20,15 +20,15 @@ public class RedisCodeGenerator {
     velocityEngine.init(p);
   }
 
-  public void listenerCodeGenerate(CodeNameInfo templateField, Writer writer) {
-    var template = velocityEngine.getTemplate("templates/InComingMessageListener.vm");
-    var context = buildVelocityContext(templateField);
+  public void listenerCodeGenerate(CodeNameInfo codeNameInfo, Writer writer) {
+    var template = velocityEngine.getTemplate("templates/SubEventListener.vm");
+    var context = buildVelocityContext(codeNameInfo);
     template.merge(context, writer);
   }
 
-  private VelocityContext buildVelocityContext(CodeNameInfo templateField) {
+  private VelocityContext buildVelocityContext(CodeNameInfo codeNameInfo) {
     VelocityContext context = new VelocityContext();
-    fillContext(templateField, context);
+    fillContext(codeNameInfo, context);
     return context;
   }
 
@@ -42,7 +42,7 @@ public class RedisCodeGenerator {
   }
 
   public void lifecycleCodeGenerator(TopicInfo annotations, Writer writer) {
-    var template = velocityEngine.getTemplate("templates/RegisterMessageListener.vm");
+    var template = velocityEngine.getTemplate("templates/SubEventRunner.vm");
     var context = buildLifeCycleContext(annotations);
     template.merge(context, writer);
   }
@@ -52,7 +52,26 @@ public class RedisCodeGenerator {
     fillContext(topicInfo.getCodeNameInfo(), context);
     context.put("topicName", topicInfo.getValue());
     context.put("codec", topicInfo.getCodec());
+    context.put("groupName", topicInfo.getGroup());
     context.put("subscriber", topicInfo.getSubscriber());
     return context;
+  }
+
+  public void executorCodeGenerator(TopicInfo topicInfo, Writer writer) {
+    var template = velocityEngine.getTemplate("templates/SubStreamExecutor.vm");
+    var context = buildLifeCycleContext(topicInfo);
+    template.merge(context, writer);
+  }
+
+  public void taskCodeGenerator(TopicInfo topicInfo, Writer writer) {
+    var template = velocityEngine.getTemplate("templates/SubStreamTask.vm");
+    var context = buildLifeCycleContext(topicInfo);
+    template.merge(context, writer);
+  }
+
+  public void handlerCodeGenerator(TopicInfo topicInfo, Writer writer) {
+    var template = velocityEngine.getTemplate("templates/SubStreamHandler.vm");
+    var context = buildLifeCycleContext(topicInfo);
+    template.merge(context, writer);
   }
 }

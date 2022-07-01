@@ -1,2 +1,2 @@
-com.github.durex.messaging.processor.InComingProcessor
+com.github.durex.messaging.processor.EventAnnotationProcessor
 com.github.durex.messaging.processor.TopicProcessor
