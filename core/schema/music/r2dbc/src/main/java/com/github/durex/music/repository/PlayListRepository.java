@@ -1,20 +1,22 @@
 package com.github.durex.music.repository;
 
-import static com.github.durex.model.tables.QPlaylist.*;
+import static com.github.durex.model.Tables.PLAYLIST;
 
-import com.github.durex.music.mapper.*;
-import com.github.durex.music.model.*;
-import com.github.durex.sqlbuilder.*;
-import com.github.durex.sqlbuilder.enums.*;
-import java.time.*;
-import java.util.*;
-import java.util.stream.*;
-import javax.enterprise.context.*;
-import javax.inject.*;
-import javax.validation.constraints.*;
-import lombok.extern.slf4j.*;
-import org.jooq.*;
-import reactor.core.publisher.*;
+import com.github.durex.music.mapper.PlayListMapper;
+import com.github.durex.music.model.PlayList;
+import com.github.durex.sqlbuilder.SqlHelper;
+import com.github.durex.sqlbuilder.enums.WildCardType;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
+import javax.enterprise.context.RequestScoped;
+import javax.inject.Inject;
+import javax.validation.constraints.NotNull;
+import lombok.extern.slf4j.Slf4j;
+import org.jooq.Condition;
+import org.jooq.DSLContext;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 @Slf4j
 @RequestScoped

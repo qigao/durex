@@ -1,11 +1,11 @@
 plugins {
-    alias qLibs.plugins.quarkus
+  alias qLibs.plugins.quarkus
 }
 subprojects {
-    apply from: "$rootDir/gradle/library/quarkus-core.gradle"
-    dependencies {
-        implementation project(':core:shared:utils')
-        implementation vLibs.reactor.core
-        implementation dbLibs.redisson
-    }
+  apply from: "$rootDir/gradle/library/quarkus-core.gradle"
+  dependencies {
+    implementation project(':core:shared:utils')
+    implementation vLibs.reactor.core
+    implementation dbLibs.redisson
+  }
 }

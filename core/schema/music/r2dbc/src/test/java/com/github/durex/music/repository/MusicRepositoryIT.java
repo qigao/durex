@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.github.durex.music.support.DemoMusicData;
 import com.github.durex.sqlbuilder.enums.WildCardType;
-import com.github.durex.uniqid.uuid.UniqID;
+import com.github.durex.uniqid.UniqID;
 import io.quarkus.test.junit.QuarkusTest;
 import javax.inject.Inject;
 import lombok.extern.slf4j.Slf4j;

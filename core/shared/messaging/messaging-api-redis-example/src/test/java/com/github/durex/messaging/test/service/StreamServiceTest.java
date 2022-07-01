@@ -25,8 +25,7 @@ class StreamServiceTest {
     final Name fakeName = Faker.instance().name();
     for (int i = 0; i < 5; i++) {
       int age = i * 2 + 1;
-      var event =
-          TestEvent.builder().age(age).name(fakeName.name()).build();
+      var event = TestEvent.builder().age(age).name(fakeName.name()).build();
       TimeUnit.MILLISECONDS.sleep(50);
 
       var id = streamService.pubMessage(event);
@@ -35,8 +34,7 @@ class StreamServiceTest {
     TimeUnit.MILLISECONDS.sleep(1000);
     for (int i = 0; i < 5; i++) {
       int age = i * 2 + 1;
-      var event =
-          TestEvent.builder().age(age).name(fakeName.name()).build();
+      var event = TestEvent.builder().age(age).name(fakeName.name()).build();
       var id = streamService.pubMessage(event);
       id.subscribe(o -> log.info("send Id: {}", o));
     }

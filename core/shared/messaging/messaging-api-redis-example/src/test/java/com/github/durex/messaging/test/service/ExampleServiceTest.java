@@ -1,6 +1,5 @@
 package com.github.durex.messaging.test.service;
 
-import static com.github.durex.messaging.api.model.CodecEnum.JSON;
 import static com.github.durex.messaging.api.model.CodecEnum.MSGPACK;
 
 import com.github.durex.messaging.redis.RedisCodec;
@@ -8,16 +7,10 @@ import com.github.durex.messaging.test.models.DemoEvent;
 import com.github.durex.messaging.test.models.TestEvent;
 import com.github.durex.messaging.test.topics.TopicNameConstants;
 import io.quarkus.test.junit.QuarkusTest;
-import java.util.Map;
 import javax.inject.Inject;
 import net.datafaker.Faker;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import org.redisson.api.RStream;
 import org.redisson.api.RedissonClient;
-import org.redisson.api.StreamMessageId;
-import org.redisson.api.stream.StreamAddArgs;
-import org.redisson.api.stream.StreamReadGroupArgs;
 import reactor.test.StepVerifier;
 
 @QuarkusTest
@@ -39,9 +32,7 @@ class ExampleServiceTest {
 
   @Test
   void testSendTestEvent() {
-    var event =
-        TestEvent.builder().age(35).name(Faker.instance().name().name()).build();
+    var event = TestEvent.builder().age(35).name(Faker.instance().name().name()).build();
     service.sendTestEvent(event).as(StepVerifier::create).expectNext(event).verifyComplete();
   }
-
 }

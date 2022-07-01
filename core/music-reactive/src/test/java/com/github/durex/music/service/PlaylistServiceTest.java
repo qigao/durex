@@ -1,22 +1,27 @@
 package com.github.durex.music.service;
 
-import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyList;
+import static org.mockito.ArgumentMatchers.anyString;
 
-import com.github.durex.music.model.*;
-import com.github.durex.music.repository.*;
-import com.github.durex.music.support.*;
-import com.github.durex.shared.exceptions.*;
-import com.github.durex.sqlbuilder.enums.*;
-import com.github.durex.uniqid.uuid.UniqID;
-import com.github.durex.uuid.*;
-import io.quarkus.test.junit.*;
-import io.quarkus.test.junit.mockito.*;
-import java.util.*;
-import javax.inject.*;
-import org.junit.jupiter.api.*;
-import org.mockito.*;
-import reactor.core.publisher.*;
-import reactor.test.*;
+import com.github.durex.music.model.Music;
+import com.github.durex.music.model.PlayList;
+import com.github.durex.music.repository.PlayListMusicRepository;
+import com.github.durex.music.repository.PlayListRepository;
+import com.github.durex.music.support.DemoMusicData;
+import com.github.durex.shared.exceptions.ApiException;
+import com.github.durex.sqlbuilder.enums.WildCardType;
+import com.github.durex.uniqid.UniqID;
+import io.quarkus.test.junit.QuarkusTest;
+import io.quarkus.test.junit.mockito.InjectMock;
+import java.util.List;
+import javax.inject.Inject;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+import reactor.test.StepVerifier;
 
 @QuarkusTest
 class PlaylistServiceTest {

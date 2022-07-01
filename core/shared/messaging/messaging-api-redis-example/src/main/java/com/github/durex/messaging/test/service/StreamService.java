@@ -18,7 +18,7 @@ public class StreamService {
   public static final String TEST_TOPIC = TopicNameConstants.TEST_TOPIC;
   @Inject RedissonClient redisson;
 
-  private RedisStreamTopicPublisher  publisher;
+  private RedisStreamTopicPublisher publisher;
 
   public void init() {
     publisher = new RedisStreamTopicPublisher(redisson, TEST_TOPIC, JSON);
