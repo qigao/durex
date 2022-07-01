@@ -1,2 +1,1 @@
 jar.enabled = true
-apply from: "$rootDir/gradle/library/junit.gradle"

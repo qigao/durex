@@ -1,8 +1,8 @@
 # versions for libraries
 [versions]
 # version for spring
-springboot = "2.6.6"
-spring-bom = "1.0.11.RELEASE"
+springboot = "2.7.1"
+spring-bom = "1.0.12.RELEASE"
 
 # Libs config
 [libraries]

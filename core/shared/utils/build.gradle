@@ -4,6 +4,9 @@ plugins {
 dependencies {
   testImplementation project(':core:shared:junit-helper')
 }
+
+apply from: "$rootDir/gradle/library/junit.gradle"
+
 apply plugin: 'org.sonarqube'
 sonarqube {
   properties {
