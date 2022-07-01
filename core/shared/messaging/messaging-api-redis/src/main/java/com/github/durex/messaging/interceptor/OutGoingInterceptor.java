@@ -5,6 +5,7 @@ import com.github.durex.messaging.api.annotation.Topic;
 import com.github.durex.messaging.api.model.CodecEnum;
 import com.github.durex.messaging.event.RedisStreamTopicPublisher;
 import com.github.durex.messaging.redis.RedisCodec;
+import com.github.durex.uniqid.UniqID;
 import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.interceptor.AroundInvoke;
@@ -41,7 +42,7 @@ public class OutGoingInterceptor {
       return result.doOnSuccess(
           v -> redissonClient.getTopic(topic, RedisCodec.getCodec(codec)).publishAsync(v));
     } else {
-      return result.doOnSuccess(v -> publish(topic, codec, "111", v).subscribe());
+      return result.doOnSuccess(v -> publish(topic, codec, UniqID.getId(), v).subscribe());
     }
   }
 
