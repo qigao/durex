@@ -3,7 +3,7 @@
 	"title": "CreatorPlayList",
 	"description": "A Creator's PlayList",
 	"type": "object",
-	"swagger-schema": {
+	"swagger": {
 		"name": "A creator and his/her playlists",
 		"description": "schema for a user's playlists"
 	},
@@ -13,7 +13,7 @@
 			"required": true,
 			"minLength": 64,
 			"maxLength": 128,
-			"schema": {
+			"swagger": {
 				"type": "String",
 				"description": "id of the user",
 				"minLength": 64,
@@ -27,7 +27,7 @@
 			"items": {
 				"$ref": "playListMusic.json"
 			},
-			"schema": {
+			"swagger": {
 				"type": "List",
 				"description": "List of the music",
 				"maxLength": 40,
