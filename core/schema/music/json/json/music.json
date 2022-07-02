@@ -3,10 +3,7 @@
 	"title": "Music",
 	"description": "An Music Object description",
 	"type": "object",
-	"additionalProperties": {
-		
-	},
-	"swagger-schema": {
+	"swagger": {
 		"name": "Music description",
 		"description": "schema for Music description"
 	},
@@ -17,7 +14,7 @@
 			"description": "The id of the music",
 			"minLength": 64,
 			"maxLength": 128,
-			"schema": {
+			"swagger": {
 				"type": "String",
 				"description": "id of the music",
 				"minLength": 64,
@@ -28,7 +25,7 @@
 		"title": {
 			"type": "string",
 			"required": true,
-			"schema": {
+			"swagger": {
 				"type": "String",
 				"description": "title of the music",
 				"maxLength": 128,
@@ -37,7 +34,7 @@
 		},
 		"description": {
 			"type": "string",
-			"schema": {
+			"swagger": {
 				"type": "String",
 				"description": "description of the music",
 				"maxLength": 512,
@@ -47,7 +44,7 @@
 		"play_id": {
 			"type": "string",
 			"required": true,
-			"schema": {
+			"swagger": {
 				"type": "String",
 				"description": "id for where to play the music",
 				"minLength": 64,
@@ -57,7 +54,7 @@
 		},
 		"cover_id": {
 			"type": "string",
-			"schema": {
+			"swagger": {
 				"type": "String",
 				"description": "cover id of the music",
 				"minLength": 64,
@@ -67,7 +64,7 @@
 		},
 		"artist_id": {
 			"type": "string",
-			"schema": {
+			"swagger": {
 				"type": "String",
 				"description": "artist id of the music",
 				"minLength": 64,
@@ -77,7 +74,7 @@
 		},
 		"lyric_id": {
 			"type": "string",
-			"schema": {
+			"swagger": {
 				"type": "String",
 				"description": "lyric id of the music",
 				"minLength": 64,
@@ -87,7 +84,7 @@
 		},
 		"duration": {
 			"type": "integer",
-			"schema": {
+			"swagger": {
 				"type": "Integer",
 				"description": "duration of the music,unit: second",
 				"example": "200"
@@ -95,7 +92,7 @@
 		},
 		"sample_rate": {
 			"type": "integer",
-			"schema": {
+			"swagger": {
 				"type": "Integer",
 				"description": "sample rate of the music,unit: Hz",
 				"example": "44100"
@@ -103,7 +100,7 @@
 		},
 		"bit_rate": {
 			"type": "integer",
-			"schema": {
+			"swagger": {
 				"type": "Integer",
 				"description": "bit rate of the music,unit: bit/s",
 				"example": "128"
@@ -111,7 +108,7 @@
 		},
 		"channels": {
 			"type": "integer",
-			"schema": {
+			"swagger": {
 				"type": "String",
 				"description": "Channel of the music,unit: channel",
 				"example": "2"
@@ -119,7 +116,7 @@
 		},
 		"music_type": {
 			"type": "integer",
-			"schema": {
+			"swagger": {
 				"type": "Integer",
 				"description": "types of the music",
 				"example": "2"

@@ -3,7 +3,7 @@
 	"title": "PlayList",
 	"description": "An PlayList description",
 	"type": "object",
-	"swagger-schema": {
+	"swagger": {
 		"name": "PlayList description",
 		"description": "schema for PlayList description"
 	},
@@ -13,7 +13,7 @@
 			"required": true,
 			"minLength": 64,
 			"maxLength": 128,
-			"schema": {
+			"swagger": {
 				"type": "String",
 				"description": "id of the playlist",
 				"minLength": 64,
@@ -25,7 +25,7 @@
 			"type": "string",
 			"required": true,
 			"maxLength": 128,
-			"schema": {
+			"swagger": {
 				"type": "String",
 				"description": "title of the playlist",
 				"maxLength": 128,
@@ -35,7 +35,7 @@
 		"description": {
 			"type": "string",
 			"maxLength": 128,
-			"schema": {
+			"swagger": {
 				"type": "String",
 				"description": "description of the playlist",
 				"maxLength": 128,
@@ -46,7 +46,7 @@
 			"type": "string",
 			"minLength": 64,
 			"maxLength": 128,
-			"schema": {
+			"swagger": {
 				"type": "String",
 				"description": "cover id of the music",
 				"minLength": 64,

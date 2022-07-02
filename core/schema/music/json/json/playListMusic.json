@@ -6,7 +6,7 @@
 	"extends": {
 		"$ref": "playList.json"
 	},
-	"swagger-schema": {
+	"swagger": {
 		"name": "PlayList and Music description",
 		"description": "schema for PlayList with Music description,extends from playList.json"
 	},
@@ -17,7 +17,7 @@
 			"items": {
 				"$ref": "music.json"
 			},
-			"schema": {
+			"swagger": {
 				"type": "List",
 				"description": "List of the music",
 				"maxLength": 40,
