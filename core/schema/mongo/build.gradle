@@ -1,0 +1,26 @@
+dependencies {
+  implementation dbLibs.morphia
+}
+task startMongo {
+  description = 'Database related tasks.'
+  group = 'Database'
+  doFirst {
+    File workingDir = new File("$projectDir/docker")
+    String command = "docker-compose up -d"
+    def proc = command.execute(null, workingDir)
+    proc.waitFor()
+  }
+  doLast {
+    exec {
+      commandLine("$rootDir/scripts/waitFor.sh")
+      args = [
+        "-h",
+        "localhost",
+        "-p",
+        "27017"
+      ]
+    }
+  }
+}
+
+tasks.test.dependsOn(startMongo)
