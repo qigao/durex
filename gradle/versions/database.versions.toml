@@ -21,11 +21,16 @@ postgre = { group = 'org.postgresql', name = 'postgresql', version = '42.3.4' }
 mysql = { group = 'mysql', name = 'mysql-connector-java', version = '8.0.28' }
 
 hikaricp = { group = 'com.zaxxer', name = 'HikariCP', version.ref = 'hikaricp' }
-
+# r2dbc
 r2dbc-bom = { group = 'io.r2dbc', name = 'r2dbc-bom', version = 'Borca-RELEASE' }
-r2dbc-mysql= { group = 'dev.miku', name = 'r2dbc-mysql', version = '0.8.2.RELEASE' }
+r2dbc-mysql = { group = 'dev.miku', name = 'r2dbc-mysql', version = '0.8.2.RELEASE' }
 
-redisson= { group = 'org.redisson', name = 'redisson-quarkus-20', version = '3.17.2' }
+redisson = { group = 'org.redisson', name = 'redisson-quarkus-20', version = '3.17.2' }
+
+# MongoDB
+mongodb = { group = 'org.mongodb', name = 'mongo-java-driver', version = '3.12.11' }
+morphia = { group = 'dev.morphia.morphia', name = 'morphia-core', version = '2.2.7' }
+
 
 [bundles]
 jooq = ['jooq-core', 'jooq-meta', 'jooq-codegen', 'jooq-ext', 'hikaricp']
