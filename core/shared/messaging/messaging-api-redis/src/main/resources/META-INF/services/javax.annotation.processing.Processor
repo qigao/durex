@@ -1,3 +1,5 @@
-com.github.durex.messaging.processor.EventAnnotationProcessor
-com.github.durex.messaging.processor.TopicProcessor
-com.github.durex.messaging.processor.ServiceAnnotationProcessor
+com.github.durex.messaging.processor.EventAnnotation
+com.github.durex.messaging.processor.TopicAnnotation
+com.github.durex.messaging.processor.RServiceAnnotation
+com.github.durex.messaging.processor.QuarkusDaemonAnnotation
+com.github.durex.messaging.processor.RServiceApiAnnotation

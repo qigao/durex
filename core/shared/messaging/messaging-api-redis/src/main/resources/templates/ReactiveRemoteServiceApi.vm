@@ -1,0 +1,10 @@
+package ${packageName};
+import org.redisson.api.annotation.RRemoteReactive;
+import reactor.core.publisher.Mono;
+
+@RRemoteReactive(R${className}.class)
+public interface Reactive${className}{
+#foreach($method in $methodInfos)
+    Mono<$method.getReturnType()> $method.getMethodName().toString()($method.getParams());
+#end
+}

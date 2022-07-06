@@ -1,7 +1,9 @@
 package com.github.durex.messaging.processor;
 
 import com.github.durex.messaging.generator.model.CodeNameInfo;
+import com.github.durex.messaging.generator.model.MethodInfo;
 import com.github.durex.utils.Pair;
+import java.util.stream.Collectors;
 import javax.annotation.processing.Messager;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ExecutableElement;
@@ -12,8 +14,9 @@ import lombok.experimental.UtilityClass;
 public class Helper {
 
   public Pair<String, String> getClassInfo(Element element) {
-    var className = element.getEnclosingElement().toString();
-    var packageName = element.getEnclosingElement().getEnclosingElement().toString();
+    final Element enclosingElement = element.getEnclosingElement();
+    var className = enclosingElement.toString();
+    var packageName = enclosingElement.getEnclosingElement().toString();
     return Pair.of(packageName, className);
   }
 
@@ -23,7 +26,7 @@ public class Helper {
     return Pair.of(methodName, paramType);
   }
 
-  public CodeNameInfo getCodeNameInfo(
+  public CodeNameInfo buildCodeNameInfo(
       Pair<String, String> classInfo, Pair<String, String> methodInfo) {
     final String className = classInfo.getSecond();
     final String packageName = classInfo.getFirst();
@@ -39,8 +42,8 @@ public class Helper {
         .build();
   }
 
-  public String getQualifiedSimpleName(String fullClassName) {
-    return fullClassName.substring(0, 1).toUpperCase() + fullClassName.substring(1);
+  public String transformToCamelCase(String simpleName) {
+    return simpleName.substring(0, 1).toUpperCase() + simpleName.substring(1);
   }
 
   public String getParentName(String fullClassName) {
@@ -69,5 +72,21 @@ public class Helper {
 
   public void printMessage(String message, Messager messager) {
     messager.printMessage(Diagnostic.Kind.NOTE, message);
+  }
+
+  public MethodInfo extractMethodInfo(ExecutableElement executableElement) {
+    var parameters = executableElement.getParameters();
+    var methodName = executableElement.getSimpleName();
+    var returnType = executableElement.getReturnType();
+    var params =
+        parameters.stream()
+            .map(p -> new StringBuffer(p.asType().toString()).append(" ").append(p))
+            .collect(Collectors.joining(","));
+    return MethodInfo.builder()
+        .methodName(methodName)
+        .returnType(returnType)
+        .params(params)
+        // .serviceType(serviceType)
+        .build();
   }
 }

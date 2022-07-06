@@ -50,7 +50,6 @@ class ByteBuddyUnitTest {
 
   @Test
   void givenSayHelloFoo_whenMethodDelegation_thenSayHelloBar() throws Exception {
-
     String r =
         new ByteBuddy()
             .subclass(Foo.class)

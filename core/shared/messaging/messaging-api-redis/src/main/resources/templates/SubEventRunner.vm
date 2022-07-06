@@ -14,7 +14,7 @@ import javax.enterprise.context.ApplicationScoped;
 
 
 import com.github.durex.messaging.event.RedisEventTopicHandler;
-import static com.github.durex.messaging.api.model.CodecEnum.${codec};
+import static com.github.durex.messaging.api.enums.CodecEnum.${codec};
 import $paramType;
 import ${packageName}.${serviceName}Listener;
 

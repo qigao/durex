@@ -1,6 +1,6 @@
 package com.github.durex.messaging.redis;
 
-import com.github.durex.messaging.api.model.CodecEnum;
+import com.github.durex.messaging.api.enums.CodecEnum;
 import lombok.experimental.UtilityClass;
 import org.redisson.client.codec.ByteArrayCodec;
 import org.redisson.client.codec.Codec;

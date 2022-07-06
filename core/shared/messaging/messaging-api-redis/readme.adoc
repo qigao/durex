@@ -8,6 +8,7 @@
 * [ ] RCache
 * [x] Streaming
 * [x] RemoteService
+* [x] QuarkusDaemon
 
 === Usages
 
@@ -17,6 +18,7 @@
 @InComing(value=DemoEventTopic.class)
 @OutGoing(value=TestEventTopic.class)
 @RemoteService
+@QuarkusDaemon // can only be used once in a module
 ----
 
 for Redis Streaming, more properties should be added

@@ -21,6 +21,7 @@ public class MyInterceptor {
       MyInterceptorAnnotation.class;
 
   @AroundInvoke
+  @SuppressWarnings("all")
   Object myInvocation(InvocationContext context) throws Exception {
     final var method = context.getMethod();
     log.info("Invoking method: {}", method);

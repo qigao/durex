@@ -10,4 +10,5 @@ Features:
 * Microservice w/ Native Deployment docker
 * Imperative/Reactive
 * Quarkus/Spring Boot
-* Annotations for fast development
+* Annotations (xref:core/shared/messaging/messaging-api-redis/readme.adoc[Redis])
+* Json Schema (xref:core/shared/json-schema-annotation/readme.adoc[jsonSchema])

@@ -1,6 +1,6 @@
 package com.github.durex.messaging.validator;
 
-import com.github.durex.messaging.api.model.CodecEnum;
+import com.github.durex.messaging.api.enums.CodecEnum;
 import com.github.durex.messaging.api.validator.CodecEnumCheck;
 import java.util.Arrays;
 import javax.validation.ConstraintValidator;

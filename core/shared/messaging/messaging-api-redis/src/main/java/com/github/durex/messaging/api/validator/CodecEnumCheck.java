@@ -8,7 +8,7 @@ import static java.lang.annotation.ElementType.PARAMETER;
 import static java.lang.annotation.ElementType.TYPE_USE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
-import com.github.durex.messaging.api.model.CodecEnum;
+import com.github.durex.messaging.api.enums.CodecEnum;
 import com.github.durex.messaging.validator.CodecEnumValidator;
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;

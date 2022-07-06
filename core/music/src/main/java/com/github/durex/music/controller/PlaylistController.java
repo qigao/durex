@@ -6,7 +6,7 @@ import com.github.durex.music.model.PlayList;
 import com.github.durex.music.model.PlayListMusic;
 import com.github.durex.music.service.PlaylistService;
 import com.github.durex.shared.model.RespData;
-import com.github.durex.shared.utils.Helper;
+import com.github.durex.shared.support.Helper;
 import java.util.List;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;

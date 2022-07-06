@@ -1,3 +1,7 @@
 plugins {
   alias qLibs.plugins.jandex
 }
+dependencies {
+    implementation project(':core:shared:messaging:messaging-api-redis')
+    annotationProcessor project(':core:shared:messaging:messaging-api-redis')
+}

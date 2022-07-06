@@ -1,0 +1,9 @@
+plugins {
+  id "application"
+}
+dependencies {
+  implementation uLibs.classgraph
+}
+mainClassName ='com.readtorakesh.java.classgraph.MainApp'
+apply from: "$rootDir/gradle/library/logs.gradle"
+apply from: "$rootDir/gradle/library/junit.gradle"

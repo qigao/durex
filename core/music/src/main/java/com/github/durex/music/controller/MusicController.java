@@ -7,7 +7,7 @@ import com.github.durex.music.service.MusicService;
 import com.github.durex.shared.annotations.Logged;
 import com.github.durex.shared.annotations.Param;
 import com.github.durex.shared.model.RespData;
-import com.github.durex.shared.utils.Helper;
+import com.github.durex.shared.support.Helper;
 import java.util.List;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
