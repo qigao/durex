@@ -65,7 +65,9 @@ public class MusicRepository {
     return Optional.ofNullable(rMusic).map(MusicMapper::mapRecordToDto);
   }
 
-  /** @return list of musics */
+  /**
+   * @return list of musics
+   */
   public List<Music> findAll() {
     return dsl.selectFrom(MUSIC).fetch().stream()
         .map(MusicMapper::mapRecordToDto)

@@ -47,28 +47,29 @@ public class EventAnnotationProcessor extends AbstractProcessor {
    */
   @Override
   public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
-    roundEnv.getElementsAnnotatedWith(InComing.class).stream()
+    roundEnv.getElementsAnnotatedWith(InComing.class).parallelStream()
         .filter(ExecutableElement.class::isInstance)
         .forEach(
             element -> {
               var classInfo = Helper.getClassInfo(element);
               var executableElement = (ExecutableElement) element;
               var methodInfo = Helper.getMethodInfo(executableElement);
-              var codeNameInfo = Helper.getTemplateFields(classInfo, methodInfo);
-              var simpleClassName = getSimpleClassName(codeNameInfo);
-              var tmpClassName = codeNameInfo.getClassName() + "." + simpleClassName;
+              var codeNameInfo = Helper.getCodeNameInfo(classInfo, methodInfo);
+              var simpleTargetClassName =
+                  Helper.getQualifiedSimpleName(codeNameInfo.getMethodName());
+              var targetClassName = codeNameInfo.getClassName() + "." + simpleTargetClassName;
               var topicInfo = getTopicAnnotations(executableElement, codeNameInfo);
               if ("NoGroup".equals(topicInfo.getGroup())) {
-                var listenerClassName = tmpClassName + "Listener";
+                var listenerClassName = targetClassName + "Listener";
                 listenerCodeGenerator(listenerClassName, javaFile, codeNameInfo);
-                var lifecycleClassName = tmpClassName + "Config";
+                var lifecycleClassName = targetClassName + "Config";
                 lifecycleCodeGenerator(lifecycleClassName, javaFile, topicInfo);
               } else {
-                var handlerClassName = tmpClassName + "Handler";
+                var handlerClassName = targetClassName + "Handler";
                 handlerCodeGenerate(handlerClassName, javaFile, topicInfo);
-                var taskClassName = tmpClassName + "Task";
+                var taskClassName = targetClassName + "Task";
                 taskCodeGenerate(taskClassName, javaFile, topicInfo);
-                var executorClassName = tmpClassName + "Executor";
+                var executorClassName = targetClassName + "Executor";
                 executorCodeGenerate(executorClassName, javaFile, topicInfo);
               }
             });
@@ -88,11 +89,6 @@ public class EventAnnotationProcessor extends AbstractProcessor {
         .subscriber(subscriber.isBlank() ? "NotAssigned" : subscriber)
         .codeNameInfo(codeNameInfo)
         .build();
-  }
-
-  private String getSimpleClassName(CodeNameInfo codeNameInfo) {
-    var methodName = codeNameInfo.getMethodName();
-    return methodName.substring(0, 1).toUpperCase() + methodName.substring(1);
   }
 
   /**

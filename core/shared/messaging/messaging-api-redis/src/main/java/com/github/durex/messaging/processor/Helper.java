@@ -23,18 +23,32 @@ public class Helper {
     return Pair.of(methodName, paramType);
   }
 
-  public CodeNameInfo getTemplateFields(
+  public CodeNameInfo getCodeNameInfo(
       Pair<String, String> classInfo, Pair<String, String> methodInfo) {
+    final String className = classInfo.getSecond();
+    final String packageName = classInfo.getFirst();
+    final String methodName = methodInfo.getFirst();
+    final String paramType = methodInfo.getSecond();
     return CodeNameInfo.builder()
-        .packageName(classInfo.getFirst())
-        .className(classInfo.getSecond())
-        .methodName(methodInfo.getFirst())
-        .paramType(methodInfo.getSecond())
-        .simpleClassName(
-            classInfo.getSecond().substring(classInfo.getSecond().lastIndexOf(".") + 1))
-        .simpleParamType(
-            methodInfo.getSecond().substring(methodInfo.getSecond().lastIndexOf(".") + 1))
+        .packageName(packageName)
+        .className(className)
+        .methodName(methodName)
+        .paramType(paramType)
+        .simpleClassName(className.substring(className.lastIndexOf(".") + 1))
+        .simpleParamType(paramType.substring(paramType.lastIndexOf(".") + 1))
         .build();
+  }
+
+  public String getQualifiedSimpleName(String fullClassName) {
+    return fullClassName.substring(0, 1).toUpperCase() + fullClassName.substring(1);
+  }
+
+  public String getParentName(String fullClassName) {
+    return fullClassName.substring(0, fullClassName.lastIndexOf("."));
+  }
+
+  public String getSimpleName(String fullClassName) {
+    return fullClassName.substring(fullClassName.lastIndexOf(".") + 1);
   }
 
   public void printMessage(

@@ -27,7 +27,7 @@ public class ${serviceName}Config {
     @Inject
     ${simpleClassName} service;
     void onStart(@Observes StartupEvent event) {
-        log.info("starting redisson remote service...");
+        log.info("starting redisson remote service... ${packageName}.${serviceName}Listener");
         var ${methodName}handler= new RedisEventTopicHandler<$simpleParamType>(redisson,"${topicName}",${codec});
         ${methodName}handler.listen(${simpleParamType}.class, new ${serviceName}Listener(service)).subscribe(
             o -> log.info("Redisson Event Listener ID: {}, subscriber: {}", o,"${subscriber}")

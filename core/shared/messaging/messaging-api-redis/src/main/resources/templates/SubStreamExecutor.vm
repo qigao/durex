@@ -51,9 +51,9 @@ public class ${serviceName}Executor {
   void onStop(@Observes ShutdownEvent ev) {
     executorService.shutdown();
     try {
-      log.info("going to shutdown");
+      log.info("going to shutdown thread pool");
       if (!executorService.awaitTermination(800, TimeUnit.MILLISECONDS)) {
-        log.info("wait to shutdown");
+        log.info("wait to shutdown thread pool");
         executorService.shutdownNow();
       }
     } catch (InterruptedException e) {
