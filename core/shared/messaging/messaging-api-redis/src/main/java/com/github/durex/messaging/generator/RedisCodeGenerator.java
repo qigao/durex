@@ -1,6 +1,7 @@
 package com.github.durex.messaging.generator;
 
 import com.github.durex.messaging.generator.model.CodeNameInfo;
+import com.github.durex.messaging.generator.model.ServiceInfo;
 import com.github.durex.messaging.generator.model.TopicInfo;
 import java.io.Writer;
 import java.util.Properties;
@@ -27,7 +28,7 @@ public class RedisCodeGenerator {
   }
 
   private VelocityContext buildVelocityContext(CodeNameInfo codeNameInfo) {
-    VelocityContext context = new VelocityContext();
+    var context = new VelocityContext();
     fillContext(codeNameInfo, context);
     return context;
   }
@@ -72,6 +73,27 @@ public class RedisCodeGenerator {
   public void handlerCodeGenerator(TopicInfo topicInfo, Writer writer) {
     var template = velocityEngine.getTemplate("templates/SubStreamHandler.vm");
     var context = buildLifeCycleContext(topicInfo);
+    template.merge(context, writer);
+  }
+
+  public void daemonCodeGenerator(ServiceInfo serviceInfo, Writer writer) {
+    var template = velocityEngine.getTemplate("templates/ServiceDaemon.vm");
+    var context = buildServiceContext(serviceInfo);
+    template.merge(context, writer);
+  }
+
+  private VelocityContext buildServiceContext(ServiceInfo serviceInfo) {
+    var context = new VelocityContext();
+    context.put("packageName", serviceInfo.getPackageName());
+    context.put("className", serviceInfo.getClassName());
+    context.put("interfaceName", serviceInfo.getInterfaceName());
+    context.put("simpleInterfaceName", serviceInfo.getSimpleInterfaceName());
+    return context;
+  }
+
+  public void lifeCycleCodeGenerator(ServiceInfo serviceInfo, Writer writer) {
+    var template = velocityEngine.getTemplate("templates/ServiceLifecycle.vm");
+    var context = buildServiceContext(serviceInfo);
     template.merge(context, writer);
   }
 }

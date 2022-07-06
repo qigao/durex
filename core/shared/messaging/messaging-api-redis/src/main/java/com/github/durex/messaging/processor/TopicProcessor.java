@@ -3,7 +3,6 @@ package com.github.durex.messaging.processor;
 import com.github.durex.messaging.api.annotation.Topic;
 import java.util.Set;
 import javax.annotation.processing.AbstractProcessor;
-import javax.annotation.processing.Filer;
 import javax.annotation.processing.Messager;
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.RoundEnvironment;
@@ -17,14 +16,12 @@ import javax.tools.Diagnostic;
 @SupportedAnnotationTypes("com.github.durex.messaging.api.annotation.Topic")
 public class TopicProcessor extends AbstractProcessor {
 
-  Messager messager;
-  Filer javaFile;
+  private Messager messager;
 
   @Override
   public synchronized void init(ProcessingEnvironment processingEnv) {
     super.init(processingEnv);
     messager = processingEnv.getMessager();
-    javaFile = processingEnv.getFiler();
   }
 
   @Override

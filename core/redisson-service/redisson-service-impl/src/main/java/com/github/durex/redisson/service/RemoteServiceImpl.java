@@ -1,12 +1,12 @@
 package com.github.durex.redisson.service;
 
-import lombok.SneakyThrows;
+import com.github.durex.messaging.api.annotation.RemoteService;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
+@RemoteService
 public class RemoteServiceImpl implements RemoteServiceApi {
 
-  @SneakyThrows
   @Override
   public String executeMe() {
     log.info("received remote service request from client");

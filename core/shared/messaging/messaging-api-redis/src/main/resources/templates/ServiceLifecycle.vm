@@ -1,23 +1,24 @@
-package com.github.durex.redisson;
+package ${packageName};
 
-import com.github.durex.redisson.service.RemoteServiceApi;
-import com.github.durex.redisson.service.RemoteServiceImpl;
-import io.quarkus.runtime.ShutdownEvent;
-import io.quarkus.runtime.StartupEvent;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
+
+import ${interfaceName};
+import ${packageName}.${className};
+import io.quarkus.runtime.ShutdownEvent;
+import io.quarkus.runtime.StartupEvent;
 import lombok.extern.slf4j.Slf4j;
 import org.redisson.api.RedissonClient;
 
 @Slf4j
 @ApplicationScoped
-public class ServiceLifecycleConfig {
+public class ${className}LifeCycle {
   @Inject RedissonClient redissonClient;
 
   void onStart(@Observes StartupEvent event) {
-    log.info("starting redisson remote service...");
-    redissonClient.getRemoteService().register(RemoteServiceApi.class, new RemoteServiceImpl(), 2);
+    log.info("starting redisson remote service... ${packageName}.${className}");
+    redissonClient.getRemoteService().register(${simpleInterfaceName}.class, new ${className}(), 1);
   }
 
   void onStop(@Observes ShutdownEvent ev) {

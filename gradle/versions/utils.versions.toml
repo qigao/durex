@@ -25,6 +25,11 @@ jooq-joor = { group = 'org.jooq', name = 'joor-java-8', version = '0.9.14' }
 classgraph = { group = 'io.github.classgraph', name = 'classgraph', version = '4.8.147' }
 velocity = { group = 'org.apache.velocity', name = 'velocity-engine-core', version = '2.3' }
 
+byte-buddy = { group = 'net.bytebuddy', name = 'byte-buddy', version = '1.12.12' }
+
+antlr4 = { group = 'org.antlr', name = 'antlr4', version = '4.10.1' }
+antlr4-runtime = { group = 'org.antlr', name = 'antlr4-runtime', version = '4.10.1' }
+
 [bundles]
 logback = ['logback-classic', 'logback-logstash', 'logback-access']
 # Gradle plugins config

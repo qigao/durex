@@ -5,5 +5,7 @@ dependencies {
   implementation platform(qLibs.quarkus.bom.get())
   implementation 'io.quarkus:quarkus-arc'
   implementation vLibs.reactor.core
+  implementation uLibs.byte.buddy
 }
 
+apply from: "$rootDir/gradle/library/junit.gradle"

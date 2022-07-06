@@ -1,4 +1,4 @@
-package com.github.durex.redisson;
+package ${packageName};
 
 import io.quarkus.runtime.Quarkus;
 import io.quarkus.runtime.QuarkusApplication;
@@ -7,7 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @QuarkusMain
-public class RedissonServiceDaemon implements QuarkusApplication {
+public class ${className}Daemon implements QuarkusApplication {
 
   @Override
   public int run(String... args) throws Exception {

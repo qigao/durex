@@ -3,6 +3,8 @@ plugins {
 }
 dependencies {
   implementation project(':core:redisson-service:redisson-service-api')
+  implementation project(':core:shared:messaging:messaging-api-redis')
+  annotationProcessor project(':core:shared:messaging:messaging-api-redis')
 }
 task startRedis {
   description = 'Redis related tasks.'

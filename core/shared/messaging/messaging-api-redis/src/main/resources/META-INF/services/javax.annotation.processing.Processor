@@ -1,2 +1,3 @@
 com.github.durex.messaging.processor.EventAnnotationProcessor
 com.github.durex.messaging.processor.TopicProcessor
+com.github.durex.messaging.processor.ServiceAnnotationProcessor
