@@ -5,7 +5,6 @@ import com.github.durex.messaging.generator.model.MethodInfo;
 import com.github.durex.utils.Pair;
 import java.util.stream.Collectors;
 import javax.annotation.processing.Messager;
-import javax.lang.model.element.Element;
 import javax.lang.model.element.ExecutableElement;
 import javax.tools.Diagnostic;
 import lombok.experimental.UtilityClass;
@@ -13,32 +12,32 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class Helper {
 
-  public Pair<String, String> getClassInfo(Element element) {
-    final Element enclosingElement = element.getEnclosingElement();
-    var className = enclosingElement.toString();
-    var packageName = enclosingElement.getEnclosingElement().toString();
-    return Pair.of(packageName, className);
+  public MethodInfo extractMethodInfo(ExecutableElement executableElement) {
+    var parameters = executableElement.getParameters();
+    var methodName = executableElement.getSimpleName();
+    var returnType = executableElement.getReturnType();
+    var params =
+        parameters.stream()
+            .map(p -> new StringBuffer(p.asType().toString()).append(" ").append(p))
+            .collect(Collectors.joining(","));
+    return MethodInfo.builder()
+        .methodName(methodName)
+        .returnType(returnType)
+        .params(params)
+        .build();
   }
 
-  public Pair<String, String> getMethodInfo(ExecutableElement executableElement) {
-    var methodName = executableElement.getSimpleName().toString();
-    var paramType = executableElement.getParameters().get(0).asType().toString();
-    return Pair.of(methodName, paramType);
-  }
-
-  public CodeNameInfo buildCodeNameInfo(
-      Pair<String, String> classInfo, Pair<String, String> methodInfo) {
-    final String className = classInfo.getSecond();
-    final String packageName = classInfo.getFirst();
-    final String methodName = methodInfo.getFirst();
-    final String paramType = methodInfo.getSecond();
+  public CodeNameInfo buildCodeNameInfo(ExecutableElement executableElement, String className) {
+    final String packageName = getParentName(className);
+    final String methodName = executableElement.getSimpleName().toString();
+    final String paramType = executableElement.getParameters().get(0).asType().toString();
     return CodeNameInfo.builder()
         .packageName(packageName)
         .className(className)
         .methodName(methodName)
         .paramType(paramType)
-        .simpleClassName(className.substring(className.lastIndexOf(".") + 1))
-        .simpleParamType(paramType.substring(paramType.lastIndexOf(".") + 1))
+        .simpleClassName(getSimpleName(className))
+        .simpleParamType(getSimpleName(paramType))
         .build();
   }
 
@@ -72,21 +71,5 @@ public class Helper {
 
   public void printMessage(String message, Messager messager) {
     messager.printMessage(Diagnostic.Kind.NOTE, message);
-  }
-
-  public MethodInfo extractMethodInfo(ExecutableElement executableElement) {
-    var parameters = executableElement.getParameters();
-    var methodName = executableElement.getSimpleName();
-    var returnType = executableElement.getReturnType();
-    var params =
-        parameters.stream()
-            .map(p -> new StringBuffer(p.asType().toString()).append(" ").append(p))
-            .collect(Collectors.joining(","));
-    return MethodInfo.builder()
-        .methodName(methodName)
-        .returnType(returnType)
-        .params(params)
-        // .serviceType(serviceType)
-        .build();
   }
 }
