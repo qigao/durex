@@ -1,18 +1,28 @@
 
 == Redisson Remote Service
 
-=== redisson-service-api
+=== redisson-service-api annotation
 
-**definition of Remote Service api:**
-[source,text]
-RemoteServiceApi
-RemoteServiceReactiveApi
+* define Remote Service api:
+[source,java]
+----
+  @RemoteServiceApi(serviceType = ASYNC)
+  String test2(String name, int a);
+  
+  @RemoteServiceApi(serviceType = RXJAVA)
+  String anotherText(String value);
 
-=== redisson-service-impl
+  @RemoteServiceApi(serviceType = REACTIVE)
+  String executeMe();
+----
 
-impl of RemoteServiceApi
+then 3 interfaces will be generated as definition
 
-=== redisson-service-client
+* impl remote service from desired interface
 
-* A AsyncTask
-* Calling RemoteServiceImpl by RemoteServiceReactiveApi
+[source,java]
+----
+public class RemoteServiceImpl implements ReactiveRemoteServiceApiDemo 
+----
+
+* Call RemoteServiceImpl by RemoteServiceReactiveApi
