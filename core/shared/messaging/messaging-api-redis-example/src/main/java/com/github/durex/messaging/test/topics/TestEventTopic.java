@@ -1,6 +1,6 @@
 package com.github.durex.messaging.test.topics;
 
-import static com.github.durex.messaging.api.model.CodecEnum.JSON;
+import static com.github.durex.messaging.api.enums.CodecEnum.JSON;
 
 import com.github.durex.messaging.api.annotation.Topic;
 import com.github.durex.messaging.api.model.EventTopic;

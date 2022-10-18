@@ -2,6 +2,7 @@ package com.github.durex.messaging.test.service;
 
 import com.github.durex.messaging.api.annotation.InComing;
 import com.github.durex.messaging.api.annotation.OutGoing;
+import com.github.durex.messaging.api.annotation.QuarkusDaemon;
 import com.github.durex.messaging.test.models.DemoEvent;
 import com.github.durex.messaging.test.models.TestEvent;
 import com.github.durex.messaging.test.topics.DemoEventTopic;
@@ -11,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Mono;
 
 @Slf4j
+@QuarkusDaemon
 @ApplicationScoped
 public class ExampleService {
   @InComing(topic = DemoEventTopic.class)

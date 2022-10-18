@@ -1,0 +1,10 @@
+package ${packageName};
+import org.redisson.api.annotation.RRemoteAsync;
+import org.redisson.api.RFuture;
+
+@RRemoteAsync(R${className}.class)
+public interface Async${className}{
+#foreach($method in $methodInfos)
+    RFuture<$method.getReturnType()> $method.getMethodName().toString()($method.getParams());
+#end
+}

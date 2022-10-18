@@ -42,7 +42,7 @@ public class RedisCodeGenerator {
     context.put("simpleParamType", codeNameInfo.getSimpleParamType());
   }
 
-  public void lifecycleCodeGenerator(TopicInfo annotations, Writer writer) {
+  public void subEventRunnerCodeGenerator(TopicInfo annotations, Writer writer) {
     var template = velocityEngine.getTemplate("templates/SubEventRunner.vm");
     var context = buildLifeCycleContext(annotations);
     template.merge(context, writer);
@@ -77,7 +77,7 @@ public class RedisCodeGenerator {
   }
 
   public void daemonCodeGenerator(ServiceInfo serviceInfo, Writer writer) {
-    var template = velocityEngine.getTemplate("templates/ServiceDaemon.vm");
+    var template = velocityEngine.getTemplate("templates/QuarkusDaemon.vm");
     var context = buildServiceContext(serviceInfo);
     template.merge(context, writer);
   }
@@ -92,7 +92,7 @@ public class RedisCodeGenerator {
   }
 
   public void lifeCycleCodeGenerator(ServiceInfo serviceInfo, Writer writer) {
-    var template = velocityEngine.getTemplate("templates/ServiceLifecycle.vm");
+    var template = velocityEngine.getTemplate("templates/RemoteServiceLifecycle.vm");
     var context = buildServiceContext(serviceInfo);
     template.merge(context, writer);
   }

@@ -1,6 +1,6 @@
 package com.github.durex.messaging.event;
 
-import com.github.durex.messaging.api.model.CodecEnum;
+import com.github.durex.messaging.api.enums.CodecEnum;
 import com.github.durex.messaging.redis.RedisCodec;
 import org.redisson.api.RTopicReactive;
 import org.redisson.api.RedissonClient;

@@ -1,0 +1,10 @@
+package ${packageName};
+import org.redisson.api.annotation.RRemoteRx;
+import io.reactivex.rxjava3.core.Single;
+
+@RRemoteRx(R${className}.class)
+public interface Rx${className}{
+#foreach($method in $methodInfos)
+Single<$method.getReturnType()> $method.getMethodName().toString()($method.getParams());
+#end
+}

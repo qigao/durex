@@ -5,7 +5,7 @@ import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 import com.github.durex.music.model.Music;
 import com.github.durex.music.service.MusicService;
 import com.github.durex.shared.model.RespData;
-import com.github.durex.shared.utils.Helper;
+import com.github.durex.shared.support.Helper;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
 import java.util.List;
@@ -30,8 +30,6 @@ import org.eclipse.microprofile.openapi.annotations.parameters.Parameter;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 import org.jboss.resteasy.reactive.RestPath;
-import org.redisson.api.RMapReactive;
-import org.redisson.api.RedissonClient;
 import reactor.core.publisher.Mono;
 
 @RequestScoped
@@ -43,7 +41,6 @@ import reactor.core.publisher.Mono;
 public class MusicController {
 
   @Inject MusicService musicService;
-  @Inject RedissonClient redissonClient;
 
   @GET
   @Path("/")
@@ -78,10 +75,8 @@ public class MusicController {
       content =
           @Content(mediaType = APPLICATION_JSON, schema = @Schema(implementation = RespData.class)))
   public Uni<RespData<Music>> getMusic(@Parameter(description = "music id ") @RestPath String id) {
-    RMapReactive<String, Music> cachedMusic = redissonClient.reactive().getMap("music");
     Mono<Music> mono = musicService.getMusicById(id);
-    var result = cachedMusic.get(id).switchIfEmpty(mono);
-    return Uni.createFrom().publisher(result).map(data -> RespData.of(data, Helper.okResponse()));
+    return Uni.createFrom().publisher(mono).map(data -> RespData.of(data, Helper.okResponse()));
   }
 
   @DELETE

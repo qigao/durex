@@ -1,6 +1,6 @@
 package com.github.durex.messaging.test.service;
 
-import static com.github.durex.messaging.api.model.CodecEnum.MSGPACK;
+import static com.github.durex.messaging.api.enums.CodecEnum.MSGPACK;
 
 import com.github.durex.messaging.redis.RedisCodec;
 import com.github.durex.messaging.test.models.DemoEvent;

@@ -2,7 +2,7 @@
 
 package  ${packageName};
 
-import static com.github.durex.messaging.api.model.CodecEnum.JSON;
+import static com.github.durex.messaging.api.enums.CodecEnum.JSON;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;

@@ -1,9 +1,6 @@
 plugins {
   alias gLibs.plugins.sonarqube
 }
-dependencies {
-  testImplementation project(':core:shared:junit-helper')
-}
 
 apply from: "$rootDir/gradle/library/junit.gradle"
 

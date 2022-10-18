@@ -2,7 +2,7 @@ package com.github.durex.redisson.resources;
 
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 
-import com.github.durex.redisson.service.RemoteServiceReactiveApi;
+import com.github.durex.service.api.ReactiveRemoteServiceApiDemo;
 import io.smallrye.mutiny.Uni;
 import javax.inject.Inject;
 import javax.ws.rs.GET;
@@ -22,7 +22,7 @@ public class QuarkusRedissonClientResource {
 
   @Inject RedissonClient redisson;
   @Inject RedissonReactiveClient reactiveRedisson;
-  @Inject RemoteServiceReactiveApi remoteService;
+  @Inject ReactiveRemoteServiceApiDemo remoteService;
   @Inject RExecutorFuture<String> futureTask;
 
   @GET

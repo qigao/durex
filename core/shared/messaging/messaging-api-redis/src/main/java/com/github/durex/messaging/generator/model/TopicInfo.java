@@ -1,6 +1,6 @@
 package com.github.durex.messaging.generator.model;
 
-import com.github.durex.messaging.api.model.CodecEnum;
+import com.github.durex.messaging.api.enums.CodecEnum;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

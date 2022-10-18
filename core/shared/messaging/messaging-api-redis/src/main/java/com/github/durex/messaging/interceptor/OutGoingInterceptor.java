@@ -2,7 +2,7 @@ package com.github.durex.messaging.interceptor;
 
 import com.github.durex.messaging.api.annotation.OutGoing;
 import com.github.durex.messaging.api.annotation.Topic;
-import com.github.durex.messaging.api.model.CodecEnum;
+import com.github.durex.messaging.api.enums.CodecEnum;
 import com.github.durex.messaging.event.RedisStreamTopicPublisher;
 import com.github.durex.messaging.redis.RedisCodec;
 import com.github.durex.uniqid.UniqID;
@@ -33,11 +33,6 @@ public class OutGoingInterceptor {
     var topic = annotation.value();
     var codec = annotation.codec();
     var group = annotation.group();
-    var returnType = method.getReturnType();
-    log.info("return Type: {}", returnType.getSimpleName());
-    var paramType = method.getParameterTypes();
-    var simpleEvent = paramType[0];
-    log.info("param types: {}", simpleEvent.getSimpleName());
     if (ObjectUtils.isEmpty(group)) {
       return result.doOnSuccess(
           v -> redissonClient.getTopic(topic, RedisCodec.getCodec(codec)).publishAsync(v));

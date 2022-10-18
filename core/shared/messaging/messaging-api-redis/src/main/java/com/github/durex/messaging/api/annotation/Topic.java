@@ -1,10 +1,11 @@
 package com.github.durex.messaging.api.annotation;
 
-import static com.github.durex.messaging.api.model.CodecEnum.JSON;
-import static com.github.durex.messaging.api.model.CodecEnum.MSGPACK;
+import static com.github.durex.messaging.api.enums.CodecEnum.JSON;
+import static com.github.durex.messaging.api.enums.CodecEnum.MSGPACK;
 import static java.lang.annotation.ElementType.TYPE;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
-import com.github.durex.messaging.api.model.CodecEnum;
+import com.github.durex.messaging.api.enums.CodecEnum;
 import com.github.durex.messaging.api.validator.CodecEnumCheck;
 import java.lang.annotation.Inherited;
 import java.lang.annotation.Retention;
@@ -12,7 +13,7 @@ import java.lang.annotation.Target;
 
 @Inherited
 @Target({TYPE})
-@Retention(java.lang.annotation.RetentionPolicy.RUNTIME)
+@Retention(RUNTIME)
 public @interface Topic {
   String value() default "";
 
