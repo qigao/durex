@@ -51,10 +51,9 @@ public class EventAnnotation extends AbstractProcessor {
         .filter(ExecutableElement.class::isInstance)
         .forEach(
             element -> {
-              var classInfo = Helper.getClassInfo(element);
+              var className = element.getEnclosingElement().toString();
               var executableElement = (ExecutableElement) element;
-              var methodInfo = Helper.getMethodInfo(executableElement);
-              var codeNameInfo = Helper.buildCodeNameInfo(classInfo, methodInfo);
+              var codeNameInfo = Helper.buildCodeNameInfo(executableElement, className);
               var simpleTargetClassName = Helper.transformToCamelCase(codeNameInfo.getMethodName());
               var targetClassName = codeNameInfo.getClassName() + "." + simpleTargetClassName;
               var topicInfo = getTopicAnnotations(executableElement, codeNameInfo);
