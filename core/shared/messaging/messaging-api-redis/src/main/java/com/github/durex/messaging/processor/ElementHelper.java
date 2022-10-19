@@ -2,7 +2,6 @@ package com.github.durex.messaging.processor;
 
 import com.github.durex.messaging.generator.model.CodeNameInfo;
 import com.github.durex.messaging.generator.model.MethodInfo;
-import com.github.durex.utils.Pair;
 import java.util.stream.Collectors;
 import javax.annotation.processing.Messager;
 import javax.lang.model.element.ExecutableElement;
@@ -10,7 +9,7 @@ import javax.tools.Diagnostic;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
-public class Helper {
+public class ElementHelper {
 
   public MethodInfo extractMethodInfo(ExecutableElement executableElement) {
     var parameters = executableElement.getParameters();
@@ -53,23 +52,4 @@ public class Helper {
     return fullClassName.substring(fullClassName.lastIndexOf(".") + 1);
   }
 
-  public void printMessage(
-      Pair<String, String> classInfo,
-      String inComingTopic,
-      Pair<String, String> methodInfo,
-      Messager messager) {
-    messager.printMessage(
-        Diagnostic.Kind.NOTE,
-        String.format(
-            "package: %s class: %s method: %s paramType: %s topic: %s",
-            classInfo.getFirst(),
-            classInfo.getSecond(),
-            methodInfo.getFirst(),
-            methodInfo.getSecond(),
-            inComingTopic));
-  }
-
-  public void printMessage(String message, Messager messager) {
-    messager.printMessage(Diagnostic.Kind.NOTE, message);
-  }
 }

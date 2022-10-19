@@ -37,7 +37,8 @@ public class RServiceApiAnnotation extends AbstractProcessor {
       List<MethodInfo> methodInfoList) {
     var strategy = clazz.getDeclaredConstructor().newInstance();
     strategy.filter(methodInfoList);
-    strategy.generate(Helper.getParentName(classInfo), Helper.getSimpleName(classInfo), filer);
+    strategy.generate(
+        ElementHelper.getParentName(classInfo), ElementHelper.getSimpleName(classInfo), filer);
   }
 
   @Override
@@ -57,7 +58,7 @@ public class RServiceApiAnnotation extends AbstractProcessor {
               var className = element.getEnclosingElement().toString();
               var serviceType = element.getAnnotation(RemoteServiceApi.class).serviceType();
               var executableElement = (ExecutableElement) element;
-              var methodInfo = Helper.extractMethodInfo(executableElement);
+              var methodInfo = ElementHelper.extractMethodInfo(executableElement);
               methodInfo.setServiceType(serviceType);
               methodInfoList.add(methodInfo);
               apiInfo.add(className);
