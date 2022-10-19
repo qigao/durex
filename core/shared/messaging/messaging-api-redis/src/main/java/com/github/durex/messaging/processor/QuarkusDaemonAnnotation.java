@@ -38,8 +38,8 @@ public class QuarkusDaemonAnnotation extends AbstractProcessor {
               var className = typeElement.getQualifiedName().toString();
               var serviceInfo =
                   ServiceInfo.builder()
-                      .packageName(Helper.getParentName(className))
-                      .className(Helper.getSimpleName(className))
+                      .packageName(ElementHelper.getParentName(className))
+                      .className(ElementHelper.getSimpleName(className))
                       .build();
               var daemonName = className + "Daemon";
               daemonCodeGenerator(daemonName, javaFile, serviceInfo);

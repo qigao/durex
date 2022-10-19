@@ -12,13 +12,8 @@ public class RedisCodeGenerator {
   VelocityEngine velocityEngine;
 
   public RedisCodeGenerator() {
-    velocityEngine = new VelocityEngine();
-    Properties p = new Properties();
-    p.setProperty("resource.loaders", "class");
-    p.setProperty(
-        "resource.loader.class.class",
-        "org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader");
-    velocityEngine.init(p);
+    Properties p = CodeGenHelper.setupProperties();
+    velocityEngine = new VelocityEngine(p);
   }
 
   public void listenerCodeGenerate(CodeNameInfo codeNameInfo, Writer writer) {
@@ -59,19 +54,19 @@ public class RedisCodeGenerator {
   }
 
   public void executorCodeGenerator(TopicInfo topicInfo, Writer writer) {
-    var template = velocityEngine.getTemplate("templates/SubStreamExecutor.vm");
+    var template = velocityEngine.getTemplate("templates/stream/SubStreamExecutor.vm");
     var context = buildLifeCycleContext(topicInfo);
     template.merge(context, writer);
   }
 
   public void taskCodeGenerator(TopicInfo topicInfo, Writer writer) {
-    var template = velocityEngine.getTemplate("templates/SubStreamTask.vm");
+    var template = velocityEngine.getTemplate("templates/stream/SubStreamTask.vm");
     var context = buildLifeCycleContext(topicInfo);
     template.merge(context, writer);
   }
 
   public void handlerCodeGenerator(TopicInfo topicInfo, Writer writer) {
-    var template = velocityEngine.getTemplate("templates/SubStreamHandler.vm");
+    var template = velocityEngine.getTemplate("templates/stream/SubStreamHandler.vm");
     var context = buildLifeCycleContext(topicInfo);
     template.merge(context, writer);
   }

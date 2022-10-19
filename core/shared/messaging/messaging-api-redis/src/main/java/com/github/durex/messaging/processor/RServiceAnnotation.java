@@ -38,15 +38,15 @@ public class RServiceAnnotation extends AbstractProcessor {
               var className = typeElement.getQualifiedName().toString();
               var interfaceName = typeElement.getInterfaces().toString();
               if (interfaceName.lastIndexOf(".") == -1) {
-                interfaceName = Helper.getParentName(className) + "." + interfaceName;
+                interfaceName = ElementHelper.getParentName(className) + "." + interfaceName;
               }
 
               var serviceInfo =
                   ServiceInfo.builder()
-                      .packageName(Helper.getParentName(className))
-                      .className(Helper.getSimpleName(className))
+                      .packageName(ElementHelper.getParentName(className))
+                      .className(ElementHelper.getSimpleName(className))
                       .interfaceName(interfaceName)
-                      .simpleInterfaceName(Helper.getSimpleName(interfaceName))
+                      .simpleInterfaceName(ElementHelper.getSimpleName(interfaceName))
                       .build();
               var lifeCycleName = className + "LifeCycle";
               remoteServiceLifeCycleCodeGenerator(lifeCycleName, javaFile, serviceInfo);
