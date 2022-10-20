@@ -58,7 +58,7 @@ public class RServiceApiAnnotation extends AbstractProcessor {
               var className = element.getEnclosingElement().toString();
               var serviceType = element.getAnnotation(RemoteServiceApi.class).serviceType();
               var executableElement = (ExecutableElement) element;
-              var methodInfo = ElementHelper.extractMethodInfo(executableElement);
+              var methodInfo = ElementHelper.getMethodInfo(executableElement);
               methodInfo.setServiceType(serviceType);
               methodInfoList.add(methodInfo);
               apiInfo.add(className);

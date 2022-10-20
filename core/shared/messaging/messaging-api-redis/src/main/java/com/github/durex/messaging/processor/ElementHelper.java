@@ -9,7 +9,7 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class ElementHelper {
 
-  public MethodInfo extractMethodInfo(ExecutableElement executableElement) {
+  public MethodInfo getMethodInfo(ExecutableElement executableElement) {
     var parameters = executableElement.getParameters();
     var methodName = executableElement.getSimpleName();
     var returnType = executableElement.getReturnType();
