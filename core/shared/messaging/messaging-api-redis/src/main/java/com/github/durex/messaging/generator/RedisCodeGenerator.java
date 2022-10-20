@@ -4,7 +4,6 @@ import com.github.durex.messaging.generator.model.CodeNameInfo;
 import com.github.durex.messaging.generator.model.ServiceInfo;
 import com.github.durex.messaging.generator.model.TopicInfo;
 import java.io.Writer;
-import java.util.Properties;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
 
@@ -12,8 +11,7 @@ public class RedisCodeGenerator {
   VelocityEngine velocityEngine;
 
   public RedisCodeGenerator() {
-    Properties p = CodeGenHelper.setupProperties();
-    velocityEngine = new VelocityEngine(p);
+    velocityEngine = CodeGenHelper.initVelocity();
   }
 
   public void listenerCodeGenerate(CodeNameInfo codeNameInfo, Writer writer) {

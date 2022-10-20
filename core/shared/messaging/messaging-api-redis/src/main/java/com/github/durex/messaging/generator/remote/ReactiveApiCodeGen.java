@@ -7,7 +7,6 @@ import com.github.durex.messaging.generator.model.MethodInfo;
 import com.github.durex.messaging.processor.ElementHelper;
 import java.io.Writer;
 import java.util.List;
-import java.util.Properties;
 import java.util.stream.Collectors;
 import javax.annotation.processing.Filer;
 import lombok.SneakyThrows;
@@ -19,8 +18,7 @@ public class ReactiveApiCodeGen implements ApiCodeGenStrategy {
   private List<MethodInfo> methodInfos;
 
   public ReactiveApiCodeGen() {
-    Properties p = CodeGenHelper.setupProperties();
-    velocityEngine = new VelocityEngine(p);
+    velocityEngine = CodeGenHelper.initVelocity();
   }
 
   @Override
