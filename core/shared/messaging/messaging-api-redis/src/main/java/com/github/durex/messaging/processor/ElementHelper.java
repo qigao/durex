@@ -3,9 +3,7 @@ package com.github.durex.messaging.processor;
 import com.github.durex.messaging.generator.model.CodeNameInfo;
 import com.github.durex.messaging.generator.model.MethodInfo;
 import java.util.stream.Collectors;
-import javax.annotation.processing.Messager;
 import javax.lang.model.element.ExecutableElement;
-import javax.tools.Diagnostic;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
@@ -51,5 +49,4 @@ public class ElementHelper {
   public String getSimpleName(String fullClassName) {
     return fullClassName.substring(fullClassName.lastIndexOf(".") + 1);
   }
-
 }

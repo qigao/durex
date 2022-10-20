@@ -5,7 +5,6 @@ import com.github.durex.messaging.generator.model.MethodInfo;
 import com.github.durex.messaging.processor.ElementHelper;
 import java.io.Writer;
 import java.util.List;
-import java.util.Properties;
 import javax.annotation.processing.Filer;
 import lombok.SneakyThrows;
 import org.apache.velocity.VelocityContext;
@@ -16,8 +15,7 @@ public class SyncApiCodeGen implements ApiCodeGenStrategy {
   private List<MethodInfo> methodInfos;
 
   public SyncApiCodeGen() {
-    Properties p = CodeGenHelper.setupProperties();
-    velocityEngine = new VelocityEngine(p);
+    velocityEngine = CodeGenHelper.initVelocity();
   }
 
   @Override
