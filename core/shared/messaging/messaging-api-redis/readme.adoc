@@ -8,6 +8,7 @@
 * [ ] RCache
 * [x] Streaming
 * [x] RemoteService
+* [x] RemoteServiceApi
 * [x] QuarkusDaemon
 
 === Usages
@@ -18,6 +19,7 @@
 @InComing(value=DemoEventTopic.class)
 @OutGoing(value=TestEventTopic.class)
 @RemoteService
+@RemoteServiceApi(serviceType = SYNC)
 @QuarkusDaemon // can only be used once in a module
 ----
 

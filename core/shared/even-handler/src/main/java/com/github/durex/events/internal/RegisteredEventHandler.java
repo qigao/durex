@@ -38,18 +38,17 @@ public class RegisteredEventHandler {
     ignoreCancelled = handler.shouldIgnoreCancellable(method);
   }
 
-    /**
-     * Execute the register event.
-     *
-     * @param event Called event instance.
-     */
-    public void invoke(Event event) {
-        try {
-            method.invoke(listener, event);
-        } catch (Exception e) {
-            log.error("[EventManager] Error launching '" + name + "' event handler.");
-            e.printStackTrace();
-        }
+  /**
+   * Execute the register event.
+   *
+   * @param event Called event instance.
+   */
+  public void invoke(Event event) {
+    try {
+      method.invoke(listener, event);
+    } catch (Exception e) {
+      log.error("[EventManager] Error launching '" + name + "' event handler.");
+      e.printStackTrace();
     }
-
+  }
 }

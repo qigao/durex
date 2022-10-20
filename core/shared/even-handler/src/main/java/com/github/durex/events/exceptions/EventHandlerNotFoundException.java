@@ -1,9 +1,6 @@
 package com.github.durex.events.exceptions;
 
-/**
- * This exception will be throw when something went wrong with an event handler.
- *
- */
+/** This exception will be throw when something went wrong with an event handler. */
 public class EventHandlerNotFoundException extends RuntimeException {
 
   private static final String PREFIX = "Unable to find Event > ";
