@@ -8,7 +8,7 @@
 ----
   @RemoteServiceApi(serviceType = ASYNC)
   String test2(String name, int a);
-  
+
   @RemoteServiceApi(serviceType = RXJAVA)
   String anotherText(String value);
 
@@ -22,7 +22,7 @@ then 3 interfaces will be generated as definition
 
 [source,java]
 ----
-public class RemoteServiceImpl implements ReactiveRemoteServiceApiDemo 
+public class RemoteServiceImpl implements ReactiveRemoteServiceApiDemo
 ----
 
 * Call RemoteServiceImpl by RemoteServiceReactiveApi
