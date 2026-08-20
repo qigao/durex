@@ -22,7 +22,7 @@ jobs:
     name: Check Project
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
       - name: Setup Java Project
@@ -39,7 +39,7 @@ jobs:
         run: ./gradlew core:music:jacocoTestCoverageVerification
       - uses: ./.github/workflows/templates/cache-action
       - name: Cache build result
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         with:
           path: core/music
           key:  ${{ runner.os }}-gradle-build-quarkus-project-${{ github.run_id }}
