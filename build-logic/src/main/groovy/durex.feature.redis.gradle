@@ -1,10 +1,10 @@
 import com.github.durex.gradle.DurexDependencyAccess
-import com.github.durex.gradle.DurexModuleState
 import com.github.durex.gradle.ModuleKind
+import com.github.durex.gradle.model.DurexModuleModel
 
 plugins { id 'durex.module' }
 
-def state = extensions.getByType(DurexModuleState)
-state.requireFeature('durex.feature.redis', ModuleKind.SPRING_LIBRARY, ModuleKind.SPRING_SERVICE)
-state.activateFeature('redis')
-DurexDependencyAccess.add(project, state, 'implementation', 'spring-redis')
+def model = extensions.getByType(DurexModuleModel)
+model.requireFeature('durex.feature.redis', project.path, ModuleKind.SPRING_LIBRARY, ModuleKind.SPRING_SERVICE)
+model.enableCapability('redis')
+DurexDependencyAccess.add(project, model, 'implementation', 'spring-redis')
