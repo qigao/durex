@@ -1,6 +1,6 @@
 plugins {
     `groovy-gradle-plugin`
-    id("durex.build-logic")
+    id("durex.internal.build-logic")
 }
 
 repositories {
@@ -11,7 +11,7 @@ repositories {
 gradlePlugin {
     plugins {
         create("durexCatalog") {
-            id = "durex.catalog"
+            id = "durex.internal.catalog"
             implementationClass = "com.github.durex.gradle.catalog.DurexCatalogPlugin"
         }
         create("durexModule") {
@@ -19,7 +19,7 @@ gradlePlugin {
             implementationClass = "com.github.durex.gradle.DurexModulePlugin"
         }
         create("durexFixtureCapability") {
-            id = "com.acme.durex.fixture"
+            id = "durex.internal.fixture"
             implementationClass = "com.github.durex.gradle.internaltesting.FixtureCapabilityPlugin"
         }
     }

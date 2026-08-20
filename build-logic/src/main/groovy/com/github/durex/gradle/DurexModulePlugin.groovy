@@ -15,7 +15,7 @@ import org.gradle.api.Project
 class DurexModulePlugin implements Plugin<Project> {
     @Override
     void apply(Project project) {
-        project.pluginManager.apply('durex.catalog')
+        project.pluginManager.apply('durex.internal.catalog')
 
         DependencyCatalogSnapshot catalog = project.extensions.getByType(DependencyCatalogSnapshot)
         DurexModuleModel model = project.extensions.create('durexModuleModel', DurexModuleModel)

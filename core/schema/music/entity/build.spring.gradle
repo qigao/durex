@@ -1,6 +1,6 @@
 plugins {
     id 'durex.java-library'
-    id 'durex.jooq-schema'
+    id 'durex.schema.jooq'
 }
 
 sourceSets {

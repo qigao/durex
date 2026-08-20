@@ -27,7 +27,7 @@ final class DurexDependencyAccess {
         DependencyCatalogSnapshot catalog = project.extensions.findByType(DependencyCatalogSnapshot)
         if (catalog == null) {
             throw new GradleException(
-                    'Durex dependency catalog error\nProblem: durexDependencyCatalog is not available; apply durex.catalog')
+                    'Durex dependency catalog error\nProblem: durexDependencyCatalog is not available; apply durex.module')
         }
         catalog
     }

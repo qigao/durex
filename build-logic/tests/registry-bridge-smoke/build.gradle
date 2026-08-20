@@ -1,4 +1,4 @@
-plugins { id 'durex.catalog' }
+plugins { id 'durex.internal.catalog' }
 
 import com.github.durex.gradle.catalog.DependencyCatalogSnapshot
 

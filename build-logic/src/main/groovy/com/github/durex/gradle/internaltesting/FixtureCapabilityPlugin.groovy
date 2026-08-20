@@ -11,7 +11,7 @@ class FixtureCapabilityPlugin implements Plugin<Project> {
         project.pluginManager.apply('durex.module')
         DurexCapabilitySupport.registerAndEnable(
                 project,
-                'com.acme.durex.fixture',
+                'durex.internal.fixture',
                 CapabilitySpec.builder('fixture').build())
     }
 }
