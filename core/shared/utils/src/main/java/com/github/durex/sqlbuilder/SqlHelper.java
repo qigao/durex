@@ -1,11 +1,11 @@
 package com.github.durex.sqlbuilder;
 
 import com.github.durex.sqlbuilder.enums.WildCardType;
-import lombok.experimental.UtilityClass;
 
-@UtilityClass
-public class SqlHelper {
-  public String likeClauseBuilder(WildCardType wildCardEnum, String realTitle) {
+public final class SqlHelper {
+  private SqlHelper() {}
+
+  public static String likeClauseBuilder(WildCardType wildCardEnum, String realTitle) {
     switch (wildCardEnum) {
       case START_WITH:
         realTitle = realTitle + "%";
