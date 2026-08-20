@@ -1,9 +1,9 @@
 import com.github.durex.gradle.DurexDependencyAccess
-import com.github.durex.gradle.DurexModuleState
+import com.github.durex.gradle.model.DurexModuleModel
 
 plugins { id 'durex.module' }
 
-def state = extensions.getByType(DurexModuleState)
-state.activateFeature('lombok')
-DurexDependencyAccess.add(project, state, 'compileOnly', 'lombok')
-DurexDependencyAccess.add(project, state, 'annotationProcessor', 'lombok')
+def model = extensions.getByType(DurexModuleModel)
+model.enableCapability('lombok')
+DurexDependencyAccess.add(project, model, 'compileOnly', 'lombok')
+DurexDependencyAccess.add(project, model, 'annotationProcessor', 'lombok')
