@@ -8,12 +8,16 @@ on:
       - 'build-bootstrap/**'
       - 'build-logic/**'
       - 'gradle/dependencies/**'
+      - 'core/**/build.spring.gradle'
+      - 'migration/spring-music/**'
       - '.github/workflows/durex-build-platform.yml'
   pull_request:
     paths:
       - 'build-bootstrap/**'
       - 'build-logic/**'
       - 'gradle/dependencies/**'
+      - 'core/**/build.spring.gradle'
+      - 'migration/spring-music/**'
       - '.github/workflows/durex-build-platform.yml'
 
 permissions:
@@ -102,3 +106,5 @@ jobs:
             exit 1
           fi
           grep -q 'durex.feature.native requires durex.spring-service' "$log"
+      - name: Music support modules on Durex platform
+        run: gradle -p migration/spring-music :music-json:compileJava :music-entity:compileJava :music-repo:compileJava --stacktrace

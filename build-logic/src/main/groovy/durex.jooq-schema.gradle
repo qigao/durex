@@ -1,5 +1,5 @@
+import com.github.durex.gradle.DurexDependencyAccess
 import org.gradle.api.GradleException
-import org.jooq.Constants
 import org.jooq.meta.jaxb.MatcherTransformType
 
 plugins {
@@ -15,9 +15,11 @@ class DurexJooqSchemaExtension {
 }
 
 def schema = extensions.create('durexJooq', DurexJooqSchemaExtension)
+def registry = DurexDependencyAccess.service(project)
 
 dependencies {
-    jooqCodegen "org.jooq:jooq-meta-extensions:${Constants.VERSION}"
+    jooqCodegen registry.library('jooq-meta-extensions').notation()
+    implementation registry.library('jooq-core').notation()
 }
 
 plugins.withId('java') {

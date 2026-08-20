@@ -1,5 +1,5 @@
 plugins {
-    id 'java-library'
+    id 'durex.java-library'
 }
 
 sourceSets {
@@ -16,13 +16,12 @@ sourceSets {
     }
 }
 
-def gradleCatalog = extensions.getByType(org.gradle.api.artifacts.VersionCatalogsExtension).named('gLibs')
-def lombok = gradleCatalog.findLibrary('lombok-modern').get()
+durex {
+    lombok()
+}
 
 dependencies {
-    compileOnly lombok
-    annotationProcessor lombok
-    compileOnly 'javax.enterprise:cdi-api:2.0.SP1'
-    compileOnly 'javax.interceptor:javax.interceptor-api:1.2.2'
-    compileOnly 'javax.validation:validation-api:2.0.1.Final'
+    compileOnly durex.library('javax-cdi')
+    compileOnly durex.library('javax-interceptor')
+    compileOnly durex.library('javax-validation')
 }

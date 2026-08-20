@@ -1,13 +1,12 @@
 plugins {
-    id 'java-library'
+    id 'durex.java-library'
 }
 
-def gradleCatalog = extensions.getByType(org.gradle.api.artifacts.VersionCatalogsExtension).named('gLibs')
-def lombok = gradleCatalog.findLibrary('lombok-modern').get()
+durex {
+    lombok()
+}
 
 dependencies {
-    implementation uLibs.json.schema.pojo
-    implementation uLibs.swagger.annotations
-    compileOnly lombok
-    annotationProcessor lombok
+    implementation durex.library('json-schema-pojo')
+    implementation durex.library('swagger-annotations')
 }
