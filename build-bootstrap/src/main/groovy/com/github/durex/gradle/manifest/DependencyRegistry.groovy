@@ -64,18 +64,18 @@ final class DependencyRegistry {
                     ]]
                 },
                 libraries: libraries.collectEntries { alias, library ->
-                    [(alias): [
-                            module: library.module,
-                            version: library.version,
-                            platform: library.platform
-                    ]]
+                    Map<String, Object> entry = [module: library.module]
+                    if (library.version != null) entry.version = library.version
+                    if (library.platform != null) entry.platform = library.platform
+                    [(alias): entry]
                 },
                 plugins: plugins.collectEntries { alias, plugin ->
-                    [(alias): [
+                    Map<String, Object> entry = [
                             id: plugin.id,
-                            module: plugin.module,
                             version: plugin.version
-                    ]]
+                    ]
+                    if (plugin.module != null) entry.module = plugin.module
+                    [(alias): entry]
                 }
         ]) as Map<String, Object>
     }
@@ -84,6 +84,10 @@ final class DependencyRegistry {
         if (value instanceof Map) {
             Map<Object, Object> copy = new LinkedHashMap<>()
             (value as Map).each { key, nested ->
+                if (!(key instanceof String)) {
+                    throw new GradleException(
+                            "Durex bootstrap error\nProblem: dependency snapshot map key must be a String")
+                }
                 copy.put(key, deepFreeze(nested))
             }
             return Collections.unmodifiableMap(copy)
@@ -92,7 +96,11 @@ final class DependencyRegistry {
             List<Object> copy = (value as List).collect { nested -> deepFreeze(nested) }
             return Collections.unmodifiableList(copy)
         }
-        value
+        if (value instanceof String || value instanceof Integer || value instanceof Boolean) {
+            return value
+        }
+        throw new GradleException(
+                "Durex bootstrap error\nProblem: unsupported dependency snapshot value type '${value == null ? 'null' : value.getClass().name}'")
     }
 
     private static <T> T required(Map<String, T> values, String kind, String id) {
