@@ -3,10 +3,10 @@ plugins {
     id 'org.jsonschema2pojo'
 }
 
-dependencies {
-    api durex.library('jackson-annotations')
-    api durex.library('jackson-databind')
-    api durex.library('jakarta-validation')
+durex {
+    dependency('api', 'jackson-annotations')
+    dependency('api', 'jackson-databind')
+    dependency('api', 'jakarta-validation')
 }
 
 jsonSchema2Pojo {
