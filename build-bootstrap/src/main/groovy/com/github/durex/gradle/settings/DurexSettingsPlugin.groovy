@@ -54,39 +54,48 @@ class DurexSettingsPlugin implements Plugin<Settings> {
                 }
             }
 
-            ProjectRegistry diagnosticsRegistry = projectRegistry
+            Map<String, Object> snapshot = serviceProvider.get().snapshot()
+            List<String> platformLines = sortedLines(snapshot.platforms as Map) { alias, value ->
+                Map entry = value as Map
+                "${alias} -> ${entry.module}:${entry.version}"
+            }
+            List<String> pluginLines = sortedLines(snapshot.plugins as Map) { alias, value ->
+                Map entry = value as Map
+                "${alias} -> ${entry.id}:${entry.version}"
+            }
+            List<String> libraryLines = sortedLines(snapshot.libraries as Map) { alias, value ->
+                Map entry = value as Map
+                String notation = entry.version ? "${entry.module}:${entry.version}" : entry.module as String
+                entry.platform ? "${alias} -> ${notation} [platform=${entry.platform}]" : "${alias} -> ${notation}"
+            }
+
+            File repositoryRoot = extension.repositoryRoot.get().asFile.canonicalFile
+            List<String> projectLines = projectRegistry == null ? [] : projectRegistry.projects().collect { projectSpec ->
+                String relative = repositoryRoot.toPath()
+                        .relativize(projectSpec.directory.toPath()).toString()
+                        .replace('\\', '/')
+                "${projectSpec.gradlePath} | ${relative} | ${projectSpec.source} | ${projectSpec.buildFile}"
+            }.sort()
+
             settings.gradle.rootProject { root ->
-                root.tasks.register('durexDependencies') {
-                    group = 'Durex'
-                    description = 'Print Durex dependency manifest diagnostics.'
-                    doLast {
-                        def service = serviceProvider.get()
-                        println "Manifest: ${extension.dependencyManifest.get().asFile.canonicalPath}"
-                        println "Java: ${service.javaVersion()}"
-                        println "Platform spring: ${service.platform('spring').coordinate()}"
-                        service.plugins().sort { a, b -> a.alias <=> b.alias }.each { plugin ->
-                            if (['spring-boot', 'graalvm-native', 'jooq-codegen'].contains(plugin.alias)) {
-                                println "Plugin ${plugin.alias}: ${plugin.version}"
-                            }
-                        }
-                    }
+                root.tasks.register('durexDependencies', DurexDependenciesTask) { task ->
+                    task.group = 'Durex'
+                    task.description = 'Print Durex dependency manifest diagnostics.'
+                    task.javaVersion.set(snapshot.javaVersion as Integer)
+                    task.platformLines.set(platformLines)
+                    task.pluginLines.set(pluginLines)
+                    task.libraryLines.set(libraryLines)
                 }
-                if (diagnosticsRegistry != null) {
-                    root.tasks.register('durexProjects') {
-                        group = 'Durex'
-                        description = 'Print Durex project discovery diagnostics.'
-                        doLast {
-                            File repositoryRoot = extension.repositoryRoot.get().asFile.canonicalFile
-                            diagnosticsRegistry.projects().each { projectSpec ->
-                                String relative = repositoryRoot.toPath()
-                                        .relativize(projectSpec.directory.toPath()).toString()
-                                        .replace('\\', '/')
-                                println "${projectSpec.gradlePath} | ${relative} | ${projectSpec.source} | ${projectSpec.buildFile}"
-                            }
-                        }
-                    }
+                root.tasks.register('durexProjects', DurexProjectsTask) { task ->
+                    task.group = 'Durex'
+                    task.description = 'Print Durex project discovery diagnostics.'
+                    task.projectLines.set(projectLines)
                 }
             }
         }
+    }
+
+    private static List<String> sortedLines(Map values, Closure<String> formatter) {
+        values.keySet().collect { it as String }.sort().collect { alias -> formatter.call(alias, values.get(alias)) }
     }
 }
