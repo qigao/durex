@@ -1,0 +1,5 @@
+plugins { id 'durex.java-library' }
+
+import com.github.durex.gradle.capability.CapabilityEngine
+
+extensions.getByType(CapabilityEngine).enable('native')
