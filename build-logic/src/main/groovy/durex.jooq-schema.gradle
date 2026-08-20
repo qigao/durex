@@ -6,6 +6,8 @@ plugins {
     id 'org.jooq.jooq-codegen-gradle'
 }
 
+pluginManager.apply('durex.catalog')
+
 class DurexJooqSchemaExtension {
     String source = 'database/schema/**/*.sql'
     String packageName
@@ -15,11 +17,11 @@ class DurexJooqSchemaExtension {
 }
 
 def schema = extensions.create('durexJooq', DurexJooqSchemaExtension)
-def registry = DurexDependencyAccess.service(project)
+def catalog = DurexDependencyAccess.catalog(project)
 
 dependencies {
-    jooqCodegen registry.library('jooq-meta-extensions').notation()
-    implementation registry.library('jooq-core').notation()
+    jooqCodegen catalog.library('jooq-meta-extensions').notation()
+    implementation catalog.library('jooq-core').notation()
 }
 
 plugins.withId('java') {
