@@ -10,6 +10,10 @@ repositories {
 
 gradlePlugin {
     plugins {
+        create("durexCatalog") {
+            id = "durex.catalog"
+            implementationClass = "com.github.durex.gradle.catalog.DurexCatalogPlugin"
+        }
         create("durexModule") {
             id = "durex.module"
             implementationClass = "com.github.durex.gradle.DurexModulePlugin"
