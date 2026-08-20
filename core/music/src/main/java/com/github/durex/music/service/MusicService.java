@@ -19,7 +19,12 @@ import lombok.extern.slf4j.Slf4j;
 @ApplicationScoped
 @Slf4j
 public class MusicService {
-  @Inject MusicRepository repository;
+  private final MusicRepository repository;
+
+  @Inject
+  public MusicService(MusicRepository repository) {
+    this.repository = repository;
+  }
 
   /**
    * get a music by id.
