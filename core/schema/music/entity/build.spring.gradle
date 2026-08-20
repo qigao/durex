@@ -1,0 +1,27 @@
+plugins {
+    id 'java-library'
+    id 'durex.jooq-schema'
+}
+
+def gradleCatalog = extensions.getByType(org.gradle.api.artifacts.VersionCatalogsExtension).named('gLibs')
+def lombok = gradleCatalog.findLibrary('lombok-modern').get()
+
+sourceSets {
+    main {
+        java {
+            exclude 'com/github/durex/music/support/DemoMusicData.java'
+        }
+    }
+}
+
+dependencies {
+    api project(':music-json')
+    api dbLibs.jooq.spring.core
+    compileOnly lombok
+    annotationProcessor lombok
+}
+
+durexJooq {
+    source = 'database/schema/mysql.sql'
+    packageName = 'com.github.durex.model'
+}

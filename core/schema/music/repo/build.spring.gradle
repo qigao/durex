@@ -1,0 +1,20 @@
+plugins {
+    id 'java-library'
+}
+
+def repoRoot = gradle.ext.repoRoot
+def gradleCatalog = extensions.getByType(org.gradle.api.artifacts.VersionCatalogsExtension).named('gLibs')
+def lombok = gradleCatalog.findLibrary('lombok-modern').get()
+
+dependencies {
+    implementation project(':shared-utils')
+    api project(':music-json')
+    implementation project(':music-entity')
+    compileOnly 'javax.enterprise:cdi-api:2.0.SP1'
+    compileOnly 'javax.inject:javax.inject:1'
+    compileOnly 'javax.validation:validation-api:2.0.1.Final'
+    compileOnly lombok
+    annotationProcessor lombok
+}
+
+apply from: new File(repoRoot, 'gradle/library/spring-jooq.gradle')

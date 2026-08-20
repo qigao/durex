@@ -1,0 +1,13 @@
+plugins {
+    id 'java-library'
+}
+
+def gradleCatalog = extensions.getByType(org.gradle.api.artifacts.VersionCatalogsExtension).named('gLibs')
+def lombok = gradleCatalog.findLibrary('lombok-modern').get()
+
+dependencies {
+    implementation uLibs.json.schema.pojo
+    implementation uLibs.swagger.annotations
+    compileOnly lombok
+    annotationProcessor lombok
+}

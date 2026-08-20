@@ -1,0 +1,12 @@
+plugins {
+    id 'java-library'
+}
+
+sourceSets {
+    main {
+        java {
+            srcDir 'src/main/java'
+            include 'com/github/durex/sqlbuilder/**'
+        }
+    }
+}

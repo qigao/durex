@@ -1,0 +1,55 @@
+name: Spring Music Migration
+
+on:
+  push:
+    paths:
+      - 'build-logic/**'
+      - 'migration/spring-music/**'
+      - 'core/music/**'
+      - 'core/schema/music/**'
+      - 'core/shared/**/build.spring.gradle'
+      - 'core/shared/utils/src/main/java/com/github/durex/sqlbuilder/**'
+      - 'gradle/versions/gradle.versions.toml'
+      - 'gradle/versions/database.versions.toml'
+      - 'gradle/library/spring-*.gradle'
+      - '.github/workflows/spring-music.yml'
+  pull_request:
+    paths:
+      - 'build-logic/**'
+      - 'migration/spring-music/**'
+      - 'core/music/**'
+      - 'core/schema/music/**'
+      - 'core/shared/**/build.spring.gradle'
+      - 'core/shared/utils/src/main/java/com/github/durex/sqlbuilder/**'
+      - 'gradle/versions/gradle.versions.toml'
+      - 'gradle/versions/database.versions.toml'
+      - 'gradle/library/spring-*.gradle'
+      - '.github/workflows/spring-music.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  compile-migration:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '25'
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '9.1.0'
+      - name: Durex jOOQ schema plugin smoke test
+        shell: bash
+        run: |
+          gradle -p build-logic/tests/jooq-schema-smoke jooqCodegen --stacktrace
+          test -f build-logic/tests/jooq-schema-smoke/build/generated-src/jooq/main/com/example/schema/tables/QMusic.java
+          test -f build-logic/tests/jooq-schema-smoke/build/generated-src/jooq/main/com/example/schema/tables/records/RMusic.java
+      - name: Resolve migration project graph
+        run: gradle -p migration/spring-music projects --stacktrace
+      - name: Compile Spring music module graph
+        run: gradle -p migration/spring-music :music:compileJava --stacktrace
+      - name: Spring MVC tests
+        run: gradle -p migration/spring-music :music:test --stacktrace

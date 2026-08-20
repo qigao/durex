@@ -1,0 +1,28 @@
+plugins {
+    id 'java-library'
+}
+
+sourceSets {
+    main {
+        java {
+            srcDir 'src/main/java'
+            include 'com/github/durex/shared/annotation/NullChecker.java'
+            include 'com/github/durex/shared/annotation/ValueChecker.java'
+            include 'com/github/durex/shared/exceptions/ApiException.java'
+            include 'com/github/durex/shared/exceptions/model/**'
+            include 'com/github/durex/shared/model/**'
+            include 'com/github/durex/shared/support/**'
+        }
+    }
+}
+
+def gradleCatalog = extensions.getByType(org.gradle.api.artifacts.VersionCatalogsExtension).named('gLibs')
+def lombok = gradleCatalog.findLibrary('lombok-modern').get()
+
+dependencies {
+    compileOnly lombok
+    annotationProcessor lombok
+    compileOnly 'javax.enterprise:cdi-api:2.0.SP1'
+    compileOnly 'javax.interceptor:javax.interceptor-api:1.2.2'
+    compileOnly 'javax.validation:validation-api:2.0.1.Final'
+}
