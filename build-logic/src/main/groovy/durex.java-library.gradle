@@ -1,0 +1,17 @@
+import com.github.durex.gradle.DurexDependencyAccess
+import com.github.durex.gradle.DurexModuleState
+import com.github.durex.gradle.ModuleKind
+
+plugins {
+    id 'java-library'
+    id 'durex.java-base'
+}
+
+def state = extensions.getByType(DurexModuleState)
+state.claim(ModuleKind.JAVA_LIBRARY)
+DurexDependencyAccess.add(project, state, 'testImplementation', 'junit-jupiter')
+DurexDependencyAccess.add(project, state, 'testRuntimeOnly', 'junit-platform-launcher')
+
+tasks.withType(Test).configureEach {
+    useJUnitPlatform()
+}

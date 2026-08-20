@@ -1,19 +1,24 @@
 pluginManagement {
+    includeBuild("../../build-bootstrap")
+    includeBuild("../../build-logic")
     repositories {
         gradlePluginPortal()
         mavenCentral()
     }
 }
 
+plugins {
+    id("durex.settings")
+}
+
+durexSettings {
+    repositoryRoot.set(file("../.."))
+    moduleDiscovery.set(false)
+}
+
 dependencyResolutionManagement {
-    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
         mavenCentral()
-    }
-    versionCatalogs {
-        create("sLibs") {
-            from(files("../../gradle/versions/spring.versions.toml"))
-        }
     }
 }
 

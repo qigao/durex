@@ -1,0 +1,19 @@
+import com.github.durex.gradle.DurexDependencyAccess
+
+plugins {
+    id 'java'
+    id 'durex.module'
+}
+
+def javaVersion = DurexDependencyAccess.javaVersion(project)
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(javaVersion)
+    }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.release = javaVersion
+    options.encoding = 'UTF-8'
+}

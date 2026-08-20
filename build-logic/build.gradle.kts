@@ -1,5 +1,6 @@
 plugins {
     `groovy-gradle-plugin`
+    id("durex.build-logic")
 }
 
 repositories {
@@ -7,8 +8,11 @@ repositories {
     mavenCentral()
 }
 
-dependencies {
-    implementation(dbLibs.jooq.spring.codegen.gradle)
-    implementation(dbLibs.jooq.spring.core)
-    implementation(dbLibs.jooq.spring.meta)
+gradlePlugin {
+    plugins {
+        create("durexModule") {
+            id = "durex.module"
+            implementationClass = "com.github.durex.gradle.DurexModulePlugin"
+        }
+    }
 }

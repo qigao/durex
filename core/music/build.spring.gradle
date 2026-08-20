@@ -1,10 +1,6 @@
 plugins {
-    alias sLibs.plugins.springboot4
+    id 'durex.spring-service'
 }
-
-def repoRoot = gradle.ext.repoRoot
-def gradleCatalog = extensions.getByType(org.gradle.api.artifacts.VersionCatalogsExtension).named('gLibs')
-def lombok = gradleCatalog.findLibrary('lombok-modern').get()
 
 sourceSets {
     main {
@@ -25,22 +21,21 @@ sourceSets {
     }
 }
 
+durex {
+    persistence {
+        jooq()
+    }
+    lombok()
+}
+
 dependencies {
     implementation project(':shared-common')
     implementation project(':shared-utils')
     implementation project(':music-json')
     implementation project(':music-entity')
     implementation project(':music-repo')
-    compileOnly 'javax.enterprise:cdi-api:2.0.SP1'
-    compileOnly 'javax.inject:javax.inject:1'
-    compileOnly 'javax.transaction:javax.transaction-api:1.3'
-    compileOnly lombok
-    annotationProcessor lombok
-    testRuntimeOnly 'com.h2database:h2'
+    compileOnly durex.library('javax-cdi')
+    compileOnly durex.library('javax-inject')
+    compileOnly durex.library('javax-transaction')
+    testRuntimeOnly durex.library('h2')
 }
-
-apply from: new File(repoRoot, 'gradle/library/spring-core.gradle')
-apply from: new File(repoRoot, 'gradle/library/spring-web.gradle')
-apply from: new File(repoRoot, 'gradle/library/spring-test.gradle')
-apply from: new File(repoRoot, 'gradle/library/spring-web-test.gradle')
-apply from: new File(repoRoot, 'gradle/library/spring-observability.gradle')

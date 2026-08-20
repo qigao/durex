@@ -1,0 +1,37 @@
+[discovery]
+mode = "manual"
+
+[[module]]
+name = "shared-utils"
+path = "core/shared/utils"
+build-file = "build.spring.gradle"
+
+[[module]]
+name = "shared-common"
+path = "core/shared/jakarta/common"
+build-file = "build.spring.gradle"
+
+[[module]]
+name = "json-schema-annotation"
+path = "core/shared/json-schema-annotation"
+build-file = "build.spring.gradle"
+
+[[module]]
+name = "music-json"
+path = "core/schema/music/json"
+build-file = "build.spring.gradle"
+
+[[module]]
+name = "music-entity"
+path = "core/schema/music/entity"
+build-file = "build.spring.gradle"
+
+[[module]]
+name = "music-repo"
+path = "core/schema/music/repo"
+build-file = "build.spring.gradle"
+
+[[module]]
+name = "music"
+path = "core/music"
+build-file = "build.spring.gradle"

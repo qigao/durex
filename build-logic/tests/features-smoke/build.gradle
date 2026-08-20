@@ -1,0 +1,11 @@
+plugins {
+    id 'durex.spring-service'
+}
+
+durex {
+    persistence {
+        jpa()
+        jooq()
+    }
+    redis()
+}

@@ -1,0 +1,73 @@
+[versions]
+spring-boot = "4.1.0"
+graal-native = "1.1.1"
+
+[platforms.spring]
+module = "org.springframework.boot:spring-boot-dependencies"
+version.ref = "spring-boot"
+
+[libraries.spring-core]
+module = "org.springframework.boot:spring-boot-starter"
+platform = "spring"
+
+[libraries.spring-web]
+module = "org.springframework.boot:spring-boot-starter-webmvc"
+platform = "spring"
+
+[libraries.spring-validation]
+module = "org.springframework.boot:spring-boot-starter-validation"
+platform = "spring"
+
+[libraries.spring-observability]
+module = "org.springframework.boot:spring-boot-starter-actuator"
+platform = "spring"
+
+[libraries.spring-test]
+module = "org.springframework.boot:spring-boot-starter-test"
+platform = "spring"
+
+[libraries.spring-web-test]
+module = "org.springframework.boot:spring-boot-starter-webmvc-test"
+platform = "spring"
+
+[libraries.spring-jpa]
+module = "org.springframework.boot:spring-boot-starter-data-jpa"
+platform = "spring"
+
+[libraries.spring-jdbc]
+module = "org.springframework.boot:spring-boot-starter-jdbc"
+platform = "spring"
+
+[libraries.spring-jooq]
+module = "org.springframework.boot:spring-boot-starter-jooq"
+platform = "spring"
+
+[libraries.spring-redis]
+module = "org.springframework.boot:spring-boot-starter-data-redis"
+platform = "spring"
+
+[libraries.jackson-annotations]
+module = "com.fasterxml.jackson.core:jackson-annotations"
+platform = "spring"
+
+[libraries.jackson-databind]
+module = "com.fasterxml.jackson.core:jackson-databind"
+platform = "spring"
+
+[libraries.jakarta-validation]
+module = "jakarta.validation:jakarta.validation-api"
+platform = "spring"
+
+[libraries.h2]
+module = "com.h2database:h2"
+platform = "spring"
+
+[plugins.spring-boot]
+id = "org.springframework.boot"
+module = "org.springframework.boot:spring-boot-gradle-plugin"
+version.ref = "spring-boot"
+
+[plugins.graalvm-native]
+id = "org.graalvm.buildtools.native"
+module = "org.graalvm.buildtools:native-gradle-plugin"
+version.ref = "graal-native"

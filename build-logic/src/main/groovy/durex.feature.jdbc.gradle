@@ -1,0 +1,10 @@
+import com.github.durex.gradle.DurexDependencyAccess
+import com.github.durex.gradle.DurexModuleState
+import com.github.durex.gradle.ModuleKind
+
+plugins { id 'durex.module' }
+
+def state = extensions.getByType(DurexModuleState)
+state.requireFeature('durex.feature.jdbc', ModuleKind.SPRING_LIBRARY, ModuleKind.SPRING_SERVICE)
+state.activateFeature('jdbc')
+DurexDependencyAccess.add(project, state, 'implementation', 'spring-jdbc')

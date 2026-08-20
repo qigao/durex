@@ -1,0 +1,4 @@
+include = ["spring.toml", "database.toml", "test.toml", "utils.toml"]
+
+[java]
+version = 25

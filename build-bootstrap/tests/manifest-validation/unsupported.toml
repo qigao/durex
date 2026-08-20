@@ -1,0 +1,5 @@
+[java]
+version = 25
+
+[unsupported]
+value = "nope"

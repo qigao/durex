@@ -1,20 +1,17 @@
 pluginManagement {
+    includeBuild("../build-bootstrap")
     repositories {
         gradlePluginPortal()
         mavenCentral()
     }
 }
 
-dependencyResolutionManagement {
-    repositories {
-        mavenCentral()
-        gradlePluginPortal()
-    }
-    versionCatalogs {
-        create("dbLibs") {
-            from(files("../gradle/versions/database.versions.toml"))
-        }
-    }
+plugins {
+    id("durex.build-logic-settings")
+}
+
+durexBuildLogicSettings {
+    repositoryRoot.set(file(".."))
 }
 
 rootProject.name = "durex-build-logic"
