@@ -1,0 +1,4 @@
+plugins {
+    id 'durex.spring-service'
+    id 'durex.java-library'
+}
