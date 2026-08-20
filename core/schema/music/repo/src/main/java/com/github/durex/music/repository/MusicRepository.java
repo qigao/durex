@@ -21,7 +21,12 @@ import org.jooq.DSLContext;
 @RequestScoped
 public class MusicRepository {
   public static final Condition NOT_DELETED = MUSIC.DELETED_FLAG.eq(0);
-  @Inject DSLContext dsl;
+  private final DSLContext dsl;
+
+  @Inject
+  public MusicRepository(DSLContext dsl) {
+    this.dsl = dsl;
+  }
 
   /**
    * find musics by titles, title must not be null, empty or blank,if titles is empty, return empty
