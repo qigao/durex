@@ -181,23 +181,58 @@ lombok
 
 No new Kafka/Mongo/Security/Flyway capabilities are added in v2.
 
-## 6. Capability Registry
+## 6. Capability Registry and Plugin Mapping
 
-`CapabilityRegistry` owns registered capability descriptions inside a project/plugin runtime.
+`CapabilityRegistry` owns registered capability descriptions inside one project/plugin runtime.
 
 Required semantics:
 
 - capability IDs are unique;
-- duplicate registration is an error unless it is the exact same immutable spec instance/definition according to an explicitly defined equality rule;
+- repeated registration of a structurally identical immutable spec is idempotent;
+- registering the same capability ID with a different definition is an error;
 - lookup by capability ID is deterministic;
-- registry registration is complete before a capability is enabled;
 - registry itself contains no dependency versions.
 
-Built-in capabilities are registered by Durex core.
+Built-in capability specs are registered by Durex core before normal first-party DSL use.
 
-Third-party capability plugins may register their own `CapabilitySpec` before enabling it.
+### 6.1 `CapabilityPluginRegistry`
 
-The central Durex core must not require modification to know every future capability.
+A separate plugin-to-capability mapping records which Gradle plugin is the primary entry point for a capability:
+
+```text
+Gradle plugin id                 Capability id
+------------------------------------------------
+durex.feature.jooq               jooq
+durex.feature.native             native
+com.acme.durex.foo               foo
+```
+
+This mapping is required for the generic `durex.capability(pluginId)` API.
+
+First-version rule: one capability plugin ID maps to exactly one primary capability ID. A capability may still require other capability IDs through `CapabilitySpec.requires`.
+
+Registering one plugin ID against two different primary capability IDs is an error.
+
+### 6.2 Third-party capability plugin contract
+
+A third-party Durex capability plugin must, during plugin application:
+
+1. apply/locate the Durex module core;
+2. register its immutable `CapabilitySpec`;
+3. register its own Gradle plugin ID -> capability ID mapping;
+4. invoke the common `CapabilityEngine.enable(capabilityId)` path.
+
+Durex should provide a small binary helper/base contract so third-party plugins do not reproduce those steps manually, but the exact Java inheritance shape is an implementation decision.
+
+Direct Gradle application and generic DSL application therefore converge on the same path:
+
+```text
+pluginManager.apply("com.acme.durex.foo")
+      ↓
+register foo + plugin mapping
+      ↓
+CapabilityEngine.enable("foo")
+```
 
 ## 7. Capability Engine
 
@@ -214,7 +249,7 @@ return if already enabled
     ↓
 validate module kind
     ↓
-resolve + enable required capabilities
+resolve + enable required registered capabilities
     ↓
 validate conflicts
     ↓
@@ -238,11 +273,22 @@ This applies whether activation comes from:
 
 ### 7.2 Requirements
 
-`requires` means the required capability must also be enabled.
+`requires` contains capability IDs, not Gradle plugin IDs.
 
-The engine may recursively enable required capabilities, but must detect cycles and fail with a Durex-specific configuration error.
+The engine may recursively enable a required capability only when that capability is already registered in the project registry. The engine does not guess or resolve a Gradle plugin from a missing capability ID.
 
-Example error:
+If a required capability is not registered, configuration fails with a Durex error identifying the missing requirement. Third-party plugins that depend on capabilities supplied by other plugins must ensure those provider plugins are applied/registered through normal Gradle plugin composition.
+
+The engine must detect capability requirement cycles.
+
+Example errors:
+
+```text
+Durex configuration error
+Project: :example
+Capability: foo
+Problem: required capability 'bar' is not registered
+```
 
 ```text
 Durex configuration error
@@ -304,13 +350,13 @@ The call chain is conceptually:
 ```text
 jooq()
   -> apply `durex.feature.jooq`
-  -> feature plugin registers/locates JOOQ spec
+  -> feature plugin registers/locates JOOQ spec + mapping
   -> CapabilityEngine.enable("jooq")
 ```
 
 ### 8.2 Generic third-party capability API
 
-Durex also exposes:
+Durex exposes:
 
 ```kotlin
 durex {
@@ -322,11 +368,19 @@ The argument is a Gradle plugin ID, not a capability ID.
 
 The generic API:
 
-1. applies the requested Gradle plugin;
-2. that plugin registers and enables its own capability through the kernel;
-3. Durex core does not need to know the third-party capability ID in advance.
+```text
+apply requested Gradle plugin
+    ↓
+lookup CapabilityPluginRegistry[pluginId]
+    ↓
+require exactly one primary capability mapping
+    ↓
+CapabilityEngine.enable(mappedCapabilityId)
+```
 
-Applying a plugin that does not register/enable a Durex capability may fail `durexDoctor`, but the generic API itself must surface a clear configuration error if the plugin cannot be resolved or does not integrate as required by the final implementation contract.
+Because compliant capability plugins also enable themselves during direct application, the final `engine.enable(...)` call is normally idempotent; it exists to make the generic DSL contract explicit and verifiable.
+
+If the plugin applies successfully but does not register a Durex capability mapping, `durex.capability(pluginId)` fails immediately with a Durex configuration error. It does not defer this integration error until `durexDoctor`.
 
 ### 8.3 Avoid unbounded facade growth
 
@@ -473,6 +527,8 @@ plugins: {...}
 
 No bootstrap-specific `LibrarySpec`, `PluginSpec`, `PlatformSpec`, or `DependencyRegistry` object crosses the build/plugin classloader boundary.
 
+The snapshot data structure is deeply immutable from the consumer's perspective: callers must not be able to mutate bootstrap registry state by modifying returned maps/lists.
+
 ### 11.3 `DurexRegistryBridge`
 
 Build logic reads the neutral snapshot and constructs its own immutable local model:
@@ -589,6 +645,7 @@ It validates the Durex model and configuration contract:
 - dependency manifest snapshot is available and schema-compatible;
 - module kind is selected for Durex module projects;
 - every enabled capability is registered;
+- capability plugin mappings are internally consistent;
 - capability module-kind constraints are satisfied;
 - required capabilities are present;
 - no conflicts exist;
@@ -635,6 +692,7 @@ Where applicable errors include:
 Project
 Module type
 Capability
+Gradle plugin id
 Dependency alias
 Configuration
 Problem
@@ -653,6 +711,7 @@ The following kernel pieces should become binary/typed implementation code first
 
 - `CapabilitySpec`;
 - `CapabilityRegistry`;
+- `CapabilityPluginRegistry`;
 - `CapabilityEngine`;
 - `DurexModuleModel`;
 - `DependencyBridge`;
@@ -707,7 +766,11 @@ Tests must cover:
 - Spring library/service;
 - JPA+jOOQ coexistence;
 - Native capability;
-- generic third-party capability registration/application;
+- generic third-party capability plugin mapping/application;
+- missing third-party capability mapping failure;
+- missing required capability failure;
+- capability requirement cycle failure;
+- capability conflict failure;
 - configuration-aware platform binding;
 - doctor success/failure;
 - snapshot schema mismatch.
@@ -776,13 +839,15 @@ Plugin Core v2 is complete when all of the following are true:
 8. Bootstrap diagnostics contain no Spring/jOOQ/GraalVM special cases.
 9. `durexDependencies`, `durexProjects`, and `durexCapabilities` have deterministic generic output.
 10. `durexDoctor` validates Durex configuration and fails invalid builds clearly.
-11. Representative Groovy and Kotlin DSL builds pass.
-12. Representative builds pass and reuse Gradle 9.1 configuration cache.
-13. Representative multi-project builds pass under `--parallel`.
-14. Spring Music migration remains green.
-15. Spring Native JVM/AOT/native behavior remains green.
-16. Existing jOOQ schema/codegen behavior remains green.
-17. No new business feature category is introduced as part of this core refactor.
+11. First-party and third-party capability plugin IDs map deterministically to one primary capability.
+12. Generic `durex.capability(pluginId)` and direct plugin application converge on the same idempotent engine path.
+13. Representative Groovy and Kotlin DSL builds pass.
+14. Representative builds pass and reuse Gradle 9.1 configuration cache.
+15. Representative multi-project builds pass under `--parallel`.
+16. Spring Music migration remains green.
+17. Spring Native JVM/AOT/native behavior remains green.
+18. Existing jOOQ schema/codegen behavior remains green.
+19. No new business feature category is introduced as part of this core refactor.
 
 ## 21. Resulting Extension Model
 
@@ -805,5 +870,7 @@ diagnostics core
 error formatting core
 settings bootstrap
 ```
+
+A third-party feature additionally registers its Gradle plugin ID -> primary capability ID mapping through the same kernel contract.
 
 That is the primary maintainability outcome of Plugin Core v2.
