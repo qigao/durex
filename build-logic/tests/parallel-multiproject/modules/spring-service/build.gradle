@@ -1,0 +1,10 @@
+plugins { id 'durex.spring-service' }
+
+durex {
+    redis()
+}
+
+dependencies {
+    implementation project(':java-lib')
+    implementation project(':spring-lib')
+}
