@@ -10,4 +10,16 @@ class PersistenceExtension {
         this.project = project
         this.state = state
     }
+
+    void jpa() {
+        project.pluginManager.apply('durex.feature.jpa')
+    }
+
+    void jdbc() {
+        project.pluginManager.apply('durex.feature.jdbc')
+    }
+
+    void jooq() {
+        project.pluginManager.apply('durex.feature.jooq')
+    }
 }

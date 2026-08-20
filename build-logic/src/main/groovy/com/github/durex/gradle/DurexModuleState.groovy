@@ -20,6 +20,12 @@ final class DurexModuleState {
         }
     }
 
+    void requireFeature(String featurePlugin, ModuleKind... allowed) {
+        if (kind != null && allowed.contains(kind)) return
+        String requirement = allowed.collect { kindPluginId(it) }.join(' or ')
+        throw new GradleException("${featurePlugin} requires ${requirement}")
+    }
+
     ModuleKind kind() { kind }
 
     synchronized boolean activatePlatform(String configuration, String platform) {
@@ -38,4 +44,13 @@ final class DurexModuleState {
     Set<String> activePlatforms() { Collections.unmodifiableSet(activePlatforms) }
     Set<String> activeFeatures() { Collections.unmodifiableSet(activeFeatures) }
     boolean nativeEnabled() { nativeEnabled }
+
+    private static String kindPluginId(ModuleKind kind) {
+        switch (kind) {
+            case ModuleKind.JAVA_LIBRARY: return 'durex.java-library'
+            case ModuleKind.SPRING_LIBRARY: return 'durex.spring-library'
+            case ModuleKind.SPRING_SERVICE: return 'durex.spring-service'
+            default: return kind.name()
+        }
+    }
 }

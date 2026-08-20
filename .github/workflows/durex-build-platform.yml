@@ -85,3 +85,20 @@ jobs:
             exit 1
           fi
           grep -q 'Durex module type conflict' "$log"
+      - name: Feature coexistence
+        shell: bash
+        run: |
+          gradle -p build-logic/tests/features-smoke durexCapabilities dependencies --configuration compileClasspath --stacktrace | tee build-logic/tests/features-smoke.log
+          grep -q '^Type: SPRING_SERVICE$' build-logic/tests/features-smoke.log
+          grep -q '^Platforms: spring$' build-logic/tests/features-smoke.log
+          grep -q '^Features: jpa,jooq,redis$' build-logic/tests/features-smoke.log
+          grep -q '^Native: disabled$' build-logic/tests/features-smoke.log
+      - name: Invalid native feature is rejected
+        shell: bash
+        run: |
+          log=build-logic/tests/feature-invalid.log
+          if gradle -p build-logic/tests/feature-invalid help --stacktrace >"$log" 2>&1; then
+            echo 'expected invalid feature to fail'
+            exit 1
+          fi
+          grep -q 'durex.feature.native requires durex.spring-service' "$log"

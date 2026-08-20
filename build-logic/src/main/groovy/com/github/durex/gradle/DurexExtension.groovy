@@ -31,4 +31,16 @@ class DurexExtension {
         configured.resolveStrategy = Closure.DELEGATE_FIRST
         configured.call()
     }
+
+    void redis() {
+        project.pluginManager.apply('durex.feature.redis')
+    }
+
+    void nativeImage() {
+        project.pluginManager.apply('durex.feature.native')
+    }
+
+    void lombok() {
+        project.pluginManager.apply('durex.feature.lombok')
+    }
 }
