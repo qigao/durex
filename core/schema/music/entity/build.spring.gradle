@@ -3,9 +3,6 @@ plugins {
     id 'durex.jooq-schema'
 }
 
-def gradleCatalog = extensions.getByType(org.gradle.api.artifacts.VersionCatalogsExtension).named('gLibs')
-def lombok = gradleCatalog.findLibrary('lombok-modern').get()
-
 sourceSets {
     main {
         java {
@@ -16,9 +13,6 @@ sourceSets {
 
 dependencies {
     api project(':music-json')
-    api dbLibs.jooq.spring.core
-    compileOnly lombok
-    annotationProcessor lombok
 }
 
 durexJooq {
