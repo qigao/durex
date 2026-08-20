@@ -1,0 +1,10 @@
+plugins { id 'durex.catalog' }
+
+import com.github.durex.gradle.catalog.DependencyCatalogSnapshot
+
+def catalog = extensions.getByType(DependencyCatalogSnapshot)
+assert catalog.javaVersion() == 25
+assert catalog.platform('spring').coordinate() ==
+    'org.springframework.boot:spring-boot-dependencies:4.1.0'
+assert catalog.library('spring-jooq').platform == 'spring'
+assert catalog.plugin('graalvm-native').id == 'org.graalvm.buildtools.native'
