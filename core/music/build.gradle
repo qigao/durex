@@ -2,19 +2,6 @@ plugins {
   alias qLibs.plugins.quarkus
 }
 
-jacocoTestReport {
-  afterEvaluate {
-    classDirectories.setFrom(files(classDirectories.files.collect {
-      fileTree(dir: it, exclude: [
-        '**/exceptions/**',
-        '**/entity/**',
-        '**/repository/**',
-      ]
-      )
-    }))
-  }
-}
-
 dependencies {
   implementation project(':core:shared:utils')
   implementation project(':core:schema:music:json')
@@ -25,6 +12,7 @@ dependencies {
   implementation project(':core:shared:jakarta:imperative')
   implementation 'io.quarkus:quarkus-smallrye-openapi'
   implementation 'io.quarkus:quarkus-smallrye-health'
+  testImplementation 'io.quarkus:quarkus-jacoco'
 }
 
 apply from: "$rootDir/gradle/library/quarkus-core.gradle"

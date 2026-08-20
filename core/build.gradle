@@ -1,5 +1,7 @@
 subprojects {
     apply plugin: 'io.freefair.lombok'
-    apply from: "$rootDir/gradle/extensions/jacoco.gradle"
+    if (path != ':core:music') {
+        apply from: "$rootDir/gradle/extensions/jacoco.gradle"
+    }
     apply from: "$rootDir/gradle/library/common.gradle"
 }
