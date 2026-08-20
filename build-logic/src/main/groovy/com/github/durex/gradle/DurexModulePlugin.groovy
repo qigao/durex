@@ -5,6 +5,9 @@ import com.github.durex.gradle.capability.CapabilityEngine
 import com.github.durex.gradle.capability.CapabilityPluginRegistry
 import com.github.durex.gradle.capability.CapabilityRegistry
 import com.github.durex.gradle.catalog.DependencyCatalogSnapshot
+import com.github.durex.gradle.diagnostics.DurexCapabilitiesTask
+import com.github.durex.gradle.diagnostics.DurexDoctorTask
+import com.github.durex.gradle.diagnostics.DurexDoctorValidator
 import com.github.durex.gradle.model.DurexModuleModel
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -30,18 +33,38 @@ class DurexModulePlugin implements Plugin<Project> {
 
         project.extensions.create('durex', DurexExtension, project, model)
 
-        project.tasks.register('durexCapabilities') {
-            group = 'Durex'
-            description = 'Print Durex module type and active capabilities.'
-            doLast {
-                Set<String> capabilities = model.capabilities.get()
-                Set<String> bindings = model.platformBindings.get()
-                Set<String> platforms = bindings.collect { it.substring(it.indexOf(':') + 1) } as TreeSet<String>
-                println "Type: ${model.moduleKind.isPresent() ? model.moduleKind.get() : 'NONE'}"
-                println "Java: ${DurexDependencyAccess.javaVersion(project)}"
-                println "Platforms: ${platforms.join(',')}"
-                println "Features: ${new TreeSet<>(capabilities).join(',')}"
-                println "Native: ${capabilities.contains('native') ? 'enabled' : 'disabled'}"
+        def sortedCapabilities = model.capabilities.map { values ->
+            new ArrayList<String>(new TreeSet<String>(values))
+        }
+        def sortedBindings = model.platformBindings.map { values ->
+            new ArrayList<String>(new TreeSet<String>(values))
+        }
+        def moduleKindName = model.moduleKind.map { it.name() }.orElse('NONE')
+
+        project.tasks.register('durexCapabilities', DurexCapabilitiesTask) { task ->
+            task.group = 'Durex'
+            task.description = 'Print Durex module type and active capabilities.'
+            task.moduleKind.set(moduleKindName)
+            task.javaVersion.set(catalog.javaVersion())
+            task.capabilities.set(sortedCapabilities)
+            task.platformBindings.set(sortedBindings)
+        }
+
+        def doctor = project.tasks.register('durexDoctor', DurexDoctorTask) { task ->
+            task.group = 'Durex'
+            task.description = 'Validate Durex module configuration consistency.'
+            task.projectPathInput.set(project.path)
+            task.moduleKind.set(moduleKindName)
+            task.capabilities.set(sortedCapabilities)
+            task.platformBindings.set(sortedBindings)
+            task.violations.convention(Collections.emptyList())
+        }
+
+        project.afterEvaluate {
+            List<String> violations = DurexDoctorValidator.validate(
+                    project.path, model, capabilityRegistry, pluginRegistry, catalog)
+            doctor.configure { task ->
+                task.violations.set(violations)
             }
         }
     }
