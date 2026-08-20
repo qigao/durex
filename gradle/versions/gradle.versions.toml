@@ -5,12 +5,16 @@ sonar = "3.3"
 spotless = "6.8.0"
 spotbugs = '5.0.7'
 jooq = "7.1.1"
+jooq-modern = "10.2.1"
 flyway = "8.5.9"
 json-schema = '4.2.0'
+jsonschema2pojo = '1.3.3'
 lombok = '6.5.0.2'
+lombok-modern = '1.18.46'
 protobuf = '0.8.18'
 
 [libraries]
+lombok-modern = { group = 'org.projectlombok', name = 'lombok', version.ref = 'lombok-modern' }
 
 # Gradle plugins config
 [plugins]
@@ -18,8 +22,10 @@ editorconfig = { id = "org.ec4j.editorconfig", version.ref = "editorconfig" }
 sonarqube = { id = "org.sonarqube", version.ref = "sonar" }
 spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
 jooq-gen = { id = "nu.studer.jooq", version.ref = "jooq" }
+jooq-modern = { id = "nu.studer.jooq", version.ref = "jooq-modern" }
 flyway = { id = 'org.flywaydb.flyway', version.ref = 'flyway' }
 json-schema = { id = 'org.jsonschema2dataclass', version.ref = 'json-schema' }
+jsonschema2pojo = { id = 'org.jsonschema2pojo', version.ref = 'jsonschema2pojo' }
 spotbugs = { id = 'com.github.spotbugs', version.ref = 'spotbugs' }
 lombok = { id = 'io.freefair.lombok', version.ref = 'lombok' }
 protobuf = { id = 'com.google.protobuf', version.ref = 'protobuf' }

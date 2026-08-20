@@ -1,0 +1,12 @@
+plugins {
+    id 'java-library'
+}
+
+def lombok = gLibs.findLibrary('lombok-modern').get()
+
+dependencies {
+    implementation uLibs.json.schema.pojo
+    implementation uLibs.swagger.annotations
+    compileOnly lombok
+    annotationProcessor lombok
+}

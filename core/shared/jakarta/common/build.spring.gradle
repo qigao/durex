@@ -1,0 +1,25 @@
+plugins {
+    id 'java-library'
+}
+
+sourceSets {
+    main {
+        java {
+            srcDir 'src/main/java'
+            include 'com/github/durex/shared/annotation/**'
+            include 'com/github/durex/shared/exceptions/ApiException.java'
+            include 'com/github/durex/shared/exceptions/model/**'
+            include 'com/github/durex/shared/model/**'
+            include 'com/github/durex/shared/support/**'
+        }
+    }
+}
+
+def lombok = gLibs.findLibrary('lombok-modern').get()
+
+dependencies {
+    compileOnly lombok
+    annotationProcessor lombok
+    compileOnly 'javax.interceptor:javax.interceptor-api:1.2.2'
+    compileOnly 'javax.validation:validation-api:2.0.1.Final'
+}

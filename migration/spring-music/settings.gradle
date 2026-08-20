@@ -1,0 +1,40 @@
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        mavenCentral()
+    }
+}
+
+rootProject.name = 'spring-music-migration'
+
+def repoRoot = file('../..').canonicalFile
+gradle.ext.repoRoot = repoRoot
+
+dependencyResolutionManagement {
+    repositories {
+        mavenCentral()
+    }
+    versionCatalogs {
+        vLibs { from(files(new File(repoRoot, 'gradle/versions/libs.versions.toml'))) }
+        tLibs { from(files(new File(repoRoot, 'gradle/versions/test.versions.toml'))) }
+        sLibs { from(files(new File(repoRoot, 'gradle/versions/spring.versions.toml'))) }
+        gLibs { from(files(new File(repoRoot, 'gradle/versions/gradle.versions.toml'))) }
+        dbLibs { from(files(new File(repoRoot, 'gradle/versions/database.versions.toml'))) }
+        uLibs { from(files(new File(repoRoot, 'gradle/versions/utils.versions.toml'))) }
+    }
+}
+
+def springProject = { String path, String directory ->
+    include(path)
+    project(path).projectDir = new File(repoRoot, directory)
+    project(path).buildFileName = 'build.spring.gradle'
+}
+
+springProject(':shared-utils', 'core/shared/utils')
+springProject(':shared-common', 'core/shared/jakarta/common')
+springProject(':json-schema-annotation', 'core/shared/json-schema-annotation')
+springProject(':jooq-codegen', 'core/shared/jooq-codegen')
+springProject(':music-json', 'core/schema/music/json')
+springProject(':music-entity', 'core/schema/music/entity')
+springProject(':music-repo', 'core/schema/music/repo')
+springProject(':music', 'core/music')

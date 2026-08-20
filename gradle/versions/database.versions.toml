@@ -1,18 +1,26 @@
 # versions for libraries
 [versions]
 jooq = '3.16.6'
+jooq-spring = '3.21.5'
 flyway = '8.5.9'
 hikaricp = '5.0.1'
 # Libs config
 [libraries]
 
-## SQL realted libs
+## SQL related libs
 
-# Jooq
+# jOOQ legacy
 jooq-core = { group = 'org.jooq', name = 'jooq', version.ref = 'jooq' }
 jooq-meta = { group = 'org.jooq', name = 'jooq-meta', version.ref = 'jooq' }
 jooq-codegen = { group = 'org.jooq', name = 'jooq-codegen', version.ref = 'jooq' }
 jooq-ext = { group = 'org.jooq', name = 'jooq-meta-extensions', version.ref = 'jooq' }
+
+# jOOQ aligned with Spring Boot 4.1
+jooq-spring-core = { group = 'org.jooq', name = 'jooq', version.ref = 'jooq-spring' }
+jooq-spring-meta = { group = 'org.jooq', name = 'jooq-meta', version.ref = 'jooq-spring' }
+jooq-spring-codegen = { group = 'org.jooq', name = 'jooq-codegen', version.ref = 'jooq-spring' }
+jooq-spring-ext = { group = 'org.jooq', name = 'jooq-meta-extensions', version.ref = 'jooq-spring' }
+
 # data immigration
 flyway = { group = 'org.flywaydb', name = 'flyway-core', version.ref = 'flyway' }
 flyway-mysql = { group = 'org.flywaydb', name = 'flyway-mysql', version.ref = 'flyway' }
@@ -34,4 +42,3 @@ morphia = { group = 'dev.morphia.morphia', name = 'morphia-core', version = '2.2
 
 [bundles]
 jooq = ['jooq-core', 'jooq-meta', 'jooq-codegen', 'jooq-ext', 'hikaricp']
-
