@@ -3,7 +3,8 @@ plugins {
 }
 
 def repoRoot = gradle.ext.repoRoot
-def lombok = gLibs.findLibrary('lombok-modern').get()
+def gradleCatalog = extensions.getByType(org.gradle.api.artifacts.VersionCatalogsExtension).named('gLibs')
+def lombok = gradleCatalog.findLibrary('lombok-modern').get()
 
 dependencies {
     implementation project(':shared-utils')
