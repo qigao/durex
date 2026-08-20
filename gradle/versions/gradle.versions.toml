@@ -2,7 +2,6 @@
 [versions]
 editorconfig = "0.0.3"
 sonar = "3.3"
-spotless = "6.8.0"
 spotbugs = '5.0.7'
 jooq = "7.1.1"
 flyway = "8.5.9"
@@ -19,7 +18,6 @@ lombok-modern = { group = 'org.projectlombok', name = 'lombok', version.ref = 'l
 [plugins]
 editorconfig = { id = "org.ec4j.editorconfig", version.ref = "editorconfig" }
 sonarqube = { id = "org.sonarqube", version.ref = "sonar" }
-spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
 jooq-gen = { id = "nu.studer.jooq", version.ref = "jooq" }
 flyway = { id = 'org.flywaydb.flyway', version.ref = 'flyway' }
 json-schema = { id = 'org.jsonschema2dataclass', version.ref = 'json-schema' }
