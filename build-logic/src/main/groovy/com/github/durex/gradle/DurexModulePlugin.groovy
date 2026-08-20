@@ -1,5 +1,6 @@
 package com.github.durex.gradle
 
+import com.github.durex.gradle.model.DurexModuleModel
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 
@@ -8,19 +9,24 @@ class DurexModulePlugin implements Plugin<Project> {
     void apply(Project project) {
         project.pluginManager.apply('durex.catalog')
 
-        DurexModuleState state = new DurexModuleState()
-        project.extensions.add(DurexModuleState, 'durexModuleState', state)
-        project.extensions.create('durex', DurexExtension, project, state)
+        DurexModuleModel model = project.extensions.create('durexModuleModel', DurexModuleModel)
+        model.capabilities.convention(Collections.emptySet())
+        model.platformBindings.convention(Collections.emptySet())
+
+        project.extensions.create('durex', DurexExtension, project, model)
 
         project.tasks.register('durexCapabilities') {
             group = 'Durex'
             description = 'Print Durex module type and active capabilities.'
             doLast {
-                println "Type: ${state.kind() ?: 'NONE'}"
+                Set<String> capabilities = model.capabilities.get()
+                Set<String> bindings = model.platformBindings.get()
+                Set<String> platforms = bindings.collect { it.substring(it.indexOf(':') + 1) } as TreeSet<String>
+                println "Type: ${model.moduleKind.isPresent() ? model.moduleKind.get() : 'NONE'}"
                 println "Java: ${DurexDependencyAccess.javaVersion(project)}"
-                println "Platforms: ${state.activePlatforms().join(',')}"
-                println "Features: ${state.activeFeatures().join(',')}"
-                println "Native: ${state.nativeEnabled() ? 'enabled' : 'disabled'}"
+                println "Platforms: ${platforms.join(',')}"
+                println "Features: ${new TreeSet<>(capabilities).join(',')}"
+                println "Native: ${capabilities.contains('native') ? 'enabled' : 'disabled'}"
             }
         }
     }
