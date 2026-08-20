@@ -1,5 +1,6 @@
 package com.github.durex.gradle
 
+import com.github.durex.gradle.dependency.DependencyBridge
 import com.github.durex.gradle.model.DurexModuleModel
 import org.gradle.api.Action
 import org.gradle.api.Project
@@ -16,7 +17,11 @@ class DurexExtension {
     }
 
     String library(String alias) {
-        DurexDependencyAccess.libraryNotation(project, model, alias)
+        DependencyBridge.explicitNotation(project, alias)
+    }
+
+    void dependency(String configuration, String alias) {
+        DependencyBridge.add(project, model, configuration, alias)
     }
 
     PersistenceExtension getPersistence() {
