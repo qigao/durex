@@ -2,8 +2,6 @@ name: Durex Build Platform
 
 on:
   push:
-    branches:
-      - design/durex-build-platform
     paths:
       - 'build-bootstrap/**'
       - 'build-logic/**'
