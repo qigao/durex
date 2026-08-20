@@ -2,98 +2,36 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Replace duplicated Durex Gradle feature behavior with a typed capability kernel, configuration-aware dependency bridge, neutral bootstrap snapshot boundary, cache-safe diagnostics, and `durexDoctor` while preserving existing user DSL and real Spring/jOOQ behavior.
+**Goal:** Replace duplicated Durex Gradle feature behavior with a typed capability kernel, configuration-aware dependency bridge, neutral bootstrap snapshot boundary, cache-safe diagnostics, and `durexDoctor` while preserving existing DSL and Spring/jOOQ/native behavior.
 
-**Architecture:** `build-bootstrap` remains the ecosystem-neutral manifest/settings layer and exposes only a versioned JDK-container snapshot across the included-build boundary. `build-logic` reconstructs its own immutable dependency catalog, owns a managed `DurexModuleModel`, routes all dependency insertion through `DependencyBridge`, and routes all feature activation through `CapabilityEngine`; existing convention scripts stay as thin composition layers during v2.
+**Architecture:** `build-bootstrap` remains the ecosystem-neutral manifest/settings layer and exposes a versioned JDK-container snapshot. `build-logic` rebuilds its own immutable dependency catalog, owns a managed `DurexModuleModel`, routes all dependency insertion through `DependencyBridge`, and routes all feature activation through `CapabilityEngine`; existing convention scripts remain thin composition layers in v2.
 
-**Tech Stack:** Gradle 9.1, Java 25, Groovy/Java binary Gradle plugins, Gradle managed `Property`/`SetProperty`/`ListProperty`, configuration cache, parallel execution, Spring Boot 4.1, GraalVM 25, jOOQ 3.21.5.
+**Tech Stack:** Gradle 9.1, Java 25, Groovy/Java Gradle plugins, Gradle managed `Property`/`SetProperty`/`ListProperty`, configuration cache, parallel execution, Spring Boot 4.1, GraalVM 25, jOOQ 3.21.5.
 
 **Spec:** `docs/superpowers/specs/2026-08-20-durex-plugin-core-v2-design.md`
 
 ## Global Constraints
 
 - TOML remains dependency/plugin data only; do not add capability behavior to TOML.
-- Preserve first-party DSL: `persistence.jpa()`, `persistence.jdbc()`, `persistence.jooq()`, `redis()`, `nativeImage()`, `lombok()`.
-- Add generic `durex.capability(pluginId)` without making the central extension a feature registry.
-- `durex.library(alias)` is valid only for libraries owning `version` or `version.ref`; platform-managed aliases must use configuration-aware `durex.dependency(configuration, alias)` / `DependencyBridge.add(...)`.
-- Platform state is configuration-scoped: `implementation:spring` and `api:spring` are different bindings.
+- Preserve `persistence.jpa()`, `persistence.jdbc()`, `persistence.jooq()`, `redis()`, `nativeImage()`, and `lombok()`.
+- Add `durex.capability(pluginId)` without making `DurexExtension` a central feature registry.
+- `durex.library(alias)` is valid only for libraries owning `version`/`version.ref`; platform-managed aliases use `durex.dependency(configuration, alias)` / `DependencyBridge.add(...)`.
+- Platform bindings are configuration-scoped (`implementation:spring` != `api:spring`).
 - All built-in feature execution converges on one `CapabilityEngine` path.
-- Module kind, capabilities, and platform bindings have one source of truth in a managed `DurexModuleModel`; remove duplicate `nativeEnabled` state.
-- Cross-build access must use a neutral deeply immutable snapshot containing only JDK container/scalar values; do not cast bootstrap model classes in build-logic and do not use Groovy dynamic calls such as `service.library(...)` across the boundary.
-- Snapshot schema version is exactly `1` in v2; mismatch is a hard Durex bootstrap error showing expected and actual versions.
-- `durex.settings` / bootstrap diagnostics must not hard-code `spring`, `spring-boot`, `graalvm-native`, `jooq-codegen`, or any capability.
-- Diagnostic output is deterministic and sorted; output order is part of the test contract.
-- Diagnostic task actions must read only declared task inputs; they must not capture/read live `Project`, extension, BuildService, capability engine, or mutable registry objects at execution time.
-- Gradle 9.1 configuration-cache reuse and representative `--parallel` execution are hard acceptance requirements.
-- Keep existing convention scripts as thin wrappers in v2; do not rewrite every plugin to a binary plugin in this plan.
-- Do not add Kafka/Mongo/Security/Flyway/OpenAPI/Testcontainers features, do not perform root Gradle cutover, and do not publish to the Gradle Plugin Portal in this plan.
+- `DurexModuleModel` is the sole source of module kind, capabilities, and platform bindings; no `nativeEnabled` duplicate state.
+- Cross-build access uses a deeply immutable neutral snapshot containing only `String`, `Integer`, `Boolean`, `Map`, and `List`; build-logic must not cast bootstrap model classes or call bootstrap `library/platform/plugin/javaVersion` methods dynamically.
+- Snapshot schema version is exactly `1` in v2.
+- Bootstrap diagnostics must not hard-code `spring`, `spring-boot`, `graalvm-native`, `jooq-codegen`, or any capability.
+- Diagnostic ordering is deterministic and lexicographically sorted.
+- Diagnostic task actions read declared task inputs only; they do not access live `Project`, extension, BuildService, engine, or mutable registries.
+- Gradle 9.1 configuration-cache reuse and representative `--parallel` execution are hard requirements.
+- Keep convention scripts as thin wrappers; do not rewrite every plugin to binary form.
+- Do not add Kafka/Mongo/Security/Flyway/OpenAPI/Testcontainers, perform root Gradle cutover, or publish plugins externally.
 - Preserve Spring Music, Spring Native, and jOOQ schema/codegen behavior.
 
 ---
 
-## File Structure
-
-New/changed kernel responsibilities:
-
-```text
-build-bootstrap/src/main/groovy/com/github/durex/gradle/manifest/
-  DependencyRegistry.groovy             # existing manifest model; gains neutral snapshot export
-  DependencyRegistryService.groovy      # BuildService; gains snapshot() only-neutral ABI
-
-build-bootstrap/src/main/groovy/com/github/durex/gradle/settings/
-  DurexSettingsPlugin.groovy            # generic bootstrap + cache-safe diagnostic task wiring
-  DurexDependenciesTask.groovy          # binary generic manifest report
-  DurexProjectsTask.groovy              # binary project discovery report
-
-build-logic/src/main/groovy/com/github/durex/gradle/catalog/
-  DependencyCatalogSnapshot.groovy      # local immutable build-logic model
-  CatalogPlatform.groovy
-  CatalogLibrary.groovy
-  CatalogPlugin.groovy
-  DurexRegistryBridge.groovy            # reflective neutral-snapshot ABI bridge
-  DurexCatalogPlugin.groovy             # internal binary plugin installing local catalog per project
-
-build-logic/src/main/groovy/com/github/durex/gradle/model/
-  DurexModuleModel.groovy               # managed source of module facts
-
-build-logic/src/main/groovy/com/github/durex/gradle/dependency/
-  DependencyBridge.groovy               # only path for configuration-aware dependency insertion
-
-build-logic/src/main/groovy/com/github/durex/gradle/capability/
-  CapabilitySpec.groovy
-  DependencyBinding.groovy
-  CapabilityRegistry.groovy
-  CapabilityPluginRegistry.groovy
-  CapabilityEngine.groovy
-  BuiltinCapabilities.groovy
-  DurexCapabilitySupport.groovy         # helper used by thin feature plugins
-
-build-logic/src/main/groovy/com/github/durex/gradle/diagnostics/
-  DurexCapabilitiesTask.groovy
-  DurexDoctorTask.groovy
-  DurexDoctorValidator.groovy
-
-build-logic/src/main/groovy/com/github/durex/gradle/
-  DurexConfigurationException.groovy
-  DurexModulePlugin.groovy
-  DurexExtension.groovy
-  PersistenceExtension.groovy
-
-existing convention scripts
-  durex.java-base.gradle
-  durex.java-library.gradle
-  durex.spring-base.gradle
-  durex.spring-library.gradle
-  durex.spring-service.gradle
-  durex.feature.*.gradle
-  durex.jooq-schema.gradle
-```
-
-Functional fixtures stay under `build-bootstrap/tests/**` and `build-logic/tests/**`; real regressions remain in `migration/spring-music` and `reference/spring-*`.
-
----
-
-### Task 1: Neutral dependency snapshot and build-logic registry bridge
+## Task 1 — Neutral dependency snapshot and local catalog bridge
 
 **Files:**
 - Modify: `build-bootstrap/src/main/groovy/com/github/durex/gradle/manifest/DependencyRegistry.groovy`
@@ -107,19 +45,19 @@ Functional fixtures stay under `build-bootstrap/tests/**` and `build-logic/tests
 - Modify: `build-logic/build.gradle.kts`
 - Modify: `build-logic/src/main/groovy/com/github/durex/gradle/DurexDependencyAccess.groovy`
 - Modify: `build-logic/src/main/groovy/durex.jooq-schema.gradle`
-- Test: `build-logic/tests/registry-bridge-smoke/**`
-- Test: `build-logic/tests/registry-schema-mismatch/**`
+- Create fixture: `build-logic/tests/registry-bridge-smoke/**`
+- Create fixture: `build-logic/tests/registry-schema-mismatch/**`
 
 **Interfaces:**
-- Produces: `Map<String, Object> DependencyRegistry.snapshot()` and `DependencyRegistryService.snapshot()`.
-- Produces: `DependencyCatalogSnapshot DurexRegistryBridge.fromSnapshot(Map raw)`.
-- Produces: `DependencyCatalogSnapshot DurexRegistryBridge.fromProject(Project project)` using neutral reflection only.
-- Produces: internal plugin id `durex.catalog`; applying it installs one local `DependencyCatalogSnapshot` project extension named `durexDependencyCatalog`.
-- Later tasks consume: `CatalogLibrary`, `CatalogPlatform`, `CatalogPlugin`, `DependencyCatalogSnapshot`.
+- `Map<String,Object> DependencyRegistry.snapshot()`
+- `Map<String,Object> DependencyRegistryService.snapshot()`
+- `DependencyCatalogSnapshot DurexRegistryBridge.fromSnapshot(Map raw)`
+- `DependencyCatalogSnapshot DurexRegistryBridge.fromProject(Project project)`
+- internal plugin `durex.catalog` installs extension `durexDependencyCatalog` of type `DependencyCatalogSnapshot`.
 
-- [ ] **Step 1: Add a RED registry bridge fixture**
+- [ ] **Step 1: Write RED registry bridge fixture**
 
-Create `build-logic/tests/registry-bridge-smoke/settings.gradle`:
+`build-logic/tests/registry-bridge-smoke/settings.gradle`:
 
 ```groovy
 pluginManagement {
@@ -128,99 +66,65 @@ pluginManagement {
     repositories { gradlePluginPortal(); mavenCentral() }
 }
 plugins { id 'durex.settings' }
-
 durexSettings {
     repositoryRoot.set(file('../../..'))
     moduleDiscovery.set(false)
 }
-
 rootProject.name = 'registry-bridge-smoke'
 ```
 
-Create `build-logic/tests/registry-bridge-smoke/build.gradle`:
+`build.gradle`:
 
 ```groovy
 plugins { id 'durex.catalog' }
 
 import com.github.durex.gradle.catalog.DependencyCatalogSnapshot
 
-tasks.register('verifyCatalog') {
-    def catalog = extensions.getByType(DependencyCatalogSnapshot)
-    doLast {
-        assert catalog.javaVersion == 25
-        assert catalog.platform('spring').coordinate() ==
-            'org.springframework.boot:spring-boot-dependencies:4.1.0'
-        assert catalog.library('spring-jooq').platform == 'spring'
-        assert catalog.plugin('graalvm-native').id == 'org.graalvm.buildtools.native'
-    }
-}
+def catalog = extensions.getByType(DependencyCatalogSnapshot)
+assert catalog.javaVersion() == 25
+assert catalog.platform('spring').coordinate() ==
+    'org.springframework.boot:spring-boot-dependencies:4.1.0'
+assert catalog.library('spring-jooq').platform == 'spring'
+assert catalog.plugin('graalvm-native').id == 'org.graalvm.buildtools.native'
 ```
 
 Run:
 
 ```bash
-gradle -p build-logic/tests/registry-bridge-smoke verifyCatalog --stacktrace
+gradle -p build-logic/tests/registry-bridge-smoke help --stacktrace
 ```
 
 Expected RED: unknown plugin `durex.catalog`.
 
-- [ ] **Step 2: Add snapshot schema-mismatch RED fixture**
+- [ ] **Step 2: Export snapshot schema 1 from bootstrap**
 
-Create `build-logic/tests/registry-schema-mismatch/settings.gradle` with the same two included builds and `durex.settings`, then `build.gradle`:
-
-```groovy
-plugins { id 'durex.catalog' }
-
-import com.github.durex.gradle.catalog.DurexRegistryBridge
-
-DurexRegistryBridge.fromSnapshot([
-    schemaVersion: 99,
-    javaVersion: 25,
-    platforms: [:],
-    libraries: [:],
-    plugins: [:]
-])
-```
-
-After `durex.catalog` exists this fixture must fail with:
-
-```text
-Durex bootstrap error
-Problem: unsupported dependency snapshot schema
-Expected: 1
-Actual: 99
-```
-
-- [ ] **Step 3: Export a deeply immutable neutral snapshot from bootstrap**
-
-Add to `DependencyRegistry`:
+Add:
 
 ```groovy
 static final int SNAPSHOT_SCHEMA_VERSION = 1
 
 Map<String, Object> snapshot() {
-    Map<String, Object> raw = [
+    deepFreeze([
         schemaVersion: SNAPSHOT_SCHEMA_VERSION,
         javaVersion: javaVersion,
-        platforms: platforms.collectEntries { id, value ->
-            [(id): [module: value.module, version: value.version]]
+        platforms: platforms.collectEntries { alias, p ->
+            [(alias): [module: p.module, version: p.version]]
         },
-        libraries: libraries.collectEntries { id, value ->
-            [(id): [module: value.module, version: value.version, platform: value.platform]]
+        libraries: libraries.collectEntries { alias, l ->
+            [(alias): [module: l.module, version: l.version, platform: l.platform]]
         },
-        plugins: plugins.collectEntries { id, value ->
-            [(id): [id: value.id, module: value.module, version: value.version]]
+        plugins: plugins.collectEntries { alias, p ->
+            [(alias): [id: p.id, module: p.module, version: p.version]]
         }
-    ]
-    deepFreeze(raw)
+    ])
 }
 ```
 
-Implement `deepFreeze` recursively so every returned map/list is a copied unmodifiable container. `DependencyRegistryService.snapshot()` delegates to `registry().snapshot()`.
+`deepFreeze` recursively copies and wraps maps/lists with `Collections.unmodifiableMap/List`; scalar values pass through. `DependencyRegistryService.snapshot()` delegates to the registry.
 
-- [ ] **Step 4: Implement the local immutable catalog**
+- [ ] **Step 3: Implement immutable build-logic catalog**
 
-Use exact semantic getters:
+Use exact fields/semantics:
 
 ```groovy
 final class CatalogPlatform {
@@ -248,7 +152,7 @@ final class CatalogPlugin {
 }
 ```
 
-`DependencyCatalogSnapshot` owns immutable maps and exposes:
+`DependencyCatalogSnapshot` exposes:
 
 ```groovy
 int javaVersion()
@@ -261,99 +165,124 @@ Collection<CatalogLibrary> libraries()
 Collection<CatalogPlugin> plugins()
 ```
 
-Unknown aliases fail with `Durex dependency catalog error` and the alias kind.
+Unknown alias errors use prefix `Durex dependency catalog error`.
 
-- [ ] **Step 5: Implement the neutral bridge without bootstrap type casts or Groovy dynamic registry calls**
+- [ ] **Step 4: Implement neutral reflective bridge**
 
-`DurexRegistryBridge.fromProject(Project)` must:
+`fromProject(Project)` performs exactly:
 
 ```text
-1. locate shared-service registration `durexDependencyRegistry`
-2. obtain `Object service = registration.service.get()`
-3. use Java reflection to invoke the zero-argument method named `snapshot`
-4. require the result to be a Map
-5. call fromSnapshot(raw)
+find sharedServices registration `durexDependencyRegistry`
+get Object service
+find zero-argument Java method named `snapshot`
+invoke it reflectively
+require returned value is Map
+call fromSnapshot(Map)
 ```
 
-Do not call `service.library(...)`, `service.platform(...)`, or cast `service` to a bootstrap class. Unwrap `InvocationTargetException` into a Durex bootstrap error with the original message.
+No bootstrap class cast and no Groovy `service.library/platform/plugin/javaVersion` calls. Unwrap `InvocationTargetException` to a `Durex bootstrap error` preserving the cause message.
 
-- [ ] **Step 6: Add internal binary plugin `durex.catalog`**
+`fromSnapshot(Map)` requires `schemaVersion == 1`; mismatch message:
+
+```text
+Durex bootstrap error
+Problem: unsupported dependency snapshot schema
+Expected: 1
+Actual: 99
+```
+
+- [ ] **Step 5: Add `durex.catalog` binary plugin**
 
 Register in `build-logic/build.gradle.kts`:
 
 ```kotlin
-gradlePlugin {
-    plugins {
-        create("durexCatalog") {
-            id = "durex.catalog"
-            implementationClass = "com.github.durex.gradle.catalog.DurexCatalogPlugin"
-        }
-        // keep existing durex.module registration
-    }
+create("durexCatalog") {
+    id = "durex.catalog"
+    implementationClass = "com.github.durex.gradle.catalog.DurexCatalogPlugin"
 }
 ```
 
-`DurexCatalogPlugin.apply(Project)` loads the snapshot once during project configuration and adds it by type/name:
+`DurexCatalogPlugin.apply` loads the local snapshot once during configuration and adds:
 
 ```groovy
-DependencyCatalogSnapshot catalog = DurexRegistryBridge.fromProject(project)
-project.extensions.add(DependencyCatalogSnapshot, 'durexDependencyCatalog', catalog)
+project.extensions.add(
+    DependencyCatalogSnapshot,
+    'durexDependencyCatalog',
+    DurexRegistryBridge.fromProject(project)
+)
 ```
 
-- [ ] **Step 7: Migrate current build-logic consumers to the local catalog**
+- [ ] **Step 6: Route existing catalog users through local snapshot**
 
-Change `DurexDependencyAccess` so `javaVersion`, platform/library/plugin lookups read `extensions.getByType(DependencyCatalogSnapshot)` and never call the bootstrap service directly. `durex.module` and `durex.jooq-schema` must apply `durex.catalog` before catalog access.
+`DurexDependencyAccess` reads `DependencyCatalogSnapshot` from project extensions. `durex.module` and `durex.jooq-schema` apply `durex.catalog` before access. No build-logic production file calls the bootstrap registry methods directly after this step.
 
-- [ ] **Step 8: Verify bridge and jOOQ behavior**
+- [ ] **Step 7: Add schema mismatch fixture**
 
-Run:
+`build-logic/tests/registry-schema-mismatch/build.gradle`:
+
+```groovy
+plugins { id 'durex.catalog' }
+
+import com.github.durex.gradle.catalog.DurexRegistryBridge
+
+DurexRegistryBridge.fromSnapshot([
+    schemaVersion: 99,
+    javaVersion: 25,
+    platforms: [:],
+    libraries: [:],
+    plugins: [:]
+])
+```
+
+- [ ] **Step 8: Verify and commit**
 
 ```bash
-gradle -p build-logic/tests/registry-bridge-smoke verifyCatalog --stacktrace
-gradle -p build-logic/tests/registry-schema-mismatch help --stacktrace
+gradle -p build-logic/tests/registry-bridge-smoke help --stacktrace
+if gradle -p build-logic/tests/registry-schema-mismatch help --stacktrace > /tmp/schema.log 2>&1; then exit 1; fi
+grep -Fq 'Expected: 1' /tmp/schema.log
+grep -Fq 'Actual: 99' /tmp/schema.log
 gradle -p build-logic/tests/jooq-schema-smoke jooqCodegen --stacktrace
-```
 
-Expected: bridge PASS; schema-mismatch FAILS with exact schema error; Q/R generation PASS.
-
-- [ ] **Step 9: Commit**
-
-```bash
 git add -- build-bootstrap/src/main/groovy/com/github/durex/gradle/manifest \
-  build-logic/build.gradle.kts \
-  build-logic/src/main/groovy/com/github/durex/gradle/catalog \
+  build-logic/build.gradle.kts build-logic/src/main/groovy/com/github/durex/gradle/catalog \
   build-logic/src/main/groovy/com/github/durex/gradle/DurexDependencyAccess.groovy \
   build-logic/src/main/groovy/durex.jooq-schema.gradle \
-  build-logic/tests/registry-bridge-smoke \
-  build-logic/tests/registry-schema-mismatch
+  build-logic/tests/registry-bridge-smoke build-logic/tests/registry-schema-mismatch
 git commit -m "refactor: add neutral Durex dependency snapshot bridge"
 ```
 
 ---
 
-### Task 2: Managed `DurexModuleModel` as the single source of module state
+## Task 2 — Managed `DurexModuleModel`
 
 **Files:**
 - Create: `build-logic/src/main/groovy/com/github/durex/gradle/model/DurexModuleModel.groovy`
 - Create: `build-logic/src/main/groovy/com/github/durex/gradle/DurexConfigurationException.groovy`
 - Modify: `build-logic/src/main/groovy/com/github/durex/gradle/DurexModulePlugin.groovy`
 - Modify: `build-logic/src/main/groovy/durex.java-library.gradle`
+- Modify: `build-logic/src/main/groovy/durex.spring-base.gradle`
 - Modify: `build-logic/src/main/groovy/durex.spring-library.gradle`
 - Modify: `build-logic/src/main/groovy/durex.spring-service.gradle`
-- Modify: `build-logic/src/main/groovy/durex.spring-base.gradle`
-- Delete after migration: `build-logic/src/main/groovy/com/github/durex/gradle/DurexModuleState.groovy`
-- Test: `build-logic/tests/module-model-smoke/**`
-- Modify test: `build-logic/tests/module-conflict/**`
+- Delete: `build-logic/src/main/groovy/com/github/durex/gradle/DurexModuleState.groovy`
+- Create fixture: `build-logic/tests/module-model-smoke/**`
+- Modify fixture: `build-logic/tests/module-conflict/**`
 
 **Interfaces:**
-- Consumes: `DependencyCatalogSnapshot` installed by `durex.catalog`.
-- Produces managed extension type `DurexModuleModel` named `durexModuleModel`.
-- Produces methods `claim(ModuleKind, String projectPath)`, `enableCapability(String)`, `bindPlatform(String configuration, String platformAlias)`.
-- Later tasks consume: `moduleKind`, `capabilities`, `platformBindings` managed properties.
 
-- [ ] **Step 1: RED fixture for managed module facts**
+```groovy
+abstract class DurexModuleModel {
+    abstract Property<ModuleKind> getModuleKind()
+    abstract SetProperty<String> getCapabilities()
+    abstract SetProperty<String> getPlatformBindings()
+    void claim(ModuleKind requested, String projectPath)
+    void enableCapability(String capability)
+    void bindPlatform(String configuration, String platformAlias)
+}
+```
 
-Create `build-logic/tests/module-model-smoke/build.gradle`:
+- [ ] **Step 1: RED managed-model fixture**
+
+`module-model-smoke/build.gradle`:
 
 ```groovy
 plugins { id 'durex.spring-service' }
@@ -361,55 +290,38 @@ plugins { id 'durex.spring-service' }
 import com.github.durex.gradle.model.DurexModuleModel
 import com.github.durex.gradle.ModuleKind
 
-tasks.register('verifyModuleModel') {
-    def model = extensions.getByType(DurexModuleModel)
-    doLast {
-        assert model.moduleKind.get() == ModuleKind.SPRING_SERVICE
-        assert model.capabilities.get().isEmpty()
-        assert model.platformBindings.get().contains('implementation:spring')
-        assert !model.metaClass.hasProperty(model, 'nativeEnabled')
-    }
-}
+def model = extensions.getByType(DurexModuleModel)
+assert model.moduleKind.get() == ModuleKind.SPRING_SERVICE
+assert model.capabilities.get().isEmpty()
+assert model.platformBindings.get().contains('implementation:spring')
 ```
 
-Run and expect RED because `DurexModuleModel` does not exist.
+Expected RED: `DurexModuleModel` missing.
 
-- [ ] **Step 2: Implement managed model**
+- [ ] **Step 2: Implement managed model and configuration error**
 
-Use:
+Model methods:
 
 ```groovy
-abstract class DurexModuleModel {
-    abstract Property<ModuleKind> getModuleKind()
-    abstract SetProperty<String> getCapabilities()
-    abstract SetProperty<String> getPlatformBindings()
-
-    void claim(ModuleKind requested, String projectPath) {
-        if (!moduleKind.present) {
-            moduleKind.set(requested)
-            return
-        }
-        ModuleKind existing = moduleKind.get()
-        if (existing != requested) {
-            throw DurexConfigurationException.moduleTypeConflict(projectPath, existing, requested)
-        }
+void claim(ModuleKind requested, String projectPath) {
+    if (!moduleKind.isPresent()) {
+        moduleKind.set(requested)
+        return
     }
-
-    void enableCapability(String capability) {
-        capabilities.add(capability)
+    ModuleKind existing = moduleKind.get()
+    if (existing != requested) {
+        throw DurexConfigurationException.moduleTypeConflict(projectPath, existing, requested)
     }
-
-    void bindPlatform(String configuration, String platformAlias) {
-        platformBindings.add("${configuration}:${platformAlias}" as String)
-    }
+}
+void enableCapability(String id) { capabilities.add(id) }
+void bindPlatform(String configuration, String alias) {
+    platformBindings.add("${configuration}:${alias}" as String)
 }
 ```
 
-Set conventions for both sets to empty sets when the model is created.
+Set empty-set conventions for capabilities/platformBindings.
 
-- [ ] **Step 3: Centralize configuration errors**
-
-`DurexConfigurationException` extends `GradleException` and provides factory methods. The module conflict output is exactly:
+`DurexConfigurationException.moduleTypeConflict` output:
 
 ```text
 Durex configuration error
@@ -419,46 +331,31 @@ Existing: SPRING_SERVICE
 Requested: JAVA_LIBRARY
 ```
 
-Later capability/dependency errors use the same prefix.
+- [ ] **Step 3: Migrate module scripts and remove old state**
 
-- [ ] **Step 4: Migrate module type scripts**
+`DurexModulePlugin` applies `durex.catalog`, creates `durexModuleModel`, then creates the existing `durex` extension. Module scripts use the managed model for `claim`. `durex.spring-base` records the exact configuration/platform pair each time it adds a Spring platform. Delete `DurexModuleState.groovy` after all source references are removed.
 
-`DurexModulePlugin` applies `durex.catalog`, creates the managed model, and creates the existing `durex` extension. Replace every `extensions.getByType(DurexModuleState)` and `state.claim(...)` with the managed model.
-
-`durex.spring-base` records exact bindings for every configuration where it adds the Spring platform; do not store only `spring`.
-
-- [ ] **Step 5: Remove duplicate state class**
-
-Delete `DurexModuleState.groovy` only after all module-type scripts compile without it. Do not add any replacement boolean for native.
-
-- [ ] **Step 6: Verify**
+- [ ] **Step 4: Verify and commit**
 
 ```bash
-gradle -p build-logic/tests/module-model-smoke verifyModuleModel --stacktrace
-gradle -p build-logic/tests/module-conflict help --stacktrace
-```
+gradle -p build-logic/tests/module-model-smoke help --stacktrace
+if gradle -p build-logic/tests/module-conflict help --stacktrace > /tmp/module-conflict.log 2>&1; then exit 1; fi
+grep -Fq 'Durex configuration error' /tmp/module-conflict.log
+grep -Fq 'Existing: SPRING_SERVICE' /tmp/module-conflict.log
 
-First PASS; second FAILS with the exact `Durex configuration error` module conflict.
-
-- [ ] **Step 7: Commit**
-
-```bash
 git add -- build-logic/src/main/groovy/com/github/durex/gradle/model \
   build-logic/src/main/groovy/com/github/durex/gradle/DurexConfigurationException.groovy \
   build-logic/src/main/groovy/com/github/durex/gradle/DurexModulePlugin.groovy \
-  build-logic/src/main/groovy/durex.java-library.gradle \
-  build-logic/src/main/groovy/durex.spring-library.gradle \
-  build-logic/src/main/groovy/durex.spring-service.gradle \
-  build-logic/src/main/groovy/durex.spring-base.gradle \
-  build-logic/tests/module-model-smoke \
-  build-logic/tests/module-conflict \
-  build-logic/src/main/groovy/com/github/durex/gradle/DurexModuleState.groovy
+  build-logic/src/main/groovy/com/github/durex/gradle/DurexModuleState.groovy \
+  build-logic/src/main/groovy/durex.java-library.gradle build-logic/src/main/groovy/durex.spring-base.gradle \
+  build-logic/src/main/groovy/durex.spring-library.gradle build-logic/src/main/groovy/durex.spring-service.gradle \
+  build-logic/tests/module-model-smoke build-logic/tests/module-conflict
 git commit -m "refactor: add managed Durex module model"
 ```
 
 ---
 
-### Task 3: Configuration-aware `DependencyBridge` and v2 dependency DSL
+## Task 3 — Configuration-aware dependency bridge and DSL
 
 **Files:**
 - Create: `build-logic/src/main/groovy/com/github/durex/gradle/dependency/DependencyBridge.groovy`
@@ -466,46 +363,63 @@ git commit -m "refactor: add managed Durex module model"
 - Modify: `build-logic/src/main/groovy/com/github/durex/gradle/DurexExtension.groovy`
 - Modify: `build-logic/src/main/groovy/durex.spring-base.gradle`
 - Modify: `core/schema/music/json/build.spring.gradle`
-- Test: `build-logic/tests/dependency-api-smoke/**`
-- Test: `build-logic/tests/dependency-library-invalid/**`
+- Create fixture: `build-logic/tests/dependency-api-smoke/**`
+- Create fixture: `build-logic/tests/dependency-library-invalid/**`
 
 **Interfaces:**
-- Consumes: `DependencyCatalogSnapshot`, `DurexModuleModel`.
-- Produces: `void DependencyBridge.add(Project, DurexModuleModel, String configuration, String alias)`.
-- Produces: `String DependencyBridge.explicitNotation(Project, String alias)`.
-- Produces public DSL `durex.dependency(String configuration, String alias)`.
-- Keeps public `durex.library(String alias)` only for explicit-version/version-ref catalog entries.
+- `void DependencyBridge.add(Project, DurexModuleModel, String configuration, String alias)`
+- `String DependencyBridge.explicitNotation(Project, String alias)`
+- public `durex.dependency(String configuration, String alias)`
+- public `durex.library(String alias)` only for non-platform-managed libraries.
 
-- [ ] **Step 1: RED configuration-scoped dependency fixture**
+- [ ] **Step 1: RED scoped-platform fixture**
 
-Create a Spring-library fixture whose build file contains:
+Fixture build:
 
 ```groovy
 plugins { id 'durex.spring-library' }
 
 durex {
     dependency('api', 'jackson-annotations')
+    dependency('api', 'jackson-databind')
     dependency('implementation', 'spring-jooq')
 }
 ```
 
-Its verification task asserts the module model contains both `api:spring` and `implementation:spring`, and the `api` configuration contains only one Spring platform dependency even if two Spring-managed APIs are added.
-
-Run and expect RED because `dependency(...)` does not exist.
-
-- [ ] **Step 2: RED invalid `durex.library` fixture**
-
-`build-logic/tests/dependency-library-invalid/build.gradle`:
+Verification during configuration:
 
 ```groovy
-plugins { id 'durex.spring-library' }
+import com.github.durex.gradle.model.DurexModuleModel
 
-dependencies {
-    api durex.library('jackson-annotations')
-}
+def model = extensions.getByType(DurexModuleModel)
+assert model.platformBindings.get().containsAll(['api:spring', 'implementation:spring'])
 ```
 
-After v2 implementation, `help` must fail with:
+Expected RED: `dependency` missing.
+
+- [ ] **Step 2: Implement `DependencyBridge.add`**
+
+Exact algorithm:
+
+```text
+require configuration exists
+lookup CatalogLibrary
+if platform-managed:
+  binding = configuration + ':' + platformAlias
+  if binding absent:
+    lookup CatalogPlatform
+    add Gradle platform(platform.coordinate()) to that configuration
+    model.bindPlatform(configuration, platformAlias)
+add library.notation() to configuration
+```
+
+Multiple platform-managed libraries in the same configuration add the platform once.
+
+Missing configuration error includes project, configuration, dependency alias, and `Durex configuration error` prefix.
+
+- [ ] **Step 3: Tighten `durex.library` and add `durex.dependency`**
+
+`explicitNotation` rejects platform-managed libraries with exact guidance:
 
 ```text
 Durex configuration error
@@ -514,49 +428,11 @@ Problem: platform-managed library cannot be returned by durex.library(alias)
 Use: durex.dependency(configuration, alias)
 ```
 
-- [ ] **Step 3: Implement `DependencyBridge.add`**
+`DurexExtension.dependency` delegates to `DependencyBridge.add`. `DurexDependencyAccess.add` becomes a compatibility facade delegating to the same bridge; no second platform algorithm remains.
 
-Exact algorithm:
+- [ ] **Step 4: Migrate the known production BOM-managed direct calls**
 
-```text
-require target configuration exists
-lookup CatalogLibrary
-if library.platform != null:
-    binding = configuration + ':' + platform
-    if model does not already contain binding:
-        lookup CatalogPlatform
-        dependencies.add(configuration, dependencies.platform(platform.coordinate()))
-        model.bindPlatform(configuration, platform)
-dependencies.add(configuration, library.notation())
-```
-
-If the configuration does not exist, fail with project, configuration, alias, and problem.
-
-- [ ] **Step 4: Tighten `durex.library`**
-
-`explicitNotation` rejects any `CatalogLibrary.isPlatformManaged()` entry with the migration guidance above. Explicit-version entries such as `javax-cdi` and `lombok` return `group:name:version` unchanged.
-
-- [ ] **Step 5: Add public DSL and migrate real descriptor**
-
-`DurexExtension` gains:
-
-```groovy
-void dependency(String configuration, String alias) {
-    DependencyBridge.add(project, model, configuration, alias)
-}
-```
-
-Migrate `core/schema/music/json/build.spring.gradle` from:
-
-```groovy
-dependencies {
-    api durex.library('jackson-annotations')
-    api durex.library('jackson-databind')
-    api durex.library('jakarta-validation')
-}
-```
-
-to:
+Replace `core/schema/music/json/build.spring.gradle` dependencies with:
 
 ```groovy
 durex {
@@ -566,38 +442,36 @@ durex {
 }
 ```
 
-Keep explicit-version `durex.library(...)` uses in music/common modules unchanged.
+Keep explicit-version `durex.library('javax-*')` calls unchanged.
 
-- [ ] **Step 6: Route existing internal dependency helpers through `DependencyBridge`**
+- [ ] **Step 5: Add invalid-library fixture and verify**
 
-Keep `DurexDependencyAccess` temporarily as a compatibility/internal facade if needed by convention scripts, but its `add(...)` delegates to `DependencyBridge.add(...)`; it must not implement a second platform algorithm.
+Invalid fixture:
 
-- [ ] **Step 7: Verify**
-
-```bash
-gradle -p build-logic/tests/dependency-api-smoke verifyDependencyBindings dependencies --configuration api --stacktrace
-gradle -p build-logic/tests/dependency-library-invalid help --stacktrace
-gradle -p migration/spring-music :music-json:compileJava --stacktrace
+```groovy
+plugins { id 'durex.spring-library' }
+dependencies { api durex.library('jackson-annotations') }
 ```
 
-Expected: first and third PASS; invalid library fixture FAILS with migration guidance.
-
-- [ ] **Step 8: Commit**
+Commands:
 
 ```bash
+gradle -p build-logic/tests/dependency-api-smoke help --stacktrace
+if gradle -p build-logic/tests/dependency-library-invalid help --stacktrace > /tmp/library-invalid.log 2>&1; then exit 1; fi
+grep -Fq 'Use: durex.dependency(configuration, alias)' /tmp/library-invalid.log
+gradle -p migration/spring-music :music-json:compileJava --stacktrace
+
 git add -- build-logic/src/main/groovy/com/github/durex/gradle/dependency \
   build-logic/src/main/groovy/com/github/durex/gradle/DurexDependencyAccess.groovy \
   build-logic/src/main/groovy/com/github/durex/gradle/DurexExtension.groovy \
-  build-logic/src/main/groovy/durex.spring-base.gradle \
-  core/schema/music/json/build.spring.gradle \
-  build-logic/tests/dependency-api-smoke \
-  build-logic/tests/dependency-library-invalid
+  build-logic/src/main/groovy/durex.spring-base.gradle core/schema/music/json/build.spring.gradle \
+  build-logic/tests/dependency-api-smoke build-logic/tests/dependency-library-invalid
 git commit -m "refactor: make Durex dependency wiring configuration-aware"
 ```
 
 ---
 
-### Task 4: Capability specs, registries, and one activation engine
+## Task 4 — Capability specs, registries, and activation engine
 
 **Files:**
 - Create: `build-logic/src/main/groovy/com/github/durex/gradle/capability/DependencyBinding.groovy`
@@ -608,114 +482,131 @@ git commit -m "refactor: make Durex dependency wiring configuration-aware"
 - Create: `build-logic/src/main/groovy/com/github/durex/gradle/capability/BuiltinCapabilities.groovy`
 - Create: `build-logic/src/main/groovy/com/github/durex/gradle/capability/DurexCapabilitySupport.groovy`
 - Modify: `build-logic/src/main/groovy/com/github/durex/gradle/DurexModulePlugin.groovy`
-- Test: `build-logic/tests/capability-kernel-smoke/**`
-- Test: `build-logic/tests/capability-missing-required/**`
-- Test: `build-logic/tests/capability-cycle/**`
-- Test: `build-logic/tests/capability-conflict/**`
-- Test: `build-logic/tests/capability-module-invalid/**`
+- Create fixtures: `build-logic/tests/capability-kernel-smoke/**`, `capability-missing-required/**`, `capability-cycle/**`, `capability-conflict/**`, `capability-module-invalid/**`
 
 **Interfaces:**
-- Consumes: managed module model and `DependencyBridge`.
-- Produces immutable `CapabilitySpec` and `DependencyBinding`.
-- Produces project extensions by type: `CapabilityRegistry`, `CapabilityPluginRegistry`, `CapabilityEngine`.
-- Produces helper `DurexCapabilitySupport.registerAndEnable(Project, String pluginId, CapabilitySpec spec)`.
 
-- [ ] **Step 1: Define immutable capability value objects**
+```groovy
+CapabilityRegistry.register(CapabilitySpec spec)
+CapabilitySpec CapabilityRegistry.get(String id)
+CapabilityPluginRegistry.register(String pluginId, String capabilityId)
+String CapabilityPluginRegistry.capabilityForPlugin(String pluginId)
+void CapabilityEngine.enable(String capabilityId)
+void DurexCapabilitySupport.registerAndEnable(Project project, String pluginId, CapabilitySpec spec)
+```
 
-Use builder/static factory semantics equivalent to:
+- [ ] **Step 1: Implement immutable capability values**
+
+Builder supports:
 
 ```groovy
 CapabilitySpec.builder('jooq')
     .allow(ModuleKind.SPRING_LIBRARY, ModuleKind.SPRING_SERVICE)
+    .require('other-capability')
+    .conflict('conflicting-capability')
     .dependency('implementation', 'spring-jooq')
+    .externalPlugin('graalvm-native')
     .build()
 ```
 
-Structural equality includes id, allowed module set, requires, conflicts, dependency bindings, and external plugin aliases. Collections are copied, immutable, and sorted/canonicalized where order is semantically irrelevant.
+Structural equality includes id, allowed modules, requires, conflicts, dependency bindings, and external plugin aliases. Collections are immutable; semantically unordered sets are canonicalized.
 
-- [ ] **Step 2: RED registry semantics in a functional fixture**
+- [ ] **Step 2: Implement registry semantics**
 
-After applying `durex.module`, fixture code obtains `CapabilityRegistry` and asserts:
+- same id + structurally equal spec: no-op;
+- same id + different spec: `Durex configuration error`;
+- same plugin id + same capability id mapping: no-op;
+- same plugin id + different capability id: `Durex configuration error`.
 
-```groovy
-def foo = CapabilitySpec.builder('foo').build()
-registry.register(foo)
-registry.register(foo) // idempotent
-registry.register(CapabilitySpec.builder('foo').dependency('implementation', 'spring-jooq').build())
-```
+- [ ] **Step 3: Implement `CapabilityEngine.enable`**
 
-The third registration must fail with `Durex configuration error` and `capability 'foo' is already registered with a different definition`.
-
-- [ ] **Step 3: Implement capability and plugin registries**
-
-`CapabilityRegistry.register` follows exact structural-idempotency semantics. `CapabilityPluginRegistry.register(pluginId, capabilityId)` is idempotent for the same pair and fails if one plugin id is mapped to another primary capability.
-
-- [ ] **Step 4: Implement `CapabilityEngine.enable`**
-
-Use a per-engine activation stack for cycle detection; do not use static/global mutable state.
-
-Algorithm:
+Use one engine instance per project and a per-engine activation stack. Exact order:
 
 ```text
-if model.capabilities contains id: return
-lookup spec or fail
-if id is already on activation stack: fail with full cycle
-validate module kind when allowedModules non-empty
-for requiredId in sorted(spec.requires):
-    require registry contains requiredId
-    enable(requiredId)
-for conflictId in sorted(spec.conflicts):
-    if model.capabilities contains conflictId: fail
-for externalPluginAlias in sorted(spec.externalPluginAliases):
-    lookup catalog plugin alias
-    pluginManager.apply(catalogPlugin.id)
-for dependency binding in spec.dependencies:
-    DependencyBridge.add(project, model, binding.configuration, binding.libraryAlias)
+return if already enabled
+lookup spec
+cycle check
+validate allowed module kind
+for each sorted required capability:
+  require it is registered
+  recursively enable it
+check declared conflicts against enabled set
+check reverse conflicts from enabled registered specs
+for each sorted external plugin alias:
+  lookup CatalogPlugin and pluginManager.apply(plugin.id)
+for each DependencyBinding:
+  DependencyBridge.add(project, model, configuration, libraryAlias)
 model.enableCapability(id)
 ```
 
-Before enabling, also check reverse conflicts: any already-enabled registered spec whose `conflicts` contains the requested id blocks activation.
+No static/global mutable activation state.
 
-- [ ] **Step 5: Register built-ins without enabling them**
+- [ ] **Step 4: Register built-in specs in module plugin**
 
-`BuiltinCapabilities.registerAll(registry)` adds exactly `jpa`, `jdbc`, `jooq`, `redis`, `native`, `lombok` with the semantics from the spec. `DurexModulePlugin` creates registries/engine and registers built-ins before the public extension can be used.
-
-- [ ] **Step 6: Implement failure fixtures**
-
-Use fixture build scripts to register synthetic specs directly in the registry and call `engine.enable(...)`:
+`BuiltinCapabilities.registerAll` adds exactly:
 
 ```text
-missing-required: foo requires bar, bar unregistered
-cycle: foo requires bar; bar requires foo
-conflict: foo conflicts bar; enable bar then foo
-module-invalid: native-like capability allowed only SPRING_SERVICE on JAVA_LIBRARY
+jpa   -> Spring library/service; implementation spring-jpa
+jdbc  -> Spring library/service; implementation spring-jdbc
+jooq  -> Spring library/service; implementation spring-jooq
+redis -> Spring library/service; implementation spring-redis
+native -> Spring service; external plugin graalvm-native
+lombok -> compileOnly lombok + annotationProcessor lombok
 ```
 
-Assert the exact Durex error category plus missing/cycle/conflict/module details; no NPE or MissingMethodException.
+`DurexModulePlugin.apply` order after Task 4 is exactly:
 
-- [ ] **Step 7: Verify**
+```text
+apply durex.catalog
+create DurexModuleModel
+create CapabilityRegistry
+create CapabilityPluginRegistry
+create CapabilityEngine
+register built-ins
+create public DurexExtension
+register diagnostics placeholders/tasks currently present
+```
+
+- [ ] **Step 5: Add positive and negative fixtures**
+
+Fixture scripts obtain registries/engine by type. Define exact invalid cases:
+
+```groovy
+// missing required
+registry.register(CapabilitySpec.builder('foo').require('bar').build())
+engine.enable('foo')
+
+// cycle
+registry.register(CapabilitySpec.builder('foo').require('bar').build())
+registry.register(CapabilitySpec.builder('bar').require('foo').build())
+engine.enable('foo')
+
+// conflict
+registry.register(CapabilitySpec.builder('foo').conflict('bar').build())
+registry.register(CapabilitySpec.builder('bar').build())
+engine.enable('bar')
+engine.enable('foo')
+```
+
+Module-invalid fixture uses JAVA_LIBRARY and a synthetic capability allowed only on SPRING_SERVICE.
+
+- [ ] **Step 6: Verify and commit**
 
 ```bash
-gradle -p build-logic/tests/capability-kernel-smoke verifyCapabilityKernel --stacktrace
-for fixture in capability-missing-required capability-cycle capability-conflict capability-module-invalid; do
-  gradle -p "build-logic/tests/$fixture" help --stacktrace && exit 1 || true
+gradle -p build-logic/tests/capability-kernel-smoke help --stacktrace
+for f in capability-missing-required capability-cycle capability-conflict capability-module-invalid; do
+  if gradle -p "build-logic/tests/$f" help --stacktrace > "/tmp/$f.log" 2>&1; then exit 1; fi
+  grep -Fq 'Durex configuration error' "/tmp/$f.log"
 done
-```
 
-Positive fixture PASS; all invalid fixtures fail for their intended Durex errors.
-
-- [ ] **Step 8: Commit**
-
-```bash
 git add -- build-logic/src/main/groovy/com/github/durex/gradle/capability \
-  build-logic/src/main/groovy/com/github/durex/gradle/DurexModulePlugin.groovy \
-  build-logic/tests/capability-*
+  build-logic/src/main/groovy/com/github/durex/gradle/DurexModulePlugin.groovy build-logic/tests/capability-*
 git commit -m "feat: add Durex capability kernel"
 ```
 
 ---
 
-### Task 5: Route built-in feature plugins and generic capability DSL through the engine
+## Task 5 — Route built-in and generic capability plugins through the engine
 
 **Files:**
 - Modify: `build-logic/src/main/groovy/durex.feature.jpa.gradle`
@@ -726,25 +617,20 @@ git commit -m "feat: add Durex capability kernel"
 - Modify: `build-logic/src/main/groovy/durex.feature.lombok.gradle`
 - Modify: `build-logic/src/main/groovy/com/github/durex/gradle/DurexExtension.groovy`
 - Modify: `build-logic/src/main/groovy/com/github/durex/gradle/PersistenceExtension.groovy`
-- Test: `build-logic/tests/features-smoke/**`
-- Test: `build-logic/tests/generic-capability-smoke/**`
-- Test: `build-logic/tests/generic-capability-missing-mapping/**`
+- Create: `build-logic/src/main/groovy/com/github/durex/gradle/internaltesting/FixtureCapabilityPlugin.groovy`
+- Modify: `build-logic/build.gradle.kts`
+- Modify fixture: `build-logic/tests/features-smoke/**`
+- Create fixture: `build-logic/tests/generic-capability-smoke/**`
+- Create fixture: `build-logic/tests/generic-capability-missing-mapping/**`
 
-**Interfaces:**
-- Consumes: `DurexCapabilitySupport`, built-in specs, capability/plugin registries, engine.
-- Produces generic public method `void DurexExtension.capability(String pluginId)`.
-- Preserves all existing typed first-party methods.
+- [ ] **Step 1: Thin every built-in feature script**
 
-- [ ] **Step 1: Make every feature script a thin declaration/activation layer**
-
-Example target for jOOQ:
+Target shape for jOOQ:
 
 ```groovy
 import com.github.durex.gradle.capability.BuiltinCapabilities
 import com.github.durex.gradle.capability.DurexCapabilitySupport
-
 plugins { id 'durex.module' }
-
 DurexCapabilitySupport.registerAndEnable(
     project,
     'durex.feature.jooq',
@@ -752,84 +638,101 @@ DurexCapabilitySupport.registerAndEnable(
 )
 ```
 
-Apply the same shape to JPA/JDBC/Redis/Native/Lombok. Remove each script's direct module checks, dependency additions, feature-state mutation, and native flag mutation.
+Apply the same shape to JPA/JDBC/Redis/Native/Lombok. Remove direct module checks, dependency insertion, feature state mutation, and native boolean mutation from feature scripts.
 
-- [ ] **Step 2: Preserve typed facades as plugin application only**
+- [ ] **Step 2: Keep typed DSL as facade-only plugin application**
 
-`PersistenceExtension.jpa/jdbc/jooq` and `DurexExtension.redis/nativeImage/lombok` continue to call `project.pluginManager.apply(featurePluginId)` and contain no semantic validation/wiring.
+`PersistenceExtension.jpa/jdbc/jooq` and `DurexExtension.redis/nativeImage/lombok` only apply their feature plugin ids.
 
 - [ ] **Step 3: Add generic capability API**
-
-Implement:
 
 ```groovy
 void capability(String pluginId) {
     project.pluginManager.apply(pluginId)
-    String capabilityId = pluginRegistry.capabilityForPlugin(pluginId)
+    CapabilityPluginRegistry mapping = project.extensions.getByType(CapabilityPluginRegistry)
+    String capabilityId = mapping.capabilityForPlugin(pluginId)
     if (capabilityId == null) {
         throw DurexConfigurationException.missingCapabilityMapping(project.path, pluginId)
     }
-    engine.enable(capabilityId)
+    project.extensions.getByType(CapabilityEngine).enable(capabilityId)
 }
 ```
 
-The final enable is intentionally idempotent because compliant feature plugins enable themselves when directly applied.
+Missing mapping message contains `Gradle plugin id: <id>` and `did not register a Durex primary capability`.
 
-- [ ] **Step 4: Prove generic success using a capability plugin without typed DSL**
+- [ ] **Step 4: Add fixture-only third-party-style plugin**
 
-For v2 dogfood, add one internal fixture-only mapping/plugin entry point with plugin id `com.acme.durex.fixture` and capability id `fixture`, no typed method on `DurexExtension`. It uses `DurexCapabilitySupport.registerAndEnable(...)` and has no new business dependency. Keep the class clearly under an `internaltesting` package and document that publication-phase tests replace this synthetic entry point before external distribution is declared stable.
+`FixtureCapabilityPlugin.groovy`:
 
-`generic-capability-smoke` uses only:
+```groovy
+package com.github.durex.gradle.internaltesting
+
+import com.github.durex.gradle.capability.CapabilitySpec
+import com.github.durex.gradle.capability.DurexCapabilitySupport
+import org.gradle.api.Plugin
+import org.gradle.api.Project
+
+class FixtureCapabilityPlugin implements Plugin<Project> {
+    @Override
+    void apply(Project project) {
+        project.pluginManager.apply('durex.module')
+        DurexCapabilitySupport.registerAndEnable(
+            project,
+            'com.acme.durex.fixture',
+            CapabilitySpec.builder('fixture').build()
+        )
+    }
+}
+```
+
+Register only for dogfood testing:
+
+```kotlin
+create("fixtureCapability") {
+    id = "com.acme.durex.fixture"
+    implementationClass = "com.github.durex.gradle.internaltesting.FixtureCapabilityPlugin"
+}
+```
+
+No typed facade method is added for `fixture`.
+
+- [ ] **Step 5: Generic fixtures**
+
+Success:
 
 ```groovy
 plugins { id 'durex.java-library' }
-
-durex {
-    capability('com.acme.durex.fixture')
-}
+durex { capability('com.acme.durex.fixture') }
+import com.github.durex.gradle.model.DurexModuleModel
+assert extensions.getByType(DurexModuleModel).capabilities.get() == ['fixture'] as Set
 ```
 
-and asserts `capabilities == ['fixture']`.
-
-- [ ] **Step 5: Prove missing mapping failure**
-
-Fixture:
+Missing mapping:
 
 ```groovy
 plugins { id 'durex.java-library' }
-
-durex {
-    capability('java')
-}
+durex { capability('java') }
 ```
 
-`java` applies successfully but has no Durex capability mapping; configuration must fail immediately with plugin id and `did not register a Durex primary capability`.
-
-- [ ] **Step 6: Verify built-ins still coexist**
+- [ ] **Step 6: Verify and commit**
 
 ```bash
 gradle -p build-logic/tests/features-smoke durexCapabilities dependencies --configuration compileClasspath --stacktrace
-gradle -p build-logic/tests/generic-capability-smoke verifyGenericCapability --stacktrace
-gradle -p build-logic/tests/generic-capability-missing-mapping help --stacktrace
-```
+gradle -p build-logic/tests/generic-capability-smoke help --stacktrace
+if gradle -p build-logic/tests/generic-capability-missing-mapping help --stacktrace > /tmp/mapping.log 2>&1; then exit 1; fi
+grep -Fq 'did not register a Durex primary capability' /tmp/mapping.log
 
-Expected feature set remains sorted canonical output `jooq,jpa,redis`; missing mapping fails intentionally.
-
-- [ ] **Step 7: Commit**
-
-```bash
-git add -- build-logic/src/main/groovy/durex.feature.*.gradle \
+git add -- build-logic/build.gradle.kts build-logic/src/main/groovy/durex.feature.*.gradle \
   build-logic/src/main/groovy/com/github/durex/gradle/DurexExtension.groovy \
   build-logic/src/main/groovy/com/github/durex/gradle/PersistenceExtension.groovy \
   build-logic/src/main/groovy/com/github/durex/gradle/internaltesting \
-  build-logic/tests/features-smoke \
-  build-logic/tests/generic-capability-*
+  build-logic/tests/features-smoke build-logic/tests/generic-capability-*
 git commit -m "refactor: route Durex features through capability engine"
 ```
 
 ---
 
-### Task 6: Generic cache-safe diagnostics and `durexDoctor`
+## Task 6 — Generic cache-safe diagnostics and `durexDoctor`
 
 **Files:**
 - Create: `build-bootstrap/src/main/groovy/com/github/durex/gradle/settings/DurexDependenciesTask.groovy`
@@ -839,19 +742,12 @@ git commit -m "refactor: route Durex features through capability engine"
 - Create: `build-logic/src/main/groovy/com/github/durex/gradle/diagnostics/DurexDoctorTask.groovy`
 - Create: `build-logic/src/main/groovy/com/github/durex/gradle/diagnostics/DurexDoctorValidator.groovy`
 - Modify: `build-logic/src/main/groovy/com/github/durex/gradle/DurexModulePlugin.groovy`
-- Test: `build-bootstrap/tests/manifest-valid/**`
-- Test: `build-bootstrap/tests/modules-auto/**`
-- Test: `build-logic/tests/doctor-smoke/**`
-- Test: `build-logic/tests/doctor-invalid/**`
+- Modify fixtures: `build-bootstrap/tests/manifest-valid/**`, `build-bootstrap/tests/modules-auto/**`
+- Create fixtures: `build-logic/tests/doctor-smoke/**`, `build-logic/tests/doctor-invalid/**`
 
-**Interfaces:**
-- Produces four diagnostic tasks: `durexDependencies`, `durexProjects`, `durexCapabilities`, `durexDoctor`.
-- Task actions consume only Gradle input properties/collections.
-- `DurexDoctorValidator.validate(...) -> List<String>` returns deterministic violations during configuration, not task execution.
+- [ ] **Step 1: Binary bootstrap diagnostic tasks**
 
-- [ ] **Step 1: Replace bootstrap diagnostic closures with binary tasks**
-
-`DurexDependenciesTask` has only inputs:
+`DurexDependenciesTask` inputs:
 
 ```groovy
 @Input abstract Property<Integer> getJavaVersion()
@@ -860,19 +756,21 @@ git commit -m "refactor: route Durex features through capability engine"
 @Input abstract ListProperty<String> getLibraryLines()
 ```
 
-Task action prints a fixed header and these already-sorted lines. It does not call the registry service.
+`DurexProjectsTask` input:
 
-`DurexProjectsTask` takes `ListProperty<String> projectLines` and prints it; it does not read settings/project registry during execution.
+```groovy
+@Input abstract ListProperty<String> getProjectLines()
+```
 
-- [ ] **Step 2: Make bootstrap diagnostics ecosystem-neutral**
+Task actions print only inputs.
 
-During settings configuration, build sorted lines by enumerating all platforms/plugins/libraries from the parsed registry/snapshot. Remove literal checks for `spring`, `spring-boot`, `graalvm-native`, and `jooq-codegen` from `DurexSettingsPlugin`.
+- [ ] **Step 2: Make settings diagnostics generic**
 
-Representative stable output includes all platform/plugin aliases and no special-case allowlist.
+During `settingsEvaluated`, call `serviceProvider.get().snapshot()` once during configuration and build sorted lines from every entry in `platforms`, `plugins`, and `libraries`. Register binary tasks at root and set their input properties. Delete the current allowlist that prints only Spring/GraalVM/jOOQ plugin versions.
 
-- [ ] **Step 3: Replace `durexCapabilities` closure with binary task**
+- [ ] **Step 3: Binary `durexCapabilities`**
 
-Use inputs:
+Inputs:
 
 ```groovy
 @Input abstract Property<String> getModuleKind()
@@ -881,30 +779,26 @@ Use inputs:
 @Input abstract ListProperty<String> getPlatformBindings()
 ```
 
-Project configuration wires providers/materialized sorted values. Task action only prints its inputs. `Native: enabled|disabled` is derived inside task action from the `capabilities` input, not a separate property.
+Wire sorted providers/values during configuration. `Native: enabled` is derived from the capability list in the task action; there is no native input flag.
 
-- [ ] **Step 4: Implement doctor validator**
+- [ ] **Step 4: Doctor validator and task**
 
-`DurexDoctorValidator` receives immutable/configuration-phase facts: project path, module model values, capability registry specs, plugin mappings, and local dependency catalog. It returns sorted violation strings for exactly these checks:
+`DurexDoctorValidator.validate(...)` returns a sorted `List<String>` of violations and checks:
 
 ```text
 module kind present
-all enabled capabilities registered
-plugin mapping references registered capabilities
+enabled capabilities registered
+plugin mappings reference registered capabilities
 allowed module kinds
-all requires present
-no conflicts
-all dependency aliases exist
-all external plugin aliases exist
-all platform-managed dependency bindings have matching configuration:platform binding
-no duplicate/inconsistent model entries
+required capabilities present
+no declared or reverse conflicts
+dependency aliases exist
+external plugin aliases exist
+platform-managed dependency bindings have exact configuration:platform binding
+no duplicate/inconsistent model values
 ```
 
-Do not resolve Maven artifacts or duplicate Gradle dependency resolution.
-
-- [ ] **Step 5: Implement cache-safe `DurexDoctorTask`**
-
-Inputs:
+`DurexDoctorTask` inputs:
 
 ```groovy
 @Input abstract Property<String> getProjectPathInput()
@@ -914,109 +808,197 @@ Inputs:
 @Input abstract ListProperty<String> getViolations()
 ```
 
-If violations is non-empty, task action throws `GradleException` with `Durex Doctor` report and non-zero task result. Otherwise prints `Configuration    OK`.
+Task action prints `Configuration    OK` when empty and fails with a Durex Doctor report when non-empty. It reads no project/model/registry/service.
 
-Wire `violations` during configuration after the project DSL has been evaluated; `afterEvaluate` is allowed only to materialize these inputs and must not install task actions or read state at execution time.
+- [ ] **Step 5: Wire doctor inputs after DSL evaluation**
 
-- [ ] **Step 6: RED/green doctor fixtures**
+`DurexModulePlugin` registers the task during `apply`. Its `project.afterEvaluate` callback computes the validator result and sets task inputs only; it does not replace/add task actions.
 
-`doctor-smoke` applies Spring service + jOOQ + lombok and expects:
+- [ ] **Step 6: Exact doctor fixtures**
 
-```text
-Module: SPRING_SERVICE
-Capabilities: jooq,lombok
-Configuration: OK
+`doctor-smoke`:
+
+```groovy
+plugins { id 'durex.spring-service' }
+durex {
+    persistence { jooq() }
+    lombok()
+}
 ```
 
-`doctor-invalid` intentionally mutates/registers a synthetic inconsistent spec/mapping so doctor fails with the exact violation instead of the capability engine failing first.
+`doctor-invalid`:
 
-- [ ] **Step 7: Verify deterministic output**
-
-Run each diagnostic twice and compare normalized output snippets. Assert canonical sort order lexicographically; do not hard-code a different semantic order.
-
-```bash
-gradle -p build-bootstrap/tests/manifest-valid durexDependencies --stacktrace
-gradle -p build-bootstrap/tests/modules-auto durexProjects --stacktrace
-gradle -p build-logic/tests/doctor-smoke durexCapabilities durexDoctor --stacktrace
-gradle -p build-logic/tests/doctor-invalid durexDoctor --stacktrace
+```groovy
+plugins { id 'durex.java-library' }
+import com.github.durex.gradle.capability.CapabilityPluginRegistry
+extensions.getByType(CapabilityPluginRegistry)
+    .register('com.acme.durex.broken', 'missing-capability')
 ```
 
-- [ ] **Step 8: Commit**
+Doctor-invalid must fail because mapping references an unregistered capability; no engine invocation occurs first.
+
+- [ ] **Step 7: Verify deterministic diagnostics and commit**
 
 ```bash
+gradle -p build-bootstrap/tests/manifest-valid durexDependencies --stacktrace | tee /tmp/deps.log
+gradle -p build-bootstrap/tests/modules-auto durexProjects --stacktrace | tee /tmp/projects.log
+gradle -p build-logic/tests/doctor-smoke durexCapabilities durexDoctor --stacktrace | tee /tmp/doctor.log
+if gradle -p build-logic/tests/doctor-invalid durexDoctor --stacktrace > /tmp/doctor-invalid.log 2>&1; then exit 1; fi
+grep -Fq 'missing-capability' /tmp/doctor-invalid.log
+
 git add -- build-bootstrap/src/main/groovy/com/github/durex/gradle/settings \
-  build-bootstrap/tests/manifest-valid \
-  build-bootstrap/tests/modules-auto \
+  build-bootstrap/tests/manifest-valid build-bootstrap/tests/modules-auto \
   build-logic/src/main/groovy/com/github/durex/gradle/diagnostics \
   build-logic/src/main/groovy/com/github/durex/gradle/DurexModulePlugin.groovy \
-  build-logic/tests/doctor-*
+  build-logic/tests/doctor-smoke build-logic/tests/doctor-invalid
 git commit -m "feat: add cache-safe Durex diagnostics and doctor"
 ```
 
 ---
 
-### Task 7: Configuration-cache and parallel-build hardening
+## Task 7 — Configuration-cache and parallel-build hardening
 
 **Files:**
-- Create: `build-logic/tests/config-cache-groovy/**`
-- Create: `build-logic/tests/config-cache-kotlin/**`
-- Create: `build-logic/tests/parallel-multiproject/**`
-- Modify as failures require: only Plugin Core v2 implementation files from Tasks 1-6
+- Create: `build-logic/tests/config-cache-groovy/settings.gradle`
+- Create: `build-logic/tests/config-cache-groovy/build.gradle`
+- Create: `build-logic/tests/config-cache-kotlin/settings.gradle.kts`
+- Create: `build-logic/tests/config-cache-kotlin/build.gradle.kts`
+- Create: `build-logic/tests/parallel-multiproject/settings.gradle`
+- Create: `build-logic/tests/parallel-multiproject/modules.toml`
+- Create: `build-logic/tests/parallel-multiproject/java-lib/build.gradle`
+- Create: `build-logic/tests/parallel-multiproject/spring-lib/build.gradle`
+- Create: `build-logic/tests/parallel-multiproject/spring-service/build.gradle`
+- Modify: `build-bootstrap/src/main/groovy/com/github/durex/gradle/settings/DurexSettingsPlugin.groovy`
+- Modify: `build-bootstrap/src/main/groovy/com/github/durex/gradle/settings/DurexDependenciesTask.groovy`
+- Modify: `build-bootstrap/src/main/groovy/com/github/durex/gradle/settings/DurexProjectsTask.groovy`
+- Modify: `build-logic/src/main/groovy/com/github/durex/gradle/catalog/DurexRegistryBridge.groovy`
+- Modify: `build-logic/src/main/groovy/com/github/durex/gradle/capability/CapabilityEngine.groovy`
+- Modify: `build-logic/src/main/groovy/com/github/durex/gradle/capability/CapabilityRegistry.groovy`
+- Modify: `build-logic/src/main/groovy/com/github/durex/gradle/capability/CapabilityPluginRegistry.groovy`
+- Modify: `build-logic/src/main/groovy/com/github/durex/gradle/diagnostics/DurexCapabilitiesTask.groovy`
+- Modify: `build-logic/src/main/groovy/com/github/durex/gradle/diagnostics/DurexDoctorTask.groovy`
+- Modify: `build-logic/src/main/groovy/com/github/durex/gradle/DurexModulePlugin.groovy`
 - Modify: `.github/workflows/durex-build-platform.yml`
 
-**Interfaces:**
-- Consumes complete v2 kernel and diagnostics.
-- Produces no new public DSL; this task hardens lifecycle behavior.
+The listed production files are the only lifecycle/state files changed in this hardening task. Do not change public DSL semantics here.
 
 - [ ] **Step 1: Groovy configuration-cache fixture**
 
-Fixture applies `durex.spring-service`, enables `jooq` and `redis`, and runs `durexDoctor`.
+`settings.gradle`:
 
-CI/local script:
-
-```bash
-rm -rf build-logic/tests/config-cache-groovy/.gradle/configuration-cache
-gradle -p build-logic/tests/config-cache-groovy durexDoctor --configuration-cache --stacktrace | tee /tmp/durex-cc1.log
-gradle -p build-logic/tests/config-cache-groovy durexDoctor --configuration-cache --stacktrace | tee /tmp/durex-cc2.log
-grep -F 'Reusing configuration cache.' /tmp/durex-cc2.log
+```groovy
+pluginManagement {
+    includeBuild('../../../build-bootstrap')
+    includeBuild('../..')
+    repositories { gradlePluginPortal(); mavenCentral() }
+}
+plugins { id 'durex.settings' }
+durexSettings {
+    repositoryRoot.set(file('../../..'))
+    moduleDiscovery.set(false)
+}
+dependencyResolutionManagement { repositories { mavenCentral() } }
+rootProject.name = 'config-cache-groovy'
 ```
 
-Both commands exit 0 and the second proves reuse.
+`build.gradle`:
 
-- [ ] **Step 2: Kotlin DSL configuration-cache fixture**
-
-Keep `settings.gradle.kts` and `build.gradle.kts`; use:
-
-```kotlin
-plugins { id("durex.spring-service") }
-
+```groovy
+plugins { id 'durex.spring-service' }
 durex {
     persistence { jooq() }
     redis()
 }
 ```
 
-Run the same two-invocation cache-reuse check. If Kotlin type-safe accessors fail, fix the public plugin/extension API; do not convert the fixture to Groovy.
-
-- [ ] **Step 3: Settings diagnostics configuration-cache proof**
-
 Run twice:
 
 ```bash
-gradle -p build-bootstrap/tests/modules-auto durexProjects --configuration-cache --stacktrace
-gradle -p build-bootstrap/tests/modules-auto durexProjects --configuration-cache --stacktrace
+rm -rf build-logic/tests/config-cache-groovy/.gradle/configuration-cache
+gradle -p build-logic/tests/config-cache-groovy durexDoctor --configuration-cache --stacktrace | tee /tmp/cc-g1.log
+gradle -p build-logic/tests/config-cache-groovy durexDoctor --configuration-cache --stacktrace | tee /tmp/cc-g2.log
+grep -Fq 'Reusing configuration cache.' /tmp/cc-g2.log
 ```
 
-Second invocation must reuse cache. Fix settings/task wiring rather than disabling configuration cache.
+- [ ] **Step 2: Kotlin configuration-cache fixture**
+
+`settings.gradle.kts` is the Kotlin equivalent of Step 1 with the same included builds/repository root. `build.gradle.kts`:
+
+```kotlin
+plugins { id("durex.spring-service") }
+durex {
+    persistence { jooq() }
+    redis()
+}
+```
+
+Run twice and require `Reusing configuration cache.` on the second run. Do not convert this fixture to Groovy.
+
+- [ ] **Step 3: Settings diagnostic cache reuse**
+
+```bash
+rm -rf build-bootstrap/tests/modules-auto/.gradle/configuration-cache
+gradle -p build-bootstrap/tests/modules-auto durexProjects --configuration-cache --stacktrace | tee /tmp/cc-s1.log
+gradle -p build-bootstrap/tests/modules-auto durexProjects --configuration-cache --stacktrace | tee /tmp/cc-s2.log
+grep -Fq 'Reusing configuration cache.' /tmp/cc-s2.log
+```
 
 - [ ] **Step 4: Parallel multi-project fixture**
 
-Create three modules via Durex settings discovery/manual mapping:
+`settings.gradle`:
 
-```text
-:java-lib       -> durex.java-library
-:spring-lib     -> durex.spring-library + jooq
-:spring-service -> durex.spring-service + redis, depends on both libraries
+```groovy
+pluginManagement {
+    includeBuild('../../../build-bootstrap')
+    includeBuild('../..')
+    repositories { gradlePluginPortal(); mavenCentral() }
+}
+plugins { id 'durex.settings' }
+durexSettings {
+    repositoryRoot.set(file('.'))
+    dependencyManifest.set(file('../../../gradle/dependencies/durex.toml'))
+    modulesManifest.set(file('modules.toml'))
+}
+dependencyResolutionManagement { repositories { mavenCentral() } }
+rootProject.name = 'parallel-multiproject'
+```
+
+`modules.toml`:
+
+```toml
+[discovery]
+mode = "manual"
+
+[[module]]
+name = "java-lib"
+path = "java-lib"
+
+[[module]]
+name = "spring-lib"
+path = "spring-lib"
+
+[[module]]
+name = "spring-service"
+path = "spring-service"
+```
+
+Subproject builds:
+
+```groovy
+// java-lib/build.gradle
+plugins { id 'durex.java-library' }
+
+// spring-lib/build.gradle
+plugins { id 'durex.spring-library' }
+durex { persistence { jooq() } }
+
+// spring-service/build.gradle
+plugins { id 'durex.spring-service' }
+durex { redis() }
+dependencies {
+    implementation project(':java-lib')
+    implementation project(':spring-lib')
+}
 ```
 
 Run:
@@ -1025,91 +1007,75 @@ Run:
 gradle -p build-logic/tests/parallel-multiproject build --parallel --stacktrace
 ```
 
-Expected PASS with no cross-project/global mutable-state failures.
+- [ ] **Step 5: Apply configuration-cache diagnostics only to the listed lifecycle files**
 
-- [ ] **Step 5: Remove configuration-cache violations found by Gradle**
-
-Typical fixes are constrained to:
+Use Gradle's reported problem to map the fix:
 
 ```text
-task inputs/provider wiring
-project/configuration access timing
-mutable static/global state
-live extension/service capture in task actions
+settings/root task captures -> DurexSettingsPlugin / DurexDependenciesTask / DurexProjectsTask
+project diagnostic task captures -> DurexModulePlugin / DurexCapabilitiesTask / DurexDoctorTask
+cross-build service capture -> DurexRegistryBridge
+mutable shared capability state -> CapabilityEngine / CapabilityRegistry / CapabilityPluginRegistry
 ```
 
-Do not suppress configuration-cache problems or use `--no-configuration-cache` in acceptance tests.
+Do not suppress problems and do not add `--no-configuration-cache`.
 
-- [ ] **Step 6: Add CI contract**
+- [ ] **Step 6: Add exact CI commands and commit**
 
-Extend `Durex Build Platform` workflow with the exact Groovy/Kotlin/settings cache-reuse commands and `--parallel` fixture. Intended-failure fixtures must still invert exit status and grep Durex-specific errors.
-
-- [ ] **Step 7: Commit**
+Add the four commands from Steps 1-4 to `Durex Build Platform` CI. Then:
 
 ```bash
-git add -- build-logic/tests/config-cache-* \
+git add -- build-logic/tests/config-cache-groovy build-logic/tests/config-cache-kotlin \
   build-logic/tests/parallel-multiproject \
-  build-bootstrap/tests/modules-auto \
-  build-bootstrap/src/main/groovy/com/github/durex/gradle \
-  build-logic/src/main/groovy/com/github/durex/gradle \
+  build-bootstrap/src/main/groovy/com/github/durex/gradle/settings \
+  build-logic/src/main/groovy/com/github/durex/gradle/catalog/DurexRegistryBridge.groovy \
+  build-logic/src/main/groovy/com/github/durex/gradle/capability \
+  build-logic/src/main/groovy/com/github/durex/gradle/diagnostics \
+  build-logic/src/main/groovy/com/github/durex/gradle/DurexModulePlugin.groovy \
   .github/workflows/durex-build-platform.yml
 git commit -m "test: harden Durex plugins for configuration cache"
 ```
 
 ---
 
-### Task 8: Real-build migration, regression matrix, and final CI evidence
+## Task 8 — Real regressions and CI evidence
 
 **Files:**
-- Modify only as required by v2 API migration:
-  - `core/music/build.spring.gradle`
-  - `core/schema/music/json/build.spring.gradle`
-  - `core/schema/music/entity/build.spring.gradle`
-  - `core/schema/music/repo/build.spring.gradle`
-  - `core/shared/jakarta/common/build.spring.gradle`
-  - `core/shared/json-schema-annotation/build.spring.gradle`
-  - `reference/spring-capabilities/**`
-  - `reference/spring-native/**`
 - Modify: `.github/workflows/durex-build-platform.yml`
-- Modify if needed: `.github/workflows/spring-music.yml`
-- Modify if needed: `.github/workflows/spring-native-reference.yml`
+- Modify: `.github/workflows/spring-music.yml`
+- Modify: `.github/workflows/spring-native-reference.yml`
+- Verify without planned source edits: `core/**/build.spring.gradle`, `migration/spring-music/**`, `reference/spring-capabilities/**`, `reference/spring-native/**`, `build-logic/src/main/**`.
 
-**Interfaces:**
-- Consumes final v2 public API; produces no new core API.
-- Acceptance is real application/schema/native behavior plus source-level removal of obsolete v1 paths.
+No new public/core API is introduced in this task. Any source failure here is treated as a defect in Tasks 1-7 and fixed in the owning file before final verification, not as a new design change.
 
-- [ ] **Step 1: Migrate all platform-managed `durex.library(...)` callers**
-
-Search:
+- [ ] **Step 1: Source invariants**
 
 ```bash
-grep -R -n "durex.library" core reference migration build-logic/tests
+grep -R -n 'DurexModuleState\|nativeEnabled' build-logic/src/main && exit 1 || true
+grep -R -n 'service.get().\(library\|platform\|plugin\|javaVersion\)' build-logic/src/main && exit 1 || true
 ```
 
-Every remaining production use must refer to an explicit-version/version-ref library. Any Spring-BOM-managed use is replaced with `durex.dependency(configuration, alias)`.
-
-- [ ] **Step 2: Verify no v1 state or direct cross-build registry path remains**
-
-These searches must produce no production hits:
+Search all production `durex.library` calls:
 
 ```bash
-grep -R -n 'DurexModuleState\|nativeEnabled' build-logic/src/main || true
-grep -R -n 'service.get().\(library\|platform\|plugin\|javaVersion\)' build-logic/src/main || true
+grep -R -n "durex.library" core reference migration
 ```
 
-`DurexSettingsPlugin.groovy` must contain no literal `spring-boot`, `graalvm-native`, or `jooq-codegen` diagnostic allowlist.
+Every returned alias must be explicit-version/version-ref in the Durex manifest. Platform-managed production calls are a Task 3 defect and must already have been replaced by `durex.dependency`.
 
-- [ ] **Step 3: Real Spring Music regression**
+- [ ] **Step 2: Spring Music**
 
-Run:
+Update `spring-music.yml` to run:
 
 ```bash
 gradle -p migration/spring-music :music:durexDoctor :music:compileJava :music:test --configuration-cache --stacktrace
 ```
 
-Expected: doctor OK; all CRUD MockMvc + H2/jOOQ integration tests green.
+Keep project graph, jOOQ schema smoke, and catalog-free descriptor checks.
 
-- [ ] **Step 4: jOOQ schema regression**
+- [ ] **Step 3: jOOQ schema**
+
+`Durex Build Platform` keeps:
 
 ```bash
 gradle -p build-logic/tests/jooq-schema-smoke jooqCodegen --configuration-cache --stacktrace
@@ -1117,98 +1083,83 @@ test -f build-logic/tests/jooq-schema-smoke/build/generated-src/jooq/main/com/ex
 test -f build-logic/tests/jooq-schema-smoke/build/generated-src/jooq/main/com/example/schema/tables/records/RMusic.java
 ```
 
-Expected Q/R generation unchanged.
+- [ ] **Step 4: Spring capabilities/Kotlin DSL**
 
-- [ ] **Step 5: Spring Native regression**
+Add to `Durex Build Platform` or preserve in Spring Native JVM job:
 
-Run JVM/AOT first:
+```bash
+gradle -p reference/spring-capabilities durexDoctor dependencies --configuration compileClasspath --configuration-cache --stacktrace
+```
+
+- [ ] **Step 5: Spring Native**
+
+Update JVM job to run:
 
 ```bash
 gradle -p reference/spring-native durexDoctor test processAot bootJar --configuration-cache --stacktrace
 ```
 
-Then GraalVM-capable CI runs:
+Preserve existing AOT HTTP smoke. Native job remains:
 
 ```bash
 gradle -p reference/spring-native nativeTest --stacktrace
 gradle -p reference/spring-native nativeCompile --stacktrace
 ```
 
-and the existing `/hello` native HTTP smoke remains required.
+and existing native `/hello` HTTP smoke.
 
-- [ ] **Step 6: Spring capabilities/Kotlin DSL regression**
+- [ ] **Step 6: Required PR-head evidence**
 
-```bash
-gradle -p reference/spring-capabilities durexDoctor dependencies --configuration compileClasspath --configuration-cache --stacktrace
-```
-
-Expected JPA/JDBC/jOOQ/Redis dependencies aligned by Spring BOM and doctor OK.
-
-- [ ] **Step 7: Final CI matrix**
-
-Required green checks on the PR head:
+All must be green:
 
 ```text
 Durex Build Platform
-  snapshot bridge
-  schema mismatch negative test
-  dependency API
-  capability kernel positive/negative tests
-  typed + generic capability DSL
+  snapshot bridge + schema mismatch negative
+  dependency API + invalid library negative
+  capability kernel positive/negative
+  built-in + generic capability DSL
   doctor positive/negative
   Groovy/Kotlin configuration-cache reuse
-  settings cache reuse
+  settings configuration-cache reuse
   parallel multi-project build
   jOOQ schema
 
 Spring Music Migration
   project graph
+  :music:durexDoctor
   compile
   CRUD/runtime integration
   catalog-free descriptors
-  :music:durexDoctor
 
 Spring Native Reference
-  capability resolution
+  Spring capabilities resolution
   JVM tests
+  durexDoctor
   AOT HTTP smoke
   nativeTest
   nativeCompile
   native HTTP smoke
 ```
 
-Legacy Quarkus/Shared Utils workflow failures are not to be described as green if they remain unrelated/red.
+Do not describe legacy Quarkus/Shared Utils workflows as green if they remain unrelated/red.
 
-- [ ] **Step 8: Final scope review**
+- [ ] **Step 7: Final scope check and commit**
 
-Compare against the base branch and verify this plan did not:
-
-```text
-add Kafka/Mongo/etc.
-change root Gradle cutover policy
-publish plugins externally
-move capability behavior into TOML
-rewrite every convention script into binary form
-```
-
-- [ ] **Step 9: Commit**
+Diff against base must not add business features, root cutover, publishing, capability TOML schema, or wholesale convention-to-binary rewrites.
 
 ```bash
-git add -- core/music/build.spring.gradle core/schema/music core/shared \
-  reference/spring-capabilities reference/spring-native \
-  .github/workflows/durex-build-platform.yml \
-  .github/workflows/spring-music.yml \
-  .github/workflows/spring-native-reference.yml
-git commit -m "refactor: complete Durex Plugin Core v2 migration"
+git add -- .github/workflows/durex-build-platform.yml \
+  .github/workflows/spring-music.yml .github/workflows/spring-native-reference.yml
+git commit -m "ci: verify Durex Plugin Core v2"
 ```
 
 ---
 
 ## Execution Notes
 
-- Execute Tasks 1-8 in order; each task has interfaces consumed by later tasks.
-- Keep RED commits/tests focused and temporary only when the task explicitly calls for a RED checkpoint; final task commits must leave branch buildable except intentionally failing fixtures.
-- Prefer existing Gradle functional fixture style over introducing a new unit-test framework merely for this refactor.
-- If Gradle 9.1 configuration-cache diagnostics expose a design conflict, the spec is authoritative: change implementation lifecycle/wiring rather than weakening the acceptance command.
-- If a capability needs special behavior beyond dependencies/external plugin application during implementation, stop and assess whether it belongs in the generic kernel as an explicit hook or is outside v2; do not silently add feature-specific branches to `CapabilityEngine`.
-- The synthetic `com.acme.durex.fixture` plugin validates the third-party-style public contract only; external publication/classloader packaging is deferred to the publication phase defined as out-of-scope by the spec.
+- Execute Tasks 1-8 in order; later tasks rely on interfaces introduced earlier.
+- Prefer existing Gradle functional fixtures; do not add a new unit-test framework solely for this refactor.
+- Intentionally failing fixtures must invert command status and grep Durex-specific messages in CI.
+- Configuration-cache failures are fixed in the exact lifecycle files listed in Task 7; acceptance commands are not weakened.
+- If a built-in capability needs behavior beyond dependency bindings or external plugin application, stop and compare against the spec before adding a new generic kernel hook; do not add feature-name conditionals to `CapabilityEngine`.
+- `com.acme.durex.fixture` is an internal dogfood-only plugin proving the third-party-style mapping contract; external artifact publication/classloader packaging remains outside v2.
