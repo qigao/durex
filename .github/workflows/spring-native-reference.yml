@@ -4,10 +4,14 @@ on:
   push:
     paths:
       - 'reference/spring-native/**'
+      - 'gradle/library/spring-*.gradle'
+      - 'gradle/versions/spring.versions.toml'
       - '.github/workflows/spring-native-reference.yml'
   pull_request:
     paths:
       - 'reference/spring-native/**'
+      - 'gradle/library/spring-*.gradle'
+      - 'gradle/versions/spring.versions.toml'
       - '.github/workflows/spring-native-reference.yml'
 
 permissions:
