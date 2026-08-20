@@ -1,8 +1,0 @@
-plugins {
-    id 'java-library'
-}
-
-dependencies {
-    implementation dbLibs.jooq.spring.codegen
-    implementation dbLibs.jooq.spring.meta
-}
