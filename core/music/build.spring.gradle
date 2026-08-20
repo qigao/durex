@@ -26,6 +26,7 @@ durex {
         jooq()
     }
     lombok()
+    dependency('testRuntimeOnly', 'h2')
 }
 
 dependencies {
@@ -37,5 +38,4 @@ dependencies {
     compileOnly durex.library('javax-cdi')
     compileOnly durex.library('javax-inject')
     compileOnly durex.library('javax-transaction')
-    testRuntimeOnly durex.library('h2')
 }
