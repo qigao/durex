@@ -1,6 +1,7 @@
 package com.github.durex.gradle
 
 import com.github.durex.gradle.catalog.DependencyCatalogSnapshot
+import com.github.durex.gradle.model.DurexModuleModel
 import org.gradle.api.GradleException
 import org.gradle.api.Project
 
@@ -9,25 +10,27 @@ final class DurexDependencyAccess {
         catalog(project).javaVersion()
     }
 
-    static void activatePlatform(Project project, DurexModuleState state, String configuration, String platformAlias) {
+    static void activatePlatform(Project project, DurexModuleModel model, String configuration, String platformAlias) {
         if (project.configurations.findByName(configuration) == null) return
-        if (state.activatePlatform(configuration, platformAlias)) {
+        String binding = "${configuration}:${platformAlias}"
+        if (!model.platformBindings.get().contains(binding)) {
             def platform = catalog(project).platform(platformAlias)
             project.dependencies.add(configuration, project.dependencies.platform(platform.coordinate()))
+            model.bindPlatform(configuration, platformAlias)
         }
     }
 
-    static void add(Project project, DurexModuleState state, String configuration, String alias) {
+    static void add(Project project, DurexModuleModel model, String configuration, String alias) {
         def library = catalog(project).library(alias)
         if (library.platform) {
-            activatePlatform(project, state, configuration, library.platform as String)
+            activatePlatform(project, model, configuration, library.platform as String)
         }
         project.dependencies.add(configuration, library.notation())
     }
 
-    static String libraryNotation(Project project, DurexModuleState state, String alias) {
+    static String libraryNotation(Project project, DurexModuleModel model, String alias) {
         def library = catalog(project).library(alias)
-        if (library.platform && !state.activePlatforms().contains(library.platform as String)) {
+        if (library.platform && !model.platformBindings.get().any { it.endsWith(":${library.platform}") }) {
             throw new GradleException(
                     "Durex dependency error\nLibrary: ${alias}\nProblem: platform '${library.platform}' is not active for this project")
         }
