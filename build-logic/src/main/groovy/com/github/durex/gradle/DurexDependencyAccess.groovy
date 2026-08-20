@@ -1,6 +1,7 @@
 package com.github.durex.gradle
 
 import com.github.durex.gradle.catalog.DependencyCatalogSnapshot
+import com.github.durex.gradle.dependency.DependencyBridge
 import com.github.durex.gradle.model.DurexModuleModel
 import org.gradle.api.GradleException
 import org.gradle.api.Project
@@ -11,30 +12,15 @@ final class DurexDependencyAccess {
     }
 
     static void activatePlatform(Project project, DurexModuleModel model, String configuration, String platformAlias) {
-        if (project.configurations.findByName(configuration) == null) return
-        String binding = "${configuration}:${platformAlias}"
-        if (!model.platformBindings.get().contains(binding)) {
-            def platform = catalog(project).platform(platformAlias)
-            project.dependencies.add(configuration, project.dependencies.platform(platform.coordinate()))
-            model.bindPlatform(configuration, platformAlias)
-        }
+        DependencyBridge.activatePlatform(project, model, configuration, platformAlias)
     }
 
     static void add(Project project, DurexModuleModel model, String configuration, String alias) {
-        def library = catalog(project).library(alias)
-        if (library.platform) {
-            activatePlatform(project, model, configuration, library.platform as String)
-        }
-        project.dependencies.add(configuration, library.notation())
+        DependencyBridge.add(project, model, configuration, alias)
     }
 
     static String libraryNotation(Project project, DurexModuleModel model, String alias) {
-        def library = catalog(project).library(alias)
-        if (library.platform && !model.platformBindings.get().any { it.endsWith(":${library.platform}") }) {
-            throw new GradleException(
-                    "Durex dependency error\nLibrary: ${alias}\nProblem: platform '${library.platform}' is not active for this project")
-        }
-        library.notation() as String
+        DependencyBridge.explicitNotation(project, alias)
     }
 
     static DependencyCatalogSnapshot catalog(Project project) {
