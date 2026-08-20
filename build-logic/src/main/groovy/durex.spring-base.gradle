@@ -6,6 +6,8 @@ plugins {
 }
 
 def model = extensions.getByType(DurexModuleModel)
-['implementation', 'api', 'testImplementation'].each { configuration ->
+['implementation', 'api', 'testImplementation'].findAll { configuration ->
+    configurations.findByName(configuration) != null
+}.each { configuration ->
     DurexDependencyAccess.activatePlatform(project, model, configuration, 'spring')
 }
