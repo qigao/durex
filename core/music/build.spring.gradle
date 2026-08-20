@@ -10,8 +10,17 @@ sourceSets {
     main {
         java {
             srcDir 'src/main/java'
+            srcDir 'src/spring/java'
             exclude 'com/github/durex/music/controller/**'
             exclude 'com/github/durex/music/config/**'
+        }
+    }
+    test {
+        java {
+            setSrcDirs(['src/springTest/java'])
+        }
+        resources {
+            setSrcDirs(['src/springTest/resources'])
         }
     }
 }
