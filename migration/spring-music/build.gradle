@@ -1,22 +1,4 @@
 allprojects {
     group = 'com.github.durex'
     version = '0.1.0-SNAPSHOT'
-
-    repositories {
-        mavenCentral()
-    }
-}
-
-subprojects {
-    apply plugin: 'java-library'
-
-    java {
-        sourceCompatibility = JavaVersion.VERSION_21
-        targetCompatibility = JavaVersion.VERSION_21
-    }
-
-    tasks.withType(JavaCompile).configureEach {
-        options.release = 21
-        options.encoding = 'UTF-8'
-    }
 }
