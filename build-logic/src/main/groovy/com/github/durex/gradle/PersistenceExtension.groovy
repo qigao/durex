@@ -1,14 +1,15 @@
 package com.github.durex.gradle
 
+import com.github.durex.gradle.model.DurexModuleModel
 import org.gradle.api.Project
 
 class PersistenceExtension {
     protected final Project project
-    protected final DurexModuleState state
+    protected final DurexModuleModel model
 
-    PersistenceExtension(Project project, DurexModuleState state) {
+    PersistenceExtension(Project project, DurexModuleModel model) {
         this.project = project
-        this.state = state
+        this.model = model
     }
 
     void jpa() {
