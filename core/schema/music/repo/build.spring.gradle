@@ -12,6 +12,7 @@ dependencies {
     implementation project(':music-entity')
     compileOnly 'javax.enterprise:cdi-api:2.0.SP1'
     compileOnly 'javax.inject:javax.inject:1'
+    compileOnly 'javax.validation:validation-api:2.0.1.Final'
     compileOnly lombok
     annotationProcessor lombok
 }
