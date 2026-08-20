@@ -1,0 +1,21 @@
+import com.github.durex.gradle.DurexDependencyAccess
+import com.github.durex.gradle.DurexModuleState
+import com.github.durex.gradle.ModuleKind
+
+plugins {
+    id 'org.springframework.boot'
+    id 'durex.spring-base'
+}
+
+def state = extensions.getByType(DurexModuleState)
+state.claim(ModuleKind.SPRING_SERVICE)
+['spring-core', 'spring-web', 'spring-validation', 'spring-observability'].each { alias ->
+    DurexDependencyAccess.add(project, state, 'implementation', alias)
+}
+['spring-test', 'spring-web-test'].each { alias ->
+    DurexDependencyAccess.add(project, state, 'testImplementation', alias)
+}
+
+tasks.withType(Test).configureEach {
+    useJUnitPlatform()
+}

@@ -72,3 +72,16 @@ jobs:
           gradle -p build-logic/tests/jooq-schema-smoke jooqCodegen --stacktrace
           test -f build-logic/tests/jooq-schema-smoke/build/generated-src/jooq/main/com/example/schema/tables/QMusic.java
           test -f build-logic/tests/jooq-schema-smoke/build/generated-src/jooq/main/com/example/schema/tables/records/RMusic.java
+      - name: Java module type
+        run: gradle -p build-logic/tests/java-library-smoke test --stacktrace
+      - name: Spring service module type
+        run: gradle -p build-logic/tests/spring-service-smoke verifyDurexService dependencies --configuration compileClasspath --stacktrace
+      - name: Module type conflict is rejected
+        shell: bash
+        run: |
+          log=build-logic/tests/module-conflict.log
+          if gradle -p build-logic/tests/module-conflict help --stacktrace >"$log" 2>&1; then
+            echo 'expected module type conflict to fail'
+            exit 1
+          fi
+          grep -q 'Durex module type conflict' "$log"
