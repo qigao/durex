@@ -75,29 +75,29 @@ The first implementation will not:
 
 ## 4. Architecture
 
-The build platform has two build-infrastructure layers.
+The build platform has two build-infrastructure layers:
 
 ```text
 gradle/dependencies/*.toml
           |
-          v
-   build-bootstrap
-          |
-          +-- durex.settings
-          +-- manifest loader / validator
-          +-- DependencyRegistry
-          +-- ProjectRegistry
-          |
-          v
-     build-logic
-          |
-          +-- module type plugins
-          +-- feature plugins
-          +-- schema/codegen plugins
-          |
-          v
-       modules
+          +--------------------+
+          |                    |
+          v                    v
+   root Gradle build      build-logic build
+          |                    |
+   durex.settings      durex.build-logic-settings
+          |                    |
+ DependencyRegistry      DependencyRegistry
+ ProjectRegistry               |
+          |                    v
+          |              build-logic plugins
+          |                    |
+          +----------+---------+
+                     v
+                  modules
 ```
+
+The TOML files are the single source of dependency/plugin truth. Registries are **per Gradle build**, not globally shared across a composite build. This is required because included builds are isolated Gradle builds and do not share settings, version catalogs, repositories, custom properties, or build services with the root build.
 
 ### 4.1 `build-bootstrap`
 
@@ -109,22 +109,66 @@ gradle/dependencies/*.toml
 
 It must not depend on Spring, Spring Boot, jOOQ, GraalVM, Jackson, Lombok, or application/runtime libraries.
 
+It provides reusable binary plugins and model code:
+
+```text
+durex.settings
+durex.build-logic-settings
+durex.build-logic
+ManifestLoader
+ManifestValidator
+DependencyRegistry model
+ProjectRegistry model
+```
+
 Its responsibilities are:
 
 - parse Durex TOML manifests;
 - resolve `include` files;
 - validate manifest schema and references;
-- build a read-only dependency registry;
-- configure external Gradle plugin resolution from the registry;
-- discover modules and build a project registry;
-- register included projects with Gradle;
-- expose both registries to project-level Durex plugins.
+- build read-only dependency registry instances;
+- discover modules and build the root project registry;
+- register root projects with Gradle;
+- expose registry instances as build-scoped services inside the Gradle build in which the plugin is running;
+- bootstrap `build-logic` from the same TOML source without hard-coding application dependency/plugin versions there.
 
 ### 4.2 `build-logic`
 
-`build-logic` contains all module-type and feature convention plugins. It consumes the registry produced by bootstrap and contains no hard-coded Spring/jOOQ/GraalVM application versions.
+`build-logic` contains module-type and feature convention plugins. It is an independent included build, so it initializes its own dependency registry from the same root Durex manifest.
 
-Representative plugins:
+Its settings file uses bootstrap:
+
+```gradle
+pluginManagement {
+    includeBuild('../build-bootstrap')
+}
+
+plugins {
+    id 'durex.build-logic-settings'
+}
+```
+
+Its build file uses a bootstrap project plugin:
+
+```gradle
+plugins {
+    id 'groovy-gradle-plugin'
+    id 'durex.build-logic'
+}
+```
+
+`durex.build-logic-settings` loads and validates the same `gradle/dependencies/durex.toml` file for the `build-logic` Gradle build. `durex.build-logic` consumes that build-local registry to add implementation dependencies for external Gradle plugin APIs such as Spring Boot, jOOQ codegen, and GraalVM Native.
+
+This means:
+
+```text
+TOML version source: one
+registry instances: one per Gradle build
+```
+
+No cross-composite-build Shared Build Service is assumed.
+
+Representative project plugins remain:
 
 ```text
 durex.java-base
@@ -263,31 +307,68 @@ No later file silently overrides an earlier file.
 
 Errors must identify the source file, object id, problem, and known valid alternatives where useful.
 
-## 6. Plugin Bootstrap and Resolution
+## 6. Bootstrap Lifecycle
 
-`durex.settings` is the only root build-policy plugin.
+### 6.1 Root build
 
-At settings evaluation time it:
+Root settings evaluation is:
 
-1. loads `gradle/dependencies/durex.toml`;
-2. recursively loads includes;
-3. validates the complete model;
-4. constructs `DependencyRegistry`;
-5. configures `pluginManagement` resolution for known external Gradle plugins;
-6. discovers/registers projects and constructs `ProjectRegistry`;
-7. exposes both registries as build-scoped services.
+```text
+pluginManagement includes build-bootstrap/build-logic
+        |
+        v
+apply durex.settings
+        |
+        +-- load Durex dependency manifest
+        +-- validate
+        +-- create root DependencyRegistry
+        +-- load modules.toml
+        +-- discover/manual-merge projects
+        +-- create ProjectRegistry
+        +-- settings.include(...) projects
+        +-- register root-build services
+        |
+        v
+project build scripts
+        |
+        v
+Durex module/feature plugins consume root-build registry
+```
 
-External Gradle plugin versions are therefore sourced from the same Durex dependency manifest as runtime libraries.
+### 6.2 `build-logic` included build
 
-`build-logic` uses a bootstrap-facing plugin such as `durex.build-logic` to add implementation dependencies for external Gradle plugin APIs from the same registry. This removes the need for Gradle Version Catalog accessors inside `build-logic`.
+`build-logic` is isolated and performs its own bootstrap:
 
-The only unavoidable hard-coded third-party version in bootstrap is the TOML parser implementation version. That version is considered bootstrap implementation detail, not application dependency policy.
+```text
+build-logic/settings.gradle
+        |
+        v
+apply durex.build-logic-settings
+        |
+        +-- load same root Durex manifest
+        +-- validate
+        +-- create build-logic DependencyRegistry
+        +-- register build-logic service
+        |
+        v
+build-logic/build.gradle
+        |
+        v
+apply durex.build-logic
+        |
+        +-- add external plugin implementation dependencies
+        |
+        v
+compile Durex convention plugins
+```
+
+The same source files are parsed once per participating Gradle build. No dependency version is duplicated in `build-logic/build.gradle`.
+
+The only unavoidable hard-coded third-party version in bootstrap is the TOML parser implementation version. It is a bootstrap implementation detail, not application dependency policy.
 
 ## 7. Module Types
 
 A project may declare exactly one Durex module type.
-
-First-version module types:
 
 ### 7.1 `durex.java-library`
 
@@ -330,7 +411,7 @@ Applying two Durex module types to one project is a hard error.
 
 ## 8. Feature DSL
 
-The user-facing DSL expresses only optional capabilities.
+The user-facing DSL expresses only optional capabilities:
 
 ```gradle
 durex {
@@ -346,8 +427,6 @@ durex {
 
 The DSL routes capabilities to independent feature plugins. It is not a second dependency engine.
 
-Conceptually:
-
 ```text
 persistence.jpa()  -> durex.feature.jpa
 persistence.jdbc() -> durex.feature.jdbc
@@ -357,9 +436,7 @@ nativeImage()      -> durex.feature.native
 lombok()           -> durex.feature.lombok
 ```
 
-Feature activation is idempotent.
-
-JPA and jOOQ are deliberately compatible and may be enabled together.
+Feature activation is idempotent. JPA and jOOQ are deliberately compatible and may be enabled together.
 
 ### 8.1 Feature prerequisites
 
@@ -393,7 +470,7 @@ The default is:
 
 > automatic discovery for normal modules; manual declarations for exceptions and control.
 
-Module discovery is configured independently from dependency manifests, for example:
+Module discovery is configured independently from dependency manifests:
 
 ```text
 gradle/modules.toml
@@ -429,7 +506,7 @@ First-version modes:
 
 ### 10.2 Automatic discovery
 
-Automatic discovery scans configured roots for supported build files such as:
+Automatic discovery scans configured roots for supported build files:
 
 ```text
 build.gradle
@@ -438,7 +515,7 @@ build.gradle.kts
 
 Build/output/source directories and configured exclusions are ignored.
 
-Naming conventions may derive logical project names from directory structure. The initial intended conventions include mappings such as:
+The initial intended naming conventions include:
 
 ```text
 core/music                    -> :music
@@ -448,7 +525,7 @@ core/schema/music/entity      -> :music-entity
 core/schema/music/repo        -> :music-repo
 ```
 
-The exact naming function must be deterministic and covered by functional tests.
+The naming function must be deterministic and covered by functional tests.
 
 ### 10.3 Manual include and override
 
@@ -460,8 +537,6 @@ A manual module declaration may:
 
 Automatic and manual modules are normalized into one `ProjectRegistry`; there are not two independent registries.
 
-Manual declarations have higher priority than automatic naming.
-
 The effective precedence is:
 
 ```text
@@ -471,7 +546,7 @@ manual exclude
     > default naming convention
 ```
 
-Duplicate logical project names or conflicting paths are hard errors.
+Duplicate logical project names or conflicting physical paths are hard errors.
 
 ### 10.4 Root registration
 
@@ -487,9 +562,7 @@ under an automatic discovery root is enough for the next Gradle invocation to re
 
 This capability replaces the existing root-level `modules.gradle` discovery mechanism in the final architecture.
 
-## 11. Registries
-
-Two build-scoped registries exist.
+## 11. Registries and Build Isolation
 
 ### 11.1 `DependencyRegistry`
 
@@ -501,11 +574,11 @@ Contains resolved and validated:
 - libraries;
 - Gradle plugins.
 
-It is parsed once and consumed by all project plugins.
+A registry instance is local to one Gradle build. The root build and `build-logic` included build each create a registry from the same Durex TOML source.
 
 ### 11.2 `ProjectRegistry`
 
-Contains normalized project specifications:
+Exists in the root build and contains normalized project specifications:
 
 ```text
 logical Gradle path
@@ -514,15 +587,17 @@ source: AUTO or MANUAL
 optional override metadata
 ```
 
-Both registries are exposed through build-scoped/shared services rather than reparsing files per project.
+### 11.3 Build-scoped services
+
+Registry parsing is not repeated per project. Within a given Gradle build, the settings/bootstrap plugin parses once and exposes the resulting immutable model through a build-scoped/shared service.
+
+Cross-build sharing is explicitly not assumed because Gradle included builds are isolated.
 
 ## 12. Repositories
 
 Durex module/feature plugins do not inject Maven repositories.
 
 Repository policy remains settings-level build policy through `dependencyResolutionManagement` or the corresponding Durex settings configuration.
-
-This preserves the separation:
 
 ```text
 settings/build policy -> where dependencies come from
@@ -533,9 +608,9 @@ module build file     -> business project dependencies and local configuration
 
 ## 13. Diagnostics
 
-Durex should provide explicit diagnostic tasks/commands so abstraction does not hide build behavior.
+Durex should provide explicit diagnostics so abstraction does not hide build behavior.
 
-Representative outputs:
+Representative project diagnostic:
 
 ```text
 :music:durexCapabilities
@@ -564,6 +639,8 @@ A settings-level diagnostic such as `durexProjects` should print:
   source: manual
 ```
 
+A bootstrap diagnostic should also be able to print the dependency manifest sources and resolved platform/plugin versions for the current Gradle build.
+
 Gradle's native `dependencies` and `dependencyInsight` remain the authoritative dependency-resolution diagnostics.
 
 ## 14. Migration Strategy
@@ -574,8 +651,9 @@ Migration must not break the existing legacy root build while Spring migration c
 
 - add `build-bootstrap`;
 - add TOML loader/model/validation;
-- add dependency and project registry tests;
-- leave existing modules unchanged.
+- add `durex.settings`, `durex.build-logic-settings`, and `durex.build-logic`;
+- add dependency/project registry tests;
+- leave existing business modules unchanged.
 
 ### Phase 2: module-type/feature smoke builds
 
@@ -592,7 +670,8 @@ Create isolated functional tests for:
 - invalid module-type conflicts;
 - invalid feature prerequisites;
 - manifest validation;
-- auto/manual project discovery.
+- auto/manual project discovery;
+- independent root/build-logic registry initialization from the same TOML source.
 
 Preserve the existing jOOQ schema smoke test.
 
@@ -628,6 +707,8 @@ Minimum test matrix:
 - duplicate-id failure;
 - missing/unknown version/platform failure;
 - platform/version ownership conflicts;
+- root-build registry initialization;
+- build-logic-build registry initialization from the same source;
 - module type conflict;
 - feature prerequisite validation;
 - platform de-duplication;
@@ -644,14 +725,13 @@ Minimum test matrix:
 
 ## 16. Final Ownership Model
 
-The final ownership boundaries are:
-
 ```text
 gradle/dependencies/*.toml
-    -> global dependency/plugin version source
+    -> single global dependency/plugin version source
 
 build-bootstrap
-    -> TOML semantics, validation, plugin resolution, project discovery
+    -> TOML semantics, validation, per-build registry bootstrap,
+       root project discovery, build-logic bootstrap
 
 build-logic
     -> module types, framework defaults, optional features, codegen
@@ -660,7 +740,8 @@ Gradle platform/BOM + resolver
     -> actual dependency alignment and conflict resolution
 
 module build files
-    -> module identity via plugin, optional Durex features, business project dependencies
+    -> module identity via plugin, optional Durex features,
+       business project dependencies
 ```
 
 The resulting rule for developers is:
