@@ -4,12 +4,14 @@ on:
   push:
     paths:
       - 'reference/spring-native/**'
+      - 'reference/spring-capabilities/**'
       - 'gradle/library/spring-*.gradle'
       - 'gradle/versions/spring.versions.toml'
       - '.github/workflows/spring-native-reference.yml'
   pull_request:
     paths:
       - 'reference/spring-native/**'
+      - 'reference/spring-capabilities/**'
       - 'gradle/library/spring-*.gradle'
       - 'gradle/versions/spring.versions.toml'
       - '.github/workflows/spring-native-reference.yml'
@@ -32,6 +34,8 @@ jobs:
       - uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: '9.1.0'
+      - name: Resolve Spring platform capabilities
+        run: gradle -p ../spring-capabilities dependencies --configuration compileClasspath --stacktrace
       - name: JVM tests
         run: gradle test --stacktrace
       - name: Spring AOT JVM smoke test
