@@ -1,21 +1,22 @@
 package com.github.durex.gradle
 
+import com.github.durex.gradle.model.DurexModuleModel
 import org.gradle.api.Action
 import org.gradle.api.Project
 
 class DurexExtension {
     private final Project project
-    private final DurexModuleState state
+    private final DurexModuleModel model
     private final PersistenceExtension persistence
 
-    DurexExtension(Project project, DurexModuleState state) {
+    DurexExtension(Project project, DurexModuleModel model) {
         this.project = project
-        this.state = state
-        this.persistence = new PersistenceExtension(project, state)
+        this.model = model
+        this.persistence = new PersistenceExtension(project, model)
     }
 
     String library(String alias) {
-        DurexDependencyAccess.libraryNotation(project, state, alias)
+        DurexDependencyAccess.libraryNotation(project, model, alias)
     }
 
     PersistenceExtension getPersistence() {
