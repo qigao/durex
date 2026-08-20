@@ -1,11 +1,9 @@
 package com.github.durex.jooq;
 
-import lombok.extern.slf4j.Slf4j;
 import org.jooq.codegen.DefaultGeneratorStrategy;
 import org.jooq.meta.Definition;
 import org.jooq.meta.TableDefinition;
 
-@Slf4j
 public class PrefixStrategy extends DefaultGeneratorStrategy {
 
   @Override
