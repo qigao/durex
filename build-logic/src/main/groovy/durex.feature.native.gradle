@@ -1,9 +1,10 @@
-import com.github.durex.gradle.ModuleKind
-import com.github.durex.gradle.model.DurexModuleModel
+import com.github.durex.gradle.capability.BuiltinCapabilities
+import com.github.durex.gradle.capability.DurexCapabilitySupport
 
 plugins { id 'durex.module' }
 
-def model = extensions.getByType(DurexModuleModel)
-model.requireFeature('durex.feature.native', project.path, ModuleKind.SPRING_SERVICE)
-pluginManager.apply('org.graalvm.buildtools.native')
-model.enableCapability('native')
+DurexCapabilitySupport.registerAndEnable(
+    project,
+    'durex.feature.native',
+    BuiltinCapabilities.NATIVE
+)
