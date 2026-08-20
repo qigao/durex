@@ -15,7 +15,7 @@ dependencies {
 
 jsonSchema2Pojo {
     targetPackage = 'com.github.durex.music.model'
-    source.setFrom files("$projectDir/json")
+    source = files("$projectDir/json")
     includeJsr303Annotations = true
     useJakartaValidation = true
     includeGetters = true
