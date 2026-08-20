@@ -41,4 +41,5 @@ dependencies {
 apply from: new File(repoRoot, 'gradle/library/spring-core.gradle')
 apply from: new File(repoRoot, 'gradle/library/spring-web.gradle')
 apply from: new File(repoRoot, 'gradle/library/spring-test.gradle')
+apply from: new File(repoRoot, 'gradle/library/spring-web-test.gradle')
 apply from: new File(repoRoot, 'gradle/library/spring-observability.gradle')
