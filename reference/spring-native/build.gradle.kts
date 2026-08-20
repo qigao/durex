@@ -1,7 +1,7 @@
 plugins {
     java
-    id("org.springframework.boot") version "4.1.0"
-    id("org.graalvm.buildtools.native") version "1.1.1"
+    alias(sLibs.plugins.springboot4)
+    alias(sLibs.plugins.graalvm)
 }
 
 group = "com.github.durex.reference"
@@ -12,14 +12,6 @@ java {
     targetCompatibility = JavaVersion.VERSION_21
 }
 
-dependencies {
-    implementation(platform(org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES))
-    implementation("org.springframework.boot:spring-boot-starter-webmvc")
-
-    testImplementation(platform(org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES))
-    testImplementation("org.springframework.boot:spring-boot-starter-test")
-}
-
-tasks.test {
-    useJUnitPlatform()
-}
+apply(from = rootProject.file("../../gradle/library/spring-core.gradle"))
+apply(from = rootProject.file("../../gradle/library/spring-web.gradle"))
+apply(from = rootProject.file("../../gradle/library/spring-test.gradle"))

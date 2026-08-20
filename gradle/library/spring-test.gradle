@@ -1,0 +1,11 @@
+def springCatalog = extensions.getByType(org.gradle.api.artifacts.VersionCatalogsExtension).named('sLibs')
+def springBom = springCatalog.findLibrary('spring-bom4').get().get()
+
+dependencies {
+    testImplementation platform(springBom)
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+tasks.withType(org.gradle.api.tasks.testing.Test).configureEach {
+    useJUnitPlatform()
+}

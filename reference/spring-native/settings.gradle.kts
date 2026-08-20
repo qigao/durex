@@ -10,6 +10,11 @@ dependencyResolutionManagement {
     repositories {
         mavenCentral()
     }
+    versionCatalogs {
+        create("sLibs") {
+            from(files("../../gradle/versions/spring.versions.toml"))
+        }
+    }
 }
 
 rootProject.name = "spring-native-reference"
