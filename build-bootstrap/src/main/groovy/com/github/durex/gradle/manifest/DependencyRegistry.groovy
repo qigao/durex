@@ -3,6 +3,8 @@ package com.github.durex.gradle.manifest
 import org.gradle.api.GradleException
 
 final class DependencyRegistry {
+    static final int SNAPSHOT_SCHEMA_VERSION = 1
+
     private final int javaVersion
     private final Map<String, VersionSpec> versions
     private final Map<String, PlatformSpec> platforms
@@ -49,6 +51,48 @@ final class DependencyRegistry {
 
     Collection<PluginSpec> plugins() {
         plugins.values()
+    }
+
+    Map<String, Object> snapshot() {
+        deepFreeze([
+                schemaVersion: SNAPSHOT_SCHEMA_VERSION,
+                javaVersion: javaVersion,
+                platforms: platforms.collectEntries { alias, platform ->
+                    [(alias): [
+                            module: platform.module,
+                            version: platform.version
+                    ]]
+                },
+                libraries: libraries.collectEntries { alias, library ->
+                    [(alias): [
+                            module: library.module,
+                            version: library.version,
+                            platform: library.platform
+                    ]]
+                },
+                plugins: plugins.collectEntries { alias, plugin ->
+                    [(alias): [
+                            id: plugin.id,
+                            module: plugin.module,
+                            version: plugin.version
+                    ]]
+                }
+        ]) as Map<String, Object>
+    }
+
+    private static Object deepFreeze(Object value) {
+        if (value instanceof Map) {
+            Map<Object, Object> copy = new LinkedHashMap<>()
+            (value as Map).each { key, nested ->
+                copy.put(key, deepFreeze(nested))
+            }
+            return Collections.unmodifiableMap(copy)
+        }
+        if (value instanceof List) {
+            List<Object> copy = (value as List).collect { nested -> deepFreeze(nested) }
+            return Collections.unmodifiableList(copy)
+        }
+        value
     }
 
     private static <T> T required(Map<String, T> values, String kind, String id) {
