@@ -3,27 +3,25 @@ name: Spring Music Migration
 on:
   push:
     paths:
+      - 'build-bootstrap/**'
       - 'build-logic/**'
+      - 'gradle/dependencies/**'
       - 'migration/spring-music/**'
       - 'core/music/**'
       - 'core/schema/music/**'
       - 'core/shared/**/build.spring.gradle'
       - 'core/shared/utils/src/main/java/com/github/durex/sqlbuilder/**'
-      - 'gradle/versions/gradle.versions.toml'
-      - 'gradle/versions/database.versions.toml'
-      - 'gradle/library/spring-*.gradle'
       - '.github/workflows/spring-music.yml'
   pull_request:
     paths:
+      - 'build-bootstrap/**'
       - 'build-logic/**'
+      - 'gradle/dependencies/**'
       - 'migration/spring-music/**'
       - 'core/music/**'
       - 'core/schema/music/**'
       - 'core/shared/**/build.spring.gradle'
       - 'core/shared/utils/src/main/java/com/github/durex/sqlbuilder/**'
-      - 'gradle/versions/gradle.versions.toml'
-      - 'gradle/versions/database.versions.toml'
-      - 'gradle/library/spring-*.gradle'
       - '.github/workflows/spring-music.yml'
 
 permissions:
@@ -41,15 +39,32 @@ jobs:
       - uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: '9.1.0'
+
       - name: Durex jOOQ schema plugin smoke test
         shell: bash
         run: |
           gradle -p build-logic/tests/jooq-schema-smoke jooqCodegen --stacktrace
           test -f build-logic/tests/jooq-schema-smoke/build/generated-src/jooq/main/com/example/schema/tables/QMusic.java
           test -f build-logic/tests/jooq-schema-smoke/build/generated-src/jooq/main/com/example/schema/tables/records/RMusic.java
-      - name: Resolve migration project graph
-        run: gradle -p migration/spring-music projects --stacktrace
+
+      - name: Resolve Durex migration project graph
+        run: gradle -p migration/spring-music projects durexProjects --stacktrace
+
       - name: Compile Spring music module graph
         run: gradle -p migration/spring-music :music:compileJava --stacktrace
-      - name: Spring MVC tests
+
+      - name: Spring music CRUD and runtime integration tests
         run: gradle -p migration/spring-music :music:test --stacktrace
+
+      - name: Migrated descriptors are catalog-free
+        shell: bash
+        run: |
+          set -euo pipefail
+          hits="$({
+            grep -R -n -E 'VersionCatalogsExtension|[a-z]Libs\.' migration/spring-music || true
+            find core/music core/schema/music core/shared -name 'build.spring.gradle' -exec grep -Hn -E 'VersionCatalogsExtension|[a-z]Libs\.' {} + || true
+          } )"
+          if [ -n "$hits" ]; then
+            echo "$hits"
+            exit 1
+          fi
