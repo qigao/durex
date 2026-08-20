@@ -1,0 +1,13 @@
+pluginManagement {
+    includeBuild('../..')
+    repositories { gradlePluginPortal(); mavenCentral() }
+}
+plugins { id 'durex.settings' }
+
+durexSettings {
+    repositoryRoot.set(file('.'))
+    dependencyManifest.set(file('../../../gradle/dependencies/durex.toml'))
+    modulesManifest.set(file('modules.toml'))
+}
+
+rootProject.name = 'modules-strict'

@@ -1,0 +1,11 @@
+[discovery]
+mode = "manual"
+
+[[module]]
+name = "music"
+path = "core/music"
+build-file = "build.spring.gradle"
+
+[[module]]
+name = "admin-tool"
+path = "tools/admin"

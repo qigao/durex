@@ -48,3 +48,19 @@ jobs:
             fi
             grep -q 'Durex dependency manifest error' "$log"
           done
+      - name: Automatic module discovery
+        run: gradle -p build-bootstrap/tests/modules-auto projects durexProjects --stacktrace
+      - name: Manual module discovery
+        run: gradle -p build-bootstrap/tests/modules-manual projects durexProjects --stacktrace
+      - name: Strict and conflict discovery failures
+        shell: bash
+        run: |
+          set -euo pipefail
+          for fixture in modules-strict modules-conflict; do
+            log="build-bootstrap/tests/${fixture}.log"
+            if gradle -p "build-bootstrap/tests/${fixture}" projects --stacktrace >"$log" 2>&1; then
+              echo "expected ${fixture} to fail"
+              exit 1
+            fi
+            grep -q 'Durex module discovery error' "$log"
+          done

@@ -1,0 +1,10 @@
+[discovery]
+mode = "manual"
+
+[[module]]
+name = "same"
+path = "one"
+
+[[module]]
+name = "same"
+path = "two"

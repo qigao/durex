@@ -1,0 +1,8 @@
+[discovery]
+mode = "auto"
+roots = ["core"]
+exclude = ["core/ignored"]
+
+[[module]]
+name = "shared-common"
+path = "core/shared/jakarta/common"
