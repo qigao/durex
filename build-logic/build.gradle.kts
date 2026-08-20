@@ -18,5 +18,9 @@ gradlePlugin {
             id = "durex.module"
             implementationClass = "com.github.durex.gradle.DurexModulePlugin"
         }
+        create("durexFixtureCapability") {
+            id = "com.acme.durex.fixture"
+            implementationClass = "com.github.durex.gradle.internaltesting.FixtureCapabilityPlugin"
+        }
     }
 }
