@@ -1,23 +1,24 @@
 package com.github.durex.gradle
 
+import com.github.durex.gradle.catalog.DependencyCatalogSnapshot
 import org.gradle.api.GradleException
 import org.gradle.api.Project
 
 final class DurexDependencyAccess {
     static int javaVersion(Project project) {
-        service(project).javaVersion() as int
+        catalog(project).javaVersion()
     }
 
     static void activatePlatform(Project project, DurexModuleState state, String configuration, String platformAlias) {
         if (project.configurations.findByName(configuration) == null) return
         if (state.activatePlatform(configuration, platformAlias)) {
-            def platform = service(project).platform(platformAlias)
+            def platform = catalog(project).platform(platformAlias)
             project.dependencies.add(configuration, project.dependencies.platform(platform.coordinate()))
         }
     }
 
     static void add(Project project, DurexModuleState state, String configuration, String alias) {
-        def library = service(project).library(alias)
+        def library = catalog(project).library(alias)
         if (library.platform) {
             activatePlatform(project, state, configuration, library.platform as String)
         }
@@ -25,7 +26,7 @@ final class DurexDependencyAccess {
     }
 
     static String libraryNotation(Project project, DurexModuleState state, String alias) {
-        def library = service(project).library(alias)
+        def library = catalog(project).library(alias)
         if (library.platform && !state.activePlatforms().contains(library.platform as String)) {
             throw new GradleException(
                     "Durex dependency error\nLibrary: ${alias}\nProblem: platform '${library.platform}' is not active for this project")
@@ -33,12 +34,12 @@ final class DurexDependencyAccess {
         library.notation() as String
     }
 
-    static Object service(Project project) {
-        def registration = project.gradle.sharedServices.registrations.findByName('durexDependencyRegistry')
-        if (registration == null) {
+    static DependencyCatalogSnapshot catalog(Project project) {
+        DependencyCatalogSnapshot catalog = project.extensions.findByType(DependencyCatalogSnapshot)
+        if (catalog == null) {
             throw new GradleException(
-                    'Durex dependency error\nProblem: durexDependencyRegistry is not available; apply durex.settings in this build')
+                    'Durex dependency catalog error\nProblem: durexDependencyCatalog is not available; apply durex.catalog')
         }
-        registration.service.get()
+        catalog
     }
 }
