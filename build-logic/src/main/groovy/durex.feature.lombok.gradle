@@ -1,9 +1,10 @@
-import com.github.durex.gradle.DurexDependencyAccess
-import com.github.durex.gradle.model.DurexModuleModel
+import com.github.durex.gradle.capability.BuiltinCapabilities
+import com.github.durex.gradle.capability.DurexCapabilitySupport
 
 plugins { id 'durex.module' }
 
-def model = extensions.getByType(DurexModuleModel)
-model.enableCapability('lombok')
-DurexDependencyAccess.add(project, model, 'compileOnly', 'lombok')
-DurexDependencyAccess.add(project, model, 'annotationProcessor', 'lombok')
+DurexCapabilitySupport.registerAndEnable(
+    project,
+    'durex.feature.lombok',
+    BuiltinCapabilities.LOMBOK
+)
