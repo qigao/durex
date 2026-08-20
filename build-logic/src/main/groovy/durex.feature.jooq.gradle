@@ -1,10 +1,10 @@
 import com.github.durex.gradle.DurexDependencyAccess
-import com.github.durex.gradle.DurexModuleState
 import com.github.durex.gradle.ModuleKind
+import com.github.durex.gradle.model.DurexModuleModel
 
 plugins { id 'durex.module' }
 
-def state = extensions.getByType(DurexModuleState)
-state.requireFeature('durex.feature.jooq', ModuleKind.SPRING_LIBRARY, ModuleKind.SPRING_SERVICE)
-state.activateFeature('jooq')
-DurexDependencyAccess.add(project, state, 'implementation', 'spring-jooq')
+def model = extensions.getByType(DurexModuleModel)
+model.requireFeature('durex.feature.jooq', project.path, ModuleKind.SPRING_LIBRARY, ModuleKind.SPRING_SERVICE)
+model.enableCapability('jooq')
+DurexDependencyAccess.add(project, model, 'implementation', 'spring-jooq')
