@@ -1,0 +1,10 @@
+plugins { id 'durex.spring-service' }
+
+import com.github.durex.gradle.ModuleKind
+import com.github.durex.gradle.model.DurexModuleModel
+
+def model = extensions.getByType(DurexModuleModel)
+assert model.moduleKind.get() == ModuleKind.SPRING_SERVICE
+assert model.capabilities.get().isEmpty()
+assert model.platformBindings.get().contains('implementation:spring')
+assert !model.metaClass.hasProperty(model, 'nativeEnabled')
