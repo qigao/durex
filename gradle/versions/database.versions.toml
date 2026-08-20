@@ -19,6 +19,7 @@ jooq-ext = { group = 'org.jooq', name = 'jooq-meta-extensions', version.ref = 'j
 jooq-spring-core = { group = 'org.jooq', name = 'jooq', version.ref = 'jooq-spring' }
 jooq-spring-meta = { group = 'org.jooq', name = 'jooq-meta', version.ref = 'jooq-spring' }
 jooq-spring-codegen = { group = 'org.jooq', name = 'jooq-codegen', version.ref = 'jooq-spring' }
+jooq-spring-codegen-gradle = { group = 'org.jooq', name = 'jooq-codegen-gradle', version.ref = 'jooq-spring' }
 jooq-spring-ext = { group = 'org.jooq', name = 'jooq-meta-extensions', version.ref = 'jooq-spring' }
 
 # data immigration

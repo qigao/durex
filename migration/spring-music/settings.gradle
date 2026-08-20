@@ -1,4 +1,5 @@
 pluginManagement {
+    includeBuild('../../build-logic')
     repositories {
         gradlePluginPortal()
         mavenCentral()
@@ -33,7 +34,6 @@ def springProject = { String path, String directory ->
 springProject(':shared-utils', 'core/shared/utils')
 springProject(':shared-common', 'core/shared/jakarta/common')
 springProject(':json-schema-annotation', 'core/shared/json-schema-annotation')
-springProject(':jooq-codegen', 'core/shared/jooq-codegen')
 springProject(':music-json', 'core/schema/music/json')
 springProject(':music-entity', 'core/schema/music/entity')
 springProject(':music-repo', 'core/schema/music/repo')
