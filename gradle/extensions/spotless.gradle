@@ -57,7 +57,7 @@ spotless {
     groovyGradle {
         target fileTree('.') {
             include '**/*.gradle'
-            exclude '**/build/**', '**/build-*/**'
+            exclude '**/build/**', '**/build-*/**', '**/build.spring.gradle'
         }
         greclipse()
         // As the method name suggests, bump this number if any of the below "custom" rules change.
