@@ -189,6 +189,9 @@ jobs:
       - name: Generic capability plugin path
         run: gradle -p build-logic/tests/generic-capability-smoke verifyGenericCapability --stacktrace
 
+      - name: Direct capability plugin path
+        run: gradle -p build-logic/tests/generic-capability-direct verifyDirectCapability --stacktrace
+
       - name: Generic capability missing mapping is rejected
         shell: bash
         run: |
