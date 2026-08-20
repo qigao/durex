@@ -64,3 +64,11 @@ jobs:
             fi
             grep -q 'Durex module discovery error' "$log"
           done
+      - name: Build logic bootstrap
+        run: gradle -p build-logic tasks --stacktrace
+      - name: jOOQ schema convention smoke
+        shell: bash
+        run: |
+          gradle -p build-logic/tests/jooq-schema-smoke jooqCodegen --stacktrace
+          test -f build-logic/tests/jooq-schema-smoke/build/generated-src/jooq/main/com/example/schema/tables/QMusic.java
+          test -f build-logic/tests/jooq-schema-smoke/build/generated-src/jooq/main/com/example/schema/tables/records/RMusic.java
