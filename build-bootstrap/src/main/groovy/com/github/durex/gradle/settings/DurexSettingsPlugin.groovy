@@ -39,10 +39,22 @@ class DurexSettingsPlugin implements Plugin<Settings> {
                 spec.parameters.manifestFile.set(extension.dependencyManifest)
             }
             serviceHolder.provider = serviceProvider
-
-            // Force one validated parse during settings evaluation so manifest errors fail fast.
             serviceProvider.get().javaVersion()
 
+            ProjectRegistry projectRegistry = null
+            if (extension.moduleDiscovery.get()) {
+                projectRegistry = ProjectDiscovery.discover(
+                        extension.repositoryRoot.get().asFile,
+                        extension.modulesManifest.get().asFile)
+                projectRegistry.projects().each { projectSpec ->
+                    settings.include(projectSpec.gradlePath)
+                    def descriptor = settings.project(projectSpec.gradlePath)
+                    descriptor.projectDir = projectSpec.directory
+                    descriptor.buildFileName = projectSpec.buildFile
+                }
+            }
+
+            ProjectRegistry diagnosticsRegistry = projectRegistry
             settings.gradle.rootProject { root ->
                 root.tasks.register('durexDependencies') {
                     group = 'Durex'
@@ -59,10 +71,22 @@ class DurexSettingsPlugin implements Plugin<Settings> {
                         }
                     }
                 }
+                if (diagnosticsRegistry != null) {
+                    root.tasks.register('durexProjects') {
+                        group = 'Durex'
+                        description = 'Print Durex project discovery diagnostics.'
+                        doLast {
+                            File repositoryRoot = extension.repositoryRoot.get().asFile.canonicalFile
+                            diagnosticsRegistry.projects().each { projectSpec ->
+                                String relative = repositoryRoot.toPath()
+                                        .relativize(projectSpec.directory.toPath()).toString()
+                                        .replace('\\', '/')
+                                println "${projectSpec.gradlePath} | ${relative} | ${projectSpec.source} | ${projectSpec.buildFile}"
+                            }
+                        }
+                    }
+                }
             }
-
-            // Task 2 extends this point with project discovery.
-            if (!extension.moduleDiscovery.get()) return
         }
     }
 }
