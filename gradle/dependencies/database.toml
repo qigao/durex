@@ -1,0 +1,23 @@
+[versions]
+jooq = "3.21.5"
+
+[libraries.jooq-core]
+module = "org.jooq:jooq"
+version.ref = "jooq"
+
+[libraries.jooq-meta]
+module = "org.jooq:jooq-meta"
+version.ref = "jooq"
+
+[libraries.jooq-codegen]
+module = "org.jooq:jooq-codegen"
+version.ref = "jooq"
+
+[libraries.jooq-meta-extensions]
+module = "org.jooq:jooq-meta-extensions"
+version.ref = "jooq"
+
+[plugins.jooq-codegen]
+id = "org.jooq.jooq-codegen-gradle"
+module = "org.jooq:jooq-codegen-gradle"
+version.ref = "jooq"

@@ -31,5 +31,20 @@ jobs:
       - uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: '9.1.0'
-      - name: Durex manifest bootstrap
-        run: gradle -p build-bootstrap/tests/manifest-valid verifyDurexManifest --stacktrace
+      - name: Valid manifest and diagnostics
+        run: gradle -p build-bootstrap/tests/manifest-valid verifyDurexManifest durexDependencies --stacktrace
+      - name: Managed external plugin resolution
+        run: gradle -p build-bootstrap/tests/plugin-resolution verifyPluginResolution --stacktrace
+      - name: Manifest validation failures are Durex errors
+        shell: bash
+        run: |
+          set -euo pipefail
+          cases=(cycle-a.toml duplicate-root.toml unknown-ref.toml version-conflict.toml unsupported.toml)
+          for manifest in "${cases[@]}"; do
+            log="build-bootstrap/tests/manifest-validation/${manifest}.log"
+            if gradle -p build-bootstrap/tests/manifest-validation help -Pmanifest="$manifest" --stacktrace >"$log" 2>&1; then
+              echo "expected $manifest to fail"
+              exit 1
+            fi
+            grep -q 'Durex dependency manifest error' "$log"
+          done

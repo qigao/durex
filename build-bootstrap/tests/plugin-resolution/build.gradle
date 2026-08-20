@@ -1,0 +1,10 @@
+plugins {
+    id 'java'
+    id 'org.jsonschema2pojo'
+}
+
+tasks.register('verifyPluginResolution') {
+    doLast {
+        assert plugins.hasPlugin('org.jsonschema2pojo')
+    }
+}
