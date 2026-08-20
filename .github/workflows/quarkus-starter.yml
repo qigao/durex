@@ -1,45 +1,65 @@
 name: Quarkus Starter Project
+
 on:
   push:
     branches:
       - master
     paths:
       - 'core/music/**'
+      - 'core/schema/music/**'
+      - 'core/shared/**'
+      - 'gradle/**'
+      - 'build.gradle'
+      - 'settings.gradle'
       - '.github/workflows/quarkus-starter.yml'
   pull_request:
-    types: [ opened,reopened, synchronize ]
+    types: [ opened, reopened, synchronize ]
     paths:
       - 'core/music/**'
+      - 'core/schema/music/**'
+      - 'core/shared/**'
+      - 'gradle/**'
+      - 'build.gradle'
+      - 'settings.gradle'
       - '.github/workflows/quarkus-starter.yml'
+
+permissions:
+  contents: read
+
 env:
   DATABASE_USERNAME: music
   DATABASE_PASSWORD: secret
   DATABASE_PORT: 3306
   DATABASE_NAME: music
   DATABASE_HOST: localhost
+
 jobs:
   check:
     name: Check Project
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 0
-      - name: Setup Java Project
-        uses: ./.github/workflows/templates/config-action
-      - name: compile annotation
-        run: ./gradlew core:shared:json-schema-annotation:build
-      - name: generate schema
-        run: ./gradlew core:schema:music:entity:generateJooq
-      - name: run gradle assemble
-        run: ./gradlew core:music:assemble -DDATABASE_USERNAME="$DATABASE_USERNAME" -DDATABASE_PASSWORD="$DATABASE_PASSWORD" -DDATABASE_PORT="$DATABASE_PORT" -DDATABASE_NAME="$DATABASE_NAME" -DDATABASE_HOST="$DATABASE_HOST"
-      - name: Execute Related Check tasks
-        run: ./gradlew core:music:check
-      - name: Validate Code Coverage
-        run: ./gradlew core:music:jacocoTestCoverageVerification
-      - uses: ./.github/workflows/templates/cache-action
-      - name: Cache build result
-        uses: actions/cache@v4
+
+      - uses: actions/setup-java@v5
         with:
-          path: core/music
-          key:  ${{ runner.os }}-gradle-build-quarkus-project-${{ github.run_id }}
+          distribution: temurin
+          java-version: '11'
+
+      - uses: gradle/actions/setup-gradle@v6
+
+      - name: Compile annotation
+        run: ./gradlew core:shared:json-schema-annotation:build --stacktrace
+
+      - name: Generate schema
+        run: ./gradlew core:schema:music:entity:generateJooq --stacktrace
+
+      - name: Assemble Quarkus music service
+        run: ./gradlew core:music:assemble --stacktrace -DDATABASE_USERNAME="$DATABASE_USERNAME" -DDATABASE_PASSWORD="$DATABASE_PASSWORD" -DDATABASE_PORT="$DATABASE_PORT" -DDATABASE_NAME="$DATABASE_NAME" -DDATABASE_HOST="$DATABASE_HOST"
+
+      - name: Execute related checks
+        run: ./gradlew core:music:check --stacktrace
+
+      - name: Validate code coverage
+        run: ./gradlew core:music:jacocoTestCoverageVerification --stacktrace
