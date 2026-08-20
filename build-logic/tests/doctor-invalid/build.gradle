@@ -1,0 +1,6 @@
+plugins { id 'durex.java-library' }
+
+import com.github.durex.gradle.capability.CapabilityPluginRegistry
+
+extensions.getByType(CapabilityPluginRegistry)
+    .register('com.acme.invalid', 'missing-capability')

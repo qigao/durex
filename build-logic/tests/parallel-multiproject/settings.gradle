@@ -1,0 +1,14 @@
+pluginManagement {
+    includeBuild('../../../build-bootstrap')
+    includeBuild('../..')
+    repositories { gradlePluginPortal(); mavenCentral() }
+}
+plugins { id 'durex.settings' }
+
+durexSettings {
+    repositoryRoot.set(file('../../..'))
+    modulesManifest.set(file('modules.toml'))
+}
+
+dependencyResolutionManagement { repositories { mavenCentral() } }
+rootProject.name = 'parallel-multiproject'

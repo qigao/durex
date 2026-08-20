@@ -32,6 +32,7 @@ abstract class DependencyRegistryService implements BuildService<DependencyRegis
     PluginSpec plugin(String alias) { registry().plugin(alias) }
     PluginSpec pluginByGradleId(String id) { registry().pluginByGradleId(id) }
     Collection<PluginSpec> plugins() { registry().plugins() }
+    Map<String, Object> snapshot() { registry().snapshot() }
 
     @Override
     void close() {}

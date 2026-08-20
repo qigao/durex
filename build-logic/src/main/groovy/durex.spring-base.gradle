@@ -1,11 +1,13 @@
 import com.github.durex.gradle.DurexDependencyAccess
-import com.github.durex.gradle.DurexModuleState
+import com.github.durex.gradle.model.DurexModuleModel
 
 plugins {
     id 'durex.java-base'
 }
 
-def state = extensions.getByType(DurexModuleState)
-['implementation', 'api', 'testImplementation'].each { configuration ->
-    DurexDependencyAccess.activatePlatform(project, state, configuration, 'spring')
+def model = extensions.getByType(DurexModuleModel)
+['implementation', 'api', 'testImplementation'].findAll { configuration ->
+    configurations.findByName(configuration) != null
+}.each { configuration ->
+    DurexDependencyAccess.activatePlatform(project, model, configuration, 'spring')
 }

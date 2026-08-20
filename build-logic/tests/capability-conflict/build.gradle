@@ -1,0 +1,12 @@
+plugins { id 'durex.java-library' }
+
+import com.github.durex.gradle.capability.CapabilityEngine
+import com.github.durex.gradle.capability.CapabilityRegistry
+import com.github.durex.gradle.capability.CapabilitySpec
+
+def registry = extensions.getByType(CapabilityRegistry)
+def engine = extensions.getByType(CapabilityEngine)
+registry.register(CapabilitySpec.builder('foo').conflict('bar').build())
+registry.register(CapabilitySpec.builder('bar').build())
+engine.enable('bar')
+engine.enable('foo')

@@ -1,16 +1,16 @@
 import com.github.durex.gradle.DurexDependencyAccess
-import com.github.durex.gradle.DurexModuleState
 import com.github.durex.gradle.ModuleKind
+import com.github.durex.gradle.model.DurexModuleModel
 
 plugins {
     id 'java-library'
     id 'durex.spring-base'
 }
 
-def state = extensions.getByType(DurexModuleState)
-state.claim(ModuleKind.SPRING_LIBRARY)
-DurexDependencyAccess.add(project, state, 'implementation', 'spring-core')
-DurexDependencyAccess.add(project, state, 'testImplementation', 'spring-test')
+def model = extensions.getByType(DurexModuleModel)
+model.claim(ModuleKind.SPRING_LIBRARY, project.path)
+DurexDependencyAccess.add(project, model, 'implementation', 'spring-core')
+DurexDependencyAccess.add(project, model, 'testImplementation', 'spring-test')
 
 tasks.withType(Test).configureEach {
     useJUnitPlatform()

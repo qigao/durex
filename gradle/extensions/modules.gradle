@@ -2,8 +2,15 @@ import static groovy.io.FileType.DIRECTORIES
 import static groovy.io.FileVisitResult.SKIP_SUBTREE
 
 def skipDirs = ~/^(build|\..*|src|target)/
+def infrastructureDirs = ['build-bootstrap', 'build-logic', 'migration', 'reference'] as Set
+
+def isExcludedDir = { File dir ->
+    skipDirs.matcher(dir.name).matches() ||
+            (dir.parentFile == rootDir && infrastructureDirs.contains(dir.name))
+}
+
 def preDir = {
-    if (skipDirs.matcher(it.name).matches())
+    if (isExcludedDir(it))
         return SKIP_SUBTREE
 }
 
@@ -15,7 +22,7 @@ rootDir.traverse(
         type: DIRECTORIES,
         preDir: preDir) { dir ->
     def dstr = dir.toString()
-    if ((!skipDirs.matcher(dir.name)) &&
+    if (!isExcludedDir(dir) &&
             new File(dstr + "/build.gradle").exists()) {
         include getProjectName(dstr)
     }

@@ -1,0 +1,25 @@
+plugins { id 'durex.java-library' }
+
+import com.github.durex.gradle.DurexConfigurationException
+import com.github.durex.gradle.capability.CapabilityEngine
+import com.github.durex.gradle.capability.CapabilityRegistry
+import com.github.durex.gradle.capability.CapabilitySpec
+import com.github.durex.gradle.model.DurexModuleModel
+
+def registry = extensions.getByType(CapabilityRegistry)
+def engine = extensions.getByType(CapabilityEngine)
+def model = extensions.getByType(DurexModuleModel)
+
+def foo = CapabilitySpec.builder('foo').build()
+registry.register(foo)
+registry.register(CapabilitySpec.builder('foo').build())
+try {
+    registry.register(CapabilitySpec.builder('foo').dependency('implementation', 'junit-jupiter').build())
+    assert false: 'expected conflicting capability registration to fail'
+} catch (DurexConfigurationException expected) {
+    assert expected.message.contains("capability 'foo' is already registered with a different definition")
+}
+engine.enable('foo')
+assert model.capabilities.get() == ['foo'] as Set
+
+tasks.register('verifyCapabilityKernel')

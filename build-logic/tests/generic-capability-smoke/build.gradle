@@ -1,0 +1,10 @@
+plugins { id 'durex.java-library' }
+
+import com.github.durex.gradle.model.DurexModuleModel
+
+durex {
+    capability('com.acme.durex.fixture')
+}
+
+assert extensions.getByType(DurexModuleModel).capabilities.get().contains('fixture')
+tasks.register('verifyGenericCapability')

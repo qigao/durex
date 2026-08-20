@@ -25,4 +25,9 @@ jsonSchema2Pojo {
 
   customAnnotator = 'com.github.durex.shared.CustomAnnotator'
 }
+
+tasks.matching { it.name == 'generateEffectiveLombokConfig' }.configureEach {
+  dependsOn 'generateJsonSchema2DataClass'
+}
+
 jar.enabled = true

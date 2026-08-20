@@ -1,0 +1,11 @@
+plugins { id 'durex.catalog' }
+
+import com.github.durex.gradle.catalog.DurexRegistryBridge
+
+DurexRegistryBridge.fromSnapshot([
+    schemaVersion: 99,
+    javaVersion: 25,
+    platforms: [:],
+    libraries: [:],
+    plugins: [:]
+])
