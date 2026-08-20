@@ -1,0 +1,12 @@
+tasks.register('verifyDurexManifest') {
+    doLast {
+        def service = gradle.sharedServices.registrations
+            .getByName('durexDependencyRegistry').service.get()
+        assert service.javaVersion() == 25
+        assert service.version('spring-boot').value == '4.1.0'
+        assert service.platform('spring').coordinate() ==
+            'org.springframework.boot:spring-boot-dependencies:4.1.0'
+        assert service.library('spring-jooq').module ==
+            'org.springframework.boot:spring-boot-starter-jooq'
+    }
+}
