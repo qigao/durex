@@ -69,6 +69,10 @@ class DurexExtension {
         project.pluginManager.apply('durex.feature.aop')
     }
 
+    void transaction() {
+        project.pluginManager.apply('durex.feature.transaction')
+    }
+
     void redis() {
         project.pluginManager.apply('durex.feature.redis')
     }

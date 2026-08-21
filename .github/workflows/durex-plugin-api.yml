@@ -36,6 +36,9 @@ jobs:
       - name: Verify AOP feature capability
         run: gradle -p build-logic/tests/aop-feature-smoke verifyAopCapability dependencies --configuration runtimeClasspath --stacktrace
 
+      - name: Verify transaction feature capability
+        run: gradle -p build-logic/tests/transaction-feature-smoke verifyTransactionCapability dependencies --configuration compileClasspath --stacktrace
+
       - name: Verify jOOQ schema public plugin
         shell: bash
         run: |

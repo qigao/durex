@@ -14,6 +14,10 @@ platform = "spring"
 module = "org.springframework.boot:spring-boot-starter-aspectj"
 platform = "spring"
 
+[libraries.spring-transaction]
+module = "org.springframework:spring-tx"
+platform = "spring"
+
 [libraries.spring-web]
 module = "org.springframework.boot:spring-boot-starter-webmvc"
 platform = "spring"
