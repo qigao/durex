@@ -73,6 +73,14 @@ class DurexExtension {
         project.pluginManager.apply('durex.feature.transaction')
     }
 
+    void web() {
+        project.pluginManager.apply('durex.feature.web')
+    }
+
+    void httpClient() {
+        project.pluginManager.apply('durex.feature.http-client')
+    }
+
     void redis() {
         project.pluginManager.apply('durex.feature.redis')
     }

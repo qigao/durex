@@ -9,12 +9,8 @@ plugins {
 
 def model = extensions.getByType(DurexModuleModel)
 model.claim(ModuleKind.SPRING_SERVICE, project.path)
-['spring-core', 'spring-web', 'spring-validation', 'spring-observability'].each { alias ->
-    DurexDependencyAccess.add(project, model, 'implementation', alias)
-}
-['spring-test', 'spring-web-test'].each { alias ->
-    DurexDependencyAccess.add(project, model, 'testImplementation', alias)
-}
+DurexDependencyAccess.add(project, model, 'implementation', 'spring-core')
+DurexDependencyAccess.add(project, model, 'testImplementation', 'spring-test')
 
 tasks.withType(Test).configureEach {
     useJUnitPlatform()

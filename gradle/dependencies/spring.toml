@@ -18,7 +18,11 @@ platform = "spring"
 module = "org.springframework:spring-tx"
 platform = "spring"
 
-[libraries.spring-web]
+[libraries.spring-http]
+module = "org.springframework:spring-web"
+platform = "spring"
+
+[libraries.spring-webmvc]
 module = "org.springframework.boot:spring-boot-starter-webmvc"
 platform = "spring"
 
@@ -34,8 +38,16 @@ platform = "spring"
 module = "org.springframework.boot:spring-boot-starter-test"
 platform = "spring"
 
-[libraries.spring-web-test]
+[libraries.spring-webmvc-test]
 module = "org.springframework.boot:spring-boot-starter-webmvc-test"
+platform = "spring"
+
+[libraries.spring-restclient]
+module = "org.springframework.boot:spring-boot-starter-restclient"
+platform = "spring"
+
+[libraries.spring-restclient-test]
+module = "org.springframework.boot:spring-boot-starter-restclient-test"
 platform = "spring"
 
 [libraries.spring-jpa]

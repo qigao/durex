@@ -39,6 +39,12 @@ jobs:
       - name: Verify transaction feature capability
         run: gradle -p build-logic/tests/transaction-feature-smoke verifyTransactionCapability dependencies --configuration compileClasspath --stacktrace
 
+      - name: Verify web feature capability
+        run: gradle -p build-logic/tests/web-feature-smoke verifyWebCapability dependencies --configuration runtimeClasspath --stacktrace
+
+      - name: Verify HTTP client feature capability
+        run: gradle -p build-logic/tests/http-client-feature-smoke verifyHttpClientCapability dependencies --configuration runtimeClasspath --stacktrace
+
       - name: Verify jOOQ schema public plugin
         shell: bash
         run: |
