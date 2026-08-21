@@ -6,7 +6,7 @@ fail=0
 require_absent() {
   local path="$1"
   if [[ -e "$path" ]]; then
-    echo "legacy runtime artifact still exists: $path"
+    echo "legacy runtime/build artifact still exists: $path"
     fail=1
   fi
 }
@@ -15,12 +15,11 @@ require_absent core/music-reactive
 require_absent core/shared/jakarta
 require_absent core/myInterceptor
 require_absent core/schema/music/r2dbc
+require_absent core/springboot
 require_absent integration-tests
-require_absent gradle/versions/quarkus.versions.toml
-require_absent gradle/library/quarkus-core.gradle
-require_absent gradle/library/quarkus-imperative.gradle
-require_absent gradle/library/quarkus-reactive.gradle
-require_absent gradle/library/quarkus-test.gradle
+require_absent gradle/library
+require_absent gradle/versions
+require_absent gradle/extensions
 require_absent core/music/build.gradle
 require_absent core/music/src/main/java/com/github/durex/music/controller
 require_absent core/music/src/main/java/com/github/durex/music/config
@@ -28,14 +27,16 @@ require_absent core/music/src/test
 require_absent core/schema/music/entity/build.gradle
 require_absent core/schema/music/repo/build.gradle
 require_absent core/schema/music/repo/src/test
+require_absent core/schema/music/json/build.gradle
+require_absent core/shared/json-schema-annotation/build.gradle
+require_absent core/shared/utils/build.gradle
 
 active_paths=(
   build-bootstrap
   build-logic
   core
   gradle/dependencies
-  gradle/library
-  gradle/versions
+  gradle/modules.toml
   migration
   reference
   settings.gradle
@@ -66,4 +67,4 @@ if ((fail)); then
   exit 1
 fi
 
-echo 'legacy Quarkus/CDI runtime boundary: clean'
+echo 'legacy runtime/build boundary: clean'

@@ -1,8 +1,0 @@
-dependencies {
-    implementation dbLibs.bundles.jooq
-    implementation dbLibs.postgre
-    implementation dbLibs.mysql
-    implementation platform(dbLibs.r2dbc.bom.get())
-    implementation 'io.r2dbc:r2dbc-spi'
-    implementation dbLibs.r2dbc.mysql
-}

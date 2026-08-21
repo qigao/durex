@@ -1,7 +1,0 @@
-def springCatalog = extensions.getByType(org.gradle.api.artifacts.VersionCatalogsExtension).named('sLibs')
-def springBom = springCatalog.findLibrary('spring-bom4').get().get()
-
-dependencies {
-    implementation platform(springBom)
-    implementation 'org.springframework.boot:spring-boot-starter-actuator'
-}

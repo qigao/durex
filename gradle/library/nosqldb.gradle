@@ -1,4 +1,0 @@
-dependencies {
-    implementation dbLibs.redisson
-    implementation dbLibs.morphia
-}

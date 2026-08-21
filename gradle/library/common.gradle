@@ -1,6 +1,0 @@
-dependencies {
-    implementation vLibs.bundles.idCreator
-    implementation vLibs.bundles.commons
-    implementation vLibs.unchecked
-}
-apply from: "$rootDir/gradle/library/logs.gradle"

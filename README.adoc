@@ -1,14 +1,40 @@
 = Durex
 :icons: font
 
-a multi-module Java platform for high quality Spring Boot development
+Durex is a multi-module Java platform for Spring Boot development.
 
-Features:
+== Build Platform
 
-* DDD, TDD/BDD
-* Spring Boot runtime with explicit Durex capabilities
-* Shared HTTP service contracts for server/client reuse
-* Spring-native Redis Pub/Sub and Stream messaging
-* Native deployment with GraalVM
-* Json Schema (xref:core/shared/json-schema-annotation/readme.adoc[jsonSchema])
-* Messaging (xref:core/shared/messaging/README.md[Spring Messaging])
+The root build is managed by Durex itself:
+
+* `durex.settings` owns module discovery and project inclusion.
+* `gradle/dependencies/*.toml` owns dependency, platform, and plugin versions.
+* `gradle/modules.toml` contains only logical-name/build-file overrides; ordinary modules are auto-discovered.
+* `build.spring.gradle` is the canonical Spring module descriptor.
+* Gradle 9.1 and Java 25 are the current build baseline.
+
+Useful diagnostics:
+
+[source,bash]
+----
+./gradlew durexProjects
+./gradlew durexDependencies
+----
+
+== Runtime
+
+Spring Boot is the only application runtime. Durex adds build-time capabilities and a small set of semantic adapters rather than replacing Spring facilities.
+
+* shared HTTP service contracts for server/client reuse
+* Spring AOP and transaction integration
+* Spring-native Redis Pub/Sub and Redis Streams messaging
+* GraalVM native/AOT reference build
+
+== Schema
+
+Schema/code generation remains build-time and framework-neutral:
+
+* `durex.schema.jooq`
+* `durex.schema.json`
+
+See xref:core/shared/json-schema-annotation/readme.adoc[JSON Schema annotations] and xref:core/shared/messaging/README.md[Spring Messaging].
