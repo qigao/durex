@@ -50,6 +50,10 @@ platform = "spring"
 module = "org.springframework.boot:spring-boot-starter-restclient-test"
 platform = "spring"
 
+[libraries.spring-messaging]
+module = "org.springframework:spring-messaging"
+platform = "spring"
+
 [libraries.spring-jpa]
 module = "org.springframework.boot:spring-boot-starter-data-jpa"
 platform = "spring"
