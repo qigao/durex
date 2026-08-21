@@ -70,6 +70,10 @@ platform = "spring"
 module = "org.springframework.boot:spring-boot-starter-data-redis"
 platform = "spring"
 
+[libraries.spring-json]
+module = "org.springframework.boot:spring-boot-starter-json"
+platform = "spring"
+
 [libraries.jackson-annotations]
 module = "com.fasterxml.jackson.core:jackson-annotations"
 platform = "spring"
