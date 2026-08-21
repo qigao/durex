@@ -18,6 +18,10 @@ on:
       - 'migration/spring-music/**'
       - '.github/workflows/durex-build-platform.yml'
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 permissions:
   contents: read
 
