@@ -103,17 +103,29 @@ final class ProjectDiscovery {
         new ProjectRegistry(selected.values())
     }
 
-    private static void scan(
+    private static boolean scan(
             File directory,
             File scanRoot,
             File repositoryRoot,
             List<File> excludes,
             boolean strict,
             Map<File, ProjectSpec> selected) {
-        if (isExcluded(directory, excludes)) return
+        if (isExcluded(directory, excludes)) return false
+
+        File[] listed = directory.listFiles()
+        List<File> children = listed == null ? [] : listed
+                .findAll { it.isDirectory() && !BLOCKED_DIRECTORIES.contains(it.name) }
+                .sort { a, b -> a.name <=> b.name }
+
+        boolean descendantContainsBuild = false
+        children.each { child ->
+            if (scan(child, scanRoot, repositoryRoot, excludes, strict, selected)) {
+                descendantContainsBuild = true
+            }
+        }
 
         String buildFile = preferredBuildFile(directory)
-        if (buildFile != null) {
+        if (buildFile != null && !descendantContainsBuild) {
             String name = deriveName(repositoryRoot, scanRoot, directory, strict)
             File canonical = directory.canonicalFile
             if (!selected.containsKey(canonical)) {
@@ -121,15 +133,7 @@ final class ProjectDiscovery {
             }
         }
 
-        File[] children = directory.listFiles()
-        if (children == null) return
-        children.findAll { it.isDirectory() }
-                .sort { a, b -> a.name <=> b.name }
-                .each { child ->
-                    if (!BLOCKED_DIRECTORIES.contains(child.name)) {
-                        scan(child, scanRoot, repositoryRoot, excludes, strict, selected)
-                    }
-                }
+        buildFile != null || descendantContainsBuild
     }
 
     private static String deriveName(File repositoryRoot, File scanRoot, File directory, boolean strict) {
