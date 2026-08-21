@@ -42,6 +42,11 @@ path = "core/api/music"
 build-file = "build.spring.gradle"
 
 [[module]]
+name = "music-client"
+path = "core/api/music-client"
+build-file = "build.spring.gradle"
+
+[[module]]
 name = "music"
 path = "core/music"
 build-file = "build.spring.gradle"
