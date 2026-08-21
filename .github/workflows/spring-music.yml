@@ -53,6 +53,16 @@ jobs:
       - name: Validate compile and test Spring music graph
         run: gradle -p migration/spring-music :music:durexDoctor :music:compileJava :music:test --configuration-cache --stacktrace
 
+      - name: Verify Spring runtime boundary
+        shell: bash
+        run: |
+          bash migration/spring-music/verify-runtime-boundary.sh
+          gradle -p migration/spring-music :music:dependencies --configuration compileClasspath --stacktrace | tee /tmp/music-compile-classpath.log
+          if grep -E 'javax\.enterprise|javax\.inject:|javax\.transaction|javax\.interceptor|io\.quarkus' /tmp/music-compile-classpath.log; then
+            echo 'legacy runtime dependency leaked into Spring compileClasspath'
+            exit 1
+          fi
+
       - name: Migrated descriptors are catalog-free
         shell: bash
         run: |

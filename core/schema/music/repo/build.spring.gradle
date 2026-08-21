@@ -7,13 +7,11 @@ durex {
         jooq()
     }
     lombok()
+    dependency('api', 'jakarta-validation')
 }
 
 dependencies {
     implementation project(':shared-utils')
     api project(':music-json')
     implementation project(':music-entity')
-    compileOnly durex.library('javax-cdi')
-    compileOnly durex.library('javax-inject')
-    compileOnly durex.library('javax-validation')
 }

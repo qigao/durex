@@ -8,6 +8,11 @@ final class BuiltinCapabilities {
             .dependency('implementation', 'spring-aop')
             .build()
 
+    static final CapabilitySpec TRANSACTION = CapabilitySpec.builder('transaction')
+            .allow(ModuleKind.SPRING_LIBRARY, ModuleKind.SPRING_SERVICE)
+            .dependency('implementation', 'spring-transaction')
+            .build()
+
     static final CapabilitySpec JPA = CapabilitySpec.builder('jpa')
             .allow(ModuleKind.SPRING_LIBRARY, ModuleKind.SPRING_SERVICE)
             .dependency('implementation', 'spring-jpa')
@@ -39,7 +44,7 @@ final class BuiltinCapabilities {
             .build()
 
     static void registerAll(CapabilityRegistry registry) {
-        [AOP, JPA, JDBC, JOOQ, REDIS, NATIVE, LOMBOK].each { registry.register(it) }
+        [AOP, TRANSACTION, JPA, JDBC, JOOQ, REDIS, NATIVE, LOMBOK].each { registry.register(it) }
     }
 
     private BuiltinCapabilities() {}

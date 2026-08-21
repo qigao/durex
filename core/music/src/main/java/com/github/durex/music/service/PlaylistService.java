@@ -16,16 +16,18 @@ import com.github.durex.sqlbuilder.enums.WildCardType;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
-import javax.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 
-@ApplicationScoped
 @Slf4j
 public class PlaylistService {
-  @Inject PlayListRepository repository;
-  @Inject PlayListMusicRepository playListMusicRepository;
+  protected final PlayListRepository repository;
+  protected final PlayListMusicRepository playListMusicRepository;
+
+  public PlaylistService(
+      PlayListRepository repository, PlayListMusicRepository playListMusicRepository) {
+    this.repository = repository;
+    this.playListMusicRepository = playListMusicRepository;
+  }
 
   @NullChecker
   public List<PlayList> findPlayListByTitle(String title) {
@@ -48,44 +50,39 @@ public class PlaylistService {
     return repository.findAll();
   }
 
-  @Transactional
   @NullChecker
   public List<Integer> createPlaylist(PlayList playList, List<Music> musics) {
     var created = repository.save(playList);
     if (created == 0) {
       throw new ApiException(MUSIC_NOT_FOUND);
-    } else {
-      return Arrays.stream(playListMusicRepository.saveMusicsToPlayList(playList.getId(), musics))
-          .boxed()
-          .collect(Collectors.toUnmodifiableList());
     }
+    return Arrays.stream(playListMusicRepository.saveMusicsToPlayList(playList.getId(), musics))
+        .boxed()
+        .collect(Collectors.toUnmodifiableList());
   }
 
-  @Transactional
   @NullChecker
   public List<Integer> createPlaylist(PlayListMusic playListMusic) {
     var created = repository.save(playListMusic);
     if (created == 0) {
       throw new ApiException(MUSIC_NOT_FOUND);
-    } else {
-      return Arrays.stream(
-              playListMusicRepository.saveMusicsToPlayList(
-                  playListMusic.getId(), playListMusic.getMusics()))
-          .boxed()
-          .collect(Collectors.toUnmodifiableList());
     }
+    return Arrays.stream(
+            playListMusicRepository.saveMusicsToPlayList(
+                playListMusic.getId(), playListMusic.getMusics()))
+        .boxed()
+        .collect(Collectors.toUnmodifiableList());
   }
 
-  @Transactional
   @ValueChecker(value = "0", type = Integer.class)
   public Integer updatePlaylist(PlayList playList) {
     var updated = repository.update(playList);
     if (updated == 0) {
       throw new ApiException(MUSIC_NOT_UPDATED);
-    } else return updated;
+    }
+    return updated;
   }
 
-  @Transactional
   @NullChecker
   public List<Integer> updatePlaylist(List<PlayList> playLists) {
     return Arrays.stream(repository.update(playLists))
@@ -93,32 +90,27 @@ public class PlaylistService {
         .collect(Collectors.toUnmodifiableList());
   }
 
-  @Transactional
   @ValueChecker(value = "0", type = Integer.class)
   public Integer deletePlaylistById(String id) {
     return repository.deleteById(id);
   }
 
-  @Transactional
   @ValueChecker(value = "0", type = Integer.class)
   public Integer deletePlayListByTitle(String title) {
     return repository.deleteByTitle(title);
   }
 
-  @Transactional
   @ValueChecker(value = "0", type = Integer.class)
   public Integer deletePlayListByTitle(String title, WildCardType wildcard) {
     var realTitle = SqlHelper.likeClauseBuilder(wildcard, title);
     return repository.deleteByTitle(realTitle, wildcard);
   }
 
-  @Transactional
   @ValueChecker(value = "0", type = Integer.class)
   public Integer deleteMusicFromPlayList(String id, List<String> musicIds) {
     return playListMusicRepository.deleteMusicFromPlayList(id, musicIds);
   }
 
-  @Transactional
   @ValueChecker(value = "0", type = Integer.class)
   public Integer clearMusicsFromPlayList(String playListId) {
     return playListMusicRepository.clearMusicsFromPlayList(playListId);

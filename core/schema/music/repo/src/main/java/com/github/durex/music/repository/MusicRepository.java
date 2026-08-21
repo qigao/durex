@@ -10,20 +10,16 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import javax.enterprise.context.RequestScoped;
-import javax.inject.Inject;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.jooq.Condition;
 import org.jooq.DSLContext;
 
 @Slf4j
-@RequestScoped
 public class MusicRepository {
   public static final Condition NOT_DELETED = MUSIC.DELETED_FLAG.eq(0);
   private final DSLContext dsl;
 
-  @Inject
   public MusicRepository(DSLContext dsl) {
     this.dsl = dsl;
   }

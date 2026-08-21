@@ -7,20 +7,21 @@ import com.github.durex.model.tables.records.RMusic;
 import com.github.durex.music.mapper.MusicMapper;
 import com.github.durex.music.mapper.PlayListMusicMapper;
 import com.github.durex.music.model.Music;
+import jakarta.validation.constraints.NotNull;
 import java.util.List;
 import java.util.stream.Collectors;
-import javax.enterprise.context.RequestScoped;
-import javax.inject.Inject;
-import javax.validation.constraints.NotNull;
 import lombok.extern.slf4j.Slf4j;
 import org.jooq.Condition;
 import org.jooq.DSLContext;
 
 @Slf4j
-@RequestScoped
 public class PlayListMusicRepository {
   public static final Condition NOT_DELETED = MUSIC.DELETED_FLAG.eq(0);
-  @Inject DSLContext dsl;
+  private final DSLContext dsl;
+
+  public PlayListMusicRepository(DSLContext dsl) {
+    this.dsl = dsl;
+  }
 
   public List<Music> listMusicsByPlayListId(@NotNull String playlistId) {
     return dsl

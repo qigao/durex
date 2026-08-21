@@ -7,20 +7,21 @@ import com.github.durex.model.tables.records.RCreatorPlaylist;
 import com.github.durex.model.tables.records.RPlaylist;
 import com.github.durex.music.mapper.PlayListMapper;
 import com.github.durex.music.model.PlayList;
+import jakarta.validation.constraints.NotNull;
 import java.util.List;
 import java.util.stream.Collectors;
-import javax.enterprise.context.RequestScoped;
-import javax.inject.Inject;
-import javax.validation.constraints.NotNull;
 import lombok.extern.slf4j.Slf4j;
 import org.jooq.Condition;
 import org.jooq.DSLContext;
 
 @Slf4j
-@RequestScoped
 public class CreatorPlayListRepository {
   public static final Condition DELETED_FLAG = PLAYLIST.DELETED_FLAG.eq(0);
-  @Inject DSLContext dsl;
+  private final DSLContext dsl;
+
+  public CreatorPlayListRepository(DSLContext dsl) {
+    this.dsl = dsl;
+  }
 
   public int savePlaylistToCreator(@NotNull String creatorId, @NotNull String playlistId) {
     return dsl.insertInto(CREATOR_PLAYLIST)
