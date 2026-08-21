@@ -1,12 +1,13 @@
 plugins {
-    id 'durex.java-library'
+    id 'io.github.qigao.simpledsl.build'
 }
 
-durex {
+simpledsl {
+    javaLibrary()
     lombok()
 }
 
 dependencies {
-    implementation durex.library('json-schema-pojo')
-    implementation durex.library('swagger-annotations')
+    implementation simpledsl.library('json-schema-pojo')
+    implementation simpledsl.library('swagger-annotations')
 }

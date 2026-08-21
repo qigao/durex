@@ -1,15 +1,18 @@
 plugins {
-    id 'durex.spring-library'
-    id 'durex.schema.json'
+    id 'io.github.qigao.simpledsl.build'
 }
 
-durex {
+simpledsl {
+    springLibrary()
     dependency('api', 'jackson-annotations')
     dependency('api', 'jackson-databind')
     dependency('api', 'jakarta-validation')
 }
 
-durexJsonSchema {
+// SimpleDSL 0.1.0 keeps schema helpers inside the published build artifact.
+apply plugin: io.github.qigao.simpledsl.gradle.schema.SimpleDslJsonSchemaPlugin
+
+simpledslJsonSchema {
     source = 'json'
     packageName = 'com.github.durex.music.model'
     validation = true

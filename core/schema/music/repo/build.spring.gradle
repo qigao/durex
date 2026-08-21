@@ -1,8 +1,9 @@
 plugins {
-    id 'durex.spring-library'
+    id 'io.github.qigao.simpledsl.build'
 }
 
-durex {
+simpledsl {
+    springLibrary()
     persistence {
         jooq()
     }

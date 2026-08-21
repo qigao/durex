@@ -1,6 +1,4 @@
 pluginManagement {
-    includeBuild("../../build-bootstrap")
-    includeBuild("../../build-logic")
     repositories {
         gradlePluginPortal()
         mavenCentral()
@@ -8,11 +6,12 @@ pluginManagement {
 }
 
 plugins {
-    id("durex.settings")
+    id("io.github.qigao.simpledsl.settings") version "0.1.0"
 }
 
-durexSettings {
-    repositoryRoot.set(file("../.."))
+simpledslSettings {
+    repositoryRoot.set(layout.settingsDirectory.dir("../.."))
+    dependencyManifest.set(layout.settingsDirectory.file("../../gradle/dependencies/durex.toml"))
     moduleDiscovery.set(false)
 }
 

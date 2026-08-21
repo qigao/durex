@@ -1,7 +1,14 @@
 plugins {
-    id 'durex.java-library'
-    id 'durex.schema.jooq'
+    id 'io.github.qigao.simpledsl.build'
 }
+
+simpledsl {
+    javaLibrary()
+    lombok()
+}
+
+// SimpleDSL 0.1.0 keeps schema helpers inside the published build artifact.
+apply plugin: io.github.qigao.simpledsl.gradle.schema.SimpleDslJooqSchemaPlugin
 
 sourceSets {
     main {
@@ -11,15 +18,11 @@ sourceSets {
     }
 }
 
-durex {
-    lombok()
-}
-
 dependencies {
     api project(':music-json')
 }
 
-durexJooq {
+simpledslJooq {
     source = 'database/schema/mysql.sql'
     packageName = 'com.github.durex.model'
 }
