@@ -18,13 +18,6 @@ class DurexJsonSchemaExtension {
 def schema = extensions.create('durexJsonSchema', DurexJsonSchemaExtension)
 def generatedDir = layout.buildDirectory.dir('generated-src/json/main')
 
-plugins.withId('java') {
-    sourceSets.main.java.srcDir(generatedDir)
-    tasks.named('compileJava') {
-        dependsOn tasks.named('generateJsonSchema2DataClass')
-    }
-}
-
 afterEvaluate {
     if (!schema.packageName) {
         throw new GradleException('durexJsonSchema.packageName must be configured')
