@@ -31,6 +31,7 @@ concurrency:
   cancel-in-progress: true
 
 permissions:
+  actions: write
   contents: read
 
 jobs:
@@ -38,6 +39,28 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
+      - name: Cancel stale workflow runs for this PR branch
+        if: github.event_name == 'pull_request'
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          HEAD_REF: ${{ github.head_ref }}
+          CURRENT_SHA: ${{ github.event.pull_request.head.sha }}
+          CURRENT_RUN_ID: ${{ github.run_id }}
+        run: |
+          set -euo pipefail
+          for status in queued in_progress; do
+            gh api --paginate "repos/$GH_REPO/actions/runs?branch=$HEAD_REF&status=$status&per_page=100" \
+              --jq ".workflow_runs[] | select(.head_sha != \"$CURRENT_SHA\" and .id != $CURRENT_RUN_ID) | .id" |
+            while read -r run_id; do
+              [ -z "$run_id" ] && continue
+              echo "Canceling stale workflow run $run_id"
+              gh api --method POST "repos/$GH_REPO/actions/runs/$run_id/cancel" || true
+            done
+          done
+
       - name: Verify no Quarkus/CDI runtime remains
         shell: bash
         run: bash scripts/verify-no-legacy-runtime.sh
