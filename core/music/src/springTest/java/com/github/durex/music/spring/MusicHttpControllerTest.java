@@ -41,7 +41,7 @@ class MusicHttpControllerTest {
   }
 
   @Test
-  void listByTitleKeepsLegacyHttpContract() throws Exception {
+  void listByTitleUsesCanonicalHttpContract() throws Exception {
     var musicService = mock(MusicService.class);
     var music = new Music();
     music.setId("music-1");
@@ -50,7 +50,7 @@ class MusicHttpControllerTest {
 
     MockMvc mvc = MockMvcBuilders.standaloneSetup(new MusicHttpController(musicService)).build();
 
-    mvc.perform(get("/v1/music/").queryParam("title", "Spring Song"))
+    mvc.perform(get("/v1/music").queryParam("title", "Spring Song"))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.result[0].id").value("music-1"))
         .andExpect(jsonPath("$.error.message").value("OK"));
@@ -66,7 +66,7 @@ class MusicHttpControllerTest {
     MockMvc mvc = MockMvcBuilders.standaloneSetup(new MusicHttpController(musicService)).build();
 
     mvc.perform(
-            post("/v1/music/")
+            post("/v1/music")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"id\":\"music-1\",\"title\":\"Spring Song\",\"playId\":\"play-1\"}"))
         .andExpect(status().isOk())
@@ -84,7 +84,7 @@ class MusicHttpControllerTest {
     MockMvc mvc = MockMvcBuilders.standaloneSetup(new MusicHttpController(musicService)).build();
 
     mvc.perform(
-            put("/v1/music/")
+            put("/v1/music")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"id\":\"music-1\",\"title\":\"Updated Song\",\"playId\":\"play-1\"}"))
         .andExpect(status().isOk())
