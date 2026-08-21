@@ -12,16 +12,12 @@ import com.github.durex.sqlbuilder.enums.WildCardType;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
 
-@ApplicationScoped
 @Slf4j
 public class MusicService {
   private final MusicRepository repository;
 
-  @Inject
   public MusicService(MusicRepository repository) {
     this.repository = repository;
   }

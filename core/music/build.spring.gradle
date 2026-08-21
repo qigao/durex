@@ -25,6 +25,8 @@ durex {
     persistence {
         jooq()
     }
+    aop()
+    transaction()
     lombok()
     dependency('testRuntimeOnly', 'h2')
 }
@@ -36,7 +38,4 @@ dependencies {
     implementation project(':music-json')
     implementation project(':music-entity')
     implementation project(':music-repo')
-    compileOnly durex.library('javax-cdi')
-    compileOnly durex.library('javax-inject')
-    compileOnly durex.library('javax-transaction')
 }
