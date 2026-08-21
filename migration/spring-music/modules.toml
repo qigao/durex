@@ -37,6 +37,11 @@ path = "core/schema/music/repo"
 build-file = "build.spring.gradle"
 
 [[module]]
+name = "music-api"
+path = "core/api/music"
+build-file = "build.spring.gradle"
+
+[[module]]
 name = "music"
 path = "core/music"
 build-file = "build.spring.gradle"

@@ -25,6 +25,7 @@ durex {
     persistence {
         jooq()
     }
+    web()
     aop()
     transaction()
     lombok()
@@ -38,4 +39,5 @@ dependencies {
     implementation project(':music-json')
     implementation project(':music-entity')
     implementation project(':music-repo')
+    implementation project(':music-api')
 }
