@@ -11,7 +11,7 @@ The supported user-facing plugin IDs are:
 - Platform: `durex.settings`, `durex.module`
 - Module types: `durex.java-library`, `durex.spring-library`, `durex.spring-service`
 - Schema: `durex.schema.jooq`
-- Features: `durex.feature.jdbc`, `durex.feature.jooq`, `durex.feature.jpa`, `durex.feature.redis`, `durex.feature.native`, `durex.feature.lombok`
+- Features: `durex.feature.aop`, `durex.feature.jdbc`, `durex.feature.jooq`, `durex.feature.jpa`, `durex.feature.redis`, `durex.feature.native`, `durex.feature.lombok`
 
 Public plugins are the only IDs application/module build files should apply directly.
 
@@ -50,7 +50,7 @@ The old IDs must stop resolving. This prevents accidental long-term support comm
 
 `durex.schema.jooq` remains independent from Spring module types. It installs only the internal dependency catalog needed to resolve jOOQ build-time dependencies and wires `jooqCodegen` into Java compilation.
 
-`durex.feature.*` IDs remain unchanged. Features continue to be orthogonal capabilities layered on module types rather than creating combinatorial module plugins.
+`durex.feature.*` plugins are orthogonal capabilities layered on module types rather than combinatorial module plugins. `durex.feature.aop` is the Spring-first AOP capability; its runtime semantics are defined by the Spring runtime interceptor migration design rather than by this namespace contract.
 
 ## Diagnostics
 
@@ -58,14 +58,15 @@ User-facing errors should recommend public recovery actions such as applying `du
 
 ## Validation
 
-The contract is verified in three ways:
+The contract is verified in four ways:
 
 1. A namespace contract checks that the expected public/internal plugin descriptors and precompiled convention files exist, and that legacy production IDs/files are gone.
-2. The existing jOOQ schema smoke fixture applies `durex.schema.jooq` and still generates `Q*` and `R*` classes.
-3. A negative fixture proves `durex.jooq-schema` no longer resolves.
+2. A dedicated AOP capability fixture applies `durex.feature.aop` through the Durex DSL and verifies the capability/dependency graph.
+3. The existing jOOQ schema smoke fixture applies `durex.schema.jooq` and still generates `Q*` and `R*` classes.
+4. A negative fixture proves `durex.jooq-schema` no longer resolves.
 
 The full Durex build-platform suite, Spring Music migration, and Spring Native reference remain regression gates.
 
 ## Non-goals
 
-This change does not alter runtime Spring behavior, dependency versions, capability semantics, jOOQ generation semantics, or module discovery. Historical design/plan documents are not rewritten; this document supersedes their plugin naming where they differ.
+The plugin namespace contract does not define application runtime policy implementations. Runtime behavior for capabilities such as AOP is specified independently. Historical design/plan documents are not rewritten; this document supersedes their plugin naming where they differ.
