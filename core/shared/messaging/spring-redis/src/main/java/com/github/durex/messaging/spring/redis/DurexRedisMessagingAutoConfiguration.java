@@ -11,9 +11,11 @@ import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.messaging.RedisMessageSendingOperations;
 import org.springframework.data.redis.messaging.RedisMessageSendingTemplate;
+import org.springframework.data.redis.stream.StreamMessageListenerContainer;
+import tools.jackson.databind.json.JsonMapper;
 
 @AutoConfiguration(afterName = "org.springframework.boot.data.redis.autoconfigure.DataRedisAutoConfiguration")
-@ConditionalOnClass({RedisMessageSendingTemplate.class, Aspect.class})
+@ConditionalOnClass({RedisMessageSendingTemplate.class, StreamMessageListenerContainer.class, Aspect.class})
 @ConditionalOnBean(RedisConnectionFactory.class)
 public class DurexRedisMessagingAutoConfiguration {
 
@@ -29,5 +31,22 @@ public class DurexRedisMessagingAutoConfiguration {
   RedisOutgoingAspect redisOutgoingAspect(
       RedisMessageSendingOperations messageSendingOperations, Environment environment) {
     return new RedisOutgoingAspect(messageSendingOperations, environment);
+  }
+
+  @Bean
+  @ConditionalOnMissingBean(RedisStreamOutgoingAspect.class)
+  RedisStreamOutgoingAspect redisStreamOutgoingAspect(
+      StringRedisTemplate redisTemplate, JsonMapper jsonMapper, Environment environment) {
+    return new RedisStreamOutgoingAspect(redisTemplate, jsonMapper, environment);
+  }
+
+  @Bean
+  @ConditionalOnMissingBean(RedisStreamListenerRegistrar.class)
+  RedisStreamListenerRegistrar redisStreamListenerRegistrar(
+      RedisConnectionFactory connectionFactory,
+      StringRedisTemplate redisTemplate,
+      JsonMapper jsonMapper,
+      Environment environment) {
+    return new RedisStreamListenerRegistrar(connectionFactory, redisTemplate, jsonMapper, environment);
   }
 }
