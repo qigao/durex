@@ -1,6 +1,6 @@
 plugins {
     id 'durex.spring-library'
-    id 'org.jsonschema2pojo'
+    id 'durex.schema.json'
 }
 
 durex {
@@ -9,14 +9,9 @@ durex {
     dependency('api', 'jakarta-validation')
 }
 
-jsonSchema2Pojo {
-    targetPackage = 'com.github.durex.music.model'
-    source = files("$projectDir/json")
-    includeJsr303Annotations = true
-    useJakartaValidation = true
-    includeGetters = true
-    includeSetters = true
-    includeToString = true
-    includeHashcodeAndEquals = true
-    generateBuilders = true
+durexJsonSchema {
+    source = 'json'
+    packageName = 'com.github.durex.music.model'
+    validation = true
+    builders = true
 }
