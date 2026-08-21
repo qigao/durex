@@ -16,6 +16,10 @@ on:
       - 'core/schema/music/json/build.spring.gradle'
       - '.github/workflows/durex-plugin-api.yml'
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 permissions:
   contents: read
 
