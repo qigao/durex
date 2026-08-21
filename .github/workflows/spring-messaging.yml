@@ -7,6 +7,7 @@ on:
       - 'build-logic/**'
       - 'gradle/dependencies/**'
       - 'core/shared/messaging/**'
+      - 'core/redisson-service/**'
       - 'migration/spring-messaging/**'
       - '.github/workflows/spring-messaging.yml'
   pull_request:
@@ -15,6 +16,7 @@ on:
       - 'build-logic/**'
       - 'gradle/dependencies/**'
       - 'core/shared/messaging/**'
+      - 'core/redisson-service/**'
       - 'migration/spring-messaging/**'
       - '.github/workflows/spring-messaging.yml'
 
@@ -50,6 +52,20 @@ jobs:
 
       - name: Validate messaging API and Redis adapter
         run: gradle -p migration/spring-messaging :messaging-api:test :messaging-spring-redis:test --configuration-cache --stacktrace
+
+      - name: Verify legacy messaging implementation is gone
+        shell: bash
+        run: |
+          set -euo pipefail
+          test ! -e core/shared/messaging/messaging-api-redis
+          test ! -e core/shared/messaging/messaging-api-redis-example
+          test ! -e core/shared/messaging/build.gradle
+          test ! -e core/redisson-service
+          if grep -R -n -E 'javax\.enterprise|javax\.inject|javax\.interceptor|io\.quarkus|org\.redisson|org\.apache\.velocity|QuarkusDaemon|RemoteService|InComing' \
+              core/shared/messaging/api core/shared/messaging/spring-redis; then
+            echo 'legacy messaging source leaked into Spring messaging modules'
+            exit 1
+          fi
 
       - name: Verify Spring messaging runtime boundary
         shell: bash

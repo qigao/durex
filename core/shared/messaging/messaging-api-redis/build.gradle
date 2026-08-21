@@ -1,7 +1,0 @@
-plugins {
-  alias qLibs.plugins.jandex
-}
-dependencies {
-  implementation uLibs.velocity
-}
-
