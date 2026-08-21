@@ -8,6 +8,9 @@ on:
       - 'core/**/build.gradle'
       - 'core/**/build.spring.gradle'
       - 'gradle/modules.toml'
+      - 'gradle/wrapper/**'
+      - 'gradlew'
+      - 'gradlew.bat'
       - 'settings.gradle'
       - 'build.gradle'
       - '.github/workflows/durex-module-discovery.yml'
@@ -18,6 +21,9 @@ on:
       - 'core/**/build.gradle'
       - 'core/**/build.spring.gradle'
       - 'gradle/modules.toml'
+      - 'gradle/wrapper/**'
+      - 'gradlew'
+      - 'gradlew.bat'
       - 'settings.gradle'
       - 'build.gradle'
       - '.github/workflows/durex-module-discovery.yml'
@@ -41,6 +47,13 @@ jobs:
       - uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: '9.1.0'
+
+      - name: Verify root Gradle wrapper
+        shell: bash
+        run: |
+          set -euo pipefail
+          ./gradlew --version | tee /tmp/durex-wrapper-version.log
+          grep -Fq 'Gradle 9.1.0' /tmp/durex-wrapper-version.log
 
       - name: Auto discover Spring build file without manifest
         shell: bash
@@ -67,7 +80,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          gradle projects durexProjects --stacktrace | tee /tmp/durex-root-projects.log
+          ./gradlew projects durexProjects --stacktrace | tee /tmp/durex-root-projects.log
           for module in music music-api music-client music-json music-entity music-repo shared-common shared-spring-interceptor shared-utils json-schema-annotation messaging-api messaging-spring-redis; do
             grep -Fq ":${module} |" /tmp/durex-root-projects.log
           done
