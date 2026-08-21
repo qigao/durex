@@ -29,7 +29,7 @@ class RedisPubSubIntegrationTest {
   void outgoingPublishesReturnValueToSpringRedisListener() throws Exception {
     var expected = pipeline.normalize(new RawEvent("event-1", "  hello spring redis  "));
 
-    var received = pipeline.received.poll(5, TimeUnit.SECONDS);
+    var received = pipeline.awaitReceived(5, TimeUnit.SECONDS);
     assertNotNull(received);
     assertEquals(expected, received);
   }
@@ -40,7 +40,7 @@ class RedisPubSubIntegrationTest {
   static class TestApplication {}
 
   public static class PubSubPipeline {
-    final BlockingQueue<NormalizedEvent> received = new LinkedBlockingQueue<>();
+    private final BlockingQueue<NormalizedEvent> received = new LinkedBlockingQueue<>();
 
     @RedisListener(topic = "events.normalized", consumes = "application/json")
     public void receive(NormalizedEvent event) {
@@ -50,6 +50,10 @@ class RedisPubSubIntegrationTest {
     @Outgoing("events.normalized")
     public NormalizedEvent normalize(RawEvent event) {
       return new NormalizedEvent(event.id(), event.value().trim());
+    }
+
+    public NormalizedEvent awaitReceived(long timeout, TimeUnit unit) throws InterruptedException {
+      return received.poll(timeout, unit);
     }
   }
 
