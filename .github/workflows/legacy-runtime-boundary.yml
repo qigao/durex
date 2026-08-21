@@ -1,0 +1,39 @@
+name: Legacy Runtime Boundary
+
+on:
+  push:
+    paths:
+      - 'core/**'
+      - 'gradle/**'
+      - 'build-bootstrap/**'
+      - 'build-logic/**'
+      - 'migration/**'
+      - 'reference/**'
+      - 'settings.gradle'
+      - 'build.gradle'
+      - 'scripts/verify-no-legacy-runtime.sh'
+      - '.github/workflows/legacy-runtime-boundary.yml'
+  pull_request:
+    paths:
+      - 'core/**'
+      - 'gradle/**'
+      - 'build-bootstrap/**'
+      - 'build-logic/**'
+      - 'migration/**'
+      - 'reference/**'
+      - 'settings.gradle'
+      - 'build.gradle'
+      - 'scripts/verify-no-legacy-runtime.sh'
+      - '.github/workflows/legacy-runtime-boundary.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  legacy-runtime-boundary:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify no Quarkus/CDI runtime remains
+        shell: bash
+        run: bash scripts/verify-no-legacy-runtime.sh
