@@ -6,7 +6,7 @@ plugins {
     id 'org.jooq.jooq-codegen-gradle'
 }
 
-pluginManager.apply('durex.catalog')
+pluginManager.apply('durex.internal.catalog')
 
 class DurexJooqSchemaExtension {
     String source = 'database/schema/**/*.sql'

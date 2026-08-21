@@ -1,6 +1,6 @@
 plugins {
     id 'durex.java-library'
-    id 'com.acme.durex.fixture'
+    id 'durex.internal.fixture'
 }
 
 import com.github.durex.gradle.model.DurexModuleModel

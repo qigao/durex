@@ -4,7 +4,7 @@ import com.github.durex.gradle.model.DurexModuleModel
 
 plugins {
     id 'java-library'
-    id 'durex.spring-base'
+    id 'durex.internal.spring-base'
 }
 
 def model = extensions.getByType(DurexModuleModel)

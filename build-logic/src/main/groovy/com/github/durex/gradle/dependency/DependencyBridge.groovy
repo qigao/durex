@@ -50,7 +50,7 @@ final class DependencyBridge {
             throw new DurexConfigurationException(
                     'Durex configuration error\n' +
                     "Project: ${project.path}\n" +
-                    'Problem: Durex dependency catalog is unavailable; apply durex.module or durex.catalog')
+                    'Problem: Durex dependency catalog is unavailable; apply durex.module')
         }
         value
     }

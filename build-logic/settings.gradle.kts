@@ -7,7 +7,7 @@ pluginManagement {
 }
 
 plugins {
-    id("durex.build-logic-settings")
+    id("durex.internal.build-logic-settings")
 }
 
 durexBuildLogicSettings {

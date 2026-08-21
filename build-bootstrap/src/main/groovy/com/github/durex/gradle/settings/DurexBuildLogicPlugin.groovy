@@ -10,7 +10,7 @@ class DurexBuildLogicPlugin implements Plugin<Project> {
         def registration = project.gradle.sharedServices.registrations.findByName('durexDependencyRegistry')
         if (registration == null) {
             throw new GradleException(
-                    'Durex build-logic bootstrap error\nProblem: durexDependencyRegistry was not registered by durex.build-logic-settings')
+                    'Durex build-logic bootstrap error\nProblem: durexDependencyRegistry was not registered during Durex build-logic settings bootstrap')
         }
         def registry = registration.service.get()
 
