@@ -32,6 +32,9 @@ jobs:
           set -euo pipefail
           gradle -p build-bootstrap/tests/modules-auto-spring-no-manifest projects durexProjects --stacktrace | tee /tmp/durex-modules-auto-spring.log
           grep -Fq ':music | core/music | auto | build.spring.gradle' /tmp/durex-modules-auto-spring.log
+          grep -Fq ':shared-utils | core/shared/utils | auto | build.gradle' /tmp/durex-modules-auto-spring.log
+          if grep -Fq ':core | core | auto | build.gradle' /tmp/durex-modules-auto-spring.log; then exit 1; fi
+          if grep -Fq ':shared | core/shared | auto | build.gradle' /tmp/durex-modules-auto-spring.log; then exit 1; fi
 
       - name: Preserve manifest auto and manual override contracts
         shell: bash
@@ -39,6 +42,7 @@ jobs:
           set -euo pipefail
           gradle -p build-bootstrap/tests/modules-auto projects durexProjects --stacktrace | tee /tmp/durex-modules-auto.log
           grep -Fq ':music | core/music | auto | build.gradle' /tmp/durex-modules-auto.log
+          grep -Fq ':shared-utils | core/shared/utils | auto | build.gradle' /tmp/durex-modules-auto.log
           grep -Fq ':shared-common | core/shared/jakarta/common | manual | build.gradle' /tmp/durex-modules-auto.log
           gradle -p build-bootstrap/tests/modules-manual projects durexProjects --stacktrace | tee /tmp/durex-modules-manual.log
           grep -Fq ':music | core/music | manual | build.spring.gradle' /tmp/durex-modules-manual.log
