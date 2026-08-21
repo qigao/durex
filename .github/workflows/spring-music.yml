@@ -26,6 +26,10 @@ on:
       - 'core/shared/utils/src/main/java/com/github/durex/sqlbuilder/**'
       - '.github/workflows/spring-music.yml'
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 permissions:
   contents: read
 
