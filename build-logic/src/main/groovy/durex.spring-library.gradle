@@ -11,6 +11,7 @@ def model = extensions.getByType(DurexModuleModel)
 model.claim(ModuleKind.SPRING_LIBRARY, project.path)
 DurexDependencyAccess.add(project, model, 'implementation', 'spring-core')
 DurexDependencyAccess.add(project, model, 'testImplementation', 'spring-test')
+DurexDependencyAccess.add(project, model, 'testRuntimeOnly', 'junit-platform-launcher')
 
 tasks.withType(Test).configureEach {
     useJUnitPlatform()

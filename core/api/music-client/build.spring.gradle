@@ -1,0 +1,11 @@
+plugins {
+    id 'durex.spring-library'
+}
+
+durex {
+    httpClient()
+}
+
+dependencies {
+    api project(':music-api')
+}

@@ -13,6 +13,19 @@ final class BuiltinCapabilities {
             .dependency('implementation', 'spring-transaction')
             .build()
 
+    static final CapabilitySpec WEB = CapabilitySpec.builder('web')
+            .allow(ModuleKind.SPRING_SERVICE)
+            .dependency('implementation', 'spring-webmvc')
+            .dependency('implementation', 'spring-validation')
+            .dependency('testImplementation', 'spring-webmvc-test')
+            .build()
+
+    static final CapabilitySpec HTTP_CLIENT = CapabilitySpec.builder('http-client')
+            .allow(ModuleKind.SPRING_LIBRARY, ModuleKind.SPRING_SERVICE)
+            .dependency('implementation', 'spring-restclient')
+            .dependency('testImplementation', 'spring-restclient-test')
+            .build()
+
     static final CapabilitySpec JPA = CapabilitySpec.builder('jpa')
             .allow(ModuleKind.SPRING_LIBRARY, ModuleKind.SPRING_SERVICE)
             .dependency('implementation', 'spring-jpa')
@@ -44,7 +57,7 @@ final class BuiltinCapabilities {
             .build()
 
     static void registerAll(CapabilityRegistry registry) {
-        [AOP, TRANSACTION, JPA, JDBC, JOOQ, REDIS, NATIVE, LOMBOK].each { registry.register(it) }
+        [AOP, TRANSACTION, WEB, HTTP_CLIENT, JPA, JDBC, JOOQ, REDIS, NATIVE, LOMBOK].each { registry.register(it) }
     }
 
     private BuiltinCapabilities() {}

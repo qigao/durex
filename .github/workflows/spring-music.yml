@@ -7,6 +7,7 @@ on:
       - 'build-logic/**'
       - 'gradle/dependencies/**'
       - 'migration/spring-music/**'
+      - 'core/api/**'
       - 'core/music/**'
       - 'core/schema/music/**'
       - 'core/shared/**/build.spring.gradle'
@@ -18,6 +19,7 @@ on:
       - 'build-logic/**'
       - 'gradle/dependencies/**'
       - 'migration/spring-music/**'
+      - 'core/api/**'
       - 'core/music/**'
       - 'core/schema/music/**'
       - 'core/shared/**/build.spring.gradle'
@@ -50,8 +52,20 @@ jobs:
       - name: Resolve Durex migration project graph
         run: gradle -p migration/spring-music projects durexProjects --stacktrace
 
+      - name: Validate HTTP contract and client modules
+        run: gradle -p migration/spring-music :music-api:compileJava :music-client:test --configuration-cache --stacktrace
+
       - name: Validate compile and test Spring music graph
         run: gradle -p migration/spring-music :music:durexDoctor :music:compileJava :music:test --configuration-cache --stacktrace
+
+      - name: Verify HTTP module layering
+        shell: bash
+        run: |
+          set -euo pipefail
+          if grep -Fq "project(':music')" core/api/music/build.spring.gradle; then
+            echo 'music-api must not depend on the music server implementation'
+            exit 1
+          fi
 
       - name: Verify Spring runtime boundary
         shell: bash
@@ -69,7 +83,7 @@ jobs:
           set -euo pipefail
           hits="$({
             grep -R -n -E 'VersionCatalogsExtension|[a-z]Libs\.' migration/spring-music || true
-            find core/music core/schema/music core/shared -name 'build.spring.gradle' -exec grep -Hn -E 'VersionCatalogsExtension|[a-z]Libs\.' {} + || true
+            find core/api core/music core/schema/music core/shared -name 'build.spring.gradle' -exec grep -Hn -E 'VersionCatalogsExtension|[a-z]Libs\.' {} + || true
           } )"
           if [ -n "$hits" ]; then
             echo "$hits"

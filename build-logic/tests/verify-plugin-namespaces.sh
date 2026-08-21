@@ -43,6 +43,8 @@ for file in \
   build-logic/src/main/groovy/durex.schema.jooq.gradle \
   build-logic/src/main/groovy/durex.feature.aop.gradle \
   build-logic/src/main/groovy/durex.feature.transaction.gradle \
+  build-logic/src/main/groovy/durex.feature.web.gradle \
+  build-logic/src/main/groovy/durex.feature.http-client.gradle \
   build-logic/src/main/groovy/durex.feature.jdbc.gradle \
   build-logic/src/main/groovy/durex.feature.jooq.gradle \
   build-logic/src/main/groovy/durex.feature.jpa.gradle \
