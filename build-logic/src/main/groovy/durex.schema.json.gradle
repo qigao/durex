@@ -1,0 +1,46 @@
+import org.gradle.api.GradleException
+
+plugins {
+    id 'org.jsonschema2pojo'
+}
+
+class DurexJsonSchemaExtension {
+    String source = 'json'
+    String packageName
+    boolean validation = true
+    boolean builders = true
+    boolean getters = true
+    boolean setters = true
+    boolean toString = true
+    boolean equalsAndHashCode = true
+}
+
+def schema = extensions.create('durexJsonSchema', DurexJsonSchemaExtension)
+def generatedDir = layout.buildDirectory.dir('generated-src/json/main')
+
+plugins.withId('java') {
+    sourceSets.main.java.srcDir(generatedDir)
+    tasks.named('compileJava') {
+        dependsOn tasks.named('generateJsonSchema2DataClass')
+    }
+}
+
+afterEvaluate {
+    if (!schema.packageName) {
+        throw new GradleException('durexJsonSchema.packageName must be configured')
+    }
+
+    jsonSchema2Pojo {
+        targetPackage = schema.packageName
+        source = files(project.file(schema.source))
+        targetDirectory = generatedDir.get().asFile
+        propertyWordDelimiters = '_'
+        includeJsr303Annotations = schema.validation
+        useJakartaValidation = schema.validation
+        includeGetters = schema.getters
+        includeSetters = schema.setters
+        includeToString = schema.toString
+        includeHashcodeAndEquals = schema.equalsAndHashCode
+        generateBuilders = schema.builders
+    }
+}
