@@ -33,6 +33,9 @@ jobs:
       - name: Verify public and internal namespaces
         run: bash build-logic/tests/verify-plugin-namespaces.sh
 
+      - name: Verify AOP feature capability
+        run: gradle -p build-logic/tests/aop-feature-smoke verifyAopCapability dependencies --configuration runtimeClasspath --stacktrace
+
       - name: Verify jOOQ schema public plugin
         shell: bash
         run: |
