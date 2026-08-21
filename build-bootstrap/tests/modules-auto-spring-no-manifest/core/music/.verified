@@ -1,0 +1,1 @@
+ProjectDiscovery should select build.spring.gradle when no modules.toml exists.
