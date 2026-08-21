@@ -1,4 +1,0 @@
-dependencies {
-    implementation uLibs.slf4j
-    implementation uLibs.bundles.logback
-}

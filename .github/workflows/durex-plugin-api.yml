@@ -6,13 +6,19 @@ on:
       - 'build-bootstrap/**'
       - 'build-logic/**'
       - 'core/schema/music/entity/build.spring.gradle'
+      - 'core/schema/music/json/build.spring.gradle'
       - '.github/workflows/durex-plugin-api.yml'
   pull_request:
     paths:
       - 'build-bootstrap/**'
       - 'build-logic/**'
       - 'core/schema/music/entity/build.spring.gradle'
+      - 'core/schema/music/json/build.spring.gradle'
       - '.github/workflows/durex-plugin-api.yml'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
 
 permissions:
   contents: read
@@ -54,6 +60,13 @@ jobs:
           gradle -p build-logic/tests/jooq-schema-smoke jooqCodegen --stacktrace
           test -f build-logic/tests/jooq-schema-smoke/build/generated-src/jooq/main/com/example/schema/tables/QMusic.java
           test -f build-logic/tests/jooq-schema-smoke/build/generated-src/jooq/main/com/example/schema/tables/records/RMusic.java
+
+      - name: Verify JSON schema public plugin
+        shell: bash
+        run: |
+          gradle -p build-logic/tests/json-schema-smoke compileJava --stacktrace
+          test -f build-logic/tests/json-schema-smoke/build/generated-src/json/main/com/example/model/Music.java
+          grep -Fq 'jakarta.validation' build-logic/tests/json-schema-smoke/build/generated-src/json/main/com/example/model/Music.java
 
       - name: Reject legacy jOOQ schema plugin id
         shell: bash

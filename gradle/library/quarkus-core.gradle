@@ -1,6 +1,0 @@
-dependencies {
-    implementation platform(qLibs.quarkus.bom.get())
-    implementation 'io.quarkus:quarkus-arc'
-    implementation 'io.quarkus:quarkus-jackson'
-    implementation qLibs.logback
-}

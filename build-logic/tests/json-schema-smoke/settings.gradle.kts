@@ -1,6 +1,6 @@
 pluginManagement {
-    includeBuild('build-bootstrap')
-    includeBuild('build-logic')
+    includeBuild("../../../build-bootstrap")
+    includeBuild("../..")
     repositories {
         gradlePluginPortal()
         mavenCentral()
@@ -8,13 +8,12 @@ pluginManagement {
 }
 
 plugins {
-    id 'durex.settings'
+    id("durex.settings")
 }
 
-rootProject.name = 'durex'
-
 durexSettings {
-    repositoryRoot.set(layout.settingsDirectory)
+    repositoryRoot.set(file("../../.."))
+    moduleDiscovery.set(false)
 }
 
 dependencyResolutionManagement {
@@ -22,3 +21,5 @@ dependencyResolutionManagement {
         mavenCentral()
     }
 }
+
+rootProject.name = "durex-json-schema-smoke"

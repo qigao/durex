@@ -11,7 +11,7 @@ durex {
 
 durexJsonSchema {
     source = 'json'
-    packageName = 'com.github.durex.music.model'
+    packageName = 'com.example.model'
     validation = true
     builders = true
 }

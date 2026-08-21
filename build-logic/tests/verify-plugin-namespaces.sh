@@ -41,6 +41,7 @@ for file in \
   build-logic/src/main/groovy/durex.spring-library.gradle \
   build-logic/src/main/groovy/durex.spring-service.gradle \
   build-logic/src/main/groovy/durex.schema.jooq.gradle \
+  build-logic/src/main/groovy/durex.schema.json.gradle \
   build-logic/src/main/groovy/durex.feature.aop.gradle \
   build-logic/src/main/groovy/durex.feature.transaction.gradle \
   build-logic/src/main/groovy/durex.feature.web.gradle \
@@ -75,5 +76,7 @@ reject_text build-logic/build.gradle.kts 'id = "com.acme.durex.fixture"'
 
 require_text core/schema/music/entity/build.spring.gradle "id 'durex.schema.jooq'"
 reject_text core/schema/music/entity/build.spring.gradle "id 'durex.jooq-schema'"
+require_text core/schema/music/json/build.spring.gradle "id 'durex.schema.json'"
+reject_text core/schema/music/json/build.spring.gradle "id 'org.jsonschema2pojo'"
 
 echo 'Durex public plugin namespace contract: OK'

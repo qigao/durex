@@ -10,22 +10,27 @@ final class ProjectDiscovery {
     private static final Set<String> DISCOVERY_KEYS = ['mode', 'roots', 'exclude'] as Set
     private static final Set<String> MODULE_KEYS = ['name', 'path', 'build-file'] as Set
     private static final Set<String> BLOCKED_DIRECTORIES = ['build', 'src', '.gradle', '.git', 'out', 'target'] as Set
-    private static final List<String> BUILD_FILES = ['build.gradle', 'build.gradle.kts']
+    private static final List<String> BUILD_FILES = [
+            'build.spring.gradle',
+            'build.spring.gradle.kts',
+            'build.gradle',
+            'build.gradle.kts'
+    ]
 
     static ProjectRegistry discover(File repositoryRoot, File modulesManifest) {
         File root = repositoryRoot.canonicalFile
         File manifest = modulesManifest.canonicalFile
-        if (!manifest.isFile()) {
-            fail("modules manifest does not exist: ${manifest}")
+
+        def parsed = null
+        if (manifest.isFile()) {
+            parsed = Toml.parse(manifest.toPath())
+            if (parsed.hasErrors()) {
+                fail("cannot parse ${manifest}: ${parsed.errors().collect { it.toString() }.join('; ')}")
+            }
+            rejectUnknown(parsed.keySet(), ROOT_KEYS, 'root')
         }
 
-        def parsed = Toml.parse(manifest.toPath())
-        if (parsed.hasErrors()) {
-            fail("cannot parse ${manifest}: ${parsed.errors().collect { it.toString() }.join('; ')}")
-        }
-        rejectUnknown(parsed.keySet(), ROOT_KEYS, 'root')
-
-        TomlTable discovery = parsed.getTable('discovery')
+        TomlTable discovery = parsed?.getTable('discovery')
         String mode = 'auto'
         List<String> roots = ['core']
         List<String> excludes = []
@@ -57,7 +62,7 @@ final class ProjectDiscovery {
         }
 
         Set<File> manualDirectories = new LinkedHashSet<>()
-        TomlArray manual = parsed.getArray('module')
+        TomlArray manual = parsed?.getArray('module')
         if (manual != null) {
             for (int i = 0; i < manual.size(); i++) {
                 Object node = manual.get(i)
@@ -91,39 +96,44 @@ final class ProjectDiscovery {
             }
         }
 
+        if (mode == 'manual' && manual == null) {
+            fail("manual discovery mode requires at least one [[module]] declaration")
+        }
+
         new ProjectRegistry(selected.values())
     }
 
-    private static void scan(
+    private static boolean scan(
             File directory,
             File scanRoot,
             File repositoryRoot,
             List<File> excludes,
             boolean strict,
             Map<File, ProjectSpec> selected) {
-        if (isExcluded(directory, excludes)) return
+        if (isExcluded(directory, excludes)) return false
 
-        List<String> buildFiles = BUILD_FILES.findAll { new File(directory, it).isFile() }
-        if (buildFiles.size() > 1) {
-            fail("multiple supported build files in ${directory}: ${buildFiles.join(', ')}")
-        }
-        if (buildFiles.size() == 1) {
-            String name = deriveName(repositoryRoot, scanRoot, directory, strict)
-            File canonical = directory.canonicalFile
-            if (!selected.containsKey(canonical)) {
-                selected.put(canonical, new ProjectSpec(toGradlePath(name), canonical, 'auto', buildFiles[0]))
+        File[] listed = directory.listFiles()
+        List<File> children = listed == null ? [] : listed
+                .findAll { it.isDirectory() && !BLOCKED_DIRECTORIES.contains(it.name) }
+                .sort { a, b -> a.name <=> b.name }
+
+        boolean descendantContainsBuild = false
+        children.each { child ->
+            if (scan(child, scanRoot, repositoryRoot, excludes, strict, selected)) {
+                descendantContainsBuild = true
             }
         }
 
-        File[] children = directory.listFiles()
-        if (children == null) return
-        children.findAll { it.isDirectory() }
-                .sort { a, b -> a.name <=> b.name }
-                .each { child ->
-                    if (!BLOCKED_DIRECTORIES.contains(child.name)) {
-                        scan(child, scanRoot, repositoryRoot, excludes, strict, selected)
-                    }
-                }
+        String buildFile = preferredBuildFile(directory)
+        if (buildFile != null && !descendantContainsBuild) {
+            String name = deriveName(repositoryRoot, scanRoot, directory, strict)
+            File canonical = directory.canonicalFile
+            if (!selected.containsKey(canonical)) {
+                selected.put(canonical, new ProjectSpec(toGradlePath(name), canonical, 'auto', buildFile))
+            }
+        }
+
+        buildFile != null || descendantContainsBuild
     }
 
     private static String deriveName(File repositoryRoot, File scanRoot, File directory, boolean strict) {
@@ -151,12 +161,16 @@ final class ProjectDiscovery {
         path.replace('\\', '/').split('/').findAll { !it.isEmpty() }
     }
 
+    private static String preferredBuildFile(File directory) {
+        BUILD_FILES.find { new File(directory, it).isFile() }
+    }
+
     private static String detectBuildFile(File directory, String subject) {
-        List<String> found = BUILD_FILES.findAll { new File(directory, it).isFile() }
-        if (found.size() != 1) {
-            fail("${subject} must contain exactly one of ${BUILD_FILES.join(', ')}")
+        String found = preferredBuildFile(directory)
+        if (found == null) {
+            fail("${subject} must contain one of ${BUILD_FILES.join(', ')}")
         }
-        found[0]
+        found
     }
 
     private static File resolveInside(File root, String path, String subject) {

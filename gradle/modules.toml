@@ -1,0 +1,28 @@
+[discovery]
+mode = "auto"
+roots = ["core"]
+
+[[module]]
+name = "music-api"
+path = "core/api/music"
+build-file = "build.spring.gradle"
+
+[[module]]
+name = "music-client"
+path = "core/api/music-client"
+build-file = "build.spring.gradle"
+
+[[module]]
+name = "json-schema-annotation"
+path = "core/shared/json-schema-annotation"
+build-file = "build.spring.gradle"
+
+[[module]]
+name = "messaging-api"
+path = "core/shared/messaging/api"
+build-file = "build.spring.gradle"
+
+[[module]]
+name = "messaging-spring-redis"
+path = "core/shared/messaging/spring-redis"
+build-file = "build.spring.gradle"
