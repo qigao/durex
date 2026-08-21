@@ -1,0 +1,12 @@
+plugins { id 'durex.spring-library' }
+
+durex {
+    messaging()
+    redis()
+    aop()
+    dependency('implementation', 'spring-json')
+}
+
+dependencies {
+    api project(':messaging-api')
+}
