@@ -1,26 +1,24 @@
-rootProject.name = 'Durex Template Projects'
+pluginManagement {
+    includeBuild('build-bootstrap')
+    includeBuild('build-logic')
+    repositories {
+        gradlePluginPortal()
+        mavenCentral()
+    }
+}
 
-apply from: "$rootDir/gradle/extensions/modules.gradle"
+plugins {
+    id 'durex.settings'
+}
+
+rootProject.name = 'durex'
+
+durexSettings {
+    repositoryRoot.set(layout.settingsDirectory)
+}
 
 dependencyResolutionManagement {
-    versionCatalogs {
-        vLibs {
-            from(files("$rootDir/gradle/versions/libs.versions.toml"))
-        }
-        tLibs {
-            from(files("$rootDir/gradle/versions/test.versions.toml"))
-        }
-        sLibs {
-            from(files("$rootDir/gradle/versions/spring.versions.toml"))
-        }
-        gLibs {
-            from(files("$rootDir/gradle/versions/gradle.versions.toml"))
-        }
-        dbLibs {
-            from(files("$rootDir/gradle/versions/database.versions.toml"))
-        }
-        uLibs {
-            from(files("$rootDir/gradle/versions/utils.versions.toml"))
-        }
+    repositories {
+        mavenCentral()
     }
 }
