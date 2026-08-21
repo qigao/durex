@@ -17,6 +17,7 @@ class DurexBuildLogicPlugin implements Plugin<Project> {
         project.dependencies.add('implementation', registry.plugin('spring-boot').coordinate())
         project.dependencies.add('implementation', registry.plugin('graalvm-native').coordinate())
         project.dependencies.add('implementation', registry.plugin('jooq-codegen').coordinate())
+        project.dependencies.add('implementation', registry.plugin('jsonschema2pojo').coordinate())
         project.dependencies.add('implementation', registry.library('jooq-core').notation())
         project.dependencies.add('implementation', registry.library('jooq-meta').notation())
     }

@@ -16,4 +16,5 @@ version = "2.2.0"
 
 [plugins.jsonschema2pojo]
 id = "org.jsonschema2pojo"
+module = "org.jsonschema2pojo:org.jsonschema2pojo.gradle.plugin"
 version.ref = "jsonschema2pojo"
