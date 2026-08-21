@@ -1,0 +1,7 @@
+[discovery]
+mode = "manual"
+
+[[module]]
+name = "messaging-api"
+path = "core/shared/messaging/api"
+build-file = "build.spring.gradle"

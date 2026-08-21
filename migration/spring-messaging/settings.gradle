@@ -1,0 +1,25 @@
+pluginManagement {
+    includeBuild('../../build-bootstrap')
+    includeBuild('../../build-logic')
+    repositories {
+        gradlePluginPortal()
+        mavenCentral()
+    }
+}
+
+plugins {
+    id 'durex.settings'
+}
+
+rootProject.name = 'spring-messaging-migration'
+
+durexSettings {
+    repositoryRoot.set(file('../..'))
+    modulesManifest.set(file('modules.toml'))
+}
+
+dependencyResolutionManagement {
+    repositories {
+        mavenCentral()
+    }
+}
