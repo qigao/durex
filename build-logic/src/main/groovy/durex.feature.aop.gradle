@@ -1,0 +1,10 @@
+import com.github.durex.gradle.capability.BuiltinCapabilities
+import com.github.durex.gradle.capability.DurexCapabilitySupport
+
+plugins { id 'durex.module' }
+
+DurexCapabilitySupport.registerAndEnable(
+    project,
+    'durex.feature.aop',
+    BuiltinCapabilities.AOP
+)

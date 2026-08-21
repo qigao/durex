@@ -8,5 +8,4 @@ durex {
         jooq()
     }
     redis()
-    aop()
 }

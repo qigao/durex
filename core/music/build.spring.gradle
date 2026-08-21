@@ -31,6 +31,7 @@ durex {
 
 dependencies {
     implementation project(':shared-common')
+    implementation project(':shared-spring-interceptor')
     implementation project(':shared-utils')
     implementation project(':music-json')
     implementation project(':music-entity')

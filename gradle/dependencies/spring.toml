@@ -10,6 +10,10 @@ version.ref = "spring-boot"
 module = "org.springframework.boot:spring-boot-starter"
 platform = "spring"
 
+[libraries.spring-aop]
+module = "org.springframework.boot:spring-boot-starter-aspectj"
+platform = "spring"
+
 [libraries.spring-web]
 module = "org.springframework.boot:spring-boot-starter-webmvc"
 platform = "spring"

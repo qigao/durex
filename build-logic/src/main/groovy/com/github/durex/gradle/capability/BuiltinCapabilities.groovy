@@ -3,6 +3,11 @@ package com.github.durex.gradle.capability
 import com.github.durex.gradle.ModuleKind
 
 final class BuiltinCapabilities {
+    static final CapabilitySpec AOP = CapabilitySpec.builder('aop')
+            .allow(ModuleKind.SPRING_LIBRARY, ModuleKind.SPRING_SERVICE)
+            .dependency('implementation', 'spring-aop')
+            .build()
+
     static final CapabilitySpec JPA = CapabilitySpec.builder('jpa')
             .allow(ModuleKind.SPRING_LIBRARY, ModuleKind.SPRING_SERVICE)
             .dependency('implementation', 'spring-jpa')
@@ -34,7 +39,7 @@ final class BuiltinCapabilities {
             .build()
 
     static void registerAll(CapabilityRegistry registry) {
-        [JPA, JDBC, JOOQ, REDIS, NATIVE, LOMBOK].each { registry.register(it) }
+        [AOP, JPA, JDBC, JOOQ, REDIS, NATIVE, LOMBOK].each { registry.register(it) }
     }
 
     private BuiltinCapabilities() {}

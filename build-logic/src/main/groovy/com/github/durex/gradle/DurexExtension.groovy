@@ -65,6 +65,10 @@ class DurexExtension {
         configured.call()
     }
 
+    void aop() {
+        project.pluginManager.apply('durex.feature.aop')
+    }
+
     void redis() {
         project.pluginManager.apply('durex.feature.redis')
     }

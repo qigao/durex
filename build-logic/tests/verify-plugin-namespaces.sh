@@ -41,6 +41,7 @@ for file in \
   build-logic/src/main/groovy/durex.spring-library.gradle \
   build-logic/src/main/groovy/durex.spring-service.gradle \
   build-logic/src/main/groovy/durex.schema.jooq.gradle \
+  build-logic/src/main/groovy/durex.feature.aop.gradle \
   build-logic/src/main/groovy/durex.feature.jdbc.gradle \
   build-logic/src/main/groovy/durex.feature.jooq.gradle \
   build-logic/src/main/groovy/durex.feature.jpa.gradle \
