@@ -1,0 +1,44 @@
+name: Durex Module Discovery
+
+on:
+  push:
+    paths:
+      - 'build-bootstrap/**'
+      - '.github/workflows/durex-module-discovery.yml'
+  pull_request:
+    paths:
+      - 'build-bootstrap/**'
+      - '.github/workflows/durex-module-discovery.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  discovery-contract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '25'
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '9.1.0'
+
+      - name: Auto discover Spring build file without manifest
+        shell: bash
+        run: |
+          set -euo pipefail
+          gradle -p build-bootstrap/tests/modules-auto-spring-no-manifest projects durexProjects --stacktrace | tee /tmp/durex-modules-auto-spring.log
+          grep -Fq ':music | core/music | auto | build.spring.gradle' /tmp/durex-modules-auto-spring.log
+
+      - name: Preserve manifest auto and manual override contracts
+        shell: bash
+        run: |
+          set -euo pipefail
+          gradle -p build-bootstrap/tests/modules-auto projects durexProjects --stacktrace | tee /tmp/durex-modules-auto.log
+          grep -Fq ':music | core/music | auto | build.gradle' /tmp/durex-modules-auto.log
+          grep -Fq ':shared-common | core/shared/jakarta/common | manual | build.gradle' /tmp/durex-modules-auto.log
+          gradle -p build-bootstrap/tests/modules-manual projects durexProjects --stacktrace | tee /tmp/durex-modules-manual.log
+          grep -Fq ':music | core/music | manual | build.spring.gradle' /tmp/durex-modules-manual.log
