@@ -1,0 +1,1 @@
+spring-build-file-auto-discovery
