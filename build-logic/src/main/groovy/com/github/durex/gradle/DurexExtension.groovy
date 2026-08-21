@@ -81,6 +81,10 @@ class DurexExtension {
         project.pluginManager.apply('durex.feature.http-client')
     }
 
+    void messaging() {
+        project.pluginManager.apply('durex.feature.messaging')
+    }
+
     void redis() {
         project.pluginManager.apply('durex.feature.redis')
     }

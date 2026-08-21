@@ -26,6 +26,11 @@ final class BuiltinCapabilities {
             .dependency('testImplementation', 'spring-restclient-test')
             .build()
 
+    static final CapabilitySpec MESSAGING = CapabilitySpec.builder('messaging')
+            .allow(ModuleKind.SPRING_LIBRARY, ModuleKind.SPRING_SERVICE)
+            .dependency('implementation', 'spring-messaging')
+            .build()
+
     static final CapabilitySpec JPA = CapabilitySpec.builder('jpa')
             .allow(ModuleKind.SPRING_LIBRARY, ModuleKind.SPRING_SERVICE)
             .dependency('implementation', 'spring-jpa')
@@ -57,7 +62,7 @@ final class BuiltinCapabilities {
             .build()
 
     static void registerAll(CapabilityRegistry registry) {
-        [AOP, TRANSACTION, WEB, HTTP_CLIENT, JPA, JDBC, JOOQ, REDIS, NATIVE, LOMBOK].each { registry.register(it) }
+        [AOP, TRANSACTION, WEB, HTTP_CLIENT, MESSAGING, JPA, JDBC, JOOQ, REDIS, NATIVE, LOMBOK].each { registry.register(it) }
     }
 
     private BuiltinCapabilities() {}

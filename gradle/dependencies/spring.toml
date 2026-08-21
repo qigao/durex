@@ -50,6 +50,10 @@ platform = "spring"
 module = "org.springframework.boot:spring-boot-starter-restclient-test"
 platform = "spring"
 
+[libraries.spring-messaging]
+module = "org.springframework:spring-messaging"
+platform = "spring"
+
 [libraries.spring-jpa]
 module = "org.springframework.boot:spring-boot-starter-data-jpa"
 platform = "spring"
@@ -64,6 +68,10 @@ platform = "spring"
 
 [libraries.spring-redis]
 module = "org.springframework.boot:spring-boot-starter-data-redis"
+platform = "spring"
+
+[libraries.spring-json]
+module = "org.springframework.boot:spring-boot-starter-json"
 platform = "spring"
 
 [libraries.jackson-annotations]

@@ -45,6 +45,9 @@ jobs:
       - name: Verify HTTP client feature capability
         run: gradle -p build-logic/tests/http-client-feature-smoke verifyHttpClientCapability dependencies --configuration runtimeClasspath --stacktrace
 
+      - name: Verify messaging feature capability
+        run: gradle -p build-logic/tests/messaging-feature-smoke verifyMessagingCapability dependencies --configuration runtimeClasspath --stacktrace
+
       - name: Verify jOOQ schema public plugin
         shell: bash
         run: |
