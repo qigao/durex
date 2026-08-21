@@ -5,15 +5,21 @@ on:
     paths:
       - 'build-bootstrap/**'
       - 'build-logic/**'
-      - 'core/schema/music/entity/build.spring.gradle'
-      - 'core/schema/music/json/build.spring.gradle'
+      - 'settings.gradle'
+      - 'core/**/build.spring.gradle'
+      - 'migration/**/settings.gradle'
+      - 'reference/**/settings.gradle.kts'
+      - 'reference/**/build.gradle.kts'
       - '.github/workflows/durex-plugin-api.yml'
   pull_request:
     paths:
       - 'build-bootstrap/**'
       - 'build-logic/**'
-      - 'core/schema/music/entity/build.spring.gradle'
-      - 'core/schema/music/json/build.spring.gradle'
+      - 'settings.gradle'
+      - 'core/**/build.spring.gradle'
+      - 'migration/**/settings.gradle'
+      - 'reference/**/settings.gradle.kts'
+      - 'reference/**/build.gradle.kts'
       - '.github/workflows/durex-plugin-api.yml'
 
 concurrency:
@@ -36,7 +42,7 @@ jobs:
         with:
           gradle-version: '9.1.0'
 
-      - name: Verify public and internal namespaces
+      - name: Verify local namespaces and published SimpleDSL consumers
         run: bash build-logic/tests/verify-plugin-namespaces.sh
 
       - name: Verify AOP feature capability

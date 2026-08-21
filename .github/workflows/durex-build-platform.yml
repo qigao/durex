@@ -239,5 +239,5 @@ jobs:
       - name: Parallel multiproject build
         run: gradle -p build-logic/tests/parallel-multiproject build --parallel --stacktrace
 
-      - name: Music support modules on Durex Plugin Core v2
+      - name: Music support modules through published SimpleDSL
         run: gradle -p migration/spring-music :music-json:compileJava :music-entity:compileJava :music-repo:compileJava --stacktrace

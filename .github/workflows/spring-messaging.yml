@@ -52,7 +52,7 @@ jobs:
           gradle-version: '9.1.0'
 
       - name: Resolve Spring messaging project graph
-        run: gradle -p migration/spring-messaging projects durexProjects --stacktrace
+        run: gradle -p migration/spring-messaging projects simpledslProjects --stacktrace
 
       - name: Validate messaging API and Redis adapter
         run: gradle -p migration/spring-messaging :messaging-api:test :messaging-spring-redis:test --configuration-cache --stacktrace

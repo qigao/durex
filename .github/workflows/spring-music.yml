@@ -53,14 +53,14 @@ jobs:
           test -f build-logic/tests/jooq-schema-smoke/build/generated-src/jooq/main/com/example/schema/tables/QMusic.java
           test -f build-logic/tests/jooq-schema-smoke/build/generated-src/jooq/main/com/example/schema/tables/records/RMusic.java
 
-      - name: Resolve Durex migration project graph
-        run: gradle -p migration/spring-music projects durexProjects --stacktrace
+      - name: Resolve SimpleDSL migration project graph
+        run: gradle -p migration/spring-music projects simpledslProjects --stacktrace
 
       - name: Validate HTTP contract and client modules
         run: gradle -p migration/spring-music :music-api:compileJava :music-client:test --configuration-cache --stacktrace
 
       - name: Validate compile and test Spring music graph
-        run: gradle -p migration/spring-music :music:durexDoctor :music:compileJava :music:test --configuration-cache --stacktrace
+        run: gradle -p migration/spring-music :music:simpledslDoctor :music:compileJava :music:test --configuration-cache --stacktrace
 
       - name: Verify HTTP module layering
         shell: bash

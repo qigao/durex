@@ -27,15 +27,22 @@ reject_text() {
   local file="$1"
   local text="$2"
   if grep -Fq "$text" "$file"; then
-    fail "$file still contains legacy plugin id: $text"
+    fail "$file still contains legacy text: $text"
   fi
 }
 
-# Public bootstrap/project plugins.
+reject_pattern() {
+  local file="$1"
+  local pattern="$2"
+  if grep -Eq "$pattern" "$file"; then
+    fail "$file still matches legacy pattern: $pattern"
+  fi
+}
+
+# Local Durex plugin implementation remains temporarily for its own regression suite.
 require_text build-bootstrap/build.gradle.kts 'id = "durex.settings"'
 require_text build-logic/build.gradle.kts 'id = "durex.module"'
 
-# Public precompiled convention plugins.
 for file in \
   build-logic/src/main/groovy/durex.java-library.gradle \
   build-logic/src/main/groovy/durex.spring-library.gradle \
@@ -74,9 +81,33 @@ reject_text build-bootstrap/build.gradle.kts 'id = "durex.build-logic"'
 reject_text build-logic/build.gradle.kts 'id = "durex.catalog"'
 reject_text build-logic/build.gradle.kts 'id = "com.acme.durex.fixture"'
 
-require_text core/schema/music/entity/build.spring.gradle "id 'durex.schema.jooq'"
-reject_text core/schema/music/entity/build.spring.gradle "id 'durex.jooq-schema'"
-require_text core/schema/music/json/build.spring.gradle "id 'durex.schema.json'"
+# Production builds consume only the two published SimpleDSL entry plugins.
+require_text settings.gradle "id 'io.github.qigao.simpledsl.settings' version '0.1.0'"
+reject_pattern settings.gradle 'includeBuild[[:space:]]*\('
+reject_text settings.gradle "id 'durex.settings'"
+
+while IFS= read -r file; do
+  require_text "$file" 'io.github.qigao.simpledsl.build'
+  reject_pattern "$file" "id[[:space:]]*\\(?[[:space:]]*['\"]durex\\."
+done < <(find core -name 'build.spring.gradle' -type f | sort)
+
+require_text core/schema/music/entity/build.spring.gradle 'SimpleDslJooqSchemaPlugin'
+require_text core/schema/music/entity/build.spring.gradle 'simpledslJooq'
+reject_text core/schema/music/entity/build.spring.gradle "id 'durex.schema.jooq'"
+
+require_text core/schema/music/json/build.spring.gradle 'SimpleDslJsonSchemaPlugin'
+require_text core/schema/music/json/build.spring.gradle 'simpledslJsonSchema'
+reject_text core/schema/music/json/build.spring.gradle "id 'durex.schema.json'"
 reject_text core/schema/music/json/build.spring.gradle "id 'org.jsonschema2pojo'"
 
-echo 'Durex public plugin namespace contract: OK'
+for file in \
+  migration/spring-messaging/settings.gradle \
+  migration/spring-music/settings.gradle \
+  reference/spring-capabilities/settings.gradle.kts \
+  reference/spring-native/settings.gradle.kts; do
+  require_text "$file" 'io.github.qigao.simpledsl.settings'
+  reject_pattern "$file" 'includeBuild[[:space:]]*\('
+  reject_pattern "$file" "id[[:space:]]*\\(?[[:space:]]*['\"]durex\\.settings"
+done
+
+echo 'Durex plugin namespace and SimpleDSL consumer contract: OK'

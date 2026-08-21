@@ -41,9 +41,9 @@ jobs:
         with:
           gradle-version: '9.1.0'
       - name: Resolve Spring platform capabilities
-        run: gradle -p ../spring-capabilities durexDoctor dependencies --configuration compileClasspath --configuration-cache --stacktrace
-      - name: JVM tests and Durex doctor
-        run: gradle durexDoctor test --configuration-cache --stacktrace
+        run: gradle -p ../spring-capabilities simpledslDoctor dependencies --configuration compileClasspath --configuration-cache --stacktrace
+      - name: JVM tests and SimpleDSL doctor
+        run: gradle simpledslDoctor test --configuration-cache --stacktrace
       - name: Spring AOT JVM smoke test
         shell: bash
         run: |
@@ -76,8 +76,8 @@ jobs:
       - uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: '9.1.0'
-      - name: Durex doctor on native project
-        run: gradle durexDoctor --stacktrace
+      - name: SimpleDSL doctor on native project
+        run: gradle simpledslDoctor --stacktrace
       - name: Native tests
         run: gradle nativeTest --stacktrace
       - name: Native executable
