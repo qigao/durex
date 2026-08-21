@@ -1,0 +1,62 @@
+name: Spring Messaging Platform
+
+on:
+  push:
+    paths:
+      - 'build-bootstrap/**'
+      - 'build-logic/**'
+      - 'gradle/dependencies/**'
+      - 'core/shared/messaging/**'
+      - 'migration/spring-messaging/**'
+      - '.github/workflows/spring-messaging.yml'
+  pull_request:
+    paths:
+      - 'build-bootstrap/**'
+      - 'build-logic/**'
+      - 'gradle/dependencies/**'
+      - 'core/shared/messaging/**'
+      - 'migration/spring-messaging/**'
+      - '.github/workflows/spring-messaging.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  redis-messaging:
+    runs-on: ubuntu-latest
+    services:
+      redis:
+        image: redis:7-alpine
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 5s
+          --health-timeout 3s
+          --health-retries 10
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '25'
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '9.1.0'
+
+      - name: Resolve Spring messaging project graph
+        run: gradle -p migration/spring-messaging projects durexProjects --stacktrace
+
+      - name: Validate messaging API and Redis adapter
+        run: gradle -p migration/spring-messaging :messaging-api:test :messaging-spring-redis:test --configuration-cache --stacktrace
+
+      - name: Verify Spring messaging runtime boundary
+        shell: bash
+        run: |
+          set -euo pipefail
+          gradle -p migration/spring-messaging :messaging-spring-redis:dependencies --configuration compileClasspath --stacktrace | tee /tmp/messaging-classpath.log
+          if grep -E 'javax\.enterprise|javax\.inject:|javax\.transaction|javax\.interceptor|io\.quarkus|org\.redisson|velocity-engine' /tmp/messaging-classpath.log; then
+            echo 'legacy messaging runtime dependency leaked into Spring messaging compileClasspath'
+            exit 1
+          fi
