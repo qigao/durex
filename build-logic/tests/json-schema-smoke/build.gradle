@@ -1,0 +1,17 @@
+plugins {
+    id 'durex.spring-library'
+    id 'durex.schema.json'
+}
+
+durex {
+    dependency('api', 'jackson-annotations')
+    dependency('api', 'jackson-databind')
+    dependency('api', 'jakarta-validation')
+}
+
+durexJsonSchema {
+    source = 'json'
+    packageName = 'com.example.model'
+    validation = true
+    builders = true
+}
