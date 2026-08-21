@@ -10,9 +10,6 @@ dependencyResolutionManagement {
         tLibs {
             from(files("$rootDir/gradle/versions/test.versions.toml"))
         }
-        qLibs {
-            from(files("$rootDir/gradle/versions/quarkus.versions.toml"))
-        }
         sLibs {
             from(files("$rootDir/gradle/versions/spring.versions.toml"))
         }

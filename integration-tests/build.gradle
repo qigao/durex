@@ -1,4 +1,0 @@
-subprojects {
-    apply plugin: 'io.freefair.lombok'
-    apply from: "$rootDir/gradle/library/common.gradle"
-}

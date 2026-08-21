@@ -15,7 +15,7 @@ require_absent core/music-reactive
 require_absent core/shared/jakarta
 require_absent core/myInterceptor
 require_absent core/schema/music/r2dbc
-require_absent integration-tests/music
+require_absent integration-tests
 require_absent gradle/versions/quarkus.versions.toml
 require_absent gradle/library/quarkus-core.gradle
 require_absent gradle/library/quarkus-imperative.gradle
@@ -25,6 +25,9 @@ require_absent core/music/build.gradle
 require_absent core/music/src/main/java/com/github/durex/music/controller
 require_absent core/music/src/main/java/com/github/durex/music/config
 require_absent core/music/src/test
+require_absent core/schema/music/entity/build.gradle
+require_absent core/schema/music/repo/build.gradle
+require_absent core/schema/music/repo/src/test
 
 active_paths=(
   build-bootstrap
@@ -48,8 +51,8 @@ done
 
 if ((${#existing[@]} > 0)); then
   matches=$(grep -R -n -E \
-    --exclude='2026-*-*.md' \
-    --exclude-dir=docs \
+    --exclude='*.md' \
+    --exclude='*.adoc' \
     --exclude='verify-no-legacy-runtime.sh' \
     "$pattern" "${existing[@]}" || true)
   if [[ -n "$matches" ]]; then
