@@ -1,0 +1,7 @@
+plugins {
+    id 'durex.java-library'
+}
+
+durex {
+    lombok()
+}

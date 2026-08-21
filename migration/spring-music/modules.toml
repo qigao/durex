@@ -8,7 +8,12 @@ build-file = "build.spring.gradle"
 
 [[module]]
 name = "shared-common"
-path = "core/shared/jakarta/common"
+path = "core/shared/common"
+build-file = "build.spring.gradle"
+
+[[module]]
+name = "shared-spring-interceptor"
+path = "core/shared/spring/interceptor"
 build-file = "build.spring.gradle"
 
 [[module]]

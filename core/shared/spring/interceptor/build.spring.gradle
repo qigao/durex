@@ -1,0 +1,11 @@
+plugins {
+    id 'durex.spring-library'
+}
+
+durex {
+    aop()
+}
+
+dependencies {
+    api project(':shared-common')
+}
