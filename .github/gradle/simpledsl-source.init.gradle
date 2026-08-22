@@ -1,0 +1,18 @@
+def sourcePath = System.getenv('SIMPLEDSL_SOURCE')
+if (!sourcePath) {
+    throw new GradleException('SIMPLEDSL_SOURCE must point to the checked-out SimpleDSL source tree')
+}
+
+def sourceDir = new File(sourcePath).canonicalFile
+
+gradle.beforeSettings { settings ->
+    // The init script is also visible to included builds. Do not make
+    // SimpleDSL recursively include itself when Gradle initializes it.
+    if (settings.settingsDir.canonicalFile == sourceDir) {
+        return
+    }
+
+    settings.pluginManagement {
+        includeBuild(sourceDir.absolutePath)
+    }
+}
