@@ -10,6 +10,7 @@ on:
       - 'core/schema/music/**'
       - 'core/shared/**/build.spring.gradle'
       - 'core/shared/utils/src/main/java/com/github/durex/sqlbuilder/**'
+      - '.github/gradle/simpledsl-source.init.gradle'
       - '.github/workflows/spring-music.yml'
   pull_request:
     paths:
@@ -20,6 +21,7 @@ on:
       - 'core/schema/music/**'
       - 'core/shared/**/build.spring.gradle'
       - 'core/shared/utils/src/main/java/com/github/durex/sqlbuilder/**'
+      - '.github/gradle/simpledsl-source.init.gradle'
       - '.github/workflows/spring-music.yml'
 
 concurrency:
@@ -32,6 +34,9 @@ permissions:
 jobs:
   compile-migration:
     runs-on: ubuntu-latest
+    env:
+      SIMPLEDSL_SOURCE: ${{ github.workspace }}/.simpledsl
+      SIMPLEDSL_INIT_SCRIPT: ${{ github.workspace }}/.github/gradle/simpledsl-source.init.gradle
     steps:
       - uses: actions/checkout@v4
       - uses: actions/checkout@v4
@@ -47,13 +52,13 @@ jobs:
           gradle-version: '9.1.0'
 
       - name: Resolve SimpleDSL migration project graph
-        run: gradle --include-build "$GITHUB_WORKSPACE/.simpledsl" -p migration/spring-music projects simpledslProjects --stacktrace
+        run: gradle -I "$SIMPLEDSL_INIT_SCRIPT" -p migration/spring-music projects simpledslProjects --stacktrace
 
       - name: Validate HTTP contract and client modules
-        run: gradle --include-build "$GITHUB_WORKSPACE/.simpledsl" -p migration/spring-music :music-api:compileJava :music-client:test --configuration-cache --stacktrace
+        run: gradle -I "$SIMPLEDSL_INIT_SCRIPT" -p migration/spring-music :music-api:compileJava :music-client:test --configuration-cache --stacktrace
 
       - name: Validate compile and test Spring music graph
-        run: gradle --include-build "$GITHUB_WORKSPACE/.simpledsl" -p migration/spring-music :music:simpledslDoctor :music:compileJava :music:test --configuration-cache --stacktrace
+        run: gradle -I "$SIMPLEDSL_INIT_SCRIPT" -p migration/spring-music :music:simpledslDoctor :music:compileJava :music:test --configuration-cache --stacktrace
 
       - name: Verify HTTP module layering
         shell: bash
@@ -68,7 +73,7 @@ jobs:
         shell: bash
         run: |
           bash migration/spring-music/verify-runtime-boundary.sh
-          gradle --include-build "$GITHUB_WORKSPACE/.simpledsl" -p migration/spring-music :music:dependencies --configuration compileClasspath --stacktrace | tee /tmp/music-compile-classpath.log
+          gradle -I "$SIMPLEDSL_INIT_SCRIPT" -p migration/spring-music :music:dependencies --configuration compileClasspath --stacktrace | tee /tmp/music-compile-classpath.log
           if grep -E 'javax\.enterprise|javax\.inject:|javax\.transaction|javax\.interceptor|io\.quarkus' /tmp/music-compile-classpath.log; then
             echo 'legacy runtime dependency leaked into Spring compileClasspath'
             exit 1

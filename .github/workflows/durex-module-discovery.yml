@@ -12,6 +12,7 @@ on:
       - 'gradlew.bat'
       - 'settings.gradle'
       - 'build.gradle'
+      - '.github/gradle/simpledsl-source.init.gradle'
       - '.github/workflows/durex-module-discovery.yml'
   pull_request:
     paths:
@@ -24,6 +25,7 @@ on:
       - 'gradlew.bat'
       - 'settings.gradle'
       - 'build.gradle'
+      - '.github/gradle/simpledsl-source.init.gradle'
       - '.github/workflows/durex-module-discovery.yml'
 
 concurrency:
@@ -36,6 +38,9 @@ permissions:
 jobs:
   discovery-contract:
     runs-on: ubuntu-latest
+    env:
+      SIMPLEDSL_SOURCE: ${{ github.workspace }}/.simpledsl
+      SIMPLEDSL_INIT_SCRIPT: ${{ github.workspace }}/.github/gradle/simpledsl-source.init.gradle
     steps:
       - uses: actions/checkout@v4
       - uses: actions/checkout@v4
@@ -61,7 +66,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          ./gradlew --include-build "$GITHUB_WORKSPACE/.simpledsl" projects simpledslProjects --stacktrace | tee /tmp/durex-root-projects.log
+          ./gradlew -I "$SIMPLEDSL_INIT_SCRIPT" projects simpledslProjects --stacktrace | tee /tmp/durex-root-projects.log
           for module in music music-api music-client music-json music-entity music-repo shared-common shared-spring-interceptor shared-utils json-schema-annotation messaging-api messaging-spring-redis; do
             grep -Fq ":${module} |" /tmp/durex-root-projects.log
           done

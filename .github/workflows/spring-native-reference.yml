@@ -6,12 +6,14 @@ on:
       - 'reference/spring-native/**'
       - 'reference/spring-capabilities/**'
       - 'gradle/dependencies/**'
+      - '.github/gradle/simpledsl-source.init.gradle'
       - '.github/workflows/spring-native-reference.yml'
   pull_request:
     paths:
       - 'reference/spring-native/**'
       - 'reference/spring-capabilities/**'
       - 'gradle/dependencies/**'
+      - '.github/gradle/simpledsl-source.init.gradle'
       - '.github/workflows/spring-native-reference.yml'
 
 concurrency:
@@ -24,6 +26,9 @@ permissions:
 jobs:
   jvm-test:
     runs-on: ubuntu-latest
+    env:
+      SIMPLEDSL_SOURCE: ${{ github.workspace }}/.simpledsl
+      SIMPLEDSL_INIT_SCRIPT: ${{ github.workspace }}/.github/gradle/simpledsl-source.init.gradle
     defaults:
       run:
         working-directory: reference/spring-native
@@ -41,13 +46,13 @@ jobs:
         with:
           gradle-version: '9.1.0'
       - name: Resolve Spring platform capabilities
-        run: gradle --include-build "$GITHUB_WORKSPACE/.simpledsl" -p ../spring-capabilities simpledslDoctor dependencies --configuration compileClasspath --configuration-cache --stacktrace
+        run: gradle -I "$SIMPLEDSL_INIT_SCRIPT" -p ../spring-capabilities simpledslDoctor dependencies --configuration compileClasspath --configuration-cache --stacktrace
       - name: JVM tests and SimpleDSL doctor
-        run: gradle --include-build "$GITHUB_WORKSPACE/.simpledsl" simpledslDoctor test --configuration-cache --stacktrace
+        run: gradle -I "$SIMPLEDSL_INIT_SCRIPT" simpledslDoctor test --configuration-cache --stacktrace
       - name: Spring AOT JVM smoke test
         shell: bash
         run: |
-          gradle --include-build "$GITHUB_WORKSPACE/.simpledsl" processAot bootJar --configuration-cache --stacktrace
+          gradle -I "$SIMPLEDSL_INIT_SCRIPT" processAot bootJar --configuration-cache --stacktrace
           java -Dspring.aot.enabled=true -jar build/libs/spring-native-reference-0.1.0-SNAPSHOT.jar > build/aot-app.log 2>&1 &
           app_pid=$!
           trap 'kill "$app_pid" 2>/dev/null || true' EXIT
@@ -63,6 +68,9 @@ jobs:
 
   native-test:
     runs-on: ubuntu-latest
+    env:
+      SIMPLEDSL_SOURCE: ${{ github.workspace }}/.simpledsl
+      SIMPLEDSL_INIT_SCRIPT: ${{ github.workspace }}/.github/gradle/simpledsl-source.init.gradle
     defaults:
       run:
         working-directory: reference/spring-native
@@ -81,11 +89,11 @@ jobs:
         with:
           gradle-version: '9.1.0'
       - name: SimpleDSL doctor on native project
-        run: gradle --include-build "$GITHUB_WORKSPACE/.simpledsl" simpledslDoctor --stacktrace
+        run: gradle -I "$SIMPLEDSL_INIT_SCRIPT" simpledslDoctor --stacktrace
       - name: Native tests
-        run: gradle --include-build "$GITHUB_WORKSPACE/.simpledsl" nativeTest --stacktrace
+        run: gradle -I "$SIMPLEDSL_INIT_SCRIPT" nativeTest --stacktrace
       - name: Native executable
-        run: gradle --include-build "$GITHUB_WORKSPACE/.simpledsl" nativeCompile --stacktrace
+        run: gradle -I "$SIMPLEDSL_INIT_SCRIPT" nativeCompile --stacktrace
       - name: Native HTTP smoke test
         shell: bash
         run: |
