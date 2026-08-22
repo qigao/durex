@@ -49,6 +49,20 @@ jobs:
         with:
           gradle-version: '9.1.0'
 
+      - name: Reject SimpleDSL implementation-class leakage
+        shell: bash
+        run: |
+          set -euo pipefail
+          hits="$({
+            find core migration reference -type f \( -name 'build.gradle' -o -name 'build.gradle.kts' -o -name 'build.spring.gradle' -o -name 'build.spring.gradle.kts' \) \
+              -exec grep -Hn -E 'io\.github\.qigao\.simpledsl\.gradle\.' {} + || true
+          })"
+          if [ -n "$hits" ]; then
+            echo "$hits"
+            echo 'Durex build descriptors must use the public SimpleDSL DSL, not implementation classes.'
+            exit 1
+          fi
+
       - name: Compile and test SimpleDSL source
         run: gradle -p .simpledsl :simpledsl-build-bootstrap:check :simpledsl-build-logic:check --stacktrace
 
