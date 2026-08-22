@@ -5,16 +5,12 @@ on:
     paths:
       - 'reference/spring-native/**'
       - 'reference/spring-capabilities/**'
-      - 'build-bootstrap/**'
-      - 'build-logic/**'
       - 'gradle/dependencies/**'
       - '.github/workflows/spring-native-reference.yml'
   pull_request:
     paths:
       - 'reference/spring-native/**'
       - 'reference/spring-capabilities/**'
-      - 'build-bootstrap/**'
-      - 'build-logic/**'
       - 'gradle/dependencies/**'
       - '.github/workflows/spring-native-reference.yml'
 
@@ -33,7 +29,11 @@ jobs:
         working-directory: reference/spring-native
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-java@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: qigao/simpledsl
+          path: .simpledsl
+      - uses: actions/setup-java@v5
         with:
           distribution: temurin
           java-version: '25'
@@ -41,13 +41,13 @@ jobs:
         with:
           gradle-version: '9.1.0'
       - name: Resolve Spring platform capabilities
-        run: gradle -p ../spring-capabilities simpledslDoctor dependencies --configuration compileClasspath --configuration-cache --stacktrace
+        run: gradle --include-build "$GITHUB_WORKSPACE/.simpledsl" -p ../spring-capabilities simpledslDoctor dependencies --configuration compileClasspath --configuration-cache --stacktrace
       - name: JVM tests and SimpleDSL doctor
-        run: gradle simpledslDoctor test --configuration-cache --stacktrace
+        run: gradle --include-build "$GITHUB_WORKSPACE/.simpledsl" simpledslDoctor test --configuration-cache --stacktrace
       - name: Spring AOT JVM smoke test
         shell: bash
         run: |
-          gradle processAot bootJar --configuration-cache --stacktrace
+          gradle --include-build "$GITHUB_WORKSPACE/.simpledsl" processAot bootJar --configuration-cache --stacktrace
           java -Dspring.aot.enabled=true -jar build/libs/spring-native-reference-0.1.0-SNAPSHOT.jar > build/aot-app.log 2>&1 &
           app_pid=$!
           trap 'kill "$app_pid" 2>/dev/null || true' EXIT
@@ -68,6 +68,10 @@ jobs:
         working-directory: reference/spring-native
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: qigao/simpledsl
+          path: .simpledsl
       - uses: graalvm/setup-graalvm@v1
         with:
           java-version: '25'
@@ -77,11 +81,11 @@ jobs:
         with:
           gradle-version: '9.1.0'
       - name: SimpleDSL doctor on native project
-        run: gradle simpledslDoctor --stacktrace
+        run: gradle --include-build "$GITHUB_WORKSPACE/.simpledsl" simpledslDoctor --stacktrace
       - name: Native tests
-        run: gradle nativeTest --stacktrace
+        run: gradle --include-build "$GITHUB_WORKSPACE/.simpledsl" nativeTest --stacktrace
       - name: Native executable
-        run: gradle nativeCompile --stacktrace
+        run: gradle --include-build "$GITHUB_WORKSPACE/.simpledsl" nativeCompile --stacktrace
       - name: Native HTTP smoke test
         shell: bash
         run: |
