@@ -7,10 +7,8 @@ simpledsl {
     dependency('api', 'jackson-annotations')
     dependency('api', 'jackson-databind')
     dependency('api', 'jakarta-validation')
+    jsonSchema()
 }
-
-// SimpleDSL 0.1.0 keeps schema helpers inside the published build artifact.
-apply plugin: io.github.qigao.simpledsl.gradle.schema.SimpleDslJsonSchemaPlugin
 
 simpledslJsonSchema {
     source = 'json'
