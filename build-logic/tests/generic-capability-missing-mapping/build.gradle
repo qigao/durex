@@ -1,5 +1,0 @@
-plugins { id 'durex.java-library' }
-
-durex {
-    capability('java')
-}

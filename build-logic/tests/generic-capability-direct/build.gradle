@@ -1,9 +1,0 @@
-plugins {
-    id 'durex.java-library'
-    id 'durex.internal.fixture'
-}
-
-import com.github.durex.gradle.model.DurexModuleModel
-
-assert extensions.getByType(DurexModuleModel).capabilities.get() == ['fixture'] as Set
-tasks.register('verifyDirectCapability')

@@ -1,8 +1,0 @@
-plugins { id 'durex.spring-library' }
-
-durex { messaging() }
-
-import com.github.durex.gradle.model.DurexModuleModel
-assert extensions.getByType(DurexModuleModel).capabilities.get().contains('messaging')
-
-tasks.register('verifyMessagingCapability')

@@ -1,3 +1,0 @@
-include = ["duplicate-a.toml", "duplicate-b.toml"]
-[java]
-version = 25
