@@ -1,9 +1,0 @@
-plugins {
-    id 'java'
-    id 'durex.schema.jooq'
-}
-
-durexJooq {
-    source = 'schema.sql'
-    packageName = 'com.example.schema'
-}

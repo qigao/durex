@@ -1,6 +1,4 @@
 pluginManagement {
-    includeBuild('../../build-bootstrap')
-    includeBuild('../../build-logic')
     repositories {
         gradlePluginPortal()
         mavenCentral()
@@ -8,14 +6,15 @@ pluginManagement {
 }
 
 plugins {
-    id 'durex.settings'
+    id 'io.github.qigao.simpledsl.settings' version '0.1.0'
 }
 
 rootProject.name = 'spring-music-migration'
 
-durexSettings {
-    repositoryRoot.set(file('../..'))
-    modulesManifest.set(file('modules.toml'))
+simpledslSettings {
+    repositoryRoot.set(layout.settingsDirectory.dir('../..'))
+    dependencyManifest.set(layout.settingsDirectory.file('../../gradle/dependencies/durex.toml'))
+    modulesManifest.set(layout.settingsDirectory.file('modules.toml'))
 }
 
 dependencyResolutionManagement {

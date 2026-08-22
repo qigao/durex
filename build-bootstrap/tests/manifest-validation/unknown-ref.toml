@@ -1,6 +1,0 @@
-[java]
-version = 25
-
-[libraries.broken]
-module = "example:broken"
-version.ref = "missing"

@@ -1,3 +1,0 @@
-include = ["cycle-b.toml"]
-[java]
-version = 25

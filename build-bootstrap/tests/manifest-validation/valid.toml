@@ -1,9 +1,0 @@
-[java]
-version = 25
-
-[versions]
-x = "1.0"
-
-[libraries.x]
-module = "example:x"
-version.ref = "x"

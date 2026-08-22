@@ -3,29 +3,29 @@ name: Durex Module Discovery
 on:
   push:
     paths:
-      - 'build-bootstrap/**'
-      - 'build-logic/**'
       - 'core/**/build.gradle'
       - 'core/**/build.spring.gradle'
       - 'gradle/modules.toml'
+      - 'gradle/dependencies/**'
       - 'gradle/wrapper/**'
       - 'gradlew'
       - 'gradlew.bat'
       - 'settings.gradle'
       - 'build.gradle'
+      - '.github/gradle/simpledsl-source.init.gradle'
       - '.github/workflows/durex-module-discovery.yml'
   pull_request:
     paths:
-      - 'build-bootstrap/**'
-      - 'build-logic/**'
       - 'core/**/build.gradle'
       - 'core/**/build.spring.gradle'
       - 'gradle/modules.toml'
+      - 'gradle/dependencies/**'
       - 'gradle/wrapper/**'
       - 'gradlew'
       - 'gradlew.bat'
       - 'settings.gradle'
       - 'build.gradle'
+      - '.github/gradle/simpledsl-source.init.gradle'
       - '.github/workflows/durex-module-discovery.yml'
 
 concurrency:
@@ -38,8 +38,15 @@ permissions:
 jobs:
   discovery-contract:
     runs-on: ubuntu-latest
+    env:
+      SIMPLEDSL_SOURCE: ${{ github.workspace }}/.simpledsl
+      SIMPLEDSL_INIT_SCRIPT: ${{ github.workspace }}/.github/gradle/simpledsl-source.init.gradle
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: qigao/simpledsl
+          path: .simpledsl
       - uses: actions/setup-java@v5
         with:
           distribution: temurin
@@ -55,36 +62,15 @@ jobs:
           ./gradlew --version | tee /tmp/durex-wrapper-version.log
           grep -Fq 'Gradle 9.1.0' /tmp/durex-wrapper-version.log
 
-      - name: Auto discover Spring build file without manifest
+      - name: Verify root SimpleDSL project graph from source
         shell: bash
         run: |
           set -euo pipefail
-          gradle -p build-bootstrap/tests/modules-auto-spring-no-manifest projects durexProjects --stacktrace | tee /tmp/durex-modules-auto-spring.log
-          grep -Fq ':music | core/music | auto | build.spring.gradle' /tmp/durex-modules-auto-spring.log
-          grep -Fq ':shared-utils | core/shared/utils | auto | build.gradle' /tmp/durex-modules-auto-spring.log
-          if grep -Fq ':core | core | auto | build.gradle' /tmp/durex-modules-auto-spring.log; then exit 1; fi
-          if grep -Fq ':shared | core/shared | auto | build.gradle' /tmp/durex-modules-auto-spring.log; then exit 1; fi
-
-      - name: Preserve manifest auto and manual override contracts
-        shell: bash
-        run: |
-          set -euo pipefail
-          gradle -p build-bootstrap/tests/modules-auto projects durexProjects --stacktrace | tee /tmp/durex-modules-auto.log
-          grep -Fq ':music | core/music | auto | build.gradle' /tmp/durex-modules-auto.log
-          grep -Fq ':shared-utils | core/shared/utils | auto | build.gradle' /tmp/durex-modules-auto.log
-          grep -Fq ':shared-common | core/shared/jakarta/common | manual | build.gradle' /tmp/durex-modules-auto.log
-          gradle -p build-bootstrap/tests/modules-manual projects durexProjects --stacktrace | tee /tmp/durex-modules-manual.log
-          grep -Fq ':music | core/music | manual | build.spring.gradle' /tmp/durex-modules-manual.log
-
-      - name: Verify root Durex project graph
-        shell: bash
-        run: |
-          set -euo pipefail
-          ./gradlew projects durexProjects --stacktrace | tee /tmp/durex-root-projects.log
+          ./gradlew -I "$SIMPLEDSL_INIT_SCRIPT" projects simpledslProjects --stacktrace | tee /tmp/durex-root-projects.log
           for module in music music-api music-client music-json music-entity music-repo shared-common shared-spring-interceptor shared-utils json-schema-annotation messaging-api messaging-spring-redis; do
             grep -Fq ":${module} |" /tmp/durex-root-projects.log
           done
           if grep -Fq ':core:' /tmp/durex-root-projects.log; then
-            echo 'legacy hierarchical Gradle project path leaked into root Durex graph'
+            echo 'legacy hierarchical Gradle project path leaked into root SimpleDSL graph'
             exit 1
           fi

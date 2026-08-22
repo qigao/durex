@@ -1,16 +1,15 @@
 # Spring Native reference
 
 This is an isolated Spring Boot 4.1 / GraalVM Native reference build for Durex.
-It intentionally does not participate in the legacy root Gradle 7.4.2 build while the Spring-first platform is migrated.
 
-The reference build now consumes the Durex build platform directly:
+The reference build consumes SimpleDSL `0.1.0` from the Gradle Plugin Portal:
 
-- `gradle/dependencies/*.toml` is the Durex-owned dependency/plugin version source;
-- `durex.spring-service` provides the Spring service baseline;
-- `durex { nativeImage() }` enables GraalVM Native as an optional feature;
+- `io.github.qigao.simpledsl.settings` loads the Durex dependency manifest from `gradle/dependencies/*.toml`;
+- `io.github.qigao.simpledsl.build` is the only project-side SimpleDSL plugin;
+- `simpledsl { springService(); web(); nativeImage() }` composes the Spring service and GraalVM Native capabilities;
 - Gradle BOM/platform resolution still performs the actual Spring dependency alignment.
 
-The reference files remain Kotlin DSL so Durex settings/module extensions are continuously checked for Kotlin DSL compatibility.
+The reference files remain Kotlin DSL so the published SimpleDSL settings/build extensions are continuously checked for Kotlin DSL compatibility.
 
 ## Requirements
 

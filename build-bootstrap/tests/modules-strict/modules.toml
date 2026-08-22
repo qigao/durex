@@ -1,3 +1,0 @@
-[discovery]
-mode = "strict-auto"
-roots = ["core"]

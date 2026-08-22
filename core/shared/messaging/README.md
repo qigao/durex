@@ -6,7 +6,7 @@ Durex messaging is Spring Boot-native.
 - Use Durex `@Outgoing` when a method's non-null return value should be forwarded to a Redis Pub/Sub destination.
 - Use `@RedisStreamListener` for explicit Redis Stream consumer-group subscriptions.
 - Use `@RedisStreamOutgoing` when a method's non-null return value should be appended to a Redis Stream.
-- `durex.feature.messaging` provides generic Spring messaging support; `durex.feature.redis` remains the independent Redis transport capability.
+- The build enables the independent SimpleDSL `messaging`, `redis`, and `aop` capabilities through `simpledsl { ... }`.
 
 The runtime adapter lives in `core/shared/messaging/spring-redis` and is discovered through Spring Boot auto-configuration. It does not use CDI, Quarkus, Redisson, annotation processors, or generated listener source.
 

@@ -1,5 +1,0 @@
-plugins { id 'durex.spring-library' }
-
-durex {
-    persistence { jooq() }
-}

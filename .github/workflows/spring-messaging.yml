@@ -3,21 +3,19 @@ name: Spring Messaging Platform
 on:
   push:
     paths:
-      - 'build-bootstrap/**'
-      - 'build-logic/**'
       - 'gradle/dependencies/**'
       - 'core/shared/messaging/**'
       - 'core/redisson-service/**'
       - 'migration/spring-messaging/**'
+      - '.github/gradle/simpledsl-source.init.gradle'
       - '.github/workflows/spring-messaging.yml'
   pull_request:
     paths:
-      - 'build-bootstrap/**'
-      - 'build-logic/**'
       - 'gradle/dependencies/**'
       - 'core/shared/messaging/**'
       - 'core/redisson-service/**'
       - 'migration/spring-messaging/**'
+      - '.github/gradle/simpledsl-source.init.gradle'
       - '.github/workflows/spring-messaging.yml'
 
 concurrency:
@@ -30,6 +28,9 @@ permissions:
 jobs:
   redis-messaging:
     runs-on: ubuntu-latest
+    env:
+      SIMPLEDSL_SOURCE: ${{ github.workspace }}/.simpledsl
+      SIMPLEDSL_INIT_SCRIPT: ${{ github.workspace }}/.github/gradle/simpledsl-source.init.gradle
     services:
       redis:
         image: redis:7-alpine
@@ -43,6 +44,10 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: qigao/simpledsl
+          path: .simpledsl
       - uses: actions/setup-java@v5
         with:
           distribution: temurin
@@ -52,10 +57,10 @@ jobs:
           gradle-version: '9.1.0'
 
       - name: Resolve Spring messaging project graph
-        run: gradle -p migration/spring-messaging projects durexProjects --stacktrace
+        run: gradle -I "$SIMPLEDSL_INIT_SCRIPT" -p migration/spring-messaging projects simpledslProjects --stacktrace
 
       - name: Validate messaging API and Redis adapter
-        run: gradle -p migration/spring-messaging :messaging-api:test :messaging-spring-redis:test --configuration-cache --stacktrace
+        run: gradle -I "$SIMPLEDSL_INIT_SCRIPT" -p migration/spring-messaging :messaging-api:test :messaging-spring-redis:test --configuration-cache --stacktrace
 
       - name: Verify legacy messaging implementation is gone
         shell: bash
@@ -75,7 +80,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          gradle -p migration/spring-messaging :messaging-spring-redis:dependencies --configuration compileClasspath --stacktrace | tee /tmp/messaging-classpath.log
+          gradle -I "$SIMPLEDSL_INIT_SCRIPT" -p migration/spring-messaging :messaging-spring-redis:dependencies --configuration compileClasspath --stacktrace | tee /tmp/messaging-classpath.log
           if grep -E 'javax\.enterprise|javax\.inject:|javax\.transaction|javax\.interceptor|io\.quarkus|org\.redisson|velocity-engine' /tmp/messaging-classpath.log; then
             echo 'legacy messaging runtime dependency leaked into Spring messaging compileClasspath'
             exit 1

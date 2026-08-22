@@ -1,8 +1,9 @@
 plugins {
-    id("durex.spring-service")
+    id("io.github.qigao.simpledsl.build")
 }
 
-durex {
+simpledsl {
+    springService()
     persistence {
         jpa()
         jdbc()

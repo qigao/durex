@@ -5,10 +5,11 @@ Durex is a multi-module Java platform for Spring Boot development.
 
 == Build Platform
 
-The root build is managed by Durex itself:
+The root build consumes SimpleDSL `0.1.0` from the Gradle Plugin Portal:
 
-* `durex.settings` owns module discovery and project inclusion.
-* `gradle/dependencies/*.toml` owns dependency, platform, and plugin versions.
+* `io.github.qigao.simpledsl.settings` owns dependency policy loading, module discovery, and project inclusion.
+* Production modules apply only `io.github.qigao.simpledsl.build`; module types and capabilities are selected through `simpledsl { ... }`.
+* `gradle/dependencies/*.toml` remains the Durex-owned dependency, platform, and external-plugin version source.
 * `gradle/modules.toml` contains only logical-name/build-file overrides; ordinary modules are auto-discovered.
 * `build.spring.gradle` is the canonical Spring module descriptor.
 * Gradle 9.1 and Java 25 are the current build baseline.
@@ -17,13 +18,13 @@ Useful diagnostics:
 
 [source,bash]
 ----
-./gradlew durexProjects
-./gradlew durexDependencies
+./gradlew simpledslProjects
+./gradlew simpledslDependencies
 ----
 
 == Runtime
 
-Spring Boot is the only application runtime. Durex adds build-time capabilities and a small set of semantic adapters rather than replacing Spring facilities.
+Spring Boot is the only application runtime. Durex adds runtime libraries and semantic adapters while SimpleDSL owns build-time composition.
 
 * shared HTTP service contracts for server/client reuse
 * Spring AOP and transaction integration
@@ -32,9 +33,8 @@ Spring Boot is the only application runtime. Durex adds build-time capabilities 
 
 == Schema
 
-Schema/code generation remains build-time and framework-neutral:
+Schema/code generation remains build-time and framework-neutral. Durex consumes the jOOQ and JSON schema helpers from the SimpleDSL build artifact rather than publishing or applying Durex schema plugin IDs.
 
-* `durex.schema.jooq`
-* `durex.schema.json`
+The current schema configuration extensions are `simpledslJooq` and `simpledslJsonSchema`.
 
 See xref:core/shared/json-schema-annotation/readme.adoc[JSON Schema annotations] and xref:core/shared/messaging/README.md[Spring Messaging].

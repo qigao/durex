@@ -1,5 +1,9 @@
 plugins {
-    id 'durex.java-library'
+    id 'io.github.qigao.simpledsl.build'
+}
+
+simpledsl {
+    javaLibrary()
 }
 
 sourceSets {
