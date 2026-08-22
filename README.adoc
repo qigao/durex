@@ -5,7 +5,7 @@ Durex is a multi-module Java platform for Spring Boot development.
 
 == Build Platform
 
-The root build consumes SimpleDSL `0.1.0` from the Gradle Plugin Portal:
+The root build consumes SimpleDSL `0.1.1` from the Gradle Plugin Portal:
 
 * `io.github.qigao.simpledsl.settings` owns dependency policy loading, module discovery, and project inclusion.
 * Production modules apply only `io.github.qigao.simpledsl.build`; module types and capabilities are selected through `simpledsl { ... }`.
@@ -33,8 +33,16 @@ Spring Boot is the only application runtime. Durex adds runtime libraries and se
 
 == Schema
 
-Schema/code generation remains build-time and framework-neutral. Durex consumes the jOOQ and JSON schema helpers from the SimpleDSL build artifact rather than publishing or applying Durex schema plugin IDs.
+Schema/code generation remains build-time and framework-neutral. Durex activates jOOQ and JSON Schema generation through the public SimpleDSL project DSL:
 
-The current schema configuration extensions are `simpledslJooq` and `simpledslJsonSchema`.
+[source,groovy]
+----
+simpledsl {
+    jooqSchema()
+    // or jsonSchema()
+}
+----
+
+Generator configuration continues through `simpledslJooq` and `simpledslJsonSchema`. Durex does not reference SimpleDSL schema implementation classes and no schema Plugin Portal IDs are published or consumed.
 
 See xref:core/shared/json-schema-annotation/readme.adoc[JSON Schema annotations] and xref:core/shared/messaging/README.md[Spring Messaging].
