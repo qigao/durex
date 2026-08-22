@@ -9,6 +9,7 @@ on:
       - 'reference/**'
       - 'settings.gradle'
       - 'build.gradle'
+      - '.github/gradle/simpledsl-source.init.gradle'
       - '.github/workflows/simpledsl-source-integration.yml'
   pull_request:
     paths:
@@ -18,6 +19,7 @@ on:
       - 'reference/**'
       - 'settings.gradle'
       - 'build.gradle'
+      - '.github/gradle/simpledsl-source.init.gradle'
       - '.github/workflows/simpledsl-source-integration.yml'
 
 concurrency:
@@ -30,6 +32,9 @@ permissions:
 jobs:
   source-integration:
     runs-on: ubuntu-latest
+    env:
+      SIMPLEDSL_SOURCE: ${{ github.workspace }}/.simpledsl
+      SIMPLEDSL_INIT_SCRIPT: ${{ github.workspace }}/.github/gradle/simpledsl-source.init.gradle
     steps:
       - uses: actions/checkout@v4
       - uses: actions/checkout@v4
@@ -48,7 +53,7 @@ jobs:
         run: gradle -p .simpledsl :simpledsl-build-bootstrap:check :simpledsl-build-logic:check --stacktrace
 
       - name: Verify Durex project graph through SimpleDSL source
-        run: ./gradlew --include-build "$GITHUB_WORKSPACE/.simpledsl" projects simpledslProjects --stacktrace
+        run: ./gradlew -I "$SIMPLEDSL_INIT_SCRIPT" projects simpledslProjects --stacktrace
 
       - name: Verify Durex core build through SimpleDSL source
-        run: ./gradlew --include-build "$GITHUB_WORKSPACE/.simpledsl" :music-json:compileJava :music-entity:compileJava :music-repo:compileJava :music-api:compileJava :music-client:test :music:test --configuration-cache --stacktrace
+        run: ./gradlew -I "$SIMPLEDSL_INIT_SCRIPT" :music-json:compileJava :music-entity:compileJava :music-repo:compileJava :music-api:compileJava :music-client:test :music:test --configuration-cache --stacktrace
