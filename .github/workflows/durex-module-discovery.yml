@@ -12,7 +12,6 @@ on:
       - 'gradlew.bat'
       - 'settings.gradle'
       - 'build.gradle'
-      - '.github/gradle/simpledsl-source.init.gradle'
       - '.github/workflows/durex-module-discovery.yml'
   pull_request:
     paths:
@@ -25,7 +24,6 @@ on:
       - 'gradlew.bat'
       - 'settings.gradle'
       - 'build.gradle'
-      - '.github/gradle/simpledsl-source.init.gradle'
       - '.github/workflows/durex-module-discovery.yml'
 
 concurrency:
@@ -38,15 +36,8 @@ permissions:
 jobs:
   discovery-contract:
     runs-on: ubuntu-latest
-    env:
-      SIMPLEDSL_SOURCE: ${{ github.workspace }}/.simpledsl
-      SIMPLEDSL_INIT_SCRIPT: ${{ github.workspace }}/.github/gradle/simpledsl-source.init.gradle
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/checkout@v4
-        with:
-          repository: qigao/simpledsl
-          path: .simpledsl
       - uses: actions/setup-java@v5
         with:
           distribution: temurin
@@ -62,11 +53,11 @@ jobs:
           ./gradlew --version | tee /tmp/durex-wrapper-version.log
           grep -Fq 'Gradle 9.1.0' /tmp/durex-wrapper-version.log
 
-      - name: Verify root SimpleDSL project graph from source
+      - name: Verify root SimpleDSL project graph from Plugin Portal
         shell: bash
         run: |
           set -euo pipefail
-          ./gradlew -I "$SIMPLEDSL_INIT_SCRIPT" projects simpledslProjects --stacktrace | tee /tmp/durex-root-projects.log
+          ./gradlew projects simpledslProjects --stacktrace | tee /tmp/durex-root-projects.log
           for module in music music-api music-client music-json music-entity music-repo shared-common shared-spring-interceptor shared-utils json-schema-annotation messaging-api messaging-spring-redis; do
             grep -Fq ":${module} |" /tmp/durex-root-projects.log
           done
