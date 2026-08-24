@@ -70,7 +70,7 @@ public class MusicRepository {
    * @return list of musics
    */
   public List<Music> findAll() {
-    return dsl.selectFrom(MUSIC).fetch().stream()
+    return dsl.selectFrom(MUSIC).where(NOT_DELETED).fetch().stream()
         .map(MusicMapper::mapRecordToDto)
         .collect(Collectors.toList());
   }
