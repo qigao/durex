@@ -20,10 +20,7 @@ public class MusicHttpController implements MusicApi {
   }
 
   @Override
-  public RespData<List<Music>> list(
-      @RequestParam(value = "title", required = false) String title,
-      @RequestParam(value = "id", required = false) String musicId,
-      @RequestParam(value = "offset", defaultValue = "10") int offset) {
+  public RespData<List<Music>> list(@RequestParam("title") String title) {
     return RespData.of(musicService.getMusicsByTitle(title), Helper.okResponse());
   }
 
