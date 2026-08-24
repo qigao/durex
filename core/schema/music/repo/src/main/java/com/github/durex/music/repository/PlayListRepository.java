@@ -42,7 +42,7 @@ public class PlayListRepository {
   }
 
   public List<PlayList> findAll() {
-    return dsl.selectFrom(PLAYLIST).fetch().map(PlayListMapper::mapRecordToDto);
+    return dsl.selectFrom(PLAYLIST).where(NOT_DELETED).fetch().map(PlayListMapper::mapRecordToDto);
   }
 
   public Optional<PlayList> findById(@NotNull String id) {
