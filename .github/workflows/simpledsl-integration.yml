@@ -1,0 +1,61 @@
+name: SimpleDSL Integration
+
+on:
+  push:
+    paths:
+      - 'core/**'
+      - 'gradle/**'
+      - 'migration/**'
+      - 'reference/**'
+      - 'settings.gradle'
+      - 'build.gradle'
+      - '.github/workflows/simpledsl-integration.yml'
+  pull_request:
+    paths:
+      - 'core/**'
+      - 'gradle/**'
+      - 'migration/**'
+      - 'reference/**'
+      - 'settings.gradle'
+      - 'build.gradle'
+      - '.github/workflows/simpledsl-integration.yml'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  portal-integration:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '25'
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '9.1.0'
+
+      - name: Reject SimpleDSL implementation-class leakage
+        shell: bash
+        run: |
+          set -euo pipefail
+          hits="$({
+            find core migration reference -type f \( -name 'build.gradle' -o -name 'build.gradle.kts' -o -name 'build.spring.gradle' -o -name 'build.spring.gradle.kts' \) \
+              -exec grep -Hn -E 'io\.github\.qigao\.simpledsl\.gradle\.' {} + || true
+          })"
+          if [ -n "$hits" ]; then
+            echo "$hits"
+            echo 'Durex build descriptors must use the public SimpleDSL DSL, not implementation classes.'
+            exit 1
+          fi
+
+      - name: Verify SimpleDSL 0.1.1 project graph from Plugin Portal
+        run: ./gradlew projects simpledslProjects --stacktrace
+
+      - name: Verify Durex core build through Plugin Portal
+        run: ./gradlew :music-json:compileJava :music-entity:compileJava :music-repo:compileJava :music-api:compileJava :music-client:test :music:test --configuration-cache --stacktrace
