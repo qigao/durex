@@ -16,10 +16,7 @@ import org.springframework.web.service.annotation.PutExchange;
 public interface MusicApi {
 
   @GetExchange
-  RespData<List<Music>> list(
-      @RequestParam(value = "title", required = false) String title,
-      @RequestParam(value = "id", required = false) String musicId,
-      @RequestParam(value = "offset", defaultValue = "10") int offset);
+  RespData<List<Music>> list(@RequestParam("title") String title);
 
   @GetExchange("/{id}")
   RespData<Music> get(@PathVariable("id") String musicId);
