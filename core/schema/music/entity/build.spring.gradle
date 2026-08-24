@@ -5,10 +5,8 @@ plugins {
 simpledsl {
     javaLibrary()
     lombok()
+    jooqSchema()
 }
-
-// SimpleDSL 0.1.0 keeps schema helpers inside the published build artifact.
-apply plugin: io.github.qigao.simpledsl.gradle.schema.SimpleDslJooqSchemaPlugin
 
 sourceSets {
     main {
