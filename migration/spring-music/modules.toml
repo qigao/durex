@@ -17,11 +17,6 @@ path = "core/shared/spring/http"
 build-file = "build.spring.gradle"
 
 [[module]]
-name = "shared-spring-interceptor"
-path = "core/shared/spring/interceptor"
-build-file = "build.spring.gradle"
-
-[[module]]
 name = "json-schema-annotation"
 path = "core/shared/json-schema-annotation"
 build-file = "build.spring.gradle"
