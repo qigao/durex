@@ -2,10 +2,18 @@ group = 'io.github.qigao.durex'
 version = providers.gradleProperty('durexVersion').orElse('0.1.0-SNAPSHOT').get()
 
 apply plugin: 'maven-publish'
+apply plugin: 'signing'
+
+def licenseNameProvider = providers.gradleProperty('durexLicenseName').orElse(providers.environmentVariable('DUREX_LICENSE_NAME'))
+def licenseUrlProvider = providers.gradleProperty('durexLicenseUrl').orElse(providers.environmentVariable('DUREX_LICENSE_URL'))
+def signingKeyProvider = providers.gradleProperty('signingKey').orElse(providers.environmentVariable('DUREX_SIGNING_KEY'))
+def signingPasswordProvider = providers.gradleProperty('signingPassword').orElse(providers.environmentVariable('DUREX_SIGNING_PASSWORD'))
+def signingKeyIdProvider = providers.gradleProperty('signingKeyId').orElse(providers.environmentVariable('DUREX_SIGNING_KEY_ID'))
 
 plugins.withId('java') {
     java {
         withSourcesJar()
+        withJavadocJar()
     }
 
     publishing {
@@ -16,6 +24,27 @@ plugins.withId('java') {
                     name = "Durex ${project.name}"
                     description = "Durex public runtime/API module ${project.name}"
                     url = 'https://github.com/qigao/durex'
+
+                    def licenseName = licenseNameProvider.orNull
+                    def licenseUrl = licenseUrlProvider.orNull
+                    if (licenseName && licenseUrl) {
+                        licenses {
+                            license {
+                                name = licenseName
+                                url = licenseUrl
+                                distribution = 'repo'
+                            }
+                        }
+                    }
+
+                    developers {
+                        developer {
+                            id = 'qigao'
+                            name = 'Qi Gao'
+                            url = 'https://github.com/qigao'
+                        }
+                    }
+
                     scm {
                         connection = 'scm:git:https://github.com/qigao/durex.git'
                         developerConnection = 'scm:git:ssh://git@github.com/qigao/durex.git'
@@ -31,5 +60,40 @@ plugins.withId('java') {
                 url = uri(stagingRepository ?: layout.buildDirectory.dir('staging-repository').get().asFile)
             }
         }
+    }
+
+    def verifyReleaseMetadata = tasks.register('verifyDurexReleaseMetadata') {
+        group = 'publishing'
+        description = 'Rejects a non-SNAPSHOT Durex publication when mandatory release metadata is missing.'
+        doLast {
+            if (!version.toString().endsWith('-SNAPSHOT')) {
+                if (!licenseNameProvider.isPresent() || !licenseUrlProvider.isPresent()) {
+                    throw new GradleException(
+                        'Durex release publication requires durexLicenseName and durexLicenseUrl. ' +
+                        'Choose and commit the project distribution license before publishing a release.')
+                }
+            }
+        }
+    }
+
+    tasks.named('generatePomFileForMavenJavaPublication') {
+        dependsOn verifyReleaseMetadata
+    }
+
+    signing {
+        def signingKey = signingKeyProvider.orNull
+        def signingPassword = signingPasswordProvider.orNull
+        def signingKeyId = signingKeyIdProvider.orNull
+
+        if (signingKey) {
+            if (signingKeyId) {
+                useInMemoryPgpKeys(signingKeyId, signingKey, signingPassword)
+            } else {
+                useInMemoryPgpKeys(signingKey, signingPassword)
+            }
+        }
+
+        required { signingKeyProvider.isPresent() }
+        sign publishing.publications.mavenJava
     }
 }
