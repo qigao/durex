@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import com.github.durex.messaging.annotation.RedisStreamListener;
 import com.github.durex.messaging.annotation.RedisStreamOutgoing;
+import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
@@ -38,21 +39,35 @@ class RedisStreamIntegrationTest {
     assertEquals(expected, received);
   }
 
+  @Test
+  void genericStreamPayloadPreservesDeclaredElementType() throws Exception {
+    var expected = pipeline.normalizeBatch(new RawEvent("event-3", "  generic value  ")).getFirst();
+
+    var received = pipeline.awaitBatchReceived(5, TimeUnit.SECONDS);
+    assertNotNull(received);
+    assertEquals(expected, received);
+  }
+
   @SpringBootConfiguration
   @EnableAutoConfiguration
   @Import(StreamPipeline.class)
   static class TestApplication {
     @Bean
     SmartInitializingSingleton streamInfrastructure(StringRedisTemplate redisTemplate) {
-      return () ->
-          redisTemplate
-              .opsForStream()
-              .createGroup("events.stream", ReadOffset.from("0-0"), "workers");
+      return () -> {
+        redisTemplate
+            .opsForStream()
+            .createGroup("events.stream", ReadOffset.from("0-0"), "workers");
+        redisTemplate
+            .opsForStream()
+            .createGroup("events.batch", ReadOffset.from("0-0"), "batch-workers");
+      };
     }
   }
 
   public static class StreamPipeline {
     private final BlockingQueue<NormalizedEvent> received = new LinkedBlockingQueue<>();
+    private final BlockingQueue<NormalizedEvent> batchReceived = new LinkedBlockingQueue<>();
 
     @RedisStreamListener(
         stream = "events.stream",
@@ -63,13 +78,32 @@ class RedisStreamIntegrationTest {
       received.add(event);
     }
 
+    @RedisStreamListener(
+        stream = "events.batch",
+        group = "batch-workers",
+        consumer = "batch-worker-1",
+        autoAck = false)
+    public void receiveBatch(List<NormalizedEvent> events) {
+      batchReceived.add(events.getFirst());
+    }
+
     @RedisStreamOutgoing("events.stream")
     public NormalizedEvent normalize(RawEvent event) {
       return new NormalizedEvent(event.id(), event.value().trim());
     }
 
+    @RedisStreamOutgoing("events.batch")
+    public List<NormalizedEvent> normalizeBatch(RawEvent event) {
+      return List.of(new NormalizedEvent(event.id(), event.value().trim()));
+    }
+
     public NormalizedEvent awaitReceived(long timeout, TimeUnit unit) throws InterruptedException {
       return received.poll(timeout, unit);
+    }
+
+    public NormalizedEvent awaitBatchReceived(long timeout, TimeUnit unit)
+        throws InterruptedException {
+      return batchReceived.poll(timeout, unit);
     }
   }
 
