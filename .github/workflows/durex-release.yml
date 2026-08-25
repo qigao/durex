@@ -3,6 +3,7 @@ name: Durex Release
 on:
   pull_request:
     paths:
+      - 'LICENSE'
       - '.github/workflows/durex-release.yml'
       - 'scripts/central-release-bundle.sh'
       - 'scripts/public-api-signatures.sh'
@@ -87,13 +88,13 @@ jobs:
 
           [[ "$version" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]
           [[ "$version" != *SNAPSHOT* ]]
+          test -f LICENSE
 
           if [[ "$publish" == true ]]; then
             test "$GITHUB_REF_TYPE" = tag
             test "$GITHUB_REF_NAME" = "v$version"
             tag_sha=$(git rev-list -n 1 "$GITHUB_REF_NAME")
             test "$tag_sha" = "$GITHUB_SHA"
-            test -f LICENSE
             test -n "$RELEASE_SIGNING_KEY"
             test -n "$CENTRAL_TOKEN_USERNAME"
             test -n "$CENTRAL_TOKEN_PASSWORD"
@@ -114,13 +115,7 @@ jobs:
           staging="$RUNNER_TEMP/durex-release-staging"
           rm -rf "$staging"
 
-          license_args=()
-          if [[ "$PUBLISH" != true ]]; then
-            license_args+=(
-              "-PdurexLicenseName=Durex CI placeholder - not for release"
-              "-PdurexLicenseUrl=https://example.invalid/durex-license"
-            )
-          else
+          if [[ "$PUBLISH" == true ]]; then
             export DUREX_SIGNING_KEY="$RELEASE_SIGNING_KEY"
             export DUREX_SIGNING_PASSWORD="$RELEASE_SIGNING_PASSWORD"
             if [[ -n "$RELEASE_SIGNING_KEY_ID" ]]; then
@@ -135,7 +130,6 @@ jobs:
             :messaging-spring-redis:publishMavenJavaPublicationToStagingRepository \
             -PdurexStagingRepo="$staging" \
             -PdurexVersion="$VERSION" \
-            "${license_args[@]}" \
             --stacktrace
 
           echo "repository=$staging" >> "$GITHUB_OUTPUT"
@@ -144,7 +138,6 @@ jobs:
         env:
           VERSION: ${{ steps.release.outputs.version }}
           STAGING: ${{ steps.staging.outputs.repository }}
-          PUBLISH: ${{ steps.release.outputs.publish }}
         run: |
           set -euo pipefail
           root="$STAGING/io/github/qigao/durex"
@@ -166,10 +159,10 @@ jobs:
             grep -Fq '<id>qigao</id>' "$pom"
             grep -Fq '<connection>scm:git:https://github.com/qigao/durex.git</connection>' "$pom"
             grep -Fq '<licenses>' "$pom"
-            if [[ "$PUBLISH" == true ]]; then
-              ! grep -Fq 'Durex CI placeholder - not for release' "$pom"
-              ! grep -Fq 'example.invalid' "$pom"
-            fi
+            grep -Fq '<name>Apache License, Version 2.0</name>' "$pom"
+            grep -Fq '<url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>' "$pom"
+            ! grep -Fq 'Durex CI placeholder - not for release' "$pom"
+            ! grep -Fq 'example.invalid' "$pom"
           done
 
           gradle -p reference/publication-consumer clean classes \
@@ -269,6 +262,7 @@ jobs:
           - \`io.github.qigao.durex:messaging-api:$VERSION\`
           - \`io.github.qigao.durex:messaging-spring-redis:$VERSION\`
 
+          License: Apache-2.0
           Central publication: $PUBLISH
           Central deployment: ${DEPLOYMENT_ID:-not uploaded (dry-run)}
           EOF
