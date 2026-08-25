@@ -6,7 +6,7 @@ pluginManagement {
 }
 
 plugins {
-    id("io.github.qigao.simpledsl.settings") version "0.1.1"
+    id("io.github.qigao.simpledsl.settings") version "0.2.0"
 }
 
 simpledslSettings {
