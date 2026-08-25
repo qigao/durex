@@ -58,9 +58,13 @@ jobs:
         run: |
           set -euo pipefail
           ./gradlew projects simpledslProjects --stacktrace | tee /tmp/durex-root-projects.log
-          for module in music music-api music-client music-json music-entity music-repo shared-common shared-spring-http shared-utils json-schema-annotation messaging-api messaging-spring-redis; do
+          for module in music music-api music-client music-json music-entity music-repo shared-common shared-spring-http shared-utils messaging-api messaging-spring-redis; do
             grep -Fq ":${module} |" /tmp/durex-root-projects.log
           done
+          if grep -Fq ':json-schema-annotation |' /tmp/durex-root-projects.log; then
+            echo 'removed json-schema-annotation module leaked back into the active project graph'
+            exit 1
+          fi
           if grep -Fq ':core:' /tmp/durex-root-projects.log; then
             echo 'legacy hierarchical Gradle project path leaked into root SimpleDSL graph'
             exit 1

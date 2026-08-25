@@ -8,14 +8,6 @@ simpledsl {
     jooqSchema()
 }
 
-sourceSets {
-    main {
-        java {
-            exclude 'com/github/durex/music/support/DemoMusicData.java'
-        }
-    }
-}
-
 dependencies {
     api project(':music-json')
 }
