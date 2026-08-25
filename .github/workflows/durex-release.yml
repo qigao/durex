@@ -1,0 +1,292 @@
+name: Durex Release
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/durex-release.yml'
+      - 'scripts/central-release-bundle.sh'
+      - 'scripts/public-api-signatures.sh'
+      - 'gradle/durex-publication.gradle'
+      - 'gradle/public-api/**'
+      - 'reference/publication-consumer/**'
+      - 'docs/releasing.md'
+      - 'README.adoc'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Release version (X.Y.Z)'
+        required: true
+        default: '0.1.0'
+        type: string
+      publish_to_central:
+        description: 'Upload and publish this exact tagged SHA to Maven Central'
+        required: true
+        default: false
+        type: boolean
+  push:
+    tags:
+      - 'v*.*.*'
+
+concurrency:
+  group: durex-release-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    env:
+      RELEASE_SIGNING_KEY: ${{ secrets.DUREX_SIGNING_KEY }}
+      RELEASE_SIGNING_PASSWORD: ${{ secrets.DUREX_SIGNING_PASSWORD }}
+      RELEASE_SIGNING_KEY_ID: ${{ secrets.DUREX_SIGNING_KEY_ID }}
+      CENTRAL_TOKEN_USERNAME: ${{ secrets.CENTRAL_TOKEN_USERNAME }}
+      CENTRAL_TOKEN_PASSWORD: ${{ secrets.CENTRAL_TOKEN_PASSWORD }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '25'
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '9.1.0'
+      - name: Resolve exact release identity
+        id: release
+        shell: bash
+        env:
+          DISPATCH_VERSION: ${{ inputs.version }}
+          DISPATCH_PUBLISH: ${{ inputs.publish_to_central }}
+        run: |
+          set -euo pipefail
+
+          case "$GITHUB_EVENT_NAME" in
+            pull_request)
+              version=0.1.0
+              publish=false
+              ;;
+            workflow_dispatch)
+              version="$DISPATCH_VERSION"
+              publish="${DISPATCH_PUBLISH:-false}"
+              ;;
+            push)
+              test "$GITHUB_REF_TYPE" = tag
+              tag="$GITHUB_REF_NAME"
+              [[ "$tag" =~ ^v([0-9]+\.[0-9]+\.[0-9]+)$ ]]
+              version="${BASH_REMATCH[1]}"
+              publish=true
+              ;;
+            *)
+              echo "::error::Unsupported release event: $GITHUB_EVENT_NAME"
+              exit 1
+              ;;
+          esac
+
+          [[ "$version" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]
+          [[ "$version" != *SNAPSHOT* ]]
+
+          if [[ "$publish" == true ]]; then
+            test "$GITHUB_REF_TYPE" = tag
+            test "$GITHUB_REF_NAME" = "v$version"
+            tag_sha=$(git rev-list -n 1 "$GITHUB_REF_NAME")
+            test "$tag_sha" = "$GITHUB_SHA"
+            test -f LICENSE
+            test -n "$RELEASE_SIGNING_KEY"
+            test -n "$CENTRAL_TOKEN_USERNAME"
+            test -n "$CENTRAL_TOKEN_PASSWORD"
+          fi
+
+          test -z "$(git status --porcelain)"
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          echo "publish=$publish" >> "$GITHUB_OUTPUT"
+          echo "sha=$GITHUB_SHA" >> "$GITHUB_OUTPUT"
+      - name: Publish exact release artifacts to an isolated Maven repository
+        id: staging
+        shell: bash
+        env:
+          VERSION: ${{ steps.release.outputs.version }}
+          PUBLISH: ${{ steps.release.outputs.publish }}
+        run: |
+          set -euo pipefail
+          staging="$RUNNER_TEMP/durex-release-staging"
+          rm -rf "$staging"
+
+          license_args=()
+          if [[ "$PUBLISH" != true ]]; then
+            license_args+=(
+              "-PdurexLicenseName=Durex CI placeholder - not for release"
+              "-PdurexLicenseUrl=https://example.invalid/durex-license"
+            )
+          else
+            export DUREX_SIGNING_KEY="$RELEASE_SIGNING_KEY"
+            export DUREX_SIGNING_PASSWORD="$RELEASE_SIGNING_PASSWORD"
+            if [[ -n "$RELEASE_SIGNING_KEY_ID" ]]; then
+              export DUREX_SIGNING_KEY_ID="$RELEASE_SIGNING_KEY_ID"
+            fi
+          fi
+
+          ./gradlew \
+            :shared-common:publishMavenJavaPublicationToStagingRepository \
+            :shared-spring-http:publishMavenJavaPublicationToStagingRepository \
+            :messaging-api:publishMavenJavaPublicationToStagingRepository \
+            :messaging-spring-redis:publishMavenJavaPublicationToStagingRepository \
+            -PdurexStagingRepo="$staging" \
+            -PdurexVersion="$VERSION" \
+            "${license_args[@]}" \
+            --stacktrace
+
+          echo "repository=$staging" >> "$GITHUB_OUTPUT"
+      - name: Verify exact release API and Maven consumer
+        shell: bash
+        env:
+          VERSION: ${{ steps.release.outputs.version }}
+          STAGING: ${{ steps.staging.outputs.repository }}
+          PUBLISH: ${{ steps.release.outputs.publish }}
+        run: |
+          set -euo pipefail
+          root="$STAGING/io/github/qigao/durex"
+          manifest="$GITHUB_WORKSPACE/gradle/public-api/0.1-surface.txt"
+          baseline="$GITHUB_WORKSPACE/gradle/public-api/0.1-signatures.txt"
+          current="$RUNNER_TEMP/durex-release-signatures.txt"
+
+          printf '%s\n' messaging-api messaging-spring-redis shared-common shared-spring-http | sort > "$RUNNER_TEMP/expected-artifacts.txt"
+          find "$root" -mindepth 1 -maxdepth 1 -type d -printf '%f\n' | sort > "$RUNNER_TEMP/actual-artifacts.txt"
+          diff -u "$RUNNER_TEMP/expected-artifacts.txt" "$RUNNER_TEMP/actual-artifacts.txt"
+
+          scripts/public-api-signatures.sh generate "$root" "$manifest" "$current" "$VERSION"
+          diff -u <(LC_ALL=C sort -u "$baseline") "$current"
+          scripts/public-api-signatures.sh check "$root" "$manifest" "$baseline" "$VERSION"
+
+          for artifact in shared-common shared-spring-http messaging-api messaging-spring-redis; do
+            pom="$root/$artifact/$VERSION/$artifact-$VERSION.pom"
+            test -f "$pom"
+            grep -Fq '<id>qigao</id>' "$pom"
+            grep -Fq '<connection>scm:git:https://github.com/qigao/durex.git</connection>' "$pom"
+            grep -Fq '<licenses>' "$pom"
+            if [[ "$PUBLISH" == true ]]; then
+              ! grep -Fq 'Durex CI placeholder - not for release' "$pom"
+              ! grep -Fq 'example.invalid' "$pom"
+            fi
+          done
+
+          gradle -p reference/publication-consumer clean classes \
+            -PdurexRepository="$STAGING" \
+            -PdurexVersion="$VERSION" \
+            --refresh-dependencies \
+            --stacktrace
+      - name: Assemble Central Publisher Portal bundle
+        id: bundle
+        shell: bash
+        env:
+          VERSION: ${{ steps.release.outputs.version }}
+          STAGING: ${{ steps.staging.outputs.repository }}
+          PUBLISH: ${{ steps.release.outputs.publish }}
+        run: |
+          set -euo pipefail
+          mode=unsigned
+          if [[ "$PUBLISH" == true ]]; then
+            mode=signed
+          fi
+          bundle="$GITHUB_WORKSPACE/build/durex-$VERSION-central-bundle.zip"
+          scripts/central-release-bundle.sh "$STAGING" "$VERSION" "$mode" "$bundle"
+          echo "path=$bundle" >> "$GITHUB_OUTPUT"
+          unzip -l "$bundle"
+      - name: Upload, validate, and publish exact bundle to Maven Central
+        id: central
+        if: steps.release.outputs.publish == 'true'
+        shell: bash
+        env:
+          VERSION: ${{ steps.release.outputs.version }}
+          BUNDLE: ${{ steps.bundle.outputs.path }}
+        run: |
+          set -euo pipefail
+          token=$(printf '%s:%s' "$CENTRAL_TOKEN_USERNAME" "$CENTRAL_TOKEN_PASSWORD" | base64 -w0)
+          short_sha=${GITHUB_SHA:0:12}
+          upload_url="https://central.sonatype.com/api/v1/publisher/upload?name=durex-$VERSION-$short_sha&publishingType=USER_MANAGED"
+          deployment_id=$(curl --fail-with-body --silent --show-error \
+            --request POST \
+            --header "Authorization: Bearer $token" \
+            --form "bundle=@$BUNDLE;type=application/octet-stream" \
+            "$upload_url")
+          [[ "$deployment_id" =~ ^[0-9a-fA-F-]{36}$ ]]
+          echo "deployment_id=$deployment_id" >> "$GITHUB_OUTPUT"
+
+          status_url="https://central.sonatype.com/api/v1/publisher/status?id=$deployment_id"
+          for _ in {1..60}; do
+            status=$(curl --fail-with-body --silent --show-error \
+              --request POST \
+              --header "Authorization: Bearer $token" \
+              "$status_url")
+            state=$(jq -r '.deploymentState' <<<"$status")
+            case "$state" in
+              VALIDATED) break ;;
+              FAILED) echo "$status" | jq .; exit 1 ;;
+              *) sleep 10 ;;
+            esac
+          done
+          test "$state" = VALIDATED
+
+          curl --fail-with-body --silent --show-error \
+            --request POST \
+            --header "Authorization: Bearer $token" \
+            "https://central.sonatype.com/api/v1/publisher/deployment/$deployment_id"
+
+          for _ in {1..60}; do
+            status=$(curl --fail-with-body --silent --show-error \
+              --request POST \
+              --header "Authorization: Bearer $token" \
+              "$status_url")
+            state=$(jq -r '.deploymentState' <<<"$status")
+            case "$state" in
+              PUBLISHED) break ;;
+              FAILED) echo "$status" | jq .; exit 1 ;;
+              *) sleep 10 ;;
+            esac
+          done
+          test "$state" = PUBLISHED
+      - name: Record tested release identity
+        id: notes
+        shell: bash
+        env:
+          VERSION: ${{ steps.release.outputs.version }}
+          PUBLISH: ${{ steps.release.outputs.publish }}
+          DEPLOYMENT_ID: ${{ steps.central.outputs.deployment_id }}
+        run: |
+          set -euo pipefail
+          notes="$GITHUB_WORKSPACE/build/release-notes.md"
+          mkdir -p "$(dirname "$notes")"
+          cat > "$notes" <<EOF
+          # Durex $VERSION
+
+          Tested SHA: \`$GITHUB_SHA\`
+
+          Maven artifacts:
+          - \`io.github.qigao.durex:shared-common:$VERSION\`
+          - \`io.github.qigao.durex:shared-spring-http:$VERSION\`
+          - \`io.github.qigao.durex:messaging-api:$VERSION\`
+          - \`io.github.qigao.durex:messaging-spring-redis:$VERSION\`
+
+          Central publication: $PUBLISH
+          Central deployment: ${DEPLOYMENT_ID:-not uploaded (dry-run)}
+          EOF
+          cat "$notes" >> "$GITHUB_STEP_SUMMARY"
+          echo "path=$notes" >> "$GITHUB_OUTPUT"
+      - name: Create immutable GitHub release for published tag
+        if: steps.release.outputs.publish == 'true'
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ steps.release.outputs.version }}
+          NOTES: ${{ steps.notes.outputs.path }}
+        run: |
+          set -euo pipefail
+          tag="v$VERSION"
+          test "$GITHUB_REF_NAME" = "$tag"
+          if gh release view "$tag" >/dev/null 2>&1; then
+            gh release edit "$tag" --title "Durex $VERSION" --notes-file "$NOTES"
+          else
+            gh release create "$tag" --verify-tag --title "Durex $VERSION" --notes-file "$NOTES"
+          fi
