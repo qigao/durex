@@ -38,9 +38,9 @@ jobs:
   release:
     runs-on: ubuntu-latest
     env:
-      DUREX_SIGNING_KEY: ${{ secrets.DUREX_SIGNING_KEY }}
-      DUREX_SIGNING_PASSWORD: ${{ secrets.DUREX_SIGNING_PASSWORD }}
-      DUREX_SIGNING_KEY_ID: ${{ secrets.DUREX_SIGNING_KEY_ID }}
+      RELEASE_SIGNING_KEY: ${{ secrets.DUREX_SIGNING_KEY }}
+      RELEASE_SIGNING_PASSWORD: ${{ secrets.DUREX_SIGNING_PASSWORD }}
+      RELEASE_SIGNING_KEY_ID: ${{ secrets.DUREX_SIGNING_KEY_ID }}
       CENTRAL_TOKEN_USERNAME: ${{ secrets.CENTRAL_TOKEN_USERNAME }}
       CENTRAL_TOKEN_PASSWORD: ${{ secrets.CENTRAL_TOKEN_PASSWORD }}
     steps:
@@ -94,7 +94,7 @@ jobs:
             tag_sha=$(git rev-list -n 1 "$GITHUB_REF_NAME")
             test "$tag_sha" = "$GITHUB_SHA"
             test -f LICENSE
-            test -n "$DUREX_SIGNING_KEY"
+            test -n "$RELEASE_SIGNING_KEY"
             test -n "$CENTRAL_TOKEN_USERNAME"
             test -n "$CENTRAL_TOKEN_PASSWORD"
           fi
@@ -120,6 +120,12 @@ jobs:
               "-PdurexLicenseName=Durex CI placeholder - not for release"
               "-PdurexLicenseUrl=https://example.invalid/durex-license"
             )
+          else
+            export DUREX_SIGNING_KEY="$RELEASE_SIGNING_KEY"
+            export DUREX_SIGNING_PASSWORD="$RELEASE_SIGNING_PASSWORD"
+            if [[ -n "$RELEASE_SIGNING_KEY_ID" ]]; then
+              export DUREX_SIGNING_KEY_ID="$RELEASE_SIGNING_KEY_ID"
+            fi
           fi
 
           ./gradlew \
