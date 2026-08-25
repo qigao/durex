@@ -5,7 +5,6 @@ import com.github.durex.music.repository.MusicRepository;
 import com.github.durex.music.repository.PlayListMusicRepository;
 import com.github.durex.music.repository.PlayListRepository;
 import com.github.durex.music.service.MusicService;
-import com.github.durex.music.service.PlaylistService;
 import org.jooq.DSLContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -41,7 +40,7 @@ class MusicSpringConfiguration {
   }
 
   @Bean
-  PlaylistService playlistService(
+  SpringPlaylistService playlistService(
       PlayListRepository repository, PlayListMusicRepository playListMusicRepository) {
     return new SpringPlaylistService(repository, playListMusicRepository);
   }
