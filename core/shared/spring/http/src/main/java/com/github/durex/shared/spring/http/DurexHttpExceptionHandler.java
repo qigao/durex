@@ -19,12 +19,8 @@ public final class DurexHttpExceptionHandler {
   }
 
   private static HttpStatus statusFor(ErrorCode errorCode) {
-    if (errorCode == ErrorCode.ENTITY_NOT_FOUND) {
-      return HttpStatus.NOT_FOUND;
-    }
-    if (errorCode == ErrorCode.EMPTY_PARAM || errorCode == ErrorCode.VALUE_ERROR) {
-      return HttpStatus.BAD_REQUEST;
-    }
-    return HttpStatus.INTERNAL_SERVER_ERROR;
+    return errorCode == ErrorCode.ENTITY_NOT_FOUND
+        ? HttpStatus.NOT_FOUND
+        : HttpStatus.INTERNAL_SERVER_ERROR;
   }
 }
