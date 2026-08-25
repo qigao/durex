@@ -147,6 +147,22 @@ jobs:
             grep -Fq '<url>https://github.com/qigao</url>' "$pom"
             grep -Fq '<connection>scm:git:https://github.com/qigao/durex.git</connection>' "$pom"
           done
+      - name: Verify release metadata and signing gates
+        shell: bash
+        run: |
+          set -euo pipefail
+          if ./gradlew :shared-common:generatePomFileForMavenJavaPublication -PdurexVersion=0.1.0 --stacktrace; then
+            echo '::error::Non-SNAPSHOT POM generation succeeded without a configured distribution license'
+            exit 1
+          fi
+
+          ./gradlew :shared-common:generatePomFileForMavenJavaPublication \
+            -PdurexVersion=0.1.0 \
+            -PdurexLicenseName='Durex CI placeholder - not for release' \
+            -PdurexLicenseUrl='https://example.invalid/durex-license' \
+            --stacktrace
+
+          ./gradlew :shared-common:tasks --all | grep -Fq 'signMavenJavaPublication'
       - name: Verify public API signature compatibility
         shell: bash
         run: |

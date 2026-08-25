@@ -113,6 +113,16 @@ The check is directional: every baseline line must still exist in the current st
 
 An intentional incompatible baseline edit must be reviewed as an explicit public contract change; updating the baseline is not a generic way to make CI green. The release/deprecation process is defined in [Public API lifecycle](public-api-lifecycle.md).
 
+## Central Publisher Portal readiness
+
+The four public modules are built as Maven Central bundle inputs: each publication contains the main jar, sources jar, javadoc jar, Maven POM, and Gradle module metadata. Gradle's Signing Plugin is wired to the `mavenJava` publication and accepts an ASCII-armored OpenPGP key through `signingKey` / `signingPassword` Gradle properties or `DUREX_SIGNING_KEY` / `DUREX_SIGNING_PASSWORD` environment variables. An optional `signingKeyId` / `DUREX_SIGNING_KEY_ID` supports OpenPGP subkeys.
+
+PR CI does not need a signing secret. When a signing key is present, publishing the Maven publication creates and publishes the `.asc` signatures for the publication artifacts/metadata.
+
+License selection is deliberately separate from build mechanics. The repository currently has no canonical distribution license, so issue #177 blocks an actual Central release. Snapshot staging may inject a clearly marked CI-only license value to verify POM serialization; a non-SNAPSHOT publication cannot generate its POM unless `durexLicenseName` and `durexLicenseUrl` (or `DUREX_LICENSE_NAME` / `DUREX_LICENSE_URL`) are present.
+
+Durex does not configure the retired OSSRH service. The release workflow will target the Central Publisher Portal bundle/API path after the exact release SHA has passed staging and compatibility checks.
+
 ## Publication verification
 
 PR CI publishes the four artifacts into a clean temporary Maven repository. `reference/publication-consumer` is then built as an ordinary external Gradle project that knows only Maven coordinates; it does not load SimpleDSL, Durex project dependencies, composite builds, or source injection.
