@@ -8,6 +8,7 @@ simpledsl {
         jooq()
     }
     web()
+    aop()
     transaction()
     lombok()
     dependency('testRuntimeOnly', 'h2')
