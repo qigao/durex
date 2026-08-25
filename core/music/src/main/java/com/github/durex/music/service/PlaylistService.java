@@ -12,7 +12,6 @@ import com.github.durex.music.repository.PlayListMusicRepository;
 import com.github.durex.music.repository.PlayListRepository;
 import com.github.durex.shared.exceptions.ApiException;
 import com.github.durex.shared.exceptions.model.ErrorCode;
-import com.github.durex.sqlbuilder.SqlHelper;
 import com.github.durex.sqlbuilder.enums.WildCardType;
 import java.util.Arrays;
 import java.util.List;
@@ -39,8 +38,7 @@ public class PlaylistService {
   }
 
   public List<PlayList> findPlayListByTitle(String title, WildCardType wildcard) {
-    var realTitle = SqlHelper.likeClauseBuilder(wildcard, title);
-    return repository.findByTitle(realTitle, wildcard);
+    return repository.findByTitle(title, wildcard);
   }
 
   public PlayList findPlayListById(String id) {
@@ -88,9 +86,8 @@ public class PlaylistService {
   }
 
   public Integer deletePlayListByTitle(String title, WildCardType wildcard) {
-    var realTitle = SqlHelper.likeClauseBuilder(wildcard, title);
     return requireAffected(
-        repository.deleteByTitle(realTitle, wildcard), PLAYLIST_NOT_DELETED, DELETE_ERROR);
+        repository.deleteByTitle(title, wildcard), PLAYLIST_NOT_DELETED, DELETE_ERROR);
   }
 
   public Integer deleteMusicFromPlayList(String id, List<String> musicIds) {
