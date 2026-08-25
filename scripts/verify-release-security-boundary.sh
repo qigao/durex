@@ -16,7 +16,7 @@ if grep -Eq '^[[:space:]]{2}(pull_request|workflow_dispatch):' "$publish_workflo
   fail "privileged Durex Release workflow must be tag-only"
 fi
 grep -Eq '^[[:space:]]{2}push:' "$publish_workflow" || fail "privileged release workflow must have a push trigger"
-grep -Fq "- 'v*.*.*'" "$publish_workflow" || fail "privileged release workflow must be restricted to vX.Y.Z tags"
+grep -Fq -- "- 'v*.*.*'" "$publish_workflow" || fail "privileged release workflow must be restricted to vX.Y.Z tags"
 
 if grep -Fq 'contents: write' "$verify_workflow"; then
   fail "release verification workflow must not request contents: write"
@@ -35,7 +35,6 @@ for workflow in "$publish_workflow" "$verify_workflow"; do
     echo "$mutable_refs" >&2
     fail "release workflows must pin third-party actions to immutable commit SHAs"
   fi
-
 done
 
 echo "Durex release security boundary is explicit: PR verification is read-only/secret-free and publication is tag-only."
