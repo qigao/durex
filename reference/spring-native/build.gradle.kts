@@ -15,5 +15,5 @@ simpledsl {
 }
 
 dependencies {
-    implementation(project(":messaging-spring-redis"))
+    add("implementation", project(":messaging-spring-redis"))
 }
