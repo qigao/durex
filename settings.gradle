@@ -13,7 +13,6 @@ rootProject.name = 'durex'
 
 simpledslSettings {
     repositoryRoot.set(layout.settingsDirectory)
-    dependencyManifest.set(layout.settingsDirectory.file('gradle/dependencies/durex.toml'))
     modulesManifest.set(layout.settingsDirectory.file('gradle/modules.toml'))
 }
 

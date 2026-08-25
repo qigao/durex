@@ -11,7 +11,6 @@ plugins {
 
 simpledslSettings {
     repositoryRoot.set(layout.settingsDirectory.dir("../.."))
-    dependencyManifest.set(layout.settingsDirectory.file("../../gradle/dependencies/durex.toml"))
     modulesManifest.set(layout.settingsDirectory.file("modules.toml"))
 }
 

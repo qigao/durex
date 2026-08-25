@@ -1,4 +1,0 @@
-include = ["spring.toml", "database.toml", "test.toml", "utils.toml"]
-
-[simpledsl]
-java = 25

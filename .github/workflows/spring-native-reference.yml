@@ -6,14 +6,16 @@ on:
       - 'reference/spring-native/**'
       - 'reference/spring-capabilities/**'
       - 'core/shared/messaging/**'
-      - 'gradle/dependencies/**'
+      - 'dependencies.toml'
+      - 'dependencies/**'
       - '.github/workflows/spring-native-reference.yml'
   pull_request:
     paths:
       - 'reference/spring-native/**'
       - 'reference/spring-capabilities/**'
       - 'core/shared/messaging/**'
-      - 'gradle/dependencies/**'
+      - 'dependencies.toml'
+      - 'dependencies/**'
       - '.github/workflows/spring-native-reference.yml'
 
 concurrency:
