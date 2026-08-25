@@ -125,6 +125,14 @@ jobs:
           cat "$current"
           echo '--- compatibility check ---'
           scripts/public-api-signatures.sh check "$root" "$manifest" "$baseline"
+
+          cp "$baseline" /tmp/durex-broken-baseline.txt
+          echo 'com.github.durex.shared.model.RespData|  public void __compatibility_self_test__();' >> /tmp/durex-broken-baseline.txt
+          if scripts/public-api-signatures.sh check "$root" "$manifest" /tmp/durex-broken-baseline.txt; then
+            echo '::error::Compatibility checker accepted an intentionally missing signature'
+            exit 1
+          fi
+          echo 'Compatibility checker self-test rejected the injected missing signature as expected.'
       - name: Compile external Maven-only consumer baseline
         shell: bash
         run: |

@@ -1,1 +1,144 @@
-com.github.durex.shared.model.RespData|  public void __compatibility_red_probe__();
+com.github.durex.messaging.annotation.Outgoing|    descriptor: ()Ljava/lang/String;
+com.github.durex.messaging.annotation.Outgoing|  public abstract java.lang.String value();
+com.github.durex.messaging.annotation.Outgoing|public interface com.github.durex.messaging.annotation.Outgoing extends java.lang.annotation.Annotation {
+com.github.durex.messaging.annotation.Outgoing|}
+com.github.durex.messaging.annotation.RedisStreamListener|    descriptor: ()Ljava/lang/String;
+com.github.durex.messaging.annotation.RedisStreamListener|    descriptor: ()Z
+com.github.durex.messaging.annotation.RedisStreamListener|  public abstract boolean autoAck();
+com.github.durex.messaging.annotation.RedisStreamListener|  public abstract java.lang.String consumer();
+com.github.durex.messaging.annotation.RedisStreamListener|  public abstract java.lang.String group();
+com.github.durex.messaging.annotation.RedisStreamListener|  public abstract java.lang.String stream();
+com.github.durex.messaging.annotation.RedisStreamListener|public interface com.github.durex.messaging.annotation.RedisStreamListener extends java.lang.annotation.Annotation {
+com.github.durex.messaging.annotation.RedisStreamListener|}
+com.github.durex.messaging.annotation.RedisStreamOutgoing|    descriptor: ()Ljava/lang/String;
+com.github.durex.messaging.annotation.RedisStreamOutgoing|  public abstract java.lang.String value();
+com.github.durex.messaging.annotation.RedisStreamOutgoing|public interface com.github.durex.messaging.annotation.RedisStreamOutgoing extends java.lang.annotation.Annotation {
+com.github.durex.messaging.annotation.RedisStreamOutgoing|}
+com.github.durex.messaging.spring.redis.RedisMessageCodec|    descriptor: (Ljava/lang/Object;)Ljava/lang/String;
+com.github.durex.messaging.spring.redis.RedisMessageCodec|    descriptor: (Ljava/lang/String;Ljava/lang/reflect/Type;)Ljava/lang/Object;
+com.github.durex.messaging.spring.redis.RedisMessageCodec|  public abstract java.lang.Object decode(java.lang.String, java.lang.reflect.Type) throws java.lang.Exception;
+com.github.durex.messaging.spring.redis.RedisMessageCodec|  public abstract java.lang.String encode(java.lang.Object) throws java.lang.Exception;
+com.github.durex.messaging.spring.redis.RedisMessageCodec|public interface com.github.durex.messaging.spring.redis.RedisMessageCodec {
+com.github.durex.messaging.spring.redis.RedisMessageCodec|}
+com.github.durex.messaging.spring.redis.RedisStreamFailureDisposition|    descriptor: ()[Lcom/github/durex/messaging/spring/redis/RedisStreamFailureDisposition;
+com.github.durex.messaging.spring.redis.RedisStreamFailureDisposition|    descriptor: (Ljava/lang/String;)Lcom/github/durex/messaging/spring/redis/RedisStreamFailureDisposition;
+com.github.durex.messaging.spring.redis.RedisStreamFailureDisposition|    descriptor: Lcom/github/durex/messaging/spring/redis/RedisStreamFailureDisposition;
+com.github.durex.messaging.spring.redis.RedisStreamFailureDisposition|  public static com.github.durex.messaging.spring.redis.RedisStreamFailureDisposition valueOf(java.lang.String);
+com.github.durex.messaging.spring.redis.RedisStreamFailureDisposition|  public static com.github.durex.messaging.spring.redis.RedisStreamFailureDisposition[] values();
+com.github.durex.messaging.spring.redis.RedisStreamFailureDisposition|  public static final com.github.durex.messaging.spring.redis.RedisStreamFailureDisposition ACKNOWLEDGE;
+com.github.durex.messaging.spring.redis.RedisStreamFailureDisposition|  public static final com.github.durex.messaging.spring.redis.RedisStreamFailureDisposition KEEP_PENDING;
+com.github.durex.messaging.spring.redis.RedisStreamFailureDisposition|public final class com.github.durex.messaging.spring.redis.RedisStreamFailureDisposition extends java.lang.Enum<com.github.durex.messaging.spring.redis.RedisStreamFailureDisposition> {
+com.github.durex.messaging.spring.redis.RedisStreamFailureDisposition|}
+com.github.durex.messaging.spring.redis.RedisStreamListenerFailureHandler|    descriptor: ()Lcom/github/durex/messaging/spring/redis/RedisStreamListenerFailureHandler;
+com.github.durex.messaging.spring.redis.RedisStreamListenerFailureHandler|    descriptor: (Lcom/github/durex/messaging/spring/redis/RedisStreamListenerFailure;)Lcom/github/durex/messaging/spring/redis/RedisStreamFailureDisposition;
+com.github.durex.messaging.spring.redis.RedisStreamListenerFailureHandler|  public abstract com.github.durex.messaging.spring.redis.RedisStreamFailureDisposition onFailure(com.github.durex.messaging.spring.redis.RedisStreamListenerFailure);
+com.github.durex.messaging.spring.redis.RedisStreamListenerFailureHandler|  public static com.github.durex.messaging.spring.redis.RedisStreamListenerFailureHandler keepPending();
+com.github.durex.messaging.spring.redis.RedisStreamListenerFailureHandler|public interface com.github.durex.messaging.spring.redis.RedisStreamListenerFailureHandler {
+com.github.durex.messaging.spring.redis.RedisStreamListenerFailureHandler|}
+com.github.durex.messaging.spring.redis.RedisStreamListenerFailure|    descriptor: ()I
+com.github.durex.messaging.spring.redis.RedisStreamListenerFailure|    descriptor: ()Ljava/lang/String;
+com.github.durex.messaging.spring.redis.RedisStreamListenerFailure|    descriptor: ()Ljava/lang/Throwable;
+com.github.durex.messaging.spring.redis.RedisStreamListenerFailure|    descriptor: ()Ljava/lang/reflect/Method;
+com.github.durex.messaging.spring.redis.RedisStreamListenerFailure|    descriptor: ()Lorg/springframework/data/redis/connection/stream/MapRecord;
+com.github.durex.messaging.spring.redis.RedisStreamListenerFailure|    descriptor: (Ljava/lang/Object;)Z
+com.github.durex.messaging.spring.redis.RedisStreamListenerFailure|    descriptor: (Ljava/lang/String;Ljava/lang/String;Lorg/springframework/data/redis/connection/stream/MapRecord;Ljava/lang/reflect/Method;Ljava/lang/Throwable;)V
+com.github.durex.messaging.spring.redis.RedisStreamListenerFailure|  public com.github.durex.messaging.spring.redis.RedisStreamListenerFailure(java.lang.String, java.lang.String, org.springframework.data.redis.connection.stream.MapRecord<java.lang.String, java.lang.String, java.lang.String>, java.lang.reflect.Method, java.lang.Throwable);
+com.github.durex.messaging.spring.redis.RedisStreamListenerFailure|  public final boolean equals(java.lang.Object);
+com.github.durex.messaging.spring.redis.RedisStreamListenerFailure|  public final int hashCode();
+com.github.durex.messaging.spring.redis.RedisStreamListenerFailure|  public final java.lang.String toString();
+com.github.durex.messaging.spring.redis.RedisStreamListenerFailure|  public java.lang.String group();
+com.github.durex.messaging.spring.redis.RedisStreamListenerFailure|  public java.lang.String stream();
+com.github.durex.messaging.spring.redis.RedisStreamListenerFailure|  public java.lang.Throwable cause();
+com.github.durex.messaging.spring.redis.RedisStreamListenerFailure|  public java.lang.reflect.Method method();
+com.github.durex.messaging.spring.redis.RedisStreamListenerFailure|  public org.springframework.data.redis.connection.stream.MapRecord<java.lang.String, java.lang.String, java.lang.String> record();
+com.github.durex.messaging.spring.redis.RedisStreamListenerFailure|public final class com.github.durex.messaging.spring.redis.RedisStreamListenerFailure extends java.lang.Record {
+com.github.durex.messaging.spring.redis.RedisStreamListenerFailure|}
+com.github.durex.shared.exceptions.ApiException|    descriptor: ()Lcom/github/durex/shared/exceptions/model/ErrorResponse;
+com.github.durex.shared.exceptions.ApiException|    descriptor: (Ljava/lang/String;)V
+com.github.durex.shared.exceptions.ApiException|    descriptor: (Ljava/lang/String;Lcom/github/durex/shared/exceptions/model/ErrorCode;)V
+com.github.durex.shared.exceptions.ApiException|  public com.github.durex.shared.exceptions.ApiException(java.lang.String);
+com.github.durex.shared.exceptions.ApiException|  public com.github.durex.shared.exceptions.ApiException(java.lang.String, com.github.durex.shared.exceptions.model.ErrorCode);
+com.github.durex.shared.exceptions.ApiException|  public com.github.durex.shared.exceptions.model.ErrorResponse getErrorResponse();
+com.github.durex.shared.exceptions.ApiException|public class com.github.durex.shared.exceptions.ApiException extends java.lang.RuntimeException implements java.io.Serializable {
+com.github.durex.shared.exceptions.ApiException|}
+com.github.durex.shared.exceptions.model.ErrorCode|    descriptor: ()Ljava/lang/String;
+com.github.durex.shared.exceptions.model.ErrorCode|    descriptor: ()[Lcom/github/durex/shared/exceptions/model/ErrorCode;
+com.github.durex.shared.exceptions.model.ErrorCode|    descriptor: (Ljava/lang/String;)Lcom/github/durex/shared/exceptions/model/ErrorCode;
+com.github.durex.shared.exceptions.model.ErrorCode|    descriptor: Lcom/github/durex/shared/exceptions/model/ErrorCode;
+com.github.durex.shared.exceptions.model.ErrorCode|  public java.lang.String getCode();
+com.github.durex.shared.exceptions.model.ErrorCode|  public static com.github.durex.shared.exceptions.model.ErrorCode valueOf(java.lang.String);
+com.github.durex.shared.exceptions.model.ErrorCode|  public static com.github.durex.shared.exceptions.model.ErrorCode[] values();
+com.github.durex.shared.exceptions.model.ErrorCode|  public static final com.github.durex.shared.exceptions.model.ErrorCode DELETE_ERROR;
+com.github.durex.shared.exceptions.model.ErrorCode|  public static final com.github.durex.shared.exceptions.model.ErrorCode EMPTY_PARAM;
+com.github.durex.shared.exceptions.model.ErrorCode|  public static final com.github.durex.shared.exceptions.model.ErrorCode ENTITY_NOT_FOUND;
+com.github.durex.shared.exceptions.model.ErrorCode|  public static final com.github.durex.shared.exceptions.model.ErrorCode NOTHING_FAILED;
+com.github.durex.shared.exceptions.model.ErrorCode|  public static final com.github.durex.shared.exceptions.model.ErrorCode OPERATION_FAILED;
+com.github.durex.shared.exceptions.model.ErrorCode|  public static final com.github.durex.shared.exceptions.model.ErrorCode SAVE_ERROR;
+com.github.durex.shared.exceptions.model.ErrorCode|  public static final com.github.durex.shared.exceptions.model.ErrorCode UNKNOWN_ERROR;
+com.github.durex.shared.exceptions.model.ErrorCode|  public static final com.github.durex.shared.exceptions.model.ErrorCode UPDATE_ERROR;
+com.github.durex.shared.exceptions.model.ErrorCode|  public static final com.github.durex.shared.exceptions.model.ErrorCode VALUE_ERROR;
+com.github.durex.shared.exceptions.model.ErrorCode|public final class com.github.durex.shared.exceptions.model.ErrorCode extends java.lang.Enum<com.github.durex.shared.exceptions.model.ErrorCode> {
+com.github.durex.shared.exceptions.model.ErrorCode|}
+com.github.durex.shared.exceptions.model.ErrorResponse|    descriptor: ()I
+com.github.durex.shared.exceptions.model.ErrorResponse|    descriptor: ()Lcom/github/durex/shared/exceptions/model/ErrorCode;
+com.github.durex.shared.exceptions.model.ErrorResponse|    descriptor: ()Ljava/lang/String;
+com.github.durex.shared.exceptions.model.ErrorResponse|    descriptor: ()Ljava/time/LocalDateTime;
+com.github.durex.shared.exceptions.model.ErrorResponse|    descriptor: ()Ljava/util/UUID;
+com.github.durex.shared.exceptions.model.ErrorResponse|    descriptor: ()V
+com.github.durex.shared.exceptions.model.ErrorResponse|    descriptor: (Lcom/github/durex/shared/exceptions/model/ErrorCode;)Lcom/github/durex/shared/exceptions/model/ErrorResponse;
+com.github.durex.shared.exceptions.model.ErrorResponse|    descriptor: (Lcom/github/durex/shared/exceptions/model/ErrorCode;)V
+com.github.durex.shared.exceptions.model.ErrorResponse|    descriptor: (Ljava/lang/Object;)Z
+com.github.durex.shared.exceptions.model.ErrorResponse|    descriptor: (Ljava/lang/String;)Lcom/github/durex/shared/exceptions/model/ErrorResponse;
+com.github.durex.shared.exceptions.model.ErrorResponse|    descriptor: (Ljava/lang/String;)V
+com.github.durex.shared.exceptions.model.ErrorResponse|    descriptor: (Ljava/time/LocalDateTime;)Lcom/github/durex/shared/exceptions/model/ErrorResponse;
+com.github.durex.shared.exceptions.model.ErrorResponse|    descriptor: (Ljava/time/LocalDateTime;)V
+com.github.durex.shared.exceptions.model.ErrorResponse|    descriptor: (Ljava/util/UUID;)Lcom/github/durex/shared/exceptions/model/ErrorResponse;
+com.github.durex.shared.exceptions.model.ErrorResponse|    descriptor: (Ljava/util/UUID;)V
+com.github.durex.shared.exceptions.model.ErrorResponse|    descriptor: (Ljava/util/UUID;Ljava/lang/String;Ljava/lang/String;Lcom/github/durex/shared/exceptions/model/ErrorCode;Ljava/time/LocalDateTime;)V
+com.github.durex.shared.exceptions.model.ErrorResponse|  protected boolean canEqual(java.lang.Object);
+com.github.durex.shared.exceptions.model.ErrorResponse|  public boolean equals(java.lang.Object);
+com.github.durex.shared.exceptions.model.ErrorResponse|  public com.github.durex.shared.exceptions.model.ErrorCode getErrorCode();
+com.github.durex.shared.exceptions.model.ErrorResponse|  public com.github.durex.shared.exceptions.model.ErrorResponse withCaller(java.lang.String);
+com.github.durex.shared.exceptions.model.ErrorResponse|  public com.github.durex.shared.exceptions.model.ErrorResponse withErrorCode(com.github.durex.shared.exceptions.model.ErrorCode);
+com.github.durex.shared.exceptions.model.ErrorResponse|  public com.github.durex.shared.exceptions.model.ErrorResponse withErrorId(java.util.UUID);
+com.github.durex.shared.exceptions.model.ErrorResponse|  public com.github.durex.shared.exceptions.model.ErrorResponse withMessage(java.lang.String);
+com.github.durex.shared.exceptions.model.ErrorResponse|  public com.github.durex.shared.exceptions.model.ErrorResponse withTimestamp(java.time.LocalDateTime);
+com.github.durex.shared.exceptions.model.ErrorResponse|  public com.github.durex.shared.exceptions.model.ErrorResponse();
+com.github.durex.shared.exceptions.model.ErrorResponse|  public com.github.durex.shared.exceptions.model.ErrorResponse(java.util.UUID, java.lang.String, java.lang.String, com.github.durex.shared.exceptions.model.ErrorCode, java.time.LocalDateTime);
+com.github.durex.shared.exceptions.model.ErrorResponse|  public int hashCode();
+com.github.durex.shared.exceptions.model.ErrorResponse|  public java.lang.String getCaller();
+com.github.durex.shared.exceptions.model.ErrorResponse|  public java.lang.String getMessage();
+com.github.durex.shared.exceptions.model.ErrorResponse|  public java.lang.String toString();
+com.github.durex.shared.exceptions.model.ErrorResponse|  public java.time.LocalDateTime getTimestamp();
+com.github.durex.shared.exceptions.model.ErrorResponse|  public java.util.UUID getErrorId();
+com.github.durex.shared.exceptions.model.ErrorResponse|  public void setCaller(java.lang.String);
+com.github.durex.shared.exceptions.model.ErrorResponse|  public void setErrorCode(com.github.durex.shared.exceptions.model.ErrorCode);
+com.github.durex.shared.exceptions.model.ErrorResponse|  public void setErrorId(java.util.UUID);
+com.github.durex.shared.exceptions.model.ErrorResponse|  public void setMessage(java.lang.String);
+com.github.durex.shared.exceptions.model.ErrorResponse|  public void setTimestamp(java.time.LocalDateTime);
+com.github.durex.shared.exceptions.model.ErrorResponse|public class com.github.durex.shared.exceptions.model.ErrorResponse implements java.io.Serializable {
+com.github.durex.shared.exceptions.model.ErrorResponse|}
+com.github.durex.shared.model.RespData|    descriptor: ()Lcom/github/durex/shared/exceptions/model/ErrorResponse;
+com.github.durex.shared.model.RespData|    descriptor: ()Lcom/github/durex/shared/model/RespData$RespDataBuilder;
+com.github.durex.shared.model.RespData|    descriptor: ()Ljava/lang/Object;
+com.github.durex.shared.model.RespData|    descriptor: ()Ljava/lang/String;
+com.github.durex.shared.model.RespData|    descriptor: ()V
+com.github.durex.shared.model.RespData|    descriptor: (Lcom/github/durex/shared/exceptions/model/ErrorResponse;)V
+com.github.durex.shared.model.RespData|    descriptor: (Ljava/lang/Object;)V
+com.github.durex.shared.model.RespData|    descriptor: (Ljava/lang/Object;Lcom/github/durex/shared/exceptions/model/ErrorResponse;)Lcom/github/durex/shared/model/RespData;
+com.github.durex.shared.model.RespData|  public T getResult();
+com.github.durex.shared.model.RespData|  public com.github.durex.shared.exceptions.model.ErrorResponse getError();
+com.github.durex.shared.model.RespData|  public com.github.durex.shared.model.RespData();
+com.github.durex.shared.model.RespData|  public java.lang.String toString();
+com.github.durex.shared.model.RespData|  public static <T> com.github.durex.shared.model.RespData$RespDataBuilder<T> builder();
+com.github.durex.shared.model.RespData|  public static <T> com.github.durex.shared.model.RespData<T> of(T, com.github.durex.shared.exceptions.model.ErrorResponse);
+com.github.durex.shared.model.RespData|  public void setError(com.github.durex.shared.exceptions.model.ErrorResponse);
+com.github.durex.shared.model.RespData|  public void setResult(T);
+com.github.durex.shared.model.RespData|public class com.github.durex.shared.model.RespData<T> {
+com.github.durex.shared.model.RespData|}
+com.github.durex.shared.spring.http.DurexHttpExceptionHandler|    descriptor: ()V
+com.github.durex.shared.spring.http.DurexHttpExceptionHandler|    descriptor: (Lcom/github/durex/shared/exceptions/ApiException;)Lorg/springframework/http/ResponseEntity;
+com.github.durex.shared.spring.http.DurexHttpExceptionHandler|  public com.github.durex.shared.spring.http.DurexHttpExceptionHandler();
+com.github.durex.shared.spring.http.DurexHttpExceptionHandler|  public org.springframework.http.ResponseEntity<com.github.durex.shared.model.RespData<java.lang.Void>> handleApiException(com.github.durex.shared.exceptions.ApiException);
+com.github.durex.shared.spring.http.DurexHttpExceptionHandler|public final class com.github.durex.shared.spring.http.DurexHttpExceptionHandler {
+com.github.durex.shared.spring.http.DurexHttpExceptionHandler|}
