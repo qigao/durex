@@ -1,0 +1,26 @@
+# Durex 0.1 public artifact surface
+# Format: artifact|scope|fully-qualified-class-name
+# scope=api     stable user-facing contract tracked by compatibility CI
+# scope=runtime public framework/runtime implementation required for wiring, not a user API promise
+
+shared-common|api|com.github.durex.shared.exceptions.ApiException
+shared-common|api|com.github.durex.shared.exceptions.model.ErrorCode
+shared-common|api|com.github.durex.shared.exceptions.model.ErrorResponse
+shared-common|api|com.github.durex.shared.model.RespData
+
+shared-spring-http|api|com.github.durex.shared.spring.http.DurexHttpExceptionHandler
+shared-spring-http|runtime|com.github.durex.shared.spring.http.DurexHttpErrorAutoConfiguration
+
+messaging-api|api|com.github.durex.messaging.annotation.Outgoing
+messaging-api|api|com.github.durex.messaging.annotation.RedisStreamListener
+messaging-api|api|com.github.durex.messaging.annotation.RedisStreamOutgoing
+
+messaging-spring-redis|api|com.github.durex.messaging.spring.redis.RedisMessageCodec
+messaging-spring-redis|api|com.github.durex.messaging.spring.redis.RedisStreamFailureDisposition
+messaging-spring-redis|api|com.github.durex.messaging.spring.redis.RedisStreamListenerFailure
+messaging-spring-redis|api|com.github.durex.messaging.spring.redis.RedisStreamListenerFailureHandler
+messaging-spring-redis|runtime|com.github.durex.messaging.spring.redis.DurexRedisMessagingAutoConfiguration
+messaging-spring-redis|runtime|com.github.durex.messaging.spring.redis.JacksonRedisMessageCodec
+messaging-spring-redis|runtime|com.github.durex.messaging.spring.redis.RedisOutgoingAspect
+messaging-spring-redis|runtime|com.github.durex.messaging.spring.redis.RedisStreamListenerRegistrar
+messaging-spring-redis|runtime|com.github.durex.messaging.spring.redis.RedisStreamOutgoingAspect

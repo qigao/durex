@@ -8,6 +8,7 @@ on:
       - 'core/shared/messaging/api/**'
       - 'core/shared/messaging/spring-redis/**'
       - 'gradle/durex-publication.gradle'
+      - 'gradle/public-api/**'
       - 'gradle/dependencies/**'
       - 'reference/publication-consumer/**'
       - 'docs/public-artifacts.md'
@@ -19,6 +20,7 @@ on:
       - 'core/shared/messaging/api/**'
       - 'core/shared/messaging/spring-redis/**'
       - 'gradle/durex-publication.gradle'
+      - 'gradle/public-api/**'
       - 'gradle/dependencies/**'
       - 'reference/publication-consumer/**'
       - 'docs/public-artifacts.md'
@@ -56,21 +58,58 @@ jobs:
             -PdurexStagingRepo="$staging" \
             -PdurexVersion=0.1.0-SNAPSHOT \
             --stacktrace
-      - name: Verify staged artifact and POM boundary
+      - name: Verify staged artifact, POM, and type boundary
         shell: bash
         run: |
           set -euo pipefail
           root="$GITHUB_WORKSPACE/build/durex-staging/io/github/qigao/durex"
+          manifest="$GITHUB_WORKSPACE/gradle/public-api/0.1-surface.txt"
+
           find "$root" -mindepth 1 -maxdepth 1 -type d -printf '%f\n' | sort > /tmp/durex-artifacts.txt
           printf '%s\n' messaging-api messaging-spring-redis shared-common shared-spring-http | sort > /tmp/durex-expected-artifacts.txt
           diff -u /tmp/durex-expected-artifacts.txt /tmp/durex-artifacts.txt
 
           http_pom=$(find "$root/shared-spring-http/0.1.0-SNAPSHOT" -maxdepth 1 -type f -name '*.pom' -print -quit)
-          redis_pom=$(find "$root/messaging-spring-redis/0.1.0-SNAPSHOT" -maxdepth 1 -type f -name '*.pom' -print -quit)
+          messaging_pom=$(find "$root/messaging-spring-redis/0.1.0-SNAPSHOT" -maxdepth 1 -type f -name '*.pom' -print -quit)
           test -n "$http_pom"
-          test -n "$redis_pom"
+          test -n "$messaging_pom"
           grep -Fq '<artifactId>shared-common</artifactId>' "$http_pom"
-          grep -Fq '<artifactId>messaging-api</artifactId>' "$redis_pom"
+          grep -Fq '<artifactId>messaging-api</artifactId>' "$messaging_pom"
+
+          main_jar() {
+            local artifact="$1"
+            find "$root/$artifact/0.1.0-SNAPSHOT" -maxdepth 1 -type f \
+              -name "${artifact}-*.jar" \
+              ! -name '*-sources.jar' \
+              ! -name '*-javadoc.jar' \
+              -print -quit
+          }
+
+          while IFS='|' read -r artifact scope fqcn; do
+            case "$scope" in
+              api|runtime) ;;
+              *) echo "::error::Invalid public API scope '$scope' for $fqcn"; exit 1 ;;
+            esac
+            jar_file=$(main_jar "$artifact")
+            test -n "$jar_file"
+            class_entry="${fqcn//.//}.class"
+            if ! jar tf "$jar_file" | grep -Fxq "$class_entry"; then
+              echo "::error::Manifest type missing from $artifact: $fqcn"
+              exit 1
+            fi
+          done < <(grep -vE '^[[:space:]]*(#|$)' "$manifest")
+
+          common_jar=$(main_jar shared-common)
+          for fqcn in \
+            com.github.durex.shared.support.Helper \
+            com.github.durex.shared.support.RespConstant \
+            com.github.durex.shared.support.EnumValue; do
+            class_entry="${fqcn//.//}.class"
+            if jar tf "$common_jar" | grep -Fxq "$class_entry"; then
+              echo "::error::Dead public support type still packaged: $fqcn"
+              exit 1
+            fi
+          done
       - name: Compile external Maven-only consumer baseline
         shell: bash
         run: |
