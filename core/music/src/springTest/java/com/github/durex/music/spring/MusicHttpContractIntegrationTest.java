@@ -33,9 +33,9 @@ class MusicHttpContractIntegrationTest {
 
     var response = client.get("music-1");
 
-    assertEquals("music-1", response.getResult().getId());
-    assertEquals("Spring Runtime Song", response.getResult().getTitle());
-    assertNull(response.getError());
+    assertEquals("music-1", response.result().getId());
+    assertEquals("Spring Runtime Song", response.result().getTitle());
+    assertNull(response.error());
   }
 
   @Test
