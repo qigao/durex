@@ -5,7 +5,11 @@ import com.github.durex.messaging.annotation.RedisStreamListener;
 import com.github.durex.messaging.annotation.RedisStreamOutgoing;
 import com.github.durex.messaging.spring.redis.RedisMessageCodec;
 import com.github.durex.messaging.spring.redis.RedisStreamFailureDisposition;
+import com.github.durex.messaging.spring.redis.RedisStreamListenerFailure;
 import com.github.durex.messaging.spring.redis.RedisStreamListenerFailureHandler;
+import com.github.durex.shared.exceptions.ApiException;
+import com.github.durex.shared.exceptions.model.ErrorCode;
+import com.github.durex.shared.exceptions.model.ErrorResponse;
 import com.github.durex.shared.model.RespData;
 import com.github.durex.shared.spring.http.DurexHttpExceptionHandler;
 
@@ -20,6 +24,18 @@ public final class PublicApiBaseline {
     return RespData.of(value, null);
   }
 
+  public ApiException apiException(String message) {
+    return new ApiException(message, ErrorCode.UNKNOWN_ERROR);
+  }
+
+  public ErrorResponse errorResponse(ApiException exception) {
+    return exception.getErrorResponse();
+  }
+
+  public ErrorCode errorCode() {
+    return ErrorCode.UNKNOWN_ERROR;
+  }
+
   public DurexHttpExceptionHandler exceptionHandler() {
     return exceptionHandler;
   }
@@ -30,6 +46,10 @@ public final class PublicApiBaseline {
 
   public RedisStreamListenerFailureHandler failureHandler() {
     return RedisStreamListenerFailureHandler.keepPending();
+  }
+
+  public RedisStreamListenerFailure listenerFailure(RedisStreamListenerFailure failure) {
+    return failure;
   }
 
   public RedisStreamFailureDisposition keepPending() {
