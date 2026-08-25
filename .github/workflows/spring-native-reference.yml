@@ -5,12 +5,14 @@ on:
     paths:
       - 'reference/spring-native/**'
       - 'reference/spring-capabilities/**'
+      - 'core/shared/messaging/**'
       - 'gradle/dependencies/**'
       - '.github/workflows/spring-native-reference.yml'
   pull_request:
     paths:
       - 'reference/spring-native/**'
       - 'reference/spring-capabilities/**'
+      - 'core/shared/messaging/**'
       - 'gradle/dependencies/**'
       - '.github/workflows/spring-native-reference.yml'
 
@@ -24,6 +26,16 @@ permissions:
 jobs:
   jvm-test:
     runs-on: ubuntu-latest
+    services:
+      redis:
+        image: redis:7-alpine
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 5s
+          --health-timeout 3s
+          --health-retries 10
     defaults:
       run:
         working-directory: reference/spring-native
@@ -59,6 +71,16 @@ jobs:
 
   native-test:
     runs-on: ubuntu-latest
+    services:
+      redis:
+        image: redis:7-alpine
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 5s
+          --health-timeout 3s
+          --health-retries 10
     defaults:
       run:
         working-directory: reference/spring-native
@@ -78,7 +100,7 @@ jobs:
         run: gradle nativeTest --stacktrace
       - name: Native executable
         run: gradle nativeCompile --stacktrace
-      - name: Native HTTP smoke test
+      - name: Native HTTP and messaging smoke test
         shell: bash
         run: |
           ./build/native/nativeCompile/spring-native-reference > build/native-app.log 2>&1 &
@@ -87,9 +109,9 @@ jobs:
           for _ in {1..30}; do
             if response=$(curl --fail --silent http://127.0.0.1:8080/hello); then
               test "$response" = 'Hello from Spring Native'
-              exit 0
+              break
             fi
             sleep 1
           done
-          cat build/native-app.log
-          exit 1
+          test "$(curl --fail --silent --request POST http://127.0.0.1:8080/messaging/pubsub/native-pubsub)" = 'native-pubsub'
+          test "$(curl --fail --silent --request POST http://127.0.0.1:8080/messaging/stream/native-stream)" = 'native-stream'
