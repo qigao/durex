@@ -2,7 +2,7 @@
 spring-boot = "4.1.0"
 graal-native = "1.1.1"
 
-[platforms.spring]
+[libraries.spring]
 module = "org.springframework.boot:spring-boot-dependencies"
 version.ref = "spring-boot"
 

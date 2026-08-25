@@ -54,7 +54,35 @@ jobs:
             exit 1
           fi
 
-      - name: Verify SimpleDSL 0.1.1 project graph from Plugin Portal
+      - name: Reject SimpleDSL 0.1 manifest and plugin contracts
+        shell: bash
+        run: |
+          set -euo pipefail
+          settings=(
+            settings.gradle
+            migration/spring-music/settings.gradle
+            migration/spring-messaging/settings.gradle
+            reference/spring-native/settings.gradle.kts
+            reference/spring-capabilities/settings.gradle.kts
+          )
+          for file in "${settings[@]}"; do
+            grep -Fq '0.2.0' "$file"
+            if grep -Fq '0.1.1' "$file"; then
+              echo "legacy SimpleDSL 0.1.1 version remains in $file"
+              exit 1
+            fi
+          done
+          old_manifest="$({ grep -Hn -E '^\[java\]|^\[platforms\.' gradle/dependencies/*.toml || true; })"
+          if [ -n "$old_manifest" ]; then
+            echo "$old_manifest"
+            echo 'legacy SimpleDSL 0.1 dependency-manifest schema remains'
+            exit 1
+          fi
+          grep -Fq '[simpledsl]' gradle/dependencies/durex.toml
+          grep -Fq 'java = 25' gradle/dependencies/durex.toml
+          grep -Fq '[libraries.spring]' gradle/dependencies/spring.toml
+
+      - name: Verify SimpleDSL 0.2.0 project graph from Plugin Portal
         run: ./gradlew projects simpledslProjects --stacktrace
 
       - name: Verify Durex core build through Plugin Portal
