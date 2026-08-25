@@ -3,7 +3,8 @@ name: Spring Music Migration
 on:
   push:
     paths:
-      - 'gradle/dependencies/**'
+      - 'dependencies.toml'
+      - 'dependencies/**'
       - 'migration/spring-music/**'
       - 'core/api/**'
       - 'core/music/**'
@@ -13,7 +14,8 @@ on:
       - '.github/workflows/spring-music.yml'
   pull_request:
     paths:
-      - 'gradle/dependencies/**'
+      - 'dependencies.toml'
+      - 'dependencies/**'
       - 'migration/spring-music/**'
       - 'core/api/**'
       - 'core/music/**'

@@ -5,6 +5,8 @@ on:
     paths:
       - 'core/**'
       - 'gradle/**'
+      - 'dependencies.toml'
+      - 'dependencies/**'
       - 'migration/**'
       - 'reference/**'
       - 'settings.gradle'
@@ -14,6 +16,8 @@ on:
     paths:
       - 'core/**'
       - 'gradle/**'
+      - 'dependencies.toml'
+      - 'dependencies/**'
       - 'migration/**'
       - 'reference/**'
       - 'settings.gradle'
@@ -72,15 +76,38 @@ jobs:
               exit 1
             fi
           done
-          old_manifest="$({ grep -Hn -E '^\[java\]|^\[platforms\.' gradle/dependencies/*.toml || true; })"
+          old_manifest="$({ grep -Hn -E '^\[java\]|^\[platforms\.' dependencies.toml dependencies/*.toml 2>/dev/null || true; })"
           if [ -n "$old_manifest" ]; then
             echo "$old_manifest"
             echo 'legacy SimpleDSL 0.1 dependency-manifest schema remains'
             exit 1
           fi
-          grep -Fq '[simpledsl]' gradle/dependencies/durex.toml
-          grep -Fq 'java = 25' gradle/dependencies/durex.toml
-          grep -Fq '[libraries.spring]' gradle/dependencies/spring.toml
+
+      - name: Require SimpleDSL 0.2 root manifest convention
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -f dependencies.toml
+          for fragment in spring database test utils; do
+            test -f "dependencies/${fragment}.toml"
+          done
+          test ! -e gradle/dependencies
+          grep -Fq '[simpledsl]' dependencies.toml
+          grep -Fq 'java = 25' dependencies.toml
+          grep -Fq '[libraries.spring]' dependencies/spring.toml
+          settings=(
+            settings.gradle
+            migration/spring-music/settings.gradle
+            migration/spring-messaging/settings.gradle
+            reference/spring-native/settings.gradle.kts
+            reference/spring-capabilities/settings.gradle.kts
+          )
+          for file in "${settings[@]}"; do
+            if grep -Fq 'dependencyManifest.set' "$file"; then
+              echo "explicit dependency manifest override remains in $file"
+              exit 1
+            fi
+          done
 
       - name: Verify SimpleDSL 0.2.0 project graph from Plugin Portal
         run: ./gradlew projects simpledslProjects --stacktrace

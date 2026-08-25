@@ -3,14 +3,16 @@ name: Spring Messaging Platform
 on:
   push:
     paths:
-      - 'gradle/dependencies/**'
+      - 'dependencies.toml'
+      - 'dependencies/**'
       - 'core/shared/messaging/**'
       - 'core/redisson-service/**'
       - 'migration/spring-messaging/**'
       - '.github/workflows/spring-messaging.yml'
   pull_request:
     paths:
-      - 'gradle/dependencies/**'
+      - 'dependencies.toml'
+      - 'dependencies/**'
       - 'core/shared/messaging/**'
       - 'core/redisson-service/**'
       - 'migration/spring-messaging/**'

@@ -34,7 +34,8 @@ active_paths=(
   build-bootstrap
   build-logic
   core
-  gradle/dependencies
+  dependencies.toml
+  dependencies
   gradle/modules.toml
   migration
   reference
