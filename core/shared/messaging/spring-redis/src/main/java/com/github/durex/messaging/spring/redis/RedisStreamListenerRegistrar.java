@@ -22,12 +22,11 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.stream.StreamListener;
 import org.springframework.data.redis.stream.StreamMessageListenerContainer;
 import org.springframework.util.ReflectionUtils;
-import tools.jackson.databind.json.JsonMapper;
 
 public class RedisStreamListenerRegistrar implements BeanPostProcessor, SmartLifecycle {
   private final RedisConnectionFactory connectionFactory;
   private final StringRedisTemplate redisTemplate;
-  private final JsonMapper jsonMapper;
+  private final RedisMessageCodec messageCodec;
   private final Environment environment;
   private final List<Handler> handlers = new ArrayList<>();
 
@@ -37,11 +36,11 @@ public class RedisStreamListenerRegistrar implements BeanPostProcessor, SmartLif
   public RedisStreamListenerRegistrar(
       RedisConnectionFactory connectionFactory,
       StringRedisTemplate redisTemplate,
-      JsonMapper jsonMapper,
+      RedisMessageCodec messageCodec,
       Environment environment) {
     this.connectionFactory = connectionFactory;
     this.redisTemplate = redisTemplate;
-    this.jsonMapper = jsonMapper;
+    this.messageCodec = messageCodec;
     this.environment = environment;
   }
 
@@ -111,7 +110,7 @@ public class RedisStreamListenerRegistrar implements BeanPostProcessor, SmartLif
     }
 
     try {
-      Object value = jsonMapper.readValue(payload, method.getParameterTypes()[0]);
+      Object value = messageCodec.decode(payload, method.getGenericParameterTypes()[0]);
       method.invoke(bean, value);
       if (!annotation.autoAck()) {
         redisTemplate.opsForStream().acknowledge(stream, group, record.getId());
