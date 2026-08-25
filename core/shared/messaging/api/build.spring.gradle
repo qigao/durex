@@ -5,3 +5,5 @@ plugins {
 simpledsl {
     javaLibrary()
 }
+
+apply from: file('../../../../gradle/durex-publication.gradle')
