@@ -1,6 +1,7 @@
 package com.github.durex.music.spring;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -50,5 +51,6 @@ class MusicHttpContractIntegrationTest {
     assertTrue(response.body().contains("\"result\":null"));
     assertTrue(response.body().contains("\"message\":\"music not found\""));
     assertTrue(response.body().contains("\"errorCode\":\"ENTITY_NOT_FOUND\""));
+    assertFalse(response.body().contains("\"caller\""));
   }
 }
