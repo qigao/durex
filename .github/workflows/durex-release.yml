@@ -1,0 +1,99 @@
+name: Durex Release
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/durex-release.yml'
+      - 'scripts/central-release-bundle.sh'
+      - 'scripts/public-api-signatures.sh'
+      - 'gradle/durex-publication.gradle'
+      - 'gradle/public-api/**'
+      - 'reference/publication-consumer/**'
+      - 'docs/releasing.md'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Release version (X.Y.Z)'
+        required: true
+        default: '0.1.0'
+        type: string
+      publish_to_central:
+        description: 'Upload and publish this exact tagged SHA to Maven Central'
+        required: true
+        default: false
+        type: boolean
+  push:
+    tags:
+      - 'v*.*.*'
+
+concurrency:
+  group: durex-release-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '25'
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '9.1.0'
+      - name: Resolve exact release identity
+        id: release
+        shell: bash
+        env:
+          DISPATCH_VERSION: ${{ inputs.version }}
+          DISPATCH_PUBLISH: ${{ inputs.publish_to_central }}
+        run: |
+          set -euo pipefail
+
+          case "$GITHUB_EVENT_NAME" in
+            pull_request)
+              version=0.1.0
+              publish=false
+              ;;
+            workflow_dispatch)
+              version="$DISPATCH_VERSION"
+              publish="${DISPATCH_PUBLISH:-false}"
+              ;;
+            push)
+              test "$GITHUB_REF_TYPE" = tag
+              tag="$GITHUB_REF_NAME"
+              [[ "$tag" =~ ^v([0-9]+\.[0-9]+\.[0-9]+)$ ]]
+              version="${BASH_REMATCH[1]}"
+              publish=true
+              ;;
+            *)
+              echo "::error::Unsupported release event: $GITHUB_EVENT_NAME"
+              exit 1
+              ;;
+          esac
+
+          [[ "$version" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]
+          [[ "$version" != *SNAPSHOT* ]]
+
+          if [[ "$publish" == true ]]; then
+            test "$GITHUB_REF_TYPE" = tag
+            test "$GITHUB_REF_NAME" = "v$version"
+            tag_sha=$(git rev-list -n 1 "$GITHUB_REF_NAME")
+            test "$tag_sha" = "$GITHUB_SHA"
+          fi
+
+          test -z "$(git status --porcelain)"
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          echo "publish=$publish" >> "$GITHUB_OUTPUT"
+          echo "sha=$GITHUB_SHA" >> "$GITHUB_OUTPUT"
+      - name: Verify release bundle contract
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -x scripts/central-release-bundle.sh
