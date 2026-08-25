@@ -64,8 +64,13 @@ jobs:
           find "$root" -mindepth 1 -maxdepth 1 -type d -printf '%f\n' | sort > /tmp/durex-artifacts.txt
           printf '%s\n' messaging-api messaging-spring-redis shared-common shared-spring-http | sort > /tmp/durex-expected-artifacts.txt
           diff -u /tmp/durex-expected-artifacts.txt /tmp/durex-artifacts.txt
-          grep -Fq '<artifactId>shared-common</artifactId>' "$root/shared-spring-http/0.1.0-SNAPSHOT/shared-spring-http-0.1.0-SNAPSHOT.pom"
-          grep -Fq '<artifactId>messaging-api</artifactId>' "$root/messaging-spring-redis/0.1.0-SNAPSHOT/messaging-spring-redis-0.1.0-SNAPSHOT.pom"
+
+          http_pom=$(find "$root/shared-spring-http/0.1.0-SNAPSHOT" -maxdepth 1 -type f -name '*.pom' -print -quit)
+          redis_pom=$(find "$root/messaging-spring-redis/0.1.0-SNAPSHOT" -maxdepth 1 -type f -name '*.pom' -print -quit)
+          test -n "$http_pom"
+          test -n "$redis_pom"
+          grep -Fq '<artifactId>shared-common</artifactId>' "$http_pom"
+          grep -Fq '<artifactId>messaging-api</artifactId>' "$redis_pom"
       - name: Compile external Maven-only consumer baseline
         shell: bash
         run: |
