@@ -13,3 +13,5 @@ simpledsl {
 dependencies {
     api project(':messaging-api')
 }
+
+apply from: file('../../../../gradle/durex-publication.gradle')

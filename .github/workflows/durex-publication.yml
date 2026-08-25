@@ -1,0 +1,77 @@
+name: Durex Publication Surface
+
+on:
+  push:
+    paths:
+      - 'core/shared/common/**'
+      - 'core/shared/spring/http/**'
+      - 'core/shared/messaging/api/**'
+      - 'core/shared/messaging/spring-redis/**'
+      - 'gradle/durex-publication.gradle'
+      - 'gradle/dependencies/**'
+      - 'reference/publication-consumer/**'
+      - 'docs/public-artifacts.md'
+      - '.github/workflows/durex-publication.yml'
+  pull_request:
+    paths:
+      - 'core/shared/common/**'
+      - 'core/shared/spring/http/**'
+      - 'core/shared/messaging/api/**'
+      - 'core/shared/messaging/spring-redis/**'
+      - 'gradle/durex-publication.gradle'
+      - 'gradle/dependencies/**'
+      - 'reference/publication-consumer/**'
+      - 'docs/public-artifacts.md'
+      - '.github/workflows/durex-publication.yml'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  staged-consumer:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '25'
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '9.1.0'
+      - name: Publish explicit Durex surface to staging Maven repository
+        shell: bash
+        run: |
+          set -euo pipefail
+          staging="$GITHUB_WORKSPACE/build/durex-staging"
+          ./gradlew \
+            :shared-common:publishMavenJavaPublicationToStagingRepository \
+            :shared-spring-http:publishMavenJavaPublicationToStagingRepository \
+            :messaging-api:publishMavenJavaPublicationToStagingRepository \
+            :messaging-spring-redis:publishMavenJavaPublicationToStagingRepository \
+            -PdurexStagingRepo="$staging" \
+            -PdurexVersion=0.1.0-SNAPSHOT \
+            --stacktrace
+      - name: Verify staged artifact and POM boundary
+        shell: bash
+        run: |
+          set -euo pipefail
+          root="$GITHUB_WORKSPACE/build/durex-staging/io/github/qigao/durex"
+          find "$root" -mindepth 1 -maxdepth 1 -type d -printf '%f\n' | sort > /tmp/durex-artifacts.txt
+          printf '%s\n' messaging-api messaging-spring-redis shared-common shared-spring-http | sort > /tmp/durex-expected-artifacts.txt
+          diff -u /tmp/durex-expected-artifacts.txt /tmp/durex-artifacts.txt
+          grep -Fq '<artifactId>shared-common</artifactId>' "$root/shared-spring-http/0.1.0-SNAPSHOT/shared-spring-http-0.1.0-SNAPSHOT.pom"
+          grep -Fq '<artifactId>messaging-api</artifactId>' "$root/messaging-spring-redis/0.1.0-SNAPSHOT/messaging-spring-redis-0.1.0-SNAPSHOT.pom"
+      - name: Compile external Maven-only consumer baseline
+        shell: bash
+        run: |
+          set -euo pipefail
+          gradle -p reference/publication-consumer clean classes \
+            -PdurexRepository="$GITHUB_WORKSPACE/build/durex-staging" \
+            -PdurexVersion=0.1.0-SNAPSHOT \
+            --refresh-dependencies \
+            --stacktrace
