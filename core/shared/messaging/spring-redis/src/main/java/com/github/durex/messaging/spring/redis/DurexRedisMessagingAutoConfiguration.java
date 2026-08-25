@@ -33,6 +33,12 @@ public class DurexRedisMessagingAutoConfiguration {
   }
 
   @Bean
+  @ConditionalOnMissingBean(RedisStreamListenerFailureHandler.class)
+  RedisStreamListenerFailureHandler redisStreamListenerFailureHandler() {
+    return RedisStreamListenerFailureHandler.keepPending();
+  }
+
+  @Bean
   @ConditionalOnMissingBean(RedisOutgoingAspect.class)
   RedisOutgoingAspect redisOutgoingAspect(
       RedisMessageSendingOperations messageSendingOperations, Environment environment) {
@@ -52,8 +58,9 @@ public class DurexRedisMessagingAutoConfiguration {
       RedisConnectionFactory connectionFactory,
       StringRedisTemplate redisTemplate,
       RedisMessageCodec messageCodec,
+      RedisStreamListenerFailureHandler failureHandler,
       Environment environment) {
     return new RedisStreamListenerRegistrar(
-        connectionFactory, redisTemplate, messageCodec, environment);
+        connectionFactory, redisTemplate, messageCodec, failureHandler, environment);
   }
 }

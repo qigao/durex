@@ -27,6 +27,7 @@ public class RedisStreamListenerRegistrar implements BeanPostProcessor, SmartLif
   private final RedisConnectionFactory connectionFactory;
   private final StringRedisTemplate redisTemplate;
   private final RedisMessageCodec messageCodec;
+  private final RedisStreamListenerFailureHandler failureHandler;
   private final Environment environment;
   private final List<Handler> handlers = new ArrayList<>();
 
@@ -37,10 +38,12 @@ public class RedisStreamListenerRegistrar implements BeanPostProcessor, SmartLif
       RedisConnectionFactory connectionFactory,
       StringRedisTemplate redisTemplate,
       RedisMessageCodec messageCodec,
+      RedisStreamListenerFailureHandler failureHandler,
       Environment environment) {
     this.connectionFactory = connectionFactory;
     this.redisTemplate = redisTemplate;
     this.messageCodec = messageCodec;
+    this.failureHandler = failureHandler;
     this.environment = environment;
   }
 
@@ -106,23 +109,53 @@ public class RedisStreamListenerRegistrar implements BeanPostProcessor, SmartLif
       MapRecord<String, String, String> record) {
     String payload = record.getValue().get("payload");
     if (payload == null) {
-      throw new IllegalStateException("Redis Stream record does not contain required 'payload' field");
+      handleFailure(
+          method,
+          annotation,
+          stream,
+          group,
+          record,
+          new IllegalStateException("Redis Stream record does not contain required 'payload' field"));
+      return;
     }
 
     try {
       Object value = messageCodec.decode(payload, method.getGenericParameterTypes()[0]);
       method.invoke(bean, value);
-      if (!annotation.autoAck()) {
-        redisTemplate.opsForStream().acknowledge(stream, group, record.getId());
-      }
+      acknowledgeIfManual(annotation, stream, group, record);
     } catch (InvocationTargetException e) {
-      Throwable target = e.getTargetException();
-      if (target instanceof RuntimeException runtimeException) {
-        throw runtimeException;
-      }
-      throw new IllegalStateException("Redis Stream listener invocation failed: " + method, target);
+      handleFailure(method, annotation, stream, group, record, e.getTargetException());
     } catch (Exception e) {
-      throw new IllegalStateException("Redis Stream listener invocation failed: " + method, e);
+      handleFailure(method, annotation, stream, group, record, e);
+    }
+  }
+
+  private void handleFailure(
+      Method method,
+      RedisStreamListener annotation,
+      String stream,
+      String group,
+      MapRecord<String, String, String> record,
+      Throwable failure) {
+    RedisStreamFailureDisposition disposition =
+        failureHandler.onFailure(new RedisStreamListenerFailure(stream, group, record, method, failure));
+    if (disposition == RedisStreamFailureDisposition.ACKNOWLEDGE) {
+      acknowledgeIfManual(annotation, stream, group, record);
+      return;
+    }
+    if (failure instanceof RuntimeException runtimeException) {
+      throw runtimeException;
+    }
+    throw new IllegalStateException("Redis Stream listener invocation failed: " + method, failure);
+  }
+
+  private void acknowledgeIfManual(
+      RedisStreamListener annotation,
+      String stream,
+      String group,
+      MapRecord<String, String, String> record) {
+    if (!annotation.autoAck()) {
+      redisTemplate.opsForStream().acknowledge(stream, group, record.getId());
     }
   }
 
