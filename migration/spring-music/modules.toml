@@ -17,11 +17,6 @@ path = "core/shared/spring/http"
 build-file = "build.spring.gradle"
 
 [[module]]
-name = "json-schema-annotation"
-path = "core/shared/json-schema-annotation"
-build-file = "build.spring.gradle"
-
-[[module]]
 name = "music-json"
 path = "core/schema/music/json"
 build-file = "build.spring.gradle"

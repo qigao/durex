@@ -43,6 +43,6 @@ simpledsl {
 }
 ----
 
-Generator configuration continues through `simpledslJooq` and `simpledslJsonSchema`. Durex does not reference SimpleDSL schema implementation classes and no schema Plugin Portal IDs are published or consumed.
+Generator configuration continues through `simpledslJooq` and `simpledslJsonSchema`. Durex does not carry a separate JSON Schema annotator runtime and does not reference SimpleDSL schema implementation classes.
 
-See xref:core/shared/json-schema-annotation/readme.adoc[JSON Schema annotations] and xref:core/shared/messaging/README.md[Spring Messaging].
+See xref:core/shared/messaging/README.md[Spring Messaging].

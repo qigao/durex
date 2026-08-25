@@ -5,12 +5,3 @@ plugins {
 simpledsl {
     javaLibrary()
 }
-
-sourceSets {
-    main {
-        java {
-            srcDir 'src/main/java'
-            include 'com/github/durex/sqlbuilder/**'
-        }
-    }
-}

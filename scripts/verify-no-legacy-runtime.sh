@@ -28,7 +28,6 @@ require_absent core/schema/music/entity/build.gradle
 require_absent core/schema/music/repo/build.gradle
 require_absent core/schema/music/repo/src/test
 require_absent core/schema/music/json/build.gradle
-require_absent core/shared/json-schema-annotation/build.gradle
 require_absent core/shared/utils/build.gradle
 
 active_paths=(
