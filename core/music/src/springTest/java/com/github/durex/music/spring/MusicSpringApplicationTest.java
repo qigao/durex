@@ -22,6 +22,6 @@ class MusicSpringApplicationTest {
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.result.id").value("music-1"))
         .andExpect(jsonPath("$.result.title").value("Spring Runtime Song"))
-        .andExpect(jsonPath("$.error.message").value("OK"));
+        .andExpect(jsonPath("$.error").doesNotExist());
   }
 }

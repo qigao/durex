@@ -35,7 +35,7 @@ class MusicHttpControllerTest {
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.result.id").value("music-1"))
         .andExpect(jsonPath("$.result.title").value("Spring Song"))
-        .andExpect(jsonPath("$.error.message").value("OK"));
+        .andExpect(jsonPath("$.error").doesNotExist());
 
     verify(musicService).getMusicById("music-1");
   }
@@ -53,7 +53,7 @@ class MusicHttpControllerTest {
     mvc.perform(get("/v1/music").queryParam("title", "Spring Song"))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.result[0].id").value("music-1"))
-        .andExpect(jsonPath("$.error.message").value("OK"));
+        .andExpect(jsonPath("$.error").doesNotExist());
 
     verify(musicService).getMusicsByTitle("Spring Song");
   }
@@ -71,7 +71,7 @@ class MusicHttpControllerTest {
                 .content("{\"id\":\"music-1\",\"title\":\"Spring Song\",\"playId\":\"play-1\"}"))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.result").value(1))
-        .andExpect(jsonPath("$.error.message").value("OK"));
+        .andExpect(jsonPath("$.error").doesNotExist());
 
     verify(musicService).createMusic(any(Music.class));
   }
@@ -88,7 +88,8 @@ class MusicHttpControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"id\":\"music-1\",\"title\":\"Updated Song\",\"playId\":\"play-1\"}"))
         .andExpect(status().isOk())
-        .andExpect(jsonPath("$.result").value(1));
+        .andExpect(jsonPath("$.result").value(1))
+        .andExpect(jsonPath("$.error").doesNotExist());
 
     verify(musicService).updateMusic(any(Music.class));
   }
@@ -102,7 +103,8 @@ class MusicHttpControllerTest {
 
     mvc.perform(delete("/v1/music/music-1"))
         .andExpect(status().isOk())
-        .andExpect(jsonPath("$.result").value(1));
+        .andExpect(jsonPath("$.result").value(1))
+        .andExpect(jsonPath("$.error").doesNotExist());
 
     verify(musicService).deleteMusicById("music-1");
   }

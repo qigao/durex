@@ -1,0 +1,12 @@
+plugins {
+    id 'io.github.qigao.simpledsl.build'
+}
+
+simpledsl {
+    springLibrary()
+    dependency('api', 'spring-http')
+}
+
+dependencies {
+    api project(':shared-common')
+}

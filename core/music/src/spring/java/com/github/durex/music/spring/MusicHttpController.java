@@ -4,7 +4,6 @@ import com.github.durex.music.api.MusicApi;
 import com.github.durex.music.model.Music;
 import com.github.durex.music.service.MusicService;
 import com.github.durex.shared.model.RespData;
-import com.github.durex.shared.support.Helper;
 import java.util.List;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -21,26 +20,26 @@ public class MusicHttpController implements MusicApi {
 
   @Override
   public RespData<List<Music>> list(@RequestParam("title") String title) {
-    return RespData.of(musicService.getMusicsByTitle(title), Helper.okResponse());
+    return RespData.of(musicService.getMusicsByTitle(title), null);
   }
 
   @Override
   public RespData<Music> get(@PathVariable("id") String musicId) {
-    return RespData.of(musicService.getMusicById(musicId), Helper.okResponse());
+    return RespData.of(musicService.getMusicById(musicId), null);
   }
 
   @Override
   public RespData<Integer> create(@RequestBody Music music) {
-    return RespData.of(musicService.createMusic(music), Helper.okResponse());
+    return RespData.of(musicService.createMusic(music), null);
   }
 
   @Override
   public RespData<Integer> update(@RequestBody Music music) {
-    return RespData.of(musicService.updateMusic(music), Helper.okResponse());
+    return RespData.of(musicService.updateMusic(music), null);
   }
 
   @Override
   public RespData<Integer> delete(@PathVariable("id") String musicId) {
-    return RespData.of(musicService.deleteMusicById(musicId), Helper.okResponse());
+    return RespData.of(musicService.deleteMusicById(musicId), null);
   }
 }
