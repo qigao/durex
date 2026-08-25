@@ -16,6 +16,61 @@ plugins.withId('java') {
         withJavadocJar()
     }
 
+    def publicApiManifest = rootProject.file('gradle/public-api/0.1-surface.txt')
+    def publicApiSourceIncludes = {
+        if (!publicApiManifest.isFile()) {
+            throw new GradleException("Missing Durex public API manifest: ${publicApiManifest}")
+        }
+
+        publicApiManifest.readLines('UTF-8')
+            .collect { it.trim() }
+            .findAll { it && !it.startsWith('#') }
+            .collect { it.split('\\|', 3) }
+            .findAll { parts -> parts.length == 3 && parts[0] == project.name && parts[1] == 'api' }
+            .collect { parts -> parts[2].replace('.', '/') + '.java' }
+    }
+
+    tasks.register('durexPublicApiJavadoc', Javadoc) {
+        group = 'verification'
+        description = 'Runs warning-as-error Javadoc only for manifest-declared Durex user API types.'
+
+        def apiSourceIncludes = publicApiSourceIncludes()
+        source = sourceSets.main.allJava.matching {
+            apiSourceIncludes.each { pattern -> include pattern }
+        }
+        classpath = sourceSets.main.compileClasspath + sourceSets.main.output
+        destinationDir = layout.buildDirectory.dir('docs/durex-public-api').get().asFile
+        failOnError = true
+
+        options.memberLevel = org.gradle.external.javadoc.JavadocMemberLevel.PROTECTED
+        options.encoding = 'UTF-8'
+        options.charSet = 'UTF-8'
+        options.docEncoding = 'UTF-8'
+        options.addBooleanOption('Werror', true)
+        options.addBooleanOption('Xdoclint:all', true)
+
+        doFirst {
+            if (apiSourceIncludes.isEmpty()) {
+                throw new GradleException("No scope=api types declared for ${project.name}")
+            }
+
+            def expected = apiSourceIncludes as Set
+            def actual = source.files.collect { file ->
+                sourceSets.main.allJava.srcDirs
+                    .find { srcDir -> file.toPath().startsWith(srcDir.toPath()) }
+                    ?.toPath()
+                    ?.relativize(file.toPath())
+                    ?.toString()
+                    ?.replace('\\', '/')
+            }.findAll { it } as Set
+
+            if (actual != expected) {
+                throw new GradleException(
+                    "Public API Javadoc source mismatch for ${project.name}. expected=${expected}, actual=${actual}")
+            }
+        }
+    }
+
     publishing {
         publications {
             mavenJava(MavenPublication) {
