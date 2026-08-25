@@ -63,6 +63,8 @@ jobs:
             :messaging-spring-redis:publishMavenJavaPublicationToStagingRepository \
             -PdurexStagingRepo="$staging" \
             -PdurexVersion=0.1.0-SNAPSHOT \
+            -PdurexLicenseName='Durex CI placeholder - not for release' \
+            -PdurexLicenseUrl='https://example.invalid/durex-license' \
             --stacktrace
       - name: Verify staged artifact, POM, and type boundary
         shell: bash
@@ -115,6 +117,35 @@ jobs:
               echo "::error::Dead public support type still packaged: $fqcn"
               exit 1
             fi
+          done
+      - name: Verify Central bundle prerequisites
+        shell: bash
+        run: |
+          set -euo pipefail
+          root="$GITHUB_WORKSPACE/build/durex-staging/io/github/qigao/durex"
+          for artifact in shared-common shared-spring-http messaging-api messaging-spring-redis; do
+            version_dir="$root/$artifact/0.1.0-SNAPSHOT"
+            main_jar=$(find "$version_dir" -maxdepth 1 -type f -name "${artifact}-*.jar" ! -name '*-sources.jar' ! -name '*-javadoc.jar' -print -quit)
+            sources_jar=$(find "$version_dir" -maxdepth 1 -type f -name '*-sources.jar' -print -quit)
+            javadoc_jar=$(find "$version_dir" -maxdepth 1 -type f -name '*-javadoc.jar' -print -quit)
+            pom=$(find "$version_dir" -maxdepth 1 -type f -name '*.pom' -print -quit)
+            module=$(find "$version_dir" -maxdepth 1 -type f -name '*.module' -print -quit)
+
+            test -n "$main_jar"
+            test -n "$sources_jar"
+            test -n "$javadoc_jar"
+            test -n "$pom"
+            test -n "$module"
+
+            grep -Fq "<name>Durex $artifact</name>" "$pom"
+            grep -Fq "<description>Durex public runtime/API module $artifact</description>" "$pom"
+            grep -Fq '<url>https://github.com/qigao/durex</url>' "$pom"
+            grep -Fq '<name>Durex CI placeholder - not for release</name>' "$pom"
+            grep -Fq '<url>https://example.invalid/durex-license</url>' "$pom"
+            grep -Fq '<id>qigao</id>' "$pom"
+            grep -Fq '<name>Qi Gao</name>' "$pom"
+            grep -Fq '<url>https://github.com/qigao</url>' "$pom"
+            grep -Fq '<connection>scm:git:https://github.com/qigao/durex.git</connection>' "$pom"
           done
       - name: Verify public API signature compatibility
         shell: bash
