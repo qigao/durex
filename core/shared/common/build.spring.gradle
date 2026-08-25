@@ -6,3 +6,5 @@ simpledsl {
     javaLibrary()
     lombok()
 }
+
+apply from: file('../../../gradle/durex-publication.gradle')

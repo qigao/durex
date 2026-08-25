@@ -31,6 +31,17 @@ Spring Boot is the only application runtime. Durex adds runtime libraries and se
 * Spring-native Redis Pub/Sub and Redis Streams messaging
 * GraalVM native/AOT reference build
 
+== Public Maven Surface
+
+Durex publishes only deliberate runtime/API modules. The initial artifact group is `io.github.qigao.durex` and the first development version is `0.1.0-SNAPSHOT`.
+
+* `shared-common`
+* `shared-spring-http`
+* `messaging-api`
+* `messaging-spring-redis`
+
+Music, schema/codegen, migration, reference, and `shared-utils` modules are not part of the public Maven surface. See xref:docs/public-artifacts.md[Public artifacts] for the versioning and external-consumer compatibility contract.
+
 == Schema
 
 Schema/code generation remains build-time and framework-neutral. Durex activates jOOQ and JSON Schema generation through the public SimpleDSL project DSL:

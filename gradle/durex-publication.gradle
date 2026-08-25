@@ -1,0 +1,35 @@
+group = 'io.github.qigao.durex'
+version = providers.gradleProperty('durexVersion').orElse('0.1.0-SNAPSHOT').get()
+
+apply plugin: 'maven-publish'
+
+plugins.withId('java') {
+    java {
+        withSourcesJar()
+    }
+
+    publishing {
+        publications {
+            mavenJava(MavenPublication) {
+                from components.java
+                pom {
+                    name = "Durex ${project.name}"
+                    description = "Durex public runtime/API module ${project.name}"
+                    url = 'https://github.com/qigao/durex'
+                    scm {
+                        connection = 'scm:git:https://github.com/qigao/durex.git'
+                        developerConnection = 'scm:git:ssh://git@github.com/qigao/durex.git'
+                        url = 'https://github.com/qigao/durex'
+                    }
+                }
+            }
+        }
+        repositories {
+            maven {
+                name = 'staging'
+                def stagingRepository = providers.gradleProperty('durexStagingRepo').orNull
+                url = uri(stagingRepository ?: layout.buildDirectory.dir('staging-repository').get().asFile)
+            }
+        }
+    }
+}
