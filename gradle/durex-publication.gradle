@@ -30,7 +30,7 @@ plugins.withId('java') {
             .collect { parts -> parts[2].replace('.', '/') + '.java' }
     }
 
-    tasks.register('durexPublicApiJavadoc', Javadoc) {
+    def strictPublicApiJavadoc = tasks.register('durexPublicApiJavadoc', Javadoc) {
         group = 'verification'
         description = 'Runs warning-as-error Javadoc only for manifest-declared Durex user API types.'
 
@@ -115,6 +115,10 @@ plugins.withId('java') {
                 url = uri(stagingRepository ?: layout.buildDirectory.dir('staging-repository').get().asFile)
             }
         }
+    }
+
+    tasks.withType(org.gradle.api.publish.maven.tasks.PublishToMavenRepository).configureEach {
+        dependsOn strictPublicApiJavadoc
     }
 
     def verifyReleaseMetadata = tasks.register('verifyDurexReleaseMetadata') {
