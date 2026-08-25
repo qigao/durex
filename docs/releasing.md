@@ -7,6 +7,8 @@ Durex releases are built from one exact Git commit. The public artifact set rema
 - `io.github.qigao.durex:messaging-api`
 - `io.github.qigao.durex:messaging-spring-redis`
 
+Durex is distributed under the Apache License, Version 2.0. The canonical license text is the repository-root `LICENSE` file, and Maven POM license metadata is fixed by `gradle/durex-publication.gradle`; release jobs do not inject or override the distribution license.
+
 ## Dry-run
 
 The `Durex Release` workflow runs as a credentials-free dry-run on pull requests that modify the release contract. It can also be started manually with a version such as `0.1.0` and `publish_to_central=false`.
@@ -14,23 +16,21 @@ The `Durex Release` workflow runs as a credentials-free dry-run on pull requests
 A dry-run:
 
 1. derives and validates a non-SNAPSHOT `X.Y.Z` version;
-2. publishes the four artifacts to an isolated temporary Maven repository;
-3. verifies the exact artifact set;
-4. requires the generated release signatures to exactly match the committed 0.1 API baseline (not merely be backward-compatible with it);
-5. compiles the external Maven-only consumer against the release-version artifacts;
-6. assembles an unsigned Central-layout bundle with MD5/SHA-1 checksums;
-7. records the tested SHA and coordinates without making any network publication.
-
-The dry-run uses a visibly invalid CI-only license placeholder because Durex currently has no selected distribution license. That placeholder is never allowed in a real publication.
+2. requires the canonical Apache-2.0 repository `LICENSE`;
+3. publishes the four artifacts to an isolated temporary Maven repository;
+4. verifies the exact artifact set and Apache-2.0 POM metadata;
+5. requires the generated release signatures to exactly match the committed 0.1 API baseline (not merely be backward-compatible with it);
+6. compiles the external Maven-only consumer against the release-version artifacts;
+7. assembles an unsigned Central-layout bundle with MD5/SHA-1 checksums;
+8. records the tested SHA, coordinates, and license without making any network publication.
 
 ## Real release prerequisites
 
-A real Central release is intentionally impossible until all prerequisites exist:
+Before a real Central release:
 
-- issue #177 is resolved with a canonical repository `LICENSE` and matching POM license metadata;
-- Central Publisher Portal namespace `io.github.qigao.durex` is verified for the publishing account;
-- repository secrets contain `DUREX_SIGNING_KEY`, `DUREX_SIGNING_PASSWORD` (when the key is protected), optional `DUREX_SIGNING_KEY_ID`, `CENTRAL_TOKEN_USERNAME`, and `CENTRAL_TOKEN_PASSWORD`;
-- the release commit passes normal Publication Surface/API compatibility CI.
+- Central Publisher Portal namespace `io.github.qigao.durex` must be verified for the publishing account;
+- repository secrets must contain `DUREX_SIGNING_KEY`, `DUREX_SIGNING_PASSWORD` (when the key is protected), optional `DUREX_SIGNING_KEY_ID`, `CENTRAL_TOKEN_USERNAME`, and `CENTRAL_TOKEN_PASSWORD`;
+- the release commit must pass normal Publication Surface/API compatibility CI and the exact-SHA release dry-run.
 
 The OpenPGP key is supplied to Gradle's Signing Plugin in memory. It is not stored in the repository.
 
@@ -45,7 +45,7 @@ git tag v0.1.0 <exact-commit-sha>
 git push origin v0.1.0
 ```
 
-Pushing the tag invokes the real publication path. Missing license/signing/Central credentials fail before any upload.
+Pushing the tag invokes the real publication path. Missing signing/Central credentials fail before any upload; the repository license cannot be replaced by workflow input or environment variables.
 
 ## Central Publisher Portal flow
 
@@ -53,6 +53,6 @@ The release repository is converted into a Maven Repository Layout zip containin
 
 The workflow uploads the single bundle to the official Central Publisher API using `POST /api/v1/publisher/upload` with `publishingType=USER_MANAGED`. It polls deployment status until `VALIDATED`, explicitly promotes that deployment, then waits for `PUBLISHED`. It does not use the retired OSSRH service.
 
-After Central reports `PUBLISHED`, the workflow creates or updates the matching GitHub release with the exact tested SHA, four Maven coordinates, and Central deployment id.
+After Central reports `PUBLISHED`, the workflow creates or updates the matching GitHub release with the exact tested SHA, four Maven coordinates, Apache-2.0 license, and Central deployment id.
 
 Central components are immutable after publication, so version/tag reuse is not a recovery mechanism. Fixes require a new version.

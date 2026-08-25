@@ -3,6 +3,7 @@ name: Durex Publication Surface
 on:
   push:
     paths:
+      - 'LICENSE'
       - 'core/shared/common/**'
       - 'core/shared/spring/http/**'
       - 'core/shared/messaging/api/**'
@@ -18,6 +19,7 @@ on:
       - '.github/workflows/durex-publication.yml'
   pull_request:
     paths:
+      - 'LICENSE'
       - 'core/shared/common/**'
       - 'core/shared/spring/http/**'
       - 'core/shared/messaging/api/**'
@@ -63,8 +65,6 @@ jobs:
             :messaging-spring-redis:publishMavenJavaPublicationToStagingRepository \
             -PdurexStagingRepo="$staging" \
             -PdurexVersion=0.1.0-SNAPSHOT \
-            -PdurexLicenseName='Durex CI placeholder - not for release' \
-            -PdurexLicenseUrl='https://example.invalid/durex-license' \
             --stacktrace
       - name: Verify staged artifact, POM, and type boundary
         shell: bash
@@ -140,8 +140,10 @@ jobs:
             grep -Fq "<name>Durex $artifact</name>" "$pom"
             grep -Fq "<description>Durex public runtime/API module $artifact</description>" "$pom"
             grep -Fq '<url>https://github.com/qigao/durex</url>' "$pom"
-            grep -Fq '<name>Durex CI placeholder - not for release</name>' "$pom"
-            grep -Fq '<url>https://example.invalid/durex-license</url>' "$pom"
+            grep -Fq '<name>Apache License, Version 2.0</name>' "$pom"
+            grep -Fq '<url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>' "$pom"
+            ! grep -Fq 'Durex CI placeholder - not for release' "$pom"
+            ! grep -Fq 'example.invalid' "$pom"
             grep -Fq '<id>qigao</id>' "$pom"
             grep -Fq '<name>Qi Gao</name>' "$pom"
             grep -Fq '<url>https://github.com/qigao</url>' "$pom"
@@ -151,16 +153,23 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          if ./gradlew :shared-common:generatePomFileForMavenJavaPublication -PdurexVersion=0.1.0 --stacktrace; then
-            echo '::error::Non-SNAPSHOT POM generation succeeded without a configured distribution license'
-            exit 1
-          fi
-
           ./gradlew :shared-common:generatePomFileForMavenJavaPublication \
             -PdurexVersion=0.1.0 \
-            -PdurexLicenseName='Durex CI placeholder - not for release' \
-            -PdurexLicenseUrl='https://example.invalid/durex-license' \
             --stacktrace
+
+          pom="$GITHUB_WORKSPACE/core/shared/common/build/publications/mavenJava/pom-default.xml"
+          test -f "$pom"
+          grep -Fq '<name>Apache License, Version 2.0</name>' "$pom"
+          grep -Fq '<url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>' "$pom"
+
+          if ./gradlew :shared-common:generatePomFileForMavenJavaPublication \
+            -PdurexVersion=0.1.0 \
+            -PdurexLicenseName='Legacy override must fail' \
+            -PdurexLicenseUrl='https://example.invalid/legacy-license' \
+            --stacktrace; then
+            echo '::error::Legacy license override was accepted; Apache-2.0 must be repository-owned metadata'
+            exit 1
+          fi
 
           ./gradlew :shared-common:tasks --all | grep -Fq 'signMavenJavaPublication'
       - name: Verify public API signature compatibility

@@ -4,10 +4,10 @@ version = providers.gradleProperty('durexVersion').orElse('0.1.0-SNAPSHOT').get(
 apply plugin: 'maven-publish'
 apply plugin: 'signing'
 
-def licenseNameProvider = providers.gradleProperty('durexLicenseName').orElse(providers.environmentVariable('DUREX_LICENSE_NAME'))
-def licenseUrlProvider = providers.gradleProperty('durexLicenseUrl').orElse(providers.environmentVariable('DUREX_LICENSE_URL'))
-def expectedLicenseName = 'Apache License, Version 2.0'
-def expectedLicenseUrl = 'https://www.apache.org/licenses/LICENSE-2.0.txt'
+def durexLicenseName = 'Apache License, Version 2.0'
+def durexLicenseUrl = 'https://www.apache.org/licenses/LICENSE-2.0.txt'
+def legacyLicenseNameOverride = providers.gradleProperty('durexLicenseName').orElse(providers.environmentVariable('DUREX_LICENSE_NAME'))
+def legacyLicenseUrlOverride = providers.gradleProperty('durexLicenseUrl').orElse(providers.environmentVariable('DUREX_LICENSE_URL'))
 def signingKeyProvider = providers.gradleProperty('signingKey').orElse(providers.environmentVariable('DUREX_SIGNING_KEY'))
 def signingPasswordProvider = providers.gradleProperty('signingPassword').orElse(providers.environmentVariable('DUREX_SIGNING_PASSWORD'))
 def signingKeyIdProvider = providers.gradleProperty('signingKeyId').orElse(providers.environmentVariable('DUREX_SIGNING_KEY_ID'))
@@ -82,15 +82,11 @@ plugins.withId('java') {
                     description = "Durex public runtime/API module ${project.name}"
                     url = 'https://github.com/qigao/durex'
 
-                    def licenseName = licenseNameProvider.orNull
-                    def licenseUrl = licenseUrlProvider.orNull
-                    if (licenseName && licenseUrl) {
-                        licenses {
-                            license {
-                                name = licenseName
-                                url = licenseUrl
-                                distribution = 'repo'
-                            }
+                    licenses {
+                        license {
+                            name = durexLicenseName
+                            url = durexLicenseUrl
+                            distribution = 'repo'
                         }
                     }
 
@@ -127,35 +123,26 @@ plugins.withId('java') {
         group = 'publishing'
         description = 'Verifies the repository and Maven publication use the canonical Apache-2.0 license.'
         doLast {
+            if (legacyLicenseNameOverride.isPresent() || legacyLicenseUrlOverride.isPresent()) {
+                throw new GradleException(
+                    'Durex distribution license is repository-owned Apache-2.0 metadata and may not be overridden ' +
+                    'with durexLicenseName/durexLicenseUrl or DUREX_LICENSE_* environment variables.')
+            }
+
             def licenseFile = rootProject.file('LICENSE')
             if (!licenseFile.isFile()) {
                 throw new GradleException('Durex publication requires the canonical Apache-2.0 LICENSE file at repository root.')
             }
-            if (licenseNameProvider.orNull != expectedLicenseName || licenseUrlProvider.orNull != expectedLicenseUrl) {
-                throw new GradleException(
-                    "Durex publication license must be '${expectedLicenseName}' (${expectedLicenseUrl}); " +
-                    "got name='${licenseNameProvider.orNull}', url='${licenseUrlProvider.orNull}'.")
-            }
-        }
-    }
 
-    def verifyReleaseMetadata = tasks.register('verifyDurexReleaseMetadata') {
-        group = 'publishing'
-        description = 'Rejects a non-SNAPSHOT Durex publication when mandatory release metadata is missing.'
-        doLast {
-            if (!version.toString().endsWith('-SNAPSHOT')) {
-                if (!licenseNameProvider.isPresent() || !licenseUrlProvider.isPresent()) {
-                    throw new GradleException(
-                        'Durex release publication requires durexLicenseName and durexLicenseUrl. ' +
-                        'Choose and commit the project distribution license before publishing a release.')
-                }
+            def licenseText = licenseFile.getText('UTF-8')
+            if (!licenseText.contains('Apache License') || !licenseText.contains('Version 2.0, January 2004')) {
+                throw new GradleException('Repository LICENSE is not the canonical Apache License 2.0 text.')
             }
         }
     }
 
     tasks.named('generatePomFileForMavenJavaPublication') {
         dependsOn verifyCanonicalLicense
-        dependsOn verifyReleaseMetadata
     }
 
     signing {
