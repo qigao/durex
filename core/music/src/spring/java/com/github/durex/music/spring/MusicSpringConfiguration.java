@@ -9,8 +9,10 @@ import com.github.durex.music.service.PlaylistService;
 import org.jooq.DSLContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration(proxyBeanMethods = false)
+@EnableTransactionManagement
 class MusicSpringConfiguration {
 
   @Bean
