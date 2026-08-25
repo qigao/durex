@@ -27,6 +27,18 @@ public class DurexRedisMessagingAutoConfiguration {
   }
 
   @Bean
+  @ConditionalOnMissingBean(RedisMessageCodec.class)
+  RedisMessageCodec redisMessageCodec(JsonMapper jsonMapper) {
+    return new JacksonRedisMessageCodec(jsonMapper);
+  }
+
+  @Bean
+  @ConditionalOnMissingBean(RedisStreamListenerFailureHandler.class)
+  RedisStreamListenerFailureHandler redisStreamListenerFailureHandler() {
+    return RedisStreamListenerFailureHandler.keepPending();
+  }
+
+  @Bean
   @ConditionalOnMissingBean(RedisOutgoingAspect.class)
   RedisOutgoingAspect redisOutgoingAspect(
       RedisMessageSendingOperations messageSendingOperations, Environment environment) {
@@ -36,8 +48,8 @@ public class DurexRedisMessagingAutoConfiguration {
   @Bean
   @ConditionalOnMissingBean(RedisStreamOutgoingAspect.class)
   RedisStreamOutgoingAspect redisStreamOutgoingAspect(
-      StringRedisTemplate redisTemplate, JsonMapper jsonMapper, Environment environment) {
-    return new RedisStreamOutgoingAspect(redisTemplate, jsonMapper, environment);
+      StringRedisTemplate redisTemplate, RedisMessageCodec messageCodec, Environment environment) {
+    return new RedisStreamOutgoingAspect(redisTemplate, messageCodec, environment);
   }
 
   @Bean
@@ -45,8 +57,10 @@ public class DurexRedisMessagingAutoConfiguration {
   RedisStreamListenerRegistrar redisStreamListenerRegistrar(
       RedisConnectionFactory connectionFactory,
       StringRedisTemplate redisTemplate,
-      JsonMapper jsonMapper,
+      RedisMessageCodec messageCodec,
+      RedisStreamListenerFailureHandler failureHandler,
       Environment environment) {
-    return new RedisStreamListenerRegistrar(connectionFactory, redisTemplate, jsonMapper, environment);
+    return new RedisStreamListenerRegistrar(
+        connectionFactory, redisTemplate, messageCodec, failureHandler, environment);
   }
 }
