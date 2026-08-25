@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-if [[ $# -ne 4 ]]; then
-  echo "usage: $0 <generate|check> <staging-root> <surface-manifest> <signature-file>" >&2
+if [[ $# -lt 4 || $# -gt 5 ]]; then
+  echo "usage: $0 <generate|check> <staging-root> <surface-manifest> <signature-file> [version]" >&2
   exit 2
 fi
 
@@ -10,10 +10,11 @@ command=$1
 staging_root=$2
 manifest=$3
 signature_file=$4
+version=${5:-0.1.0-SNAPSHOT}
 
 main_jar() {
   local artifact=$1
-  find "$staging_root/$artifact/0.1.0-SNAPSHOT" -maxdepth 1 -type f \
+  find "$staging_root/$artifact/$version" -maxdepth 1 -type f \
     -name "${artifact}-*.jar" \
     ! -name '*-sources.jar' \
     ! -name '*-javadoc.jar' \
@@ -32,7 +33,7 @@ generate_signatures() {
     local jar_file
     jar_file=$(main_jar "$artifact")
     if [[ -z "$jar_file" ]]; then
-      echo "missing staged jar for artifact: $artifact" >&2
+      echo "missing staged jar for artifact/version: $artifact:$version" >&2
       exit 1
     fi
 

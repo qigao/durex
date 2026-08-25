@@ -42,7 +42,7 @@ Durex publishes only deliberate runtime/API modules. The artifact group is `io.g
 
 Music, schema/codegen, migration, reference, and `shared-utils` modules are not part of the public Maven surface.
 
-See xref:docs/public-artifacts.md[Public artifacts and Maven-only examples] and xref:docs/public-api-lifecycle.md[Public API lifecycle and deprecation policy].
+See xref:docs/public-artifacts.md[Public artifacts and Maven-only examples], xref:docs/public-api-lifecycle.md[Public API lifecycle and deprecation policy], and xref:docs/releasing.md[Release procedure].
 
 == Schema
 
