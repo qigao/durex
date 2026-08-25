@@ -28,12 +28,20 @@ The distinction is deliberate: Java/Spring mechanics sometimes require implement
 
 The initial supported API includes the complete HTTP error model (`ApiException`, `ErrorCode`, `ErrorResponse`, `RespData`, `DurexHttpExceptionHandler`), the three messaging annotations, and the Redis codec/failure-policy contracts including `RedisStreamListenerFailure`.
 
-Legacy `shared.support` helpers are not part of the public contract and must not be packaged in the first 0.1 external surface unless a real consumer contract is established.
+Legacy `shared.support` helpers are not part of the public contract and are not packaged in the 0.1 external surface.
+
+## Compatibility verification
+
+`gradle/public-api/0.1-signatures.txt` is the normalized JVM signature baseline for entries classified as `api`. `scripts/public-api-signatures.sh` generates signatures from the **staged Maven jars** using JDK `javap -protected -s`; it does not inspect project source.
+
+The check is directional: every baseline line must still exist in the current staged artifact. This catches removed classes/members, incompatible JVM descriptor changes, and visibility/class-declaration changes while allowing additive API growth. Types classified as `runtime` are intentionally excluded from the user API compatibility promise.
+
+An intentional incompatible baseline edit must be reviewed as an explicit public contract change; updating the baseline is not a generic way to make CI green.
 
 ## Publication verification
 
 PR CI publishes the four artifacts into a clean temporary Maven repository. `reference/publication-consumer` is then built as an ordinary external Gradle project that knows only Maven coordinates; it does not load SimpleDSL, Durex project dependencies, composite builds, or source injection.
 
-`PublicApiBaseline.java` is the compile-time fixture for the supported `api` entries. The publication workflow also verifies that every manifest entry exists in the staged jars and rejects known dead support types. #169 will add deterministic JVM signature compatibility on top of this explicit manifest.
+`PublicApiBaseline.java` remains a compile-time usability fixture. The signature baseline adds deterministic JVM-level compatibility protection on top of that consumer compile proof.
 
 The staging repository is a CI proof mechanism. Network release credentials and deployment to a public Maven repository are a separate release operation.

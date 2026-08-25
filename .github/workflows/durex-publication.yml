@@ -10,6 +10,7 @@ on:
       - 'gradle/durex-publication.gradle'
       - 'gradle/public-api/**'
       - 'gradle/dependencies/**'
+      - 'scripts/public-api-signatures.sh'
       - 'reference/publication-consumer/**'
       - 'docs/public-artifacts.md'
       - '.github/workflows/durex-publication.yml'
@@ -22,6 +23,7 @@ on:
       - 'gradle/durex-publication.gradle'
       - 'gradle/public-api/**'
       - 'gradle/dependencies/**'
+      - 'scripts/public-api-signatures.sh'
       - 'reference/publication-consumer/**'
       - 'docs/public-artifacts.md'
       - '.github/workflows/durex-publication.yml'
@@ -110,6 +112,19 @@ jobs:
               exit 1
             fi
           done
+      - name: Verify public API signature compatibility
+        shell: bash
+        run: |
+          set -euo pipefail
+          root="$GITHUB_WORKSPACE/build/durex-staging/io/github/qigao/durex"
+          manifest="$GITHUB_WORKSPACE/gradle/public-api/0.1-surface.txt"
+          baseline="$GITHUB_WORKSPACE/gradle/public-api/0.1-signatures.txt"
+          current=/tmp/durex-current-signatures.txt
+          scripts/public-api-signatures.sh generate "$root" "$manifest" "$current"
+          echo '--- current normalized public API signatures ---'
+          cat "$current"
+          echo '--- compatibility check ---'
+          scripts/public-api-signatures.sh check "$root" "$manifest" "$baseline"
       - name: Compile external Maven-only consumer baseline
         shell: bash
         run: |
