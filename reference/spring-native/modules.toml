@@ -1,0 +1,12 @@
+[discovery]
+mode = "manual"
+
+[[module]]
+name = "messaging-api"
+path = "core/shared/messaging/api"
+build-file = "build.spring.gradle"
+
+[[module]]
+name = "messaging-spring-redis"
+path = "core/shared/messaging/spring-redis"
+build-file = "build.spring.gradle"
