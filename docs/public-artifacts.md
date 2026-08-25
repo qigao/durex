@@ -4,7 +4,7 @@ Durex separates its external runtime/API surface from repository-local applicati
 
 ## Initial Maven surface
 
-All public artifacts use group `io.github.qigao.durex` and one synchronized version. The first development line is `0.1.0-SNAPSHOT`; pre-1.0 releases follow semantic versioning.
+All public artifacts use group `io.github.qigao.durex` and one synchronized version. The first development line is `0.1.0-SNAPSHOT`; pre-1.0 releases follow the compatibility policy in [Public API lifecycle](public-api-lifecycle.md).
 
 | Artifact | Contract |
 | --- | --- |
@@ -16,6 +16,81 @@ All public artifacts use group `io.github.qigao.durex` and one synchronized vers
 Music, schema/codegen, migration, and reference modules are not public artifacts. `shared-utils` remains internal until its SQL-builder responsibility has an explicit external contract.
 
 A BOM is intentionally not published yet. Four artifacts share one version, so a BOM would add an artifact without solving a current alignment problem. Revisit that decision if the public surface expands or versions diverge.
+
+## Maven-only consumption
+
+External consumers use ordinary Maven coordinates. They do **not** apply SimpleDSL and do not depend on the Durex source tree.
+
+The examples below use the intended `0.1.0` release coordinate. Repository PR CI currently proves the same graph from a staged `0.1.0-SNAPSHOT` Maven repository before public deployment.
+
+### HTTP error model
+
+Gradle Groovy DSL:
+
+```groovy
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation "io.github.qigao.durex:shared-spring-http:0.1.0"
+}
+```
+
+`shared-common` is exposed transitively, so application code can use the canonical error/response types without declaring it separately:
+
+```java
+import com.github.durex.shared.exceptions.ApiException;
+import com.github.durex.shared.exceptions.model.ErrorCode;
+import com.github.durex.shared.model.RespData;
+
+RespData<String> ok = RespData.of("ready", null);
+throw new ApiException("missing", ErrorCode.ENTITY_NOT_FOUND);
+```
+
+The Spring HTTP adapter supplies Durex's `ApiException` mapping when its auto-configuration is active.
+
+### Redis messaging
+
+Gradle Groovy DSL:
+
+```groovy
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation "io.github.qigao.durex:messaging-spring-redis:0.1.0"
+}
+```
+
+`messaging-api` is exposed transitively. A consumer can use Durex annotations and the Redis adapter without a project/composite dependency:
+
+```java
+import com.github.durex.messaging.annotation.Outgoing;
+import com.github.durex.messaging.annotation.RedisStreamListener;
+import com.github.durex.messaging.annotation.RedisStreamOutgoing;
+
+@Outgoing("events.normalized")
+public Event normalize(Event event) {
+    return event;
+}
+
+@RedisStreamOutgoing("events.stream")
+public Event publish(Event event) {
+    return event;
+}
+
+@RedisStreamListener(
+    stream = "events.stream",
+    group = "workers",
+    consumer = "worker-1")
+public void consume(Event event) {
+    // application handling
+}
+```
+
+Applications may provide their own `RedisMessageCodec` or `RedisStreamListenerFailureHandler` when the default codec/failure disposition is not sufficient.
 
 ## Supported type surface
 
@@ -36,7 +111,7 @@ Legacy `shared.support` helpers are not part of the public contract and are not 
 
 The check is directional: every baseline line must still exist in the current staged artifact. This catches removed classes/members, incompatible JVM descriptor changes, and visibility/class-declaration changes while allowing additive API growth. Types classified as `runtime` are intentionally excluded from the user API compatibility promise.
 
-An intentional incompatible baseline edit must be reviewed as an explicit public contract change; updating the baseline is not a generic way to make CI green.
+An intentional incompatible baseline edit must be reviewed as an explicit public contract change; updating the baseline is not a generic way to make CI green. The release/deprecation process is defined in [Public API lifecycle](public-api-lifecycle.md).
 
 ## Publication verification
 

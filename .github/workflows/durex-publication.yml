@@ -12,7 +12,9 @@ on:
       - 'gradle/dependencies/**'
       - 'scripts/public-api-signatures.sh'
       - 'reference/publication-consumer/**'
+      - 'README.adoc'
       - 'docs/public-artifacts.md'
+      - 'docs/public-api-lifecycle.md'
       - '.github/workflows/durex-publication.yml'
   pull_request:
     paths:
@@ -25,7 +27,9 @@ on:
       - 'gradle/dependencies/**'
       - 'scripts/public-api-signatures.sh'
       - 'reference/publication-consumer/**'
+      - 'README.adoc'
       - 'docs/public-artifacts.md'
+      - 'docs/public-api-lifecycle.md'
       - '.github/workflows/durex-publication.yml'
 
 concurrency:
@@ -133,6 +137,17 @@ jobs:
             exit 1
           fi
           echo 'Compatibility checker self-test rejected the injected missing signature as expected.'
+      - name: Verify public API documentation contract
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -f docs/public-api-lifecycle.md
+          grep -Fq 'xref:docs/public-artifacts.md[Public artifacts and Maven-only examples]' README.adoc
+          grep -Fq 'xref:docs/public-api-lifecycle.md[Public API lifecycle and deprecation policy]' README.adoc
+          grep -Fq 'io.github.qigao.durex:shared-spring-http:0.1.0' docs/public-artifacts.md
+          grep -Fq 'io.github.qigao.durex:messaging-spring-redis:0.1.0' docs/public-artifacts.md
+          grep -Fq '`api` means the type is a supported user-facing contract.' docs/public-api-lifecycle.md
+          grep -Fq 'Keep the deprecated signature for the remainder of the `0.1.x` line.' docs/public-api-lifecycle.md
       - name: Compile external Maven-only consumer baseline
         shell: bash
         run: |

@@ -33,14 +33,16 @@ Spring Boot is the only application runtime. Durex adds runtime libraries and se
 
 == Public Maven Surface
 
-Durex publishes only deliberate runtime/API modules. The initial artifact group is `io.github.qigao.durex` and the first development version is `0.1.0-SNAPSHOT`.
+Durex publishes only deliberate runtime/API modules. The artifact group is `io.github.qigao.durex`; the 0.1 line is protected by an explicit type manifest plus a staged-Maven JVM signature baseline.
 
 * `shared-common`
 * `shared-spring-http`
 * `messaging-api`
 * `messaging-spring-redis`
 
-Music, schema/codegen, migration, reference, and `shared-utils` modules are not part of the public Maven surface. See xref:docs/public-artifacts.md[Public artifacts] for the versioning and external-consumer compatibility contract.
+Music, schema/codegen, migration, reference, and `shared-utils` modules are not part of the public Maven surface.
+
+See xref:docs/public-artifacts.md[Public artifacts and Maven-only examples] and xref:docs/public-api-lifecycle.md[Public API lifecycle and deprecation policy].
 
 == Schema
 
