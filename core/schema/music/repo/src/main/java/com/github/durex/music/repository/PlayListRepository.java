@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.jooq.Condition;
 import org.jooq.DSLContext;
+import org.jooq.Query;
 
 @Slf4j
 public class PlayListRepository {
@@ -72,24 +73,11 @@ public class PlayListRepository {
   }
 
   public int update(PlayList playList) {
-    var rPlaylist = dsl.newRecord(PLAYLIST);
-    PlayListMapper.mapDtoToRecord(playList, rPlaylist);
-    rPlaylist.setUpdateTime(LocalDateTime.now());
-    return rPlaylist.update();
+    return updateQuery(playList).execute();
   }
 
   public int[] update(List<PlayList> playLists) {
-    var rPlaylists =
-        playLists.stream()
-            .map(
-                m -> {
-                  var rPlaylist = dsl.newRecord(PLAYLIST);
-                  rPlaylist.setUpdateTime(LocalDateTime.now());
-                  PlayListMapper.mapDtoToRecord(m, rPlaylist);
-                  return rPlaylist;
-                })
-            .collect(Collectors.toList());
-    return dsl.batchUpdate(rPlaylists).execute();
+    return dsl.batch(playLists.stream().map(this::updateQuery).toList()).execute();
   }
 
   public int deleteById(@NotNull String id) {
@@ -97,6 +85,7 @@ public class PlayListRepository {
         .set(PLAYLIST.DELETE_TIME, LocalDateTime.now())
         .set(PLAYLIST.DELETED_FLAG, 1)
         .where(PLAYLIST.ID.eq(id))
+        .and(NOT_DELETED)
         .execute();
   }
 
@@ -105,6 +94,7 @@ public class PlayListRepository {
         .set(PLAYLIST.DELETE_TIME, LocalDateTime.now())
         .set(PLAYLIST.DELETED_FLAG, 1)
         .where(PLAYLIST.ID.in(playlistIds))
+        .and(NOT_DELETED)
         .execute();
   }
 
@@ -113,6 +103,7 @@ public class PlayListRepository {
         .set(PLAYLIST.DELETE_TIME, LocalDateTime.now())
         .set(PLAYLIST.DELETED_FLAG, 1)
         .where(PLAYLIST.TITLE.eq(title))
+        .and(NOT_DELETED)
         .execute();
   }
 
@@ -122,6 +113,17 @@ public class PlayListRepository {
         .set(PLAYLIST.DELETE_TIME, LocalDateTime.now())
         .set(PLAYLIST.DELETED_FLAG, 1)
         .where(PLAYLIST.TITLE.like(realTitle))
+        .and(NOT_DELETED)
         .execute();
+  }
+
+  private Query updateQuery(PlayList playList) {
+    return dsl.update(PLAYLIST)
+        .set(PLAYLIST.DESCRIPTION, playList.getDescription())
+        .set(PLAYLIST.TITLE, playList.getTitle())
+        .set(PLAYLIST.COVER_ID, playList.getCoverId())
+        .set(PLAYLIST.UPDATE_TIME, LocalDateTime.now())
+        .where(PLAYLIST.ID.eq(playList.getId()))
+        .and(NOT_DELETED);
   }
 }
