@@ -84,57 +84,33 @@ com.github.durex.shared.exceptions.model.ErrorResponse|    descriptor: ()Lcom/gi
 com.github.durex.shared.exceptions.model.ErrorResponse|    descriptor: ()Ljava/lang/String;
 com.github.durex.shared.exceptions.model.ErrorResponse|    descriptor: ()Ljava/time/LocalDateTime;
 com.github.durex.shared.exceptions.model.ErrorResponse|    descriptor: ()Ljava/util/UUID;
-com.github.durex.shared.exceptions.model.ErrorResponse|    descriptor: ()V
-com.github.durex.shared.exceptions.model.ErrorResponse|    descriptor: (Lcom/github/durex/shared/exceptions/model/ErrorCode;)Lcom/github/durex/shared/exceptions/model/ErrorResponse;
-com.github.durex.shared.exceptions.model.ErrorResponse|    descriptor: (Lcom/github/durex/shared/exceptions/model/ErrorCode;)V
 com.github.durex.shared.exceptions.model.ErrorResponse|    descriptor: (Ljava/lang/Object;)Z
-com.github.durex.shared.exceptions.model.ErrorResponse|    descriptor: (Ljava/lang/String;)Lcom/github/durex/shared/exceptions/model/ErrorResponse;
-com.github.durex.shared.exceptions.model.ErrorResponse|    descriptor: (Ljava/lang/String;)V
-com.github.durex.shared.exceptions.model.ErrorResponse|    descriptor: (Ljava/time/LocalDateTime;)Lcom/github/durex/shared/exceptions/model/ErrorResponse;
-com.github.durex.shared.exceptions.model.ErrorResponse|    descriptor: (Ljava/time/LocalDateTime;)V
-com.github.durex.shared.exceptions.model.ErrorResponse|    descriptor: (Ljava/util/UUID;)Lcom/github/durex/shared/exceptions/model/ErrorResponse;
-com.github.durex.shared.exceptions.model.ErrorResponse|    descriptor: (Ljava/util/UUID;)V
-com.github.durex.shared.exceptions.model.ErrorResponse|    descriptor: (Ljava/util/UUID;Ljava/lang/String;Ljava/lang/String;Lcom/github/durex/shared/exceptions/model/ErrorCode;Ljava/time/LocalDateTime;)V
-com.github.durex.shared.exceptions.model.ErrorResponse|  protected boolean canEqual(java.lang.Object);
-com.github.durex.shared.exceptions.model.ErrorResponse|  public boolean equals(java.lang.Object);
-com.github.durex.shared.exceptions.model.ErrorResponse|  public com.github.durex.shared.exceptions.model.ErrorCode getErrorCode();
-com.github.durex.shared.exceptions.model.ErrorResponse|  public com.github.durex.shared.exceptions.model.ErrorResponse withCaller(java.lang.String);
-com.github.durex.shared.exceptions.model.ErrorResponse|  public com.github.durex.shared.exceptions.model.ErrorResponse withErrorCode(com.github.durex.shared.exceptions.model.ErrorCode);
-com.github.durex.shared.exceptions.model.ErrorResponse|  public com.github.durex.shared.exceptions.model.ErrorResponse withErrorId(java.util.UUID);
-com.github.durex.shared.exceptions.model.ErrorResponse|  public com.github.durex.shared.exceptions.model.ErrorResponse withMessage(java.lang.String);
-com.github.durex.shared.exceptions.model.ErrorResponse|  public com.github.durex.shared.exceptions.model.ErrorResponse withTimestamp(java.time.LocalDateTime);
-com.github.durex.shared.exceptions.model.ErrorResponse|  public com.github.durex.shared.exceptions.model.ErrorResponse();
-com.github.durex.shared.exceptions.model.ErrorResponse|  public com.github.durex.shared.exceptions.model.ErrorResponse(java.util.UUID, java.lang.String, java.lang.String, com.github.durex.shared.exceptions.model.ErrorCode, java.time.LocalDateTime);
-com.github.durex.shared.exceptions.model.ErrorResponse|  public int hashCode();
-com.github.durex.shared.exceptions.model.ErrorResponse|  public java.lang.String getCaller();
-com.github.durex.shared.exceptions.model.ErrorResponse|  public java.lang.String getMessage();
-com.github.durex.shared.exceptions.model.ErrorResponse|  public java.lang.String toString();
-com.github.durex.shared.exceptions.model.ErrorResponse|  public java.time.LocalDateTime getTimestamp();
-com.github.durex.shared.exceptions.model.ErrorResponse|  public java.util.UUID getErrorId();
-com.github.durex.shared.exceptions.model.ErrorResponse|  public void setCaller(java.lang.String);
-com.github.durex.shared.exceptions.model.ErrorResponse|  public void setErrorCode(com.github.durex.shared.exceptions.model.ErrorCode);
-com.github.durex.shared.exceptions.model.ErrorResponse|  public void setErrorId(java.util.UUID);
-com.github.durex.shared.exceptions.model.ErrorResponse|  public void setMessage(java.lang.String);
-com.github.durex.shared.exceptions.model.ErrorResponse|  public void setTimestamp(java.time.LocalDateTime);
-com.github.durex.shared.exceptions.model.ErrorResponse|public class com.github.durex.shared.exceptions.model.ErrorResponse implements java.io.Serializable {
+com.github.durex.shared.exceptions.model.ErrorResponse|    descriptor: (Ljava/util/UUID;Ljava/lang/String;Lcom/github/durex/shared/exceptions/model/ErrorCode;Ljava/time/LocalDateTime;)V
+com.github.durex.shared.exceptions.model.ErrorResponse|  public com.github.durex.shared.exceptions.model.ErrorCode errorCode();
+com.github.durex.shared.exceptions.model.ErrorResponse|  public com.github.durex.shared.exceptions.model.ErrorResponse(java.util.UUID, java.lang.String, com.github.durex.shared.exceptions.model.ErrorCode, java.time.LocalDateTime);
+com.github.durex.shared.exceptions.model.ErrorResponse|  public final boolean equals(java.lang.Object);
+com.github.durex.shared.exceptions.model.ErrorResponse|  public final int hashCode();
+com.github.durex.shared.exceptions.model.ErrorResponse|  public final java.lang.String toString();
+com.github.durex.shared.exceptions.model.ErrorResponse|  public java.lang.String message();
+com.github.durex.shared.exceptions.model.ErrorResponse|  public java.time.LocalDateTime timestamp();
+com.github.durex.shared.exceptions.model.ErrorResponse|  public java.util.UUID errorId();
+com.github.durex.shared.exceptions.model.ErrorResponse|public final class com.github.durex.shared.exceptions.model.ErrorResponse extends java.lang.Record implements java.io.Serializable {
 com.github.durex.shared.exceptions.model.ErrorResponse|}
+com.github.durex.shared.model.RespData|    descriptor: ()I
 com.github.durex.shared.model.RespData|    descriptor: ()Lcom/github/durex/shared/exceptions/model/ErrorResponse;
-com.github.durex.shared.model.RespData|    descriptor: ()Lcom/github/durex/shared/model/RespData$RespDataBuilder;
 com.github.durex.shared.model.RespData|    descriptor: ()Ljava/lang/Object;
 com.github.durex.shared.model.RespData|    descriptor: ()Ljava/lang/String;
-com.github.durex.shared.model.RespData|    descriptor: ()V
-com.github.durex.shared.model.RespData|    descriptor: (Lcom/github/durex/shared/exceptions/model/ErrorResponse;)V
-com.github.durex.shared.model.RespData|    descriptor: (Ljava/lang/Object;)V
+com.github.durex.shared.model.RespData|    descriptor: (Ljava/lang/Object;)Z
 com.github.durex.shared.model.RespData|    descriptor: (Ljava/lang/Object;Lcom/github/durex/shared/exceptions/model/ErrorResponse;)Lcom/github/durex/shared/model/RespData;
-com.github.durex.shared.model.RespData|  public T getResult();
-com.github.durex.shared.model.RespData|  public com.github.durex.shared.exceptions.model.ErrorResponse getError();
-com.github.durex.shared.model.RespData|  public com.github.durex.shared.model.RespData();
-com.github.durex.shared.model.RespData|  public java.lang.String toString();
-com.github.durex.shared.model.RespData|  public static <T> com.github.durex.shared.model.RespData$RespDataBuilder<T> builder();
+com.github.durex.shared.model.RespData|    descriptor: (Ljava/lang/Object;Lcom/github/durex/shared/exceptions/model/ErrorResponse;)V
+com.github.durex.shared.model.RespData|  public T result();
+com.github.durex.shared.model.RespData|  public com.github.durex.shared.exceptions.model.ErrorResponse error();
+com.github.durex.shared.model.RespData|  public com.github.durex.shared.model.RespData(T, com.github.durex.shared.exceptions.model.ErrorResponse);
+com.github.durex.shared.model.RespData|  public final boolean equals(java.lang.Object);
+com.github.durex.shared.model.RespData|  public final int hashCode();
+com.github.durex.shared.model.RespData|  public final java.lang.String toString();
 com.github.durex.shared.model.RespData|  public static <T> com.github.durex.shared.model.RespData<T> of(T, com.github.durex.shared.exceptions.model.ErrorResponse);
-com.github.durex.shared.model.RespData|  public void setError(com.github.durex.shared.exceptions.model.ErrorResponse);
-com.github.durex.shared.model.RespData|  public void setResult(T);
-com.github.durex.shared.model.RespData|public class com.github.durex.shared.model.RespData<T> {
+com.github.durex.shared.model.RespData|public final class com.github.durex.shared.model.RespData<T> extends java.lang.Record {
 com.github.durex.shared.model.RespData|}
 com.github.durex.shared.spring.http.DurexHttpExceptionHandler|    descriptor: ()V
 com.github.durex.shared.spring.http.DurexHttpExceptionHandler|    descriptor: (Lcom/github/durex/shared/exceptions/ApiException;)Lorg/springframework/http/ResponseEntity;
