@@ -23,7 +23,8 @@ public class RedisOutgoingAspect {
     Object result = joinPoint.proceed();
     if (result != null) {
       String destination = environment.resolvePlaceholders(outgoing.value());
-      messageSendingOperations.convertAndSend(destination, result);
+      TransactionalPublication.publishNowOrAfterCommit(
+          () -> messageSendingOperations.convertAndSend(destination, result));
     }
     return result;
   }
