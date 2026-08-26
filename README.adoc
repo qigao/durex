@@ -23,6 +23,12 @@ Useful diagnostics:
 ./gradlew simpledslDependencies
 ----
 
+== Repository Gate
+
+Every pull request receives one always-present `Durex Gate` check. It aggregates all other pull-request workflows actually triggered for the same exact head SHA and succeeds only after every discovered sibling workflow has completed successfully. Path-filtered workflows therefore remain efficient without becoming permanently pending required checks when their paths do not match.
+
+After the workflow is merged, repository protection should require `Durex Gate` on `master` and disallow force pushes.
+
 == Runtime
 
 Spring Boot is the only application runtime. Durex adds runtime libraries and semantic adapters while SimpleDSL owns build-time composition.

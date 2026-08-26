@@ -1,0 +1,71 @@
+name: Durex Gate
+
+on:
+  pull_request:
+
+permissions:
+  actions: read
+  contents: read
+  pull-requests: read
+
+concurrency:
+  group: durex-gate-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  aggregate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Require all exact-head PR workflows to succeed
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          GATE_NAME: Durex Gate
+        run: |
+          set -euo pipefail
+
+          previous_ids='__initial__'
+          stable_scans=0
+
+          for attempt in {1..360}; do
+            response=$(gh api --method GET \
+              -H 'Accept: application/vnd.github+json' \
+              "/repos/${GITHUB_REPOSITORY}/actions/runs?event=pull_request&head_sha=${HEAD_SHA}&per_page=100")
+
+            runs=$(jq --arg gate "$GATE_NAME" '[.workflow_runs[] | select(.name != $gate)]' <<<"$response")
+            ids=$(jq -r 'sort_by(.id) | map((.id|tostring) + ":" + (.run_attempt|tostring)) | join(",")' <<<"$runs")
+
+            failures=$(jq -r '
+              .[]
+              | select(.status == "completed" and .conclusion != "success")
+              | "\(.name) #\(.run_number) => \(.conclusion)"
+            ' <<<"$runs")
+            if [[ -n "$failures" ]]; then
+              echo "Exact-head PR workflow failure(s):"
+              echo "$failures"
+              exit 1
+            fi
+
+            pending=$(jq '[.[] | select(.status != "completed")] | length' <<<"$runs")
+
+            if [[ "$ids" == "$previous_ids" ]]; then
+              stable_scans=$((stable_scans + 1))
+            else
+              echo "Observed exact-head workflow set:"
+              jq -r '.[] | "- \(.name) #\(.run_number): \(.status) / \(.conclusion // "pending")"' <<<"$runs"
+              previous_ids="$ids"
+              stable_scans=0
+            fi
+
+            if [[ "$pending" -eq 0 && "$stable_scans" -ge 6 ]]; then
+              count=$(jq 'length' <<<"$runs")
+              echo "Durex Gate passed: $count sibling PR workflow run(s) completed successfully and the run set was stable for 60 seconds."
+              exit 0
+            fi
+
+            sleep 10
+          done
+
+          echo "::error::Durex Gate timed out before all exact-head PR workflows completed successfully."
+          exit 1
