@@ -2,6 +2,7 @@ package com.github.durex.music.api.client;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import com.github.durex.music.api.MusicApi;
 import com.sun.net.httpserver.HttpServer;
@@ -40,8 +41,9 @@ class MusicClientAutoConfigurationTest {
   @Test
   void autoConfigurationProvidesNamedMusicHttpClient() {
     var response = musicApi.get("music-1");
-    assertEquals("music-1", response.getResult().getId());
-    assertEquals("Client Runtime Song", response.getResult().getTitle());
+    assertEquals("music-1", response.result().getId());
+    assertEquals("Client Runtime Song", response.result().getTitle());
+    assertNull(response.error());
   }
 
   @SpringBootConfiguration
@@ -56,7 +58,7 @@ class MusicClientAutoConfigurationTest {
           exchange -> {
             var body =
                 "{\"result\":{\"id\":\"music-1\",\"title\":\"Client Runtime Song\"},"
-                    + "\"error\":{\"message\":\"OK\"}}";
+                    + "\"error\":null}";
             var bytes = body.getBytes(UTF_8);
             exchange.getResponseHeaders().set("Content-Type", "application/json");
             exchange.sendResponseHeaders(200, bytes.length);

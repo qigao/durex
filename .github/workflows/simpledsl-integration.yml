@@ -113,4 +113,4 @@ jobs:
         run: ./gradlew projects simpledslProjects --stacktrace
 
       - name: Verify Durex core build through Plugin Portal
-        run: ./gradlew :music-json:compileJava :music-entity:compileJava :music-repo:compileJava :music-api:compileJava :music-client:test :music:test --configuration-cache --stacktrace
+        run: ./gradlew :shared-common:test :shared-spring-http:test :music-json:compileJava :music-entity:compileJava :music-repo:compileJava :music-api:compileJava :music-client:test :music:test --configuration-cache --stacktrace

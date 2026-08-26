@@ -8,6 +8,7 @@ simpledsl {
     redis()
     aop()
     dependency('implementation', 'spring-json')
+    dependency('implementation', 'spring-transaction')
 }
 
 dependencies {

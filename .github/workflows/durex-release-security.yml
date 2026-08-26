@@ -1,0 +1,21 @@
+name: Durex Release Security Boundary
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/durex-release.yml'
+      - '.github/workflows/durex-release-verify.yml'
+      - '.github/workflows/durex-release-security.yml'
+      - 'scripts/verify-release-security-boundary.sh'
+      - 'docs/releasing.md'
+
+permissions:
+  contents: read
+
+jobs:
+  verify-release-security-boundary:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - name: Verify release privilege boundary
+        run: bash scripts/verify-release-security-boundary.sh

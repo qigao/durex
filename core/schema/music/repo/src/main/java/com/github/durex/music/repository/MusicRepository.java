@@ -14,6 +14,7 @@ import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.jooq.Condition;
 import org.jooq.DSLContext;
+import org.jooq.Query;
 
 @Slf4j
 public class MusicRepository {
@@ -86,6 +87,7 @@ public class MusicRepository {
         .set(MUSIC.DELETED_FLAG, 1)
         .set(MUSIC.DELETE_TIME, LocalDateTime.now())
         .where(MUSIC.ID.eq(id))
+        .and(NOT_DELETED)
         .execute();
   }
 
@@ -100,6 +102,7 @@ public class MusicRepository {
         .set(MUSIC.DELETED_FLAG, 1)
         .set(MUSIC.DELETE_TIME, LocalDateTime.now())
         .where(MUSIC.TITLE.eq(title))
+        .and(NOT_DELETED)
         .execute();
   }
 
@@ -113,6 +116,7 @@ public class MusicRepository {
         .set(MUSIC.DELETED_FLAG, 1)
         .set(MUSIC.DELETE_TIME, LocalDateTime.now())
         .where(MUSIC.TITLE.like(realTitle))
+        .and(NOT_DELETED)
         .execute();
   }
 
@@ -121,6 +125,7 @@ public class MusicRepository {
         .set(MUSIC.DELETED_FLAG, 1)
         .set(MUSIC.DELETE_TIME, LocalDateTime.now())
         .where(MUSIC.ID.in(musicIds))
+        .and(NOT_DELETED)
         .execute();
   }
 
@@ -164,10 +169,7 @@ public class MusicRepository {
    * @return number of updated records
    */
   public int update(Music music) {
-    var rMusic = dsl.newRecord(MUSIC);
-    MusicMapper.mapDtoToRecord(music, rMusic);
-    rMusic.setUpdateTime(LocalDateTime.now());
-    return rMusic.update();
+    return updateQuery(music).execute();
   }
 
   /**
@@ -177,16 +179,24 @@ public class MusicRepository {
    * @return number of updated records
    */
   public int[] update(List<Music> musics) {
-    var rMusics =
-        musics.stream()
-            .map(
-                m -> {
-                  var rMusic = dsl.newRecord(MUSIC);
-                  rMusic.setUpdateTime(LocalDateTime.now());
-                  MusicMapper.mapDtoToRecord(m, rMusic);
-                  return rMusic;
-                })
-            .collect(Collectors.toList());
-    return dsl.batchUpdate(rMusics).execute();
+    return dsl.batch(musics.stream().map(this::updateQuery).toList()).execute();
+  }
+
+  private Query updateQuery(Music music) {
+    return dsl.update(MUSIC)
+        .set(MUSIC.TITLE, music.getTitle())
+        .set(MUSIC.DESCRIPTION, music.getDescription())
+        .set(MUSIC.ARTIST_ID, music.getArtistId())
+        .set(MUSIC.PLAY_ID, music.getPlayId())
+        .set(MUSIC.LYRIC_ID, music.getLyricId())
+        .set(MUSIC.COVER_ID, music.getCoverId())
+        .set(MUSIC.SAMPLE_RATE, String.valueOf(music.getSampleRate()))
+        .set(MUSIC.CHANNELS, music.getChannels())
+        .set(MUSIC.BIT_RATE, music.getBitRate())
+        .set(MUSIC.DURATION, music.getDuration())
+        .set(MUSIC.MUSIC_TYPE, music.getMusicType())
+        .set(MUSIC.UPDATE_TIME, LocalDateTime.now())
+        .where(MUSIC.ID.eq(music.getId()))
+        .and(NOT_DELETED);
   }
 }
