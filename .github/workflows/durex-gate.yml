@@ -9,7 +9,7 @@ permissions:
   pull-requests: read
 
 concurrency:
-  group: durex-gate-${{ github.event.pull_request.number }}-${{ github.event.pull_request.head.sha }}
+  group: durex-gate-${{ github.event.pull_request.number }}
   cancel-in-progress: true
 
 jobs:
