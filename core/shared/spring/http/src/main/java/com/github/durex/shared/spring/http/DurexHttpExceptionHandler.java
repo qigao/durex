@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 /**
  * Spring MVC exception advice that maps {@link ApiException} to the Durex response envelope.
  *
- * <p>{@link ErrorCode#ENTITY_NOT_FOUND} is returned as HTTP 404. Other Durex API errors are
- * returned as HTTP 500.
+ * <p>{@link ErrorCode#ENTITY_NOT_FOUND} maps to HTTP 404. {@link ErrorCode#EMPTY_PARAM} and {@link
+ * ErrorCode#VALUE_ERROR} map to HTTP 400. Other or unclassified Durex API errors map to HTTP 500.
  */
 @RestControllerAdvice
 public final class DurexHttpExceptionHandler {
@@ -30,12 +30,17 @@ public final class DurexHttpExceptionHandler {
   @ExceptionHandler(ApiException.class)
   public ResponseEntity<RespData<Void>> handleApiException(ApiException exception) {
     ErrorResponse error = exception.getErrorResponse();
-    return ResponseEntity.status(statusFor(error.getErrorCode())).body(RespData.of(null, error));
+    return ResponseEntity.status(statusFor(error.errorCode())).body(RespData.of(null, error));
   }
 
   private static HttpStatus statusFor(ErrorCode errorCode) {
-    return errorCode == ErrorCode.ENTITY_NOT_FOUND
-        ? HttpStatus.NOT_FOUND
-        : HttpStatus.INTERNAL_SERVER_ERROR;
+    if (errorCode == null) {
+      return HttpStatus.INTERNAL_SERVER_ERROR;
+    }
+    return switch (errorCode) {
+      case ENTITY_NOT_FOUND -> HttpStatus.NOT_FOUND;
+      case EMPTY_PARAM, VALUE_ERROR -> HttpStatus.BAD_REQUEST;
+      default -> HttpStatus.INTERNAL_SERVER_ERROR;
+    };
   }
 }
