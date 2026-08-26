@@ -2,14 +2,14 @@
 
 This is an isolated Spring Boot 4.1 / GraalVM Native reference build for Durex.
 
-The reference build consumes SimpleDSL `0.2.0` from the Gradle Plugin Portal:
+The reference build consumes SimpleDSL `0.3.0` from the Gradle Plugin Portal:
 
 - `io.github.qigao.simpledsl.settings` follows the configured `repositoryRoot` to auto-discover the repository-root `dependencies.toml`, which includes `dependencies/*.toml` fragments;
-- `io.github.qigao.simpledsl.build` is the only project-side SimpleDSL plugin;
+- `io.github.qigao.simpledsl.java` is the Java/Spring project backend;
 - `simpledsl { springService(); web(); nativeImage() }` composes the Spring service and GraalVM Native capabilities;
 - Gradle BOM/platform resolution still performs the actual Spring dependency alignment.
 
-The reference files remain Kotlin DSL so the published SimpleDSL settings/build extensions are continuously checked for Kotlin DSL compatibility.
+The reference files remain Kotlin DSL so the published SimpleDSL settings/Java extensions are continuously checked for Kotlin DSL compatibility.
 
 ## Requirements
 

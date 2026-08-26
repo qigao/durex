@@ -5,12 +5,12 @@ Durex is a multi-module Java platform for Spring Boot development.
 
 == Build Platform
 
-The root build consumes SimpleDSL `0.2.0` from the Gradle Plugin Portal:
+The root build consumes SimpleDSL `0.3.0` from the Gradle Plugin Portal:
 
-* `io.github.qigao.simpledsl.settings` owns dependency policy loading, module discovery, and project inclusion.
-* Production modules apply only `io.github.qigao.simpledsl.build`; module types and capabilities are selected through `simpledsl { ... }`.
-* Repository-root `dependencies.toml` is auto-discovered by SimpleDSL 0.2 and includes the Durex-owned dependency fragments under `dependencies/*.toml`; no explicit dependency-manifest override is used.
-* Dependency policy uses the SimpleDSL 0.2 manifest contract: `[simpledsl] java`, Gradle-shaped `versions` / `libraries` / `plugins`, and BOMs declared as normal libraries.
+* `io.github.qigao.simpledsl.settings` owns dependency policy loading, module discovery, project inclusion, and backend version alignment.
+* Production modules apply only `io.github.qigao.simpledsl.java`; module types and capabilities are selected through `simpledsl { ... }`.
+* Repository-root `dependencies.toml` is auto-discovered by SimpleDSL 0.3 and includes the Durex-owned dependency fragments under `dependencies/*.toml`; no explicit dependency-manifest override is used.
+* Dependency policy uses the SimpleDSL 0.3 manifest contract: `[simpledsl] java`, Gradle-shaped `versions` / `libraries` / `plugins`, and BOMs declared as normal libraries.
 * `gradle/modules.toml` contains only logical-name/build-file overrides; ordinary modules are auto-discovered.
 * `build.spring.gradle` is the canonical Spring module descriptor.
 * Gradle 9.1 and Java 25 are the current build baseline.
