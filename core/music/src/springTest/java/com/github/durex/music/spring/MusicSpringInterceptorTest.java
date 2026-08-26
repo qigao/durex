@@ -31,7 +31,7 @@ class MusicSpringInterceptorTest {
     var exception =
         assertThrows(ApiException.class, () -> musicService.deleteMusicById("missing-id"));
 
-    assertEquals(DELETE_ERROR, exception.getErrorResponse().getErrorCode());
+    assertEquals(DELETE_ERROR, exception.getErrorResponse().errorCode());
   }
 
   @Test
