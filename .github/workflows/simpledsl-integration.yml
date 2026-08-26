@@ -58,7 +58,7 @@ jobs:
             exit 1
           fi
 
-      - name: Reject SimpleDSL 0.1 manifest and plugin contracts
+      - name: Require SimpleDSL 0.3 plugin contracts
         shell: bash
         run: |
           set -euo pipefail
@@ -70,20 +70,34 @@ jobs:
             reference/spring-capabilities/settings.gradle.kts
           )
           for file in "${settings[@]}"; do
-            grep -Fq '0.2.0' "$file"
-            if grep -Fq '0.1.1' "$file"; then
-              echo "legacy SimpleDSL 0.1.1 version remains in $file"
+            if ! grep -Fq '0.3.0' "$file"; then
+              echo "SimpleDSL 0.3.0 is not pinned in $file"
+              exit 1
+            fi
+            if grep -Eq '0\.[12]\.' "$file"; then
+              echo "legacy SimpleDSL version remains in $file"
               exit 1
             fi
           done
-          old_manifest="$({ grep -Hn -E '^\[java\]|^\[platforms\.' dependencies.toml dependencies/*.toml 2>/dev/null || true; })"
-          if [ -n "$old_manifest" ]; then
-            echo "$old_manifest"
-            echo 'legacy SimpleDSL 0.1 dependency-manifest schema remains'
+
+          old_plugins="$({
+            find core migration reference -type f \( -name 'build.gradle' -o -name 'build.gradle.kts' -o -name 'build.spring.gradle' -o -name 'build.spring.gradle.kts' \) \
+              -exec grep -Hn -F 'io.github.qigao.simpledsl.build' {} + || true
+          })"
+          if [ -n "$old_plugins" ]; then
+            echo "$old_plugins"
+            echo 'legacy SimpleDSL project plugin remains'
             exit 1
           fi
 
-      - name: Require SimpleDSL 0.2 root manifest convention
+          old_manifest="$({ grep -Hn -E '^\[java\]|^\[platforms\.' dependencies.toml dependencies/*.toml 2>/dev/null || true; })"
+          if [ -n "$old_manifest" ]; then
+            echo "$old_manifest"
+            echo 'legacy SimpleDSL dependency-manifest schema remains'
+            exit 1
+          fi
+
+      - name: Require SimpleDSL 0.3 root manifest convention
         shell: bash
         run: |
           set -euo pipefail
@@ -109,7 +123,7 @@ jobs:
             fi
           done
 
-      - name: Verify SimpleDSL 0.2.0 project graph from Plugin Portal
+      - name: Verify SimpleDSL 0.3.0 project graph from Plugin Portal
         run: ./gradlew projects simpledslProjects --stacktrace
 
       - name: Verify Durex core build through Plugin Portal
