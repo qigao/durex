@@ -16,6 +16,7 @@ import java.util.UUID;
 public class ApiException extends RuntimeException implements Serializable {
   @Serial private static final long serialVersionUID = 1L;
 
+  /** Stable structured response created once for this exception occurrence. */
   private final ErrorResponse errorResponse;
 
   /**
