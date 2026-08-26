@@ -4,6 +4,7 @@ import static com.github.durex.model.tables.QMusic.MUSIC;
 import static com.github.durex.model.tables.QPlaylist.PLAYLIST;
 import static com.github.durex.sqlbuilder.enums.WildCardType.CONTAINS;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -97,16 +98,16 @@ class RepositoryWiringTest {
             .where(PLAYLIST.ID.eq("playlist-deleted"))
             .fetchOne(PLAYLIST.TITLE);
 
-    var music = new Music();
-    music.setId("music-deleted");
-    music.setTitle("mutated deleted music");
-    var playlist = new PlayList();
-    playlist.setId("playlist-deleted");
-    playlist.setTitle("mutated deleted playlist");
+    var music = deletedMusic("mutated deleted music");
+    var playlist = deletedPlaylist("mutated deleted playlist");
+    var batchMusic = deletedMusic("batch mutated deleted music");
+    var batchPlaylist = deletedPlaylist("batch mutated deleted playlist");
 
     assertAll(
         () -> assertEquals(0, musicRepository.update(music)),
-        () -> assertEquals(0, playListRepository.update(playlist)));
+        () -> assertEquals(0, playListRepository.update(playlist)),
+        () -> assertArrayEquals(new int[] {0}, musicRepository.update(List.of(batchMusic))),
+        () -> assertArrayEquals(new int[] {0}, playListRepository.update(List.of(batchPlaylist))));
 
     assertEquals(
         musicTitleBefore,
@@ -120,5 +121,31 @@ class RepositoryWiringTest {
             .from(PLAYLIST)
             .where(PLAYLIST.ID.eq("playlist-deleted"))
             .fetchOne(PLAYLIST.TITLE));
+  }
+
+  private static Music deletedMusic(String title) {
+    var music = new Music();
+    music.setId("music-deleted");
+    music.setTitle(title);
+    music.setDescription("soft-delete-fixture");
+    music.setDuration(120);
+    music.setSampleRate(44100);
+    music.setBitRate(192);
+    music.setChannels(2);
+    music.setMusicType(0);
+    music.setArtistId("artist-2");
+    music.setCoverId("cover-2");
+    music.setPlayId("play-2");
+    music.setLyricId("lyric-2");
+    return music;
+  }
+
+  private static PlayList deletedPlaylist(String title) {
+    var playlist = new PlayList();
+    playlist.setId("playlist-deleted");
+    playlist.setTitle(title);
+    playlist.setDescription("soft-delete-fixture");
+    playlist.setCoverId("cover-2");
+    return playlist;
   }
 }
