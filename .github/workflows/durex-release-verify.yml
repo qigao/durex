@@ -1,0 +1,164 @@
+name: Durex Release Verification
+
+on:
+  pull_request:
+    paths:
+      - 'LICENSE'
+      - '.github/workflows/durex-release.yml'
+      - '.github/workflows/durex-release-verify.yml'
+      - '.github/workflows/durex-release-security.yml'
+      - 'scripts/central-release-bundle.sh'
+      - 'scripts/public-api-signatures.sh'
+      - 'scripts/verify-release-security-boundary.sh'
+      - 'gradle/durex-publication.gradle'
+      - 'gradle/public-api/**'
+      - 'reference/publication-consumer/**'
+      - 'docs/releasing.md'
+      - 'README.adoc'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Stable version to verify (X.Y.Z)'
+        required: true
+        default: '0.1.0'
+        type: string
+
+concurrency:
+  group: durex-release-verification-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  verify-release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-java@b6effb05e454b25005698d916606bdc6ffcbf961 # v5
+        with:
+          distribution: temurin
+          java-version: '25'
+      - uses: gradle/actions/setup-gradle@ed408507eac070d1f99cc633dbcf757c94c7933a # v4.4.3
+        with:
+          gradle-version: '9.1.0'
+      - name: Verify release privilege boundary
+        run: bash scripts/verify-release-security-boundary.sh
+      - name: Resolve release verification identity
+        id: release
+        shell: bash
+        env:
+          DISPATCH_VERSION: ${{ inputs.version }}
+        run: |
+          set -euo pipefail
+
+          case "$GITHUB_EVENT_NAME" in
+            pull_request)
+              version=0.1.0
+              ;;
+            workflow_dispatch)
+              version="$DISPATCH_VERSION"
+              ;;
+            *)
+              echo "::error::Unsupported release verification event: $GITHUB_EVENT_NAME"
+              exit 1
+              ;;
+          esac
+
+          [[ "$version" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]
+          [[ "$version" != *SNAPSHOT* ]]
+          test -f LICENSE
+          test -z "$(git status --porcelain)"
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          echo "sha=$GITHUB_SHA" >> "$GITHUB_OUTPUT"
+      - name: Publish exact verification artifacts to an isolated Maven repository
+        id: staging
+        shell: bash
+        env:
+          VERSION: ${{ steps.release.outputs.version }}
+        run: |
+          set -euo pipefail
+          staging="$RUNNER_TEMP/durex-release-verification-staging"
+          rm -rf "$staging"
+
+          ./gradlew \
+            :shared-common:publishMavenJavaPublicationToStagingRepository \
+            :shared-spring-http:publishMavenJavaPublicationToStagingRepository \
+            :messaging-api:publishMavenJavaPublicationToStagingRepository \
+            :messaging-spring-redis:publishMavenJavaPublicationToStagingRepository \
+            -PdurexStagingRepo="$staging" \
+            -PdurexVersion="$VERSION" \
+            --stacktrace
+
+          echo "repository=$staging" >> "$GITHUB_OUTPUT"
+      - name: Verify exact release API and Maven consumer
+        shell: bash
+        env:
+          VERSION: ${{ steps.release.outputs.version }}
+          STAGING: ${{ steps.staging.outputs.repository }}
+        run: |
+          set -euo pipefail
+          root="$STAGING/io/github/qigao/durex"
+          manifest="$GITHUB_WORKSPACE/gradle/public-api/0.1-surface.txt"
+          baseline="$GITHUB_WORKSPACE/gradle/public-api/0.1-signatures.txt"
+          current="$RUNNER_TEMP/durex-release-verification-signatures.txt"
+
+          printf '%s\n' messaging-api messaging-spring-redis shared-common shared-spring-http | sort > "$RUNNER_TEMP/expected-artifacts.txt"
+          find "$root" -mindepth 1 -maxdepth 1 -type d -printf '%f\n' | sort > "$RUNNER_TEMP/actual-artifacts.txt"
+          diff -u "$RUNNER_TEMP/expected-artifacts.txt" "$RUNNER_TEMP/actual-artifacts.txt"
+
+          scripts/public-api-signatures.sh generate "$root" "$manifest" "$current" "$VERSION"
+          diff -u <(LC_ALL=C sort -u "$baseline") "$current"
+          scripts/public-api-signatures.sh check "$root" "$manifest" "$baseline" "$VERSION"
+
+          for artifact in shared-common shared-spring-http messaging-api messaging-spring-redis; do
+            pom="$root/$artifact/$VERSION/$artifact-$VERSION.pom"
+            test -f "$pom"
+            grep -Fq '<id>qigao</id>' "$pom"
+            grep -Fq '<connection>scm:git:https://github.com/qigao/durex.git</connection>' "$pom"
+            grep -Fq '<licenses>' "$pom"
+            grep -Fq '<name>Apache License, Version 2.0</name>' "$pom"
+            grep -Fq '<url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>' "$pom"
+            ! grep -Fq 'Durex CI placeholder - not for release' "$pom"
+            ! grep -Fq 'example.invalid' "$pom"
+          done
+
+          gradle -p reference/publication-consumer clean classes \
+            -PdurexRepository="$STAGING" \
+            -PdurexVersion="$VERSION" \
+            --refresh-dependencies \
+            --stacktrace
+      - name: Assemble unsigned Central Publisher Portal bundle
+        id: bundle
+        shell: bash
+        env:
+          VERSION: ${{ steps.release.outputs.version }}
+          STAGING: ${{ steps.staging.outputs.repository }}
+        run: |
+          set -euo pipefail
+          bundle="$GITHUB_WORKSPACE/build/durex-$VERSION-central-bundle.zip"
+          scripts/central-release-bundle.sh "$STAGING" "$VERSION" unsigned "$bundle"
+          echo "path=$bundle" >> "$GITHUB_OUTPUT"
+          unzip -l "$bundle"
+      - name: Record tested release identity
+        shell: bash
+        env:
+          VERSION: ${{ steps.release.outputs.version }}
+        run: |
+          set -euo pipefail
+          cat >> "$GITHUB_STEP_SUMMARY" <<EOF
+          # Durex $VERSION release verification
+
+          Tested SHA: \`$GITHUB_SHA\`
+
+          Maven artifacts:
+          - \`io.github.qigao.durex:shared-common:$VERSION\`
+          - \`io.github.qigao.durex:shared-spring-http:$VERSION\`
+          - \`io.github.qigao.durex:messaging-api:$VERSION\`
+          - \`io.github.qigao.durex:messaging-spring-redis:$VERSION\`
+
+          License: Apache-2.0
+          Central publication: false (verification only)
+          EOF
