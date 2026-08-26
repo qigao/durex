@@ -12,6 +12,8 @@ import com.github.durex.shared.exceptions.model.ErrorCode;
 import com.github.durex.shared.exceptions.model.ErrorResponse;
 import com.github.durex.shared.model.RespData;
 import com.github.durex.shared.spring.http.DurexHttpExceptionHandler;
+import java.time.LocalDateTime;
+import java.util.UUID;
 
 /**
  * Compile-only compatibility fixture for the public Durex API promised by the initial Maven surface.
@@ -24,12 +26,41 @@ public final class PublicApiBaseline {
     return RespData.of(value, null);
   }
 
+  public String responseResult(RespData<String> response) {
+    return response.result();
+  }
+
+  public ErrorResponse responseError(RespData<?> response) {
+    return response.error();
+  }
+
   public ApiException apiException(String message) {
     return new ApiException(message, ErrorCode.UNKNOWN_ERROR);
   }
 
   public ErrorResponse errorResponse(ApiException exception) {
     return exception.getErrorResponse();
+  }
+
+  public ErrorResponse errorResponse(
+      UUID errorId, String message, ErrorCode errorCode, LocalDateTime timestamp) {
+    return new ErrorResponse(errorId, message, errorCode, timestamp);
+  }
+
+  public UUID errorId(ErrorResponse error) {
+    return error.errorId();
+  }
+
+  public String errorMessage(ErrorResponse error) {
+    return error.message();
+  }
+
+  public ErrorCode responseErrorCode(ErrorResponse error) {
+    return error.errorCode();
+  }
+
+  public LocalDateTime errorTimestamp(ErrorResponse error) {
+    return error.timestamp();
   }
 
   public ErrorCode errorCode() {

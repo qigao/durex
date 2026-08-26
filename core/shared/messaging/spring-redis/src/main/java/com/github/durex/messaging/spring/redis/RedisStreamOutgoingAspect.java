@@ -29,7 +29,8 @@ public class RedisStreamOutgoingAspect {
     if (result != null) {
       String stream = environment.resolvePlaceholders(outgoing.value());
       String payload = messageCodec.encode(result);
-      redisTemplate.opsForStream().add(MapRecord.create(stream, Map.of("payload", payload)));
+      TransactionalPublication.publishNowOrAfterCommit(
+          () -> redisTemplate.opsForStream().add(MapRecord.create(stream, Map.of("payload", payload))));
     }
     return result;
   }
