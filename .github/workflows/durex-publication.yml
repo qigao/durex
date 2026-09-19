@@ -2,6 +2,8 @@ name: Durex Publication Surface
 
 on:
   push:
+    branches:
+      - master
     paths:
       - 'LICENSE'
       - 'core/shared/common/**'
