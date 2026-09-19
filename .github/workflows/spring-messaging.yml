@@ -2,6 +2,8 @@ name: Spring Messaging Platform
 
 on:
   push:
+    branches:
+      - master
     paths:
       - 'dependencies.toml'
       - 'dependencies/**'
