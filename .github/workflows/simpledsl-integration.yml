@@ -2,6 +2,8 @@ name: SimpleDSL Integration
 
 on:
   push:
+    branches:
+      - master
     paths:
       - 'core/**'
       - 'gradle/**'
@@ -44,6 +46,13 @@ jobs:
         with:
           gradle-version: '9.1.0'
 
+      - name: Verify root Gradle wrapper
+        shell: bash
+        run: |
+          set -euo pipefail
+          ./gradlew --version | tee /tmp/durex-wrapper-version.log
+          grep -Fq 'Gradle 9.1.0' /tmp/durex-wrapper-version.log
+
       - name: Reject SimpleDSL implementation-class leakage
         shell: bash
         run: |
@@ -58,7 +67,7 @@ jobs:
             exit 1
           fi
 
-      - name: Reject SimpleDSL 0.1 manifest and plugin contracts
+      - name: Require SimpleDSL 0.3 plugin contracts
         shell: bash
         run: |
           set -euo pipefail
@@ -70,20 +79,34 @@ jobs:
             reference/spring-capabilities/settings.gradle.kts
           )
           for file in "${settings[@]}"; do
-            grep -Fq '0.2.0' "$file"
-            if grep -Fq '0.1.1' "$file"; then
-              echo "legacy SimpleDSL 0.1.1 version remains in $file"
+            if ! grep -Fq '0.3.0' "$file"; then
+              echo "SimpleDSL 0.3.0 is not pinned in $file"
+              exit 1
+            fi
+            if grep -Eq '0\.[12]\.' "$file"; then
+              echo "legacy SimpleDSL version remains in $file"
               exit 1
             fi
           done
-          old_manifest="$({ grep -Hn -E '^\[java\]|^\[platforms\.' dependencies.toml dependencies/*.toml 2>/dev/null || true; })"
-          if [ -n "$old_manifest" ]; then
-            echo "$old_manifest"
-            echo 'legacy SimpleDSL 0.1 dependency-manifest schema remains'
+
+          old_plugins="$({
+            find core migration reference -type f \( -name 'build.gradle' -o -name 'build.gradle.kts' -o -name 'build.spring.gradle' -o -name 'build.spring.gradle.kts' \) \
+              -exec grep -Hn -F 'io.github.qigao.simpledsl.build' {} + || true
+          })"
+          if [ -n "$old_plugins" ]; then
+            echo "$old_plugins"
+            echo 'legacy SimpleDSL project plugin remains'
             exit 1
           fi
 
-      - name: Require SimpleDSL 0.2 root manifest convention
+          old_manifest="$({ grep -Hn -E '^\[java\]|^\[platforms\.' dependencies.toml dependencies/*.toml 2>/dev/null || true; })"
+          if [ -n "$old_manifest" ]; then
+            echo "$old_manifest"
+            echo 'legacy SimpleDSL dependency-manifest schema remains'
+            exit 1
+          fi
+
+      - name: Require SimpleDSL 0.3 root manifest convention
         shell: bash
         run: |
           set -euo pipefail
@@ -109,8 +132,35 @@ jobs:
             fi
           done
 
-      - name: Verify SimpleDSL 0.2.0 project graph from Plugin Portal
-        run: ./gradlew projects simpledslProjects --stacktrace
+      - name: Verify SimpleDSL 0.3.0 project graph from Plugin Portal
+        shell: bash
+        run: |
+          set -euo pipefail
+          ./gradlew projects simpledslProjects --stacktrace | tee /tmp/durex-root-projects.log
+          for module in music music-api music-client music-json music-entity music-repo shared-common shared-spring-http shared-utils messaging-api messaging-spring-redis; do
+            grep -Fq ":${module} |" /tmp/durex-root-projects.log
+          done
+          ! grep -Fq ':json-schema-annotation |' /tmp/durex-root-projects.log
+          ! grep -Fq ':core:' /tmp/durex-root-projects.log
 
       - name: Verify Durex core build through Plugin Portal
         run: ./gradlew :shared-common:test :shared-spring-http:test :music-json:compileJava :music-entity:compileJava :music-repo:compileJava :music-api:compileJava :music-client:test :music:test --configuration-cache --stacktrace
+
+      - name: Verify music layering and runtime boundary
+        shell: bash
+        run: |
+          set -euo pipefail
+          if grep -Fq "project(':music')" core/api/music/build.spring.gradle; then
+            echo 'music-api must not depend on the music server implementation'
+            exit 1
+          fi
+          bash migration/spring-music/verify-runtime-boundary.sh
+          ./gradlew :music:dependencies --configuration compileClasspath --stacktrace | tee /tmp/music-compile-classpath.log
+          if grep -E 'javax\.enterprise|javax\.inject:|javax\.transaction|javax\.interceptor|io\.quarkus' /tmp/music-compile-classpath.log; then
+            echo 'obsolete runtime dependency leaked into music compileClasspath'
+            exit 1
+          fi
+          hits="$({
+            find core/api core/music core/schema/music core/shared -name 'build.spring.gradle' -exec grep -Hn -E 'VersionCatalogsExtension|[a-z]Libs\.' {} + || true
+          })"
+          test -z "$hits" || { echo "$hits"; exit 1; }

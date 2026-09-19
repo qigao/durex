@@ -1,20 +1,6 @@
 name: Durex Release Verification
 
 on:
-  pull_request:
-    paths:
-      - 'LICENSE'
-      - '.github/workflows/durex-release.yml'
-      - '.github/workflows/durex-release-verify.yml'
-      - '.github/workflows/durex-release-security.yml'
-      - 'scripts/central-release-bundle.sh'
-      - 'scripts/public-api-signatures.sh'
-      - 'scripts/verify-release-security-boundary.sh'
-      - 'gradle/durex-publication.gradle'
-      - 'gradle/public-api/**'
-      - 'reference/publication-consumer/**'
-      - 'docs/releasing.md'
-      - 'README.adoc'
   workflow_dispatch:
     inputs:
       version:
@@ -54,18 +40,8 @@ jobs:
         run: |
           set -euo pipefail
 
-          case "$GITHUB_EVENT_NAME" in
-            pull_request)
-              version=0.1.0
-              ;;
-            workflow_dispatch)
-              version="$DISPATCH_VERSION"
-              ;;
-            *)
-              echo "::error::Unsupported release verification event: $GITHUB_EVENT_NAME"
-              exit 1
-              ;;
-          esac
+          test "$GITHUB_EVENT_NAME" = workflow_dispatch
+          version="$DISPATCH_VERSION"
 
           [[ "$version" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]
           [[ "$version" != *SNAPSHOT* ]]

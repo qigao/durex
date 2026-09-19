@@ -1,5 +1,5 @@
 plugins {
-    id("io.github.qigao.simpledsl.build")
+    id("io.github.qigao.simpledsl.java")
 }
 
 group = "com.github.durex.reference"
