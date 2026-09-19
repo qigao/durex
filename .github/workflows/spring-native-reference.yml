@@ -2,6 +2,8 @@ name: Spring Native Reference
 
 on:
   push:
+    branches:
+      - master
     paths:
       - 'reference/spring-native/**'
       - 'reference/spring-capabilities/**'
